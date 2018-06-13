@@ -1,0 +1,362 @@
+<?php
+
+
+
+// SERVER :: telegrambots (@hp-envy) | botton (@alt) | odroid0 (@odroid)
+// PORT   :: 443 (hp-envy) | 8443 (alt) | 80 (odroid)
+// BOT    :: nombre (...bot) del bot de telegram cuyo hook se fija o borra; debe ser uno de los de la lista de abajo ($cmBots)
+// Para fijar  el hook: navegar a: https://panama_bot.local/scripts/hooksetter/setwebhook.php
+// Para borrar el hook: navegar a: https://panama_bot.local/scripts/hooksetter/setwebhook.php?action=delete_webhook
+
+define('SERVER', 'odroid0');
+define('PORT', '88');
+define('BOT', 'Monitorexbot');
+
+
+
+// COPY-PASTE FROM CHATMEDIUMTELEGRAM HERE (delete "static..."):
+
+$cmBots = [
+
+    ///////////////////////////////////////
+    // NEUROPOWER (TEST DRIVE #1) - FOTOBOT
+    ///////////////////////////////////////
+
+    // NP - Fotobot - main
+    10 => [
+        [ 'NeuroPowerBot',  'tgrp_10_00_278347235423590890123454.php',                                                                                                              '171752376:AAGgO5P3_W8Q8KPLCvoQAKHafiQ54w-K6rw' ],
+    ],
+    // NP - Fotobot - staff (monitor) - used for monitoring
+    12 => [
+        [ 'neuropower_bot', 'tgrp_12_00_934967523854879438679845.php',                                                                                                              '227989979:AAG0lpleT4SlriqdeLUv35jhJsRXn2chMoc' ],
+    ],
+
+    ////////////////
+    // BOTS DE JORGE
+    ////////////////
+
+    210 => [
+        [ 'Copa_bot',           'tgrp_210_00_237245486123689752355454.php',                                                                                                             '356650537:AAFQ2V4dkWd_u90d3Mpj6goaG4crA1vGyf0' ],
+    ],
+    211 => [
+        [ 'TheHandybot',        'tgrp_211_00_345457872345454875754468.php',                                                                                                             '317790698:AAFORJf9RbgKzRaIm4po6IYYuHv9FokksXc' ],
+    ],
+    212 => [
+        [ 'SchedyBot',          'tgrp_212_00_234235634675689867983454.php',                                                                                                             '344270765:AAEVzMA9q_B4fEoO65iohFXnp0gFj0mIYGE' ],
+    ],
+    249 => [
+        [ 'HeadEndBot',         'tgrp_249_00_235556854754345235356856.php',                                                                                                             '333814656:AAHnl0CaAjaYyDvw9jkswMqDUpKFtzFBvlI' ],
+    ],
+
+    /////////////////
+    // BOTS DE NICOLE
+    /////////////////
+
+    260 => [
+        [ 'TheBotBox_Bot',      'tgrp_260_00_234346568534655567342367.php',                                                                                                             '349758138:AAEog_6bey4po9VJjpQvMaGH4EPhE-iz5HI' ],
+    ],
+    261 => [
+        [ 'BotlightyearBot',    'tgrp_261_00_233485854734665898553444.php',                                                                                                             '293002363:AAGu_XbCX9en29BLCEPG6L4AKZS5b5jw9Lg' ],
+    ],
+    262 => [
+        [ 'BotstartupsBot',     'tgrp_262_00_236543475679123461478740.php',                                                                                                             '345446126:AAFP0ZlGPyXfM2cU9rwfLsEWivHRDajvqoI' ],
+    ],
+    299 => [
+        [ 'MybotsmonitorBot',   'tgrp_299_00_345868549563486212678545.php',                                                                                                             '353002157:AAFPe_kNxjZ-DGbE4kV_7SQ44KXFc1T_aE8' ],
+    ],
+
+    ///////////////
+    // BOTS DE LUIS
+    ///////////////
+
+    310 => [
+        [ 'grocabot',           'tgrp_310_00_345547823345565687545438.php',                                                                                                             '432198335:AAE39s7b08gHV1grEErZpz7M8DP2IJNkbpI' ],
+    ],
+    311 => [
+        [ 'cheverebot',         'tgrp_311_00_123615312846513613684316.php',                                                                                                             '424233639:AAGDBziaURXzZJvE3bN6bQqbdUriydN7kiM' ],
+    ],
+    312 => [
+        [ 'LuxurySkinBot',      'tgrp_312_00_225845554721721874898990.php',                                                                                                             '357186665:AAElZkcfDA9fmJVAhkbywX5Kk6rMZAxmyWo' ],
+    ],
+    349 => [
+        [ 'ServiWebBot',        'tgrp_349_00_124897612675636059626267.php',                                                                                                             '447345564:AAERyPqRcgwAXAWdsoF_yhDC3BVAO1xk6ek' ],
+    ],
+
+    /////////////////
+    // BOTS DE CARLOS
+    /////////////////
+
+    360 => [
+        [ 'CoffeExpressbot',    'tgrp_360_00_908698055113687895334533.php',                                                                                                             '412241406:AAHiUYGNJVAUJq0_ebcRML3thZi8JLwxiKo' ],
+    ],
+    361 => [
+        [ 'GymMuscleBot',       'tgrp_361_00_011561095605020755654561.php',                                                                                                             '363854619:AAH238L4CAuPypmQm4TQOHN0qlXosiC2EfM' ],
+    ],
+    362 => [
+        [ 'MusicTreebot',       'tgrp_362_00_346845865156789651348900.php',                                                                                                             '438907663:AAHpkci4tlkeoK11N4CwdQQOY4em3N-I7F4' ],
+    ],
+    399 => [
+        [ 'Monitorexbot',       'tgrp_399_00_670565665480123655668108.php',                                                                                                             '392858945:AAHTbOsNjo1SvTfiYgz0yvBmcsh2P4VGGcM' ],
+    ],
+
+];
+
+// END OF COPY-PASTE
+
+
+
+$hook = $token = null;
+foreach ($cmBots as $bbBotCode => $bots) {
+    foreach ($bots as $credentials) {
+        list ($bot, $script, $aToken) = $credentials;
+        if ($bot == BOT) { $hook = $script; $token = $aToken; break 2; }
+    }
+}
+if ($hook === null) { die("Can't locate bot credentials"); }
+
+//                                 https://telegrambots.duckdns.org:8443/scripts/telegramhooks/coolbot.php
+//                                'https://telegrambots.duckdns.org:8443/scripts/telegramhooks'
+//define('WEBHOOK_BASE_URL'     , 'https://' . SERVER . '.duckdns.org:' . PORT . '/scripts/telegramhooks');   // old-style (insecure)
+define('WEBHOOK_BASE_URL'       , 'https://' . SERVER . '.duckdns.org:' . PORT . '/telegram');
+define('WEBHOOK_URL'            , WEBHOOK_BASE_URL . '/' . $hook);
+define('API_URL'                , 'https://api.telegram.org/bot' . $token . '/');
+define('LOCAL_SERVER'           , 'panama_bot.local');
+define('BASEDIR'                , '/home/gorka/telegram/panama_bot');
+define('CERTIFICATE_FILENAME'   , BASEDIR . '/webhook_certificate/public.pem');
+define('LOGFILE'                , BASEDIR . '/logs/hooksetter.log');
+//define('LOGFILE'              , 'php://stdout');
+
+// END OF CONFIG
+
+
+
+function logger($msg, $limit = true, $close = false)
+{
+    static $log_fh = null;
+    $log_line_limit = 80 * 5;
+    if ($log_fh === null) {
+        $log_fh = fopen(LOGFILE, "a+");
+    }
+    $prefix = "[" . date("Y-m-d h:i:s") . "] --- ";
+    $text = $prefix . $msg;
+    if ($limit && strlen($text) > $log_line_limit - 3) {
+        $text = substr($text, 0, $log_line_limit - 3) . "...";
+    }
+    fwrite($log_fh, $text . "\n");
+    if ($close && $log_fh !== null) {
+        fclose($log_fh);
+        $log_fh = null;
+    }
+    echo $text . " <br/>\n";
+}
+
+
+
+function apiRequestWebhook($method, $parameters)
+{
+    if (!is_string($method)) {
+        logger("API: Method name must be a string");
+        return false;
+    }
+
+    if (!$parameters) {
+        $parameters = array();
+    } else if (!is_array($parameters)) {
+        logger("API: Parameters must be an array");
+        return false;
+    }
+
+    $parameters["method"] = $method;
+
+    header("Content-Type: application/json");
+    echo json_encode($parameters);
+    return true;
+}
+
+
+
+function exec_curl_request($handle)
+{
+    $response = curl_exec($handle);
+
+    if ($response === false) {
+        $errno = curl_errno($handle);
+        $error = curl_error($handle);
+        logger("API: Curl returned error $errno: $error");
+        curl_close($handle);
+        return false;
+    }
+
+    $http_code = intval(curl_getinfo($handle, CURLINFO_HTTP_CODE));
+    curl_close($handle);
+
+    if ($http_code >= 500) {
+        // do not wat to DDOS server if something goes wrong
+        sleep(10);
+        return false;
+    } else if ($http_code != 200) {
+        $response = json_decode($response, true);
+        logger("API: Request has failed with error {$response['error_code']}: {$response['description']}");
+        if ($http_code == 401) {
+            throw new Exception('Invalid access token provided');
+        }
+        return false;
+    } else {
+        $response = json_decode($response, true);
+        if (isset($response['description'])) {
+            logger("API: Request was successfull: {$response['description']}");
+        }
+        $response = $response['result'];
+    }
+
+    return $response;
+}
+
+
+
+function apiRequest($method, $parameters)
+{
+    if (!is_string($method)) {
+        logger("API: Method name must be a string");
+        return false;
+    }
+
+    if (!$parameters) {
+        $parameters = array();
+    } else if (!is_array($parameters)) {
+        logger("API: Parameters must be an array");
+        return false;
+    }
+
+    foreach ($parameters as $key => &$val) {
+        // encoding to JSON array parameters, for example reply_markup
+        if (!is_numeric($val) && !is_string($val)) {
+            $val = json_encode($val);
+        }
+    }
+    $url = API_URL.$method.'?'.http_build_query($parameters);
+
+    $handle = curl_init($url);
+    curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 5);
+    curl_setopt($handle, CURLOPT_TIMEOUT, 60);
+
+    return exec_curl_request($handle);
+}
+
+
+
+function apiRequestJson($method, $parameters)
+{
+    if (!is_string($method)) {
+        logger("API: Method name must be a string");
+        return false;
+    }
+
+    if (!$parameters) {
+        $parameters = array();
+    } else if (!is_array($parameters)) {
+        logger("API: Parameters must be an array");
+        return false;
+    }
+
+    $parameters["method"] = $method;
+
+    $handle = curl_init(API_URL);
+    curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 5);
+    curl_setopt($handle, CURLOPT_TIMEOUT, 60);
+    curl_setopt($handle, CURLOPT_POSTFIELDS, json_encode($parameters));
+    curl_setopt($handle, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+
+    return exec_curl_request($handle);
+}
+
+
+
+function processMessage($message)
+{
+    // process incoming message
+    //$message_id = $message['message_id'];
+    $chat_id = $message['chat']['id'];
+    if (isset($message['text'])) {
+        // incoming text message
+        $text = $message['text'];
+        if (strpos($text, "/start") === 0) {
+            apiRequestJson("sendMessage", array('chat_id' => $chat_id, "text" => 'Hello', 'reply_markup' => array(
+                'keyboard' => array(array('Hello', 'Hi')),
+                'one_time_keyboard' => true,
+                'resize_keyboard' => true)));
+        } else if ($text === "Hello" || $text === "Hi") {
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Nice to meet you'));
+        } else if (strpos($text, "/stop") === 0) {
+            // stop now
+        } else {
+            //apiRequestWebhook("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => 'Cool'));
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Cool'));
+        }
+    } else {
+        apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'I understand only text messages'));
+    }
+}
+
+
+
+///////
+// MAIN
+///////
+
+
+
+// SCRIPT ENTRY CHECKING (for testing)
+
+// testing tunnel? show a message and exit
+if (false) {
+    //echo "Just testing the HTTP(S) tunnel from logicos.org to the development PC...";
+    echo "Just testing the script from duckdns.org to the development PC...";
+    logger("Just tested script entrance.");
+    exit;
+}
+
+
+
+// WEBHOOK SETTING
+
+// setear o borrar webhook
+// el seteo del webhook debe ser efectuado antes de cualquier utilizacion del bot
+//
+if (php_sapi_name() == 'cli' || $_SERVER['HTTP_HOST'] == LOCAL_SERVER) {
+    // if run from console o in a local browser, set or delete webhook
+    // se agrego modalidad local browser debido a que en este momento no se puede usar curl desde php_cli
+    $delete =    php_sapi_name() == 'cli' && isset($argv[1])        && $argv[1]        == 'delete_webhook'
+              || php_sapi_name() != 'cli' && isset($_GET['action']) && $_GET['action'] == 'delete_webhook';
+    apiRequest('setWebhook', array('url' => $delete ? '' : WEBHOOK_URL));
+    // apiRequest('setWebhook', array('url' => $delete ? '' : WEBHOOK_URL, 'certificate' => CERTIFICATE_FILENAME));
+    /*
+    para self-signed certificates: NO DEBE SER EL NOMBRE DEL ARCHIVO SINO UN STREAM HTTP POST FILE (ver documentacion del API)
+    para hacerlo con cURL:
+    curl -F "url=https://example.com/myscript.php" -F "certificate=@/etc/apache2/ssl/apache.crt" https://api.telegram.org/bot<SECRETTOKEN>/setWebhook
+    openssl req -newkey rsa:2048 -sha256 -nodes -keyout /your_home/BOTServer/ssl/PRIVATE.key -x509 -days 365 -out /your_home/BOTServer/ssl/PUBLIC.pem -subj "/C=IT/ST=state/L=location/O=description/CN=your_domain.com"
+    */
+    logger("Como respuesta a solicitud sobre webhook: " . ($delete ? "eliminacion" : "registro"));
+    exit;
+}
+
+$content = file_get_contents("php://input");
+$update = json_decode($content, true);
+
+if (!$update) {
+    // receive wrong update, must not happen
+    logger("Error: no se recibio un update o no se pudo decodificar la entrada");
+    exit;
+}
+
+if (isset($update["message"])) {
+    logger("Por procesar update con message: " . json_encode($update["message"]));
+    processMessage($update["message"]);
+}
+else {
+    logger("Se recibio un update sin message; el bot no emite respuesta...");
+}
+
+exit;

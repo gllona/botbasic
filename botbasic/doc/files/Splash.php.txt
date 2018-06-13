@@ -1,0 +1,117 @@
+<?php
+/**
+ * Interacción entre el sistema y el usuario, en ese sentido
+ *
+ * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
+ * @license     http://www.venicua.com/botbasic/license     Licencia de BotBasic
+ * @see         http://www.venicua.com/botbasic             Referencia de BotBasic
+ * @version     1.0 - 01.jan.2017
+ * @since       0.1 - 01.jul.2016
+ */
+
+
+
+namespace botbasic;
+
+
+
+/**
+ * Clase Splash
+ *
+ * Refleja un texto, menú o contenido multimedia que es enviado a una chatapp desde el servidor de BotBasic.
+ *
+ * @package botbasic
+ */
+class Splash extends Interaction
+{
+
+
+
+    /** @const Subtipo de Interaction para el tipo Splash: texto */
+    public const SUBTYPE_TEXT     = 101;
+
+    /** @const Subtipo de Interaction para el tipo Splash: menú (texto + opciones) */
+    public const SUBTYPE_MENU     = 102;
+
+    /** @const Subtipo de Interaction para el tipo Splash: recurso multimedia */
+    public const SUBTYPE_RESOURCE = 103;
+
+    /** @var int Subtipo (SUBTYPE_...) */
+    private $subType  = null;
+
+    /** @var array|null opciones del menú; se trata de un arreglo de resultados de Interaction::encodeMenuhook() */
+    private $options  = null;
+
+
+
+    public function getSubType  () { return $this->subType;                                                                         }
+    public function getOptions  () { return $this->options;                                                                         }
+    public function getResource () { return $this->resources === null || count($this->resources) == 0 ? null : $this->resources[0]; }
+
+    protected function __construct ()
+    {
+        parent::__construct(self::TYPE_SPLASH);
+    }
+
+    static public function createWithText ($text)
+    {
+        if (! is_string($text)) { return null; }   // TODO Log this
+        $s          = new Splash();
+        $s->subType = self::SUBTYPE_TEXT;
+        $s->text    = $text;
+        return $s;
+    }
+
+    static public function createWithResource ($resource)
+    {
+        if (! $resource instanceof InteractionResource) { return null; }   // TODO Log this
+        $s            = new Splash(self::SUBTYPE_RESOURCE);
+        $s->subType   = self::SUBTYPE_RESOURCE;
+        $s->resources = [ $resource ];
+        return $s;
+    }
+    static public function createWithMenu ($options, $title = null)
+    {
+        if (! is_array($options)) { return null; }   // TODO Log this
+        $s          = new Splash(self::SUBTYPE_MENU);
+        $s->subType = self::SUBTYPE_MENU;
+        $s->text    = $title;
+        $s->options = $options;
+        return $s;
+    }
+
+    public function createByCloning ()
+    {
+        $clone = clone $this;
+        $clone->resources = [];
+        foreach ($this->resources as $resource) {
+            $clone->resources[] = $resource->createByCloning();
+        }
+        return $clone;
+    }
+
+    public function addMenuOptions ($options)
+    {
+        if (! is_array($options)) { return null; }   // TODO Log this
+        if ($this->subType != self::SUBTYPE_MENU) { return; }    // TODO Log this
+        $this->options = array_merge($this->options, $options);
+    }
+
+    protected function fillFields ($values)
+    {
+        list ($id, $subType, $bbcId, $bmUserId, $text, $options) = $values;
+        $this->id       = $id;
+        $this->subType  = $subType;
+        $this->bbcId    = $bbcId;
+        $this->bmUserId = $bmUserId;
+        $this->text     = $text;
+        $this->options  = $options;
+    }
+
+    public function setBBchannelId ($bbChannelid)
+    {
+        $this->bbcId = $bbChannelid;
+    }
+
+}
+

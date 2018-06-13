@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/botbasic.html">\botbasic</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">217</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">17</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-624123888"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-624123888" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1221175715"></a>
+                                <a href="../namespaces/botbasic.html" style="margin-left: 30px; padding-left: 0">botbasic</a>
+            </div>
+            <div id="namespace-1221175715" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/botbasic.Closable.html">Closable</a></li>
+                                                    <li class="interface"><a href="../classes/botbasic.Initializable.html">Initializable</a></li>
+                                                    <li class="interface"><a href="../classes/botbasic.LogbotChatMedium.html">LogbotChatMedium</a></li>
+                                                                                                    <li class="class"><a href="../classes/botbasic.BizModelAdapter.html">BizModelAdapter</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BizModelAdapterTemplate.html">BizModelAdapterTemplate</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BizModelProvider.html">BizModelProvider</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasic.html">BotBasic</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasicChannel.html">BotBasicChannel</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasicParser.html">BotBasicParser</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasicRuntime.html">BotBasicRuntime</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMedium.html">ChatMedium</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumChannel.html">ChatMediumChannel</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumCliStub.html">ChatMediumCliStub</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumTelegram.html">ChatMediumTelegram</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumWebStub.html">ChatMediumWebStub</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.DBbroker.html">DBbroker</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Interaction.html">Interaction</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.InteractionResource.html">InteractionResource</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Log.html">Log</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Splash.html">Splash</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Update.html">Update</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouter.html">WebRouter</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouterCliStub.html">WebRouterCliStub</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouterTelegram.html">WebRouterTelegram</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouterWebStub.html">WebRouterWebStub</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/botbasic.html">\botbasic</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\botbasic</small>InteractionResource</h1>
+                    <p><em>Clase InteractionResource</em></p>
+                    <p>Representa un recurso multimedia que es enviado o recibido como parte de un Interaction (Update/Splash).</p>
+<p>Dentro del código y nombres de BotBasic, &quot;resource&quot; equivale a InteractionResource.</p>
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.InteractionResource.html#method_isValidType" class="">isValidType()</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#method_typeString" class="">typeString()</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#method_createFromContent" class="">createFromContent()</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#method_createFromFileId" class="">createFromFileId()</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#method_createFromFile" class="">createFromFile()</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#method_createByCloning" class="">createByCloning()</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#method_load" class="">load()</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#method_save" class="">save()</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#method_serializeBrief" class="">serializeBrief()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.InteractionResource.html#property_id" class="">$id</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#property_type" class="">$type</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#property_clonedFrom" class="">$clonedFrom</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#property_cmType" class="">$cmType</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#property_cmcAuthInfo" class="">$cmcAuthInfo</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#property_fileId" class="">$fileId</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#property_filename" class="">$filename</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#property_content" class="">$content</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#property_downloadState" class="">$downloadState</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#property_typeStrings" class="">$typeStrings</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.InteractionResource.html#constant_TYPE_CLONED" class="">TYPE_CLONED</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#constant_TYPE_TEXT" class="">TYPE_TEXT</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#constant_TYPE_IMAGE" class="">TYPE_IMAGE</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#constant_TYPE_AUDIO" class="">TYPE_AUDIO</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#constant_TYPE_VOICE" class="">TYPE_VOICE</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#constant_TYPE_VIDEO" class="">TYPE_VIDEO</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#constant_TYPE_DOCUMENT" class="">TYPE_DOCUMENT</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#constant_TYPE_LOCATION" class="">TYPE_LOCATION</a><br />
+                                                                    <a href="../classes/botbasic.InteractionResource.html#constant_TYPE_CAPTION" class="">TYPE_CAPTION</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.InteractionResource.html#method___construct" class="">__construct()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/botbasic.InteractionResource.html"><div class="path-wrapper">botbasic/InteractionResource.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">botbasic</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\botbasic\InteractionResource</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_CLONED" name="constant_TYPE_CLONED" class="anchor"></a>
+            <article id="constant_TYPE_CLONED" class="constant">
+                <h3 class="">TYPE_CLONED</h3>
+                <pre class="signature">TYPE_CLONED</pre>
+                <p><em>Tipo de recurso: usado por DBbroker para señalizar Splashes que son &quot;clones&quot; de un Interaction cuando se utilizan túneles de BotBasic;
+ la clonación de recursos evita la duplicación de los archivos que reflejan sus contenidos, y permite reutilizar el file_id de Telegram</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_TEXT" name="constant_TYPE_TEXT" class="anchor"></a>
+            <article id="constant_TYPE_TEXT" class="constant">
+                <h3 class="">TYPE_TEXT</h3>
+                <pre class="signature">TYPE_TEXT</pre>
+                <p><em>Tipo de recurso: texto; no usado actualmente para recursos (pues los textos van en Interaction) pero sí para la lógica que implementa túneles</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_IMAGE" name="constant_TYPE_IMAGE" class="anchor"></a>
+            <article id="constant_TYPE_IMAGE" class="constant">
+                <h3 class="">TYPE_IMAGE</h3>
+                <pre class="signature">TYPE_IMAGE</pre>
+                <p><em>Tipo de recurso: imagen; en Telegram se descargará siempre la imagen que tenga la máxima resolución</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_AUDIO" name="constant_TYPE_AUDIO" class="anchor"></a>
+            <article id="constant_TYPE_AUDIO" class="constant">
+                <h3 class="">TYPE_AUDIO</h3>
+                <pre class="signature">TYPE_AUDIO</pre>
+                <p><em>Tipo de recurso: clip de audio</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_VOICE" name="constant_TYPE_VOICE" class="anchor"></a>
+            <article id="constant_TYPE_VOICE" class="constant">
+                <h3 class="">TYPE_VOICE</h3>
+                <pre class="signature">TYPE_VOICE</pre>
+                <p><em>Tipo de recurso: clip de voz</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_VIDEO" name="constant_TYPE_VIDEO" class="anchor"></a>
+            <article id="constant_TYPE_VIDEO" class="constant">
+                <h3 class="">TYPE_VIDEO</h3>
+                <pre class="signature">TYPE_VIDEO</pre>
+                <p><em>Tipo de recurso: clip de video</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_DOCUMENT" name="constant_TYPE_DOCUMENT" class="anchor"></a>
+            <article id="constant_TYPE_DOCUMENT" class="constant">
+                <h3 class="">TYPE_DOCUMENT</h3>
+                <pre class="signature">TYPE_DOCUMENT</pre>
+                <p><em>Tipo de recurso: documento</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_LOCATION" name="constant_TYPE_LOCATION" class="anchor"></a>
+            <article id="constant_TYPE_LOCATION" class="constant">
+                <h3 class="">TYPE_LOCATION</h3>
+                <pre class="signature">TYPE_LOCATION</pre>
+                <p><em>Tipo de recurso: geolocalización; no se guarda como archivo descargado sino en $content</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_CAPTION" name="constant_TYPE_CAPTION" class="anchor"></a>
+            <article id="constant_TYPE_CAPTION" class="constant">
+                <h3 class="">TYPE_CAPTION</h3>
+                <pre class="signature">TYPE_CAPTION</pre>
+                <p><em>Tipo de recurso: caption (asociado a algunos updates que vienen de la chatapp); se almacena junto con el recurso pero no se usa en BotBasic</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_id" name="property_id" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$id</h3>
+                <pre class="signature">$id : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; ID del recurso, tal como aparece en la BD                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_type" name="property_type" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$type</h3>
+                <pre class="signature">$type : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; Tipo del recurso (TYPE_...)                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_clonedFrom" name="property_clonedFrom" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$clonedFrom</h3>
+                <pre class="signature">$clonedFrom : null</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null
+                &mdash; InteractionResource original; aplica sólo a generados por clonación                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_cmType" name="property_cmType" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$cmType</h3>
+                <pre class="signature">$cmType : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; Tipo ($type) del ChatMedium del que proviene el recurso; se refleja en BD a efectos de business intelligence                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_cmcAuthInfo" name="property_cmcAuthInfo" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$cmcAuthInfo</h3>
+                <pre class="signature">$cmcAuthInfo : mixed</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                mixed
+                &mdash; Información de autenticación necesaria para descargar el contenido del recurso desde los servidores de la chatapp                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_fileId" name="property_fileId" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$fileId</h3>
+                <pre class="signature">$fileId : mixed</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                mixed
+                &mdash; ID del recurso, necesario para descargar el contenido desde los servidores de la chatapp                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_filename" name="property_filename" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$filename</h3>
+                <pre class="signature">$filename : string|null</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string|null
+                &mdash; Nombre del archivo local que refleja el recurso después de que ha sido descargado, o null cuando aún no lo ha sido                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_content" name="property_content" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$content</h3>
+                <pre class="signature">$content : null|mixed</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|mixed
+                &mdash; En recursos que no ameritan un archivo para su contenido (como geolocalizaciones), el contenido se almacena aquí                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_downloadState" name="property_downloadState" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$downloadState</h3>
+                <pre class="signature">$downloadState : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; Estado de la descarga del archivo del contenido, según campo ENUM de la BD                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_typeStrings" name="property_typeStrings" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$typeStrings</h3>
+                <pre class="signature">$typeStrings : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                &mdash; Nombres de los tipos de recursos                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidType" name="method_isValidType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">isValidType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidType(integer  <span class="argument">$type</span>) : boolean</pre>
+                <p><em>Indica si un tipo es una de las constantes TYPE_.</em></p>
+                <p>..</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_typeString" name="method_typeString" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">typeString()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">typeString(integer  <span class="argument">$type</span>) : string</pre>
+                <p><em>Retorna un string correspondiente al tipo de resource</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type </td>
+                                <td><p>Una de las constantes TYPE_...</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>Nombre asociado al tipo de resource, o &quot;unknown&quot;</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createFromContent" name="method_createFromContent" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createFromContent()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createFromContent(integer  <span class="argument">$type</span>, mixed  <span class="argument">$content</span>) : \botbasic\InteractionResource|null</pre>
+                <p><em>Factory method: crea un resource a partir de un content pasado como parámetro</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type </td>
+                                <td><p>Una de las constantes TYPE_...</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$content </td>
+                                <td><p>contenido del resource a ser guardado, según su tipo</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a>|null
+                                            &mdash; <p>null en caso de no haber podido generar la entrada en BD; el resource en caso de éxito</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createFromFileId" name="method_createFromFileId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createFromFileId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createFromFileId(integer  <span class="argument">$type</span>, mixed  <span class="argument">$cmAuthInfo</span>, string  <span class="argument">$fileId</span>, boolean  <span class="argument">$doDownload = BOTBASIC_DOWNLOAD_MMCONTENT</span>) : \botbasic\InteractionResource|null</pre>
+                <p><em>Factory method: crea un resource a partir de un file_id que sea recibido como parte de un raw update</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type </td>
+                                <td><p>Una de las constantes TYPE_...</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$cmAuthInfo </td>
+                                <td><p>Información necesaria para autenticar ante el servidor la petición de download del resource</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$fileId </td>
+                                <td><p>file_id</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$doDownload </td>
+                                <td><p>Indica si el contenido del resource deberá ser descargado; las descargas de video se transformarán a audio</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a>|null
+                                            &mdash; <p>null en caso de no haber podido generar la entrada en BD; el resource en caso de éxito</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createFromFile" name="method_createFromFile" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createFromFile()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createFromFile(integer  <span class="argument">$type</span>, string  <span class="argument">$filename</span>) : \botbasic\InteractionResource|null</pre>
+                <p><em>Factory method: crea un resource a partir de un archivo en el filesystem del servidor local</em></p>
+                <p>El contenido del archivo será movido o copiado a una ubicación propia del storage area de BotBasic.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type </td>
+                                <td><p>Una de las constantes TYPE_...</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$filename </td>
+                                <td><p>Ruta al archivo fuente</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a>|null
+                                            &mdash; <p>null en caso de no haber podido crear la entrada en BD o no haber podido copiar/mover el archivo;
+la instancia del resource en caso de éxito</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createByCloning" name="method_createByCloning" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createByCloning()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createByCloning() : \botbasic\InteractionResource|null</pre>
+                <p><em>Factory method: crea un recurso por medio de clonación a partir de otro</em></p>
+                <p>La clonación permite evitar la descarga o replicación en filesystem de archivos con el mismo contenido.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a>|null
+                                            &mdash; <p>null en caso de no haber podido generar la entrada en BD; el resource en caso de éxito</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_load" name="method_load" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">load()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">load(integer  <span class="argument">$id</span>) : \botbasic\InteractionResource|null</pre>
+                <p><em>Carga un InteractionResource desde la BD</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$id </td>
+                                <td><p>ID del resource</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a>|null
+                                            &mdash; <p>null en caso de error de BD o si no se ha ubicado el resource; el resource en caso de éxito</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_save" name="method_save" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">save()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">save(\botbasic\Interaction  <span class="argument">$interaction</span>, boolean  <span class="argument">$doDownload = BOTBASIC_DOWNLOAD_MMCONTENT</span>) : boolean|null</pre>
+                <p><em>Guarda un resource en BD, especificando opcionalmente si se deberá descargar el contenido multimedia asociado (positivo por defecto)</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/botbasic.Interaction.html">\botbasic\Interaction</a></td>
+                                <td>$interaction </td>
+                                <td><p>Interaction al cual está asociado el resource, o null para no almacenar la relación en BD</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$doDownload </td>
+                                <td><p>Indica si se descargará el contenido multimedia asociado</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean|null
+                                            &mdash; <p>null en caso de error de BD; true en caso de éxito</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_serializeBrief" name="method_serializeBrief" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">serializeBrief()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">serializeBrief() : string</pre>
+                <p><em>Retorna una representación compacta del resource en forma de string</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(integer  <span class="argument">$type</span>) </pre>
+                <p><em>Constructor</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type </td>
+                                <td><p>Una de las constantes TYPE_...</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">InteractionResource.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/botbasic/InteractionResource.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/botbasic.html">\botbasic</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 19th, 2017 at 17:39.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

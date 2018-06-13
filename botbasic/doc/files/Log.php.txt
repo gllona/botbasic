@@ -1,0 +1,228 @@
+<?php
+/**
+ * Librería de registro de mensajes y errores en archivos de bitácora y base de datos
+ *
+ * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
+ * @license     http://www.venicua.com/botbasic/license     Licencia de BotBasic
+ * @see         http://www.venicua.com/botbasic             Referencia de BotBasic
+ * @version     1.0 - 01.jan.2017
+ * @since       0.1 - 01.jul.2016
+ */
+
+
+
+namespace botbasic;
+
+use \DateTime, \DateTimeZone;
+
+
+
+/**
+ * Clase Log
+ *
+ * Implementa (como métodos estáticos) las herramientas de registro de errores de mensajes en bitácora.
+ *
+ * El registro en BD no está implementado aún.
+ *
+ * @package botbasic
+ */
+class Log
+{
+
+
+
+    /** Tipo de una entrada en bitácora: mensaje usado durante debugging de BotBasic (no de programas BotBasic) */
+    const TYPE_DEVLOG     = 101;
+
+    /** Tipo de una entrada en bitácora: mensaje genérico */
+    const TYPE_GENERIC    = 102;
+
+    /** Tipo de una entrada en bitácora: error de BD */
+    const TYPE_DATABASE   = 103;
+
+    /** Tipo de una entrada en bitácora: mensaje asociado a la lógica del entorno de ejecución */
+    const TYPE_RUNTIME    = 104;
+
+    /** Tipo de una entrada en bitácora: mensaje relativo a un ChatMedium */
+    const TYPE_CHATMEDIUM = 105;
+
+    /** Tipo de una entrada en bitácora: error o alerta asociado a la lógica de un programa BotBasic */
+    const TYPE_BBCODE     = 106;
+
+    /** Tipo de una entrada en bitácora: mensaje reflejado con las directivas BotBasic LOG y también REM cuando está activado TRACE */
+    const TYPE_BBAPPDEBUG = 107;
+
+    /** @var array Etiquetas para los tipos de entradas de bitácora, tal como se reflejarán en ella */
+    static private $types = [
+        self::TYPE_DEVLOG     => "debug",
+        self::TYPE_GENERIC    => "generic",
+        self::TYPE_DATABASE   => "database",
+        self::TYPE_RUNTIME    => "runtime",
+        self::TYPE_CHATMEDIUM => "chatmedium",
+        self::TYPE_BBCODE     => "botbasic",
+        self::TYPE_BBAPPDEBUG => "app",
+    ];
+
+    /** Atributo de una entrada de bitácora: este en particular es no aplicable (artificio) */
+    const ATTRIB_DUMMY              = 201;
+
+    /** Atributo de una entrada de bitácora: excepción */
+    const ATTRIB_EXCEPTION          = 202;
+
+    /** Atributo de una entrada de bitácora: ID del BizModelUser */
+    const ATTRIB_BIZMODEL_USERID    = 203;
+
+    /** Atributo de una entrada de bitácora: ID del usuario de la chatapp (según es informado por la chatapp) */
+    const ATTRIB_CHATMEDIUM_USERID  = 204;
+
+    /** Atributo de una entrada de bitácora: nombre del ChatMedium */
+    const ATTRIB_CHATMEDIUM_NAME    = 205;
+
+    /** Atributo de una entrada de bitácora: nombre del bot de la chatapp */
+    const ATTRIB_CHATMEDIUM_CHANNEL = 206;
+
+    /** Atributo de una entrada de bitácora: recurso (no usado por el momento) */
+    const ATTRIB_RESOURCE           = 207;
+
+    /** Atributo de una entrada de bitácora: nombre del bot de BotBasic */
+    const ATTRIB_BB_BOT             = 208;
+
+    /** Atributo de una entrada de bitácora: número de línea del programa BotBasic */
+    const ATTRIB_BB_LINENO          = 209;
+
+    /** Atributo de una entrada de bitácora: simbolo (nombre de variable, ...) del programa BotBasic */
+    const ATTRIB_BB_SYMBOL          = 210;
+
+    /** @var array Nombres de los tipos de atributos, con indicación de si son registrados antes o después del texto principal de la entrada de bitácora */
+    static private $attribNames = [
+        self::ATTRIB_CHATMEDIUM_NAME    => "/chatmedium_name",       // '/' before name logs it before the message
+        self::ATTRIB_CHATMEDIUM_CHANNEL => "/chatmedium_channel",
+        self::ATTRIB_CHATMEDIUM_USERID  => "/chatmedium_user",
+        self::ATTRIB_BIZMODEL_USERID    => "/bizmodel_userid",
+        self::ATTRIB_RESOURCE           => "resource/",              // '/' after name logs it after the message
+        self::ATTRIB_BB_BOT             => "botbasicbot/",
+        self::ATTRIB_BB_LINENO          => "botbasiclineno/",
+        self::ATTRIB_BB_SYMBOL          => "botbasicsymbol/",
+        self::ATTRIB_EXCEPTION          => "exception/",
+        self::ATTRIB_DUMMY              => "anything/",
+    ];
+
+    /** @var array Estos tipos de atributos no serán registrados */
+    static private $dontLogThese = [ self::ATTRIB_DUMMY ];
+
+    /** @var bool Indica si las entradas de bitácora serán también reflejadas en una tabla en BD (no implementado aún) */
+    static private $logToDB = false;
+
+    /** @var mixed Filehanler del archivo de bitácora, cuando está abierto */
+    static private $fh = null;
+
+
+
+    /**
+     * @param  int                  $type     type constant
+     * @param  array                $message  free text
+     * @param  array                $attribs  [ [ attribNameConstant, content(string|resource|exception) ], ... ]
+     * @param  BotBasicRuntime|null $runtime
+     */
+    static public function register ($type, $message, $attribs, $runtime)   // TODO make $runtime optional
+    {
+        if ($attribs !== null) { if (count($attribs) > 0 && ! is_array($attribs[0])) { $attribs = [ $attribs ]; } }
+        else                   { $attribs = [];                                                                   }
+        // attempt to include runtime specific data in the log entry
+        // any NULL included and duplicated attribute won't affect previous ones because read order is left-to-right in $attribs
+        if ($runtime !== null) {
+            $bmUserId  = $runtime->getBMuserId() === null ? 'NULL' : $runtime->getBMuserId();
+            $attribs[] = [ self::ATTRIB_CHATMEDIUM_NAME,    ChatMedium::typeString($runtime->getCurrentBBchannel()->getCMchannel()->getCMtype()) ];
+            $attribs[] = [ self::ATTRIB_CHATMEDIUM_CHANNEL, $runtime->getCurrentBBchannel()->getCMchannel()->getCMbotName()                      ];
+            $attribs[] = [ self::ATTRIB_CHATMEDIUM_USERID,  $runtime->getCurrentBBchannel()->getCMchannel()->getCMuserId()                       ];
+            $attribs[] = [ self::ATTRIB_BIZMODEL_USERID,    $bmUserId                                                                            ];
+            $attribs[] = [ self::ATTRIB_BB_BOT,             $runtime->getBBbotName()                                                             ];
+        }
+        // build the message
+        $message = self::makeFullMessage($type, $message, $attribs);
+        // write in logfile
+        if (self::$fh === null) {
+            $fh = fopen(BOTBASIC_LOGFILE, "a");
+            if ($fh === false) { echo "CAN'T OPEN LOGFILE FOR WRITING... \n$message"; }   // log to console TODO define final version
+            else               { self::$fh = $fh;                                     }
+        }
+        if (self::$fh !== null) {
+            $res = fwrite(self::$fh, $message);
+            if ($res === false) { echo "CAN'T WRITE INTO LOGFILE... \n$message"; }   // log to console TODO define final version
+            else                { fflush(self::$fh);                             }
+        }
+        // optionally write in DB
+        if (self::$logToDB) { DBbroker::DBlogger($message); }
+    }
+
+
+
+    static private function makeFullMessage ($type, $message, $attribs)
+    {
+        if (! is_string($message)) { $message = "BAD_MESSAGE_ASSIGNED"; }
+        $now  = self::makeCurrentDatetimeString();
+        $text = "[$now] " . strtoupper(self::$types[$type]);
+        foreach (array_keys(self::$attribNames) as $ak => $an) {
+            list ($a, $putAfterMessage) = self::getAttrib($attribs, $ak);
+            if (! $putAfterMessage) { $text .= ' ' . $an . ': ' . $a; }
+        }
+        $text .= ' ' . $message;
+        foreach (array_keys(self::$attribNames) as $ak => $an) {
+            list ($a, $putAfterMessage) = self::getAttrib($attribs, $ak);
+            if ($putAfterMessage) { $text .= ' ' . $an . ': ' . $a; }
+        }
+        return $text;
+    }
+
+
+    /**
+     * @param $attribs  array       [ [ attribNameConstant, content(string|resource|exception) ], ... ]
+     * @param $type     int         attribNameConstant for filtering $attribs
+     * @return          string|null
+     */
+    static private function getAttrib ($attribs, $type)
+    {
+        if ($attribs === null)                    { return null; }
+        if (in_array($type, self::$dontLogThese)) { return null; }
+        $res = [];
+        foreach ($attribs as $attrib) {
+            list ($t, $content) = $attrib;   /** @var $content \Exception */
+            if ($type === $t && $content !== null) {
+                if  (is_object($content) && (get_class($content) == "Exception" || is_subclass_of($content, "Exception"))) {
+                    $content = '<' . $content->getFile() . ':' . $content->getLine() . ':' . $content->getMessage() . '>';
+                }
+                elseif ($content instanceof InteractionResource) {
+                    $content = $content->serializeBrief();
+                }
+                elseif (! is_string($content)) {
+                    $content = "INVALID_CONTENT";
+                }
+                $res[] = $content;
+            }
+        }
+        return count($res) == 0 ? null : $res[0];
+    }
+
+
+
+    static private function makeCurrentDatetimeString ($withMicroSeconds = true)
+    {
+        $mt = microtime(true);
+        $ms = sprintf("%06d", ($mt - floor($mt)) * 1000000);
+        $dt = new DateTime( date('Y-m-d@H:i:s.' . $ms, $mt) );
+        $tz = new DateTimeZone(BOTBASIC_TIMEZONE);
+        $dt->setTimezone($tz);
+        return $dt->format("Y-m-d H:i:s" . ($withMicroSeconds ? ".u" : ""));
+    }
+
+
+
+    static public function logAlsoOnDB ($onOff = true)
+    {
+        self::$logToDB = $onOff;
+    }
+
+
+
+}
+

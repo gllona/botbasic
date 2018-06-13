@@ -1,0 +1,1495 @@
+<?php
+/**
+ * Librería de lectura y escritura para las estructuras de BotBasic (no aplica a los modelos de negocio)
+ *
+ * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
+ * @license     http://www.venicua.com/botbasic/license     Licencia de BotBasic
+ * @see         http://www.venicua.com/botbasic             Referencia de BotBasic
+ * @version     1.0 - 01.jan.2017
+ * @since       0.1 - 01.jul.2016
+ */
+
+
+
+namespace botbasic;
+
+use \PDO, \PDOException;
+
+
+
+/**
+ * Clase DBbroker
+ *
+ * Implementa como librería (en forma de métodos estáticos) el ORM de BotBasic.
+ *
+ * No hay acceso a base de datos fuera de esta clase, a lo largo del código del namespace.
+ *
+ * @package botbasic
+ */
+class DBbroker
+{
+
+    /**
+     * @var PDO
+     */
+    static private $dbh = null;   // DB handler
+
+    ////////////
+    // DB LOGGER
+    ////////////
+
+    static public function DBlogger ($message)
+    {
+        // do nothing, for now
+    }
+
+    static private function readLastlogtimeForDaemon ($daemon, $cmType)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT stamp
+              FROM daemons_log_stamps
+             WHERE cm_type = $cmType
+               AND daemon = '$daemon'
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if ($rows === null || count($rows) == 0) {
+            return null;
+        }
+        return $rows[0]['stamp'];
+    }
+
+    static private function writeCurrentLastlogtimeDaemon ($daemon, $cmType)
+    {
+        $tstamp = time();
+        self::connect();
+        $sql = <<<END
+            UPDATE daemons_log_stamps
+               SET stamp = $tstamp
+             WHERE cm_type = $cmType
+               AND daemon = '$daemon'
+               AND deleted IS NULL;
+END;
+        $res = self::exec($sql);
+        if ($res === false) { return null; }
+        return true;
+    }
+
+    static public function readLastlogtimeForMessageDaemon ($cmType)
+    {
+        return self::readLastlogtimeForDaemon('message', $cmType);
+    }
+
+    static public function writeCurrentLastlogtimeForMessageDaemon ($cmType)
+    {
+        return self::writeCurrentLastlogtimeDaemon('message', $cmType);
+    }
+
+    static public function readLastlogtimeForDownloadDaemon ($cmType)
+    {
+        return self::readLastlogtimeForDaemon('download', $cmType);
+    }
+
+    static public function writeCurrentLastlogtimeForDownloadDaemon ($cmType)
+    {
+        return self::writeCurrentLastlogtimeDaemon('download', $cmType);
+    }
+
+    //////////////////////////////////////////////
+    // BOTBASICPARSER AND BOTBASICRUNTIME (BBCODE)
+    //////////////////////////////////////////////
+
+    static public function userCanUploadCode ($userId, $password)
+    {
+        self::connect();
+        // sanitize input
+        $userId   = self::q($userId);
+        $password = self::q($password);
+        // read the new try_count
+        $sql = <<<END
+            SELECT COUNT(*) AS matches
+              FROM parser_user
+             WHERE user_id = '$userId' 
+               AND password = PASSWORD('$password')
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if ($rows === false) { return null; }
+        return $rows[0]['matches'] == 0 ? false : true;
+    }
+
+    /**
+     * @param  $bbparser    BotBasicParser
+     * @return              bool|null
+     */
+    static public function writeBBcode ($bbparser)
+    {
+        self::connect();
+        // gather data
+        $bbVersion       = $bbparser->getBBversion();
+        $codename        = $bbparser->getCodename();
+        $majorVersion    = $bbparser->getMajorCodeVersion();
+        $minorVersion    = $bbparser->getMinorCodeVersion();
+        $subminorVersion = $bbparser->getSubminorCodeVersion();
+        $bots            = implode('|', $bbparser->getBBbotNames());
+        $messages        = self::q(json_encode($bbparser->getMessages()));
+        $menus           = self::q(json_encode($bbparser->getMenus()));
+        $magicvars       = self::q(json_encode($bbparser->getMagicvars()));
+        $primitives      = self::q(json_encode($bbparser->getPrimitives()));
+        $program         = self::q(json_encode($bbparser->getProgram()));
+        // check for codeversion overwritting
+        $sql = <<<END
+            SELECT COUNT(*) AS matches
+              FROM bbcode
+             WHERE code_name = '$codename'
+               AND code_major_version = '$majorVersion'
+               AND code_minor_version = '$minorVersion'
+               AND code_subminor_version = '$subminorVersion'
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if ($rows === false)         { return null;  }
+        if ($rows[0]['matches'] > 0) { return false; }
+        // insert
+        $sql = <<<END
+            INSERT INTO bbcode 
+                   (botbasic_version, code_name, code_major_version, code_minor_version, code_subminor_version, bots, messages, menus, magicvars, primitives, program)
+            VALUES ('$bbVersion', '$codename', '$majorVersion', '$minorVersion', '$subminorVersion', '$bots', '$messages', '$menus', '$magicvars', '$primitives', '$program');
+END;
+        $newId = self::exec($sql);
+        if ($newId === false) { return null; }
+        return true;
+    }
+
+    static public function readBBcode ($codename, $majorCodeVersion = null, $minorCodeVersion = null)
+    {
+        self::connect();
+        // if no full codeVersion was passed, then query for the most recent version of the code
+        if ($majorCodeVersion === null || $minorCodeVersion === null) {
+            $data = DBbroker::readLastBBCodeVersionForCodename($majorCodeVersion);
+            if     ($data === null)  { return null;  }
+            elseif ($data === false) { return false; }
+            list ($majorCodeVersion, $minorCodeVersion, ) = $data;
+        }
+        // read the code
+        if ($minorCodeVersion !== null) {
+            $sql = <<<END
+                SELECT id, botbasic_version, code_minor_version, messages, menus, magicvars, primitives, program 
+                  FROM bbcode
+                 WHERE code_name = '$codename'
+                   AND code_major_version = '$majorCodeVersion'
+                   AND code_minor_version = '$minorCodeVersion'
+                   AND deleted IS NULL
+                 ORDER BY code_subminor_version DESC
+                 LIMIT 1;
+END;
+        }
+        else {
+            $sql = <<<END
+                SELECT id, botbasic_version, code_minor_version, messages, menus, magicvars, primitives, program 
+                  FROM bbcode
+                 WHERE code_name = '$codename'
+                   AND code_major_version = '$majorCodeVersion'
+                   AND deleted IS NULL
+                 ORDER BY code_minor_version DESC, code_subminor_version DESC
+                 LIMIT 1;
+END;
+        }
+        $rows = self::query($sql);
+        if ($rows === false)    { return null;  }
+        if (count($rows) === 0) { return false; }
+        list ($id, $bbVersion, $minorCodeVersion, $messages, $menus, $magicvars, $primitives, $program) = array_values($rows[0]);
+        return [
+            $id, $bbVersion, $codename, $majorCodeVersion, $minorCodeVersion,
+            json_decode($messages), json_decode($menus), json_decode($magicvars), json_decode($primitives), json_decode($program)
+        ];
+    }
+
+    static public function readLastBBCodeVersionForCodename ($bbCodeName, $majorCodeVersion = null)
+    {
+        self::connect();
+        $andClause = $majorCodeVersion !== null ? "AND code_major_version = '$majorCodeVersion'" : '';
+        $sql = <<<END
+            SELECT code_major_version, code_minor_version, code_subminor_version
+              FROM bbcode
+             WHERE code_name = '$bbCodeName'
+                   $andClause
+               AND deleted IS NULL
+             ORDER BY code_major_version DESC, code_minor_version DESC, code_subminor_version DESC
+             LIMIT 1;
+END;
+        $rows = self::query($sql);
+        if ($rows === false)    { return null;  }
+        if (count($rows) === 0) { return false; }
+        return array_values($rows[0]);
+    }
+
+    static public function readAllRouteQueuesAndBBlabelsForBBruntime ($bbRuntimeId, $bbRuntimeMajorCodeVersion, $bbBotName)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT ch.id, ch.route, cd.program
+              FROM bbchannel AS ch
+              JOIN runtime AS rt ON ch.runtime_id = rt.id
+              JOIN bbcode AS cd ON rt.code_major_version = cd.code_major_version AND rt.code_minor_version = cd.code_minor_version
+             WHERE rt.id = $bbRuntimeId
+               AND rt.code_major_version = '$bbRuntimeMajorCodeVersion'
+               AND cd.code_subminor_version = MAX(
+                   SELECT cd2.code_subminor_version
+                     FROM bbcode AS cd2
+                    WHERE cd2.code_major_version = cd.code_major_version
+                      AND cd2.code_minor_version = cd.code_minor_version
+                      AND cd2.deleted IS NULL
+                   )
+               AND ch.deleted IS NULL
+               AND rt.deleted IS NULL
+               AND cd.deleted IS NULL
+             ORDER BY cd.code_minor_version DESC;
+END;
+        $rows = self::query($sql);
+        if ($rows === false) { return null; }
+        $res = [];
+        foreach ($rows as $row) {
+            list ($bbcId, $route, $program) = $row;
+            $route   = json_decode($route);
+            $program = json_decode($program);
+            $labels  = isset($program[$bbBotName]) ? $program[$bbBotName]['labels'] : null;
+            $res[]   = [ $bbcId, $route, $labels ];
+        }
+        return $res;
+    }
+
+    static public function readNewerBBcodeVersions ($bbCodename, $bbCodeMajorVersion, $bbCodeMinorVersion, $bbBotName)
+    {
+        self::connect();   // TODO field labels should be stored when parsing in bbcode and bb instance
+        $sql = <<<END
+            SELECT code_major_version, code_minor_version, program
+              FROM bbcode
+             WHERE id = '$bbCodename'
+               AND code_major_version = '$bbCodeMajorVersion'
+               AND code_minor_version > '$bbCodeMinorVersion'
+             ORDER BY code_minor_version DESC;
+END;
+        $rows = self::query($sql);
+        if ($rows === false) { return null; }
+        $res = [];
+        foreach ($rows as $row) {
+            list ($major, $minor, $program) = $row;
+            $program = json_decode($program);
+            $labels  = isset($program[$bbBotName]) ? $program[$bbBotName]['labels'] : null;
+            $res[]   = [ $major, $minor, $labels ];
+        }
+        return $res;
+    }
+
+    ////////////////////////////////////////
+    // CHATMEDIUM : MESSAGE QUEUE - TELEGRAM
+    ////////////////////////////////////////
+
+    static public function writeToTelegramMessageQueue ($text, $menuOptions, $resource, $cmcId)
+    {
+        self::connect();
+        $text        = self::q($text);
+        $menuOptions = self::q(json_encode($menuOptions));
+        $resource    = self::q(json_encode($resource));
+        $sql = <<<END
+            INSERT INTO telegram_queue (text, menu_options, resource, cmchannel_id)
+            VALUES ('$text', '$menuOptions', '$resource', $cmcId);
+END;
+        $newId = self::exec($sql, null, true);
+        if ($newId === false) { return null; }
+        return $newId;
+    }
+
+    static public function readFirstInTelegramMessageQueueAndMarkAsSending ($tryCount)
+    {
+        self::connect();
+        $type = ChatMedium::TYPE_TELEGRAM;
+        // closures
+        $unlock = function () {
+            $sql = <<<END
+                UNLOCK TABLES;
+END;
+            self::exec($sql);
+        };
+        // lock the table
+        $sql = <<<END
+            LOCK TABLES telegram_queue WRITE;
+END;
+        $res = self::exec($sql);
+        if ($res === false) {
+            $unlock();
+            // TODO Log this
+            return null;
+        }
+        // read the next message to send:
+        // select the oldest pending message with the specified tryCount that has no previous pending messages when associated by their common cmChannelId
+        // this guarantees that messages are sent in the proper order and allows balancing of the send queue according to the tryCount attribute
+        $sql = <<<END
+            SELECT tq1.id, tq1.text, tq1.menu_options, tq1.resource, tq1.cmchannel_id
+              FROM telegram_queue AS tq1
+             WHERE tq1.type = $type 
+               AND tq1.state = 'pending'
+               AND tq1.try_count = $tryCount
+               AND (SELECT tq2.id 
+                      FROM telegram_queue AS tq2 
+                     WHERE tq2.state = 'pending'
+                       AND tq2.cmchannel_id = tq1.cmchannel_id
+                       AND tq2.deleted IS NOT NULL
+                     ORDER BY tq2.id ASC
+                     LIMIT 1) = tq1.id
+               AND tq1.deleted IS NOT NULL 
+             ORDER BY tq1.id ASC
+             LIMIT 1;
+END;
+        $rows = self::query($sql);
+        if ($rows === null) {
+            $unlock();
+            // TODO Log this
+            return null;
+        }
+        if (count($rows) == 0) {
+            $unlock();
+            return false;
+        }
+        list ($id, $text, $menuOptions, $resource, $cmcId) = array_values($rows[0]);
+        $menuOptions = json_decode($menuOptions);
+        $resource    = json_decode($resource);
+        $res         = [ $id, $text, $menuOptions, $resource, $cmcId ];
+        // unlock tables and return
+        $unlock();
+        return $res;
+    }
+
+    static public function markAsSentInTelegramMessageQueue ($id)
+    {
+        self::connect();
+        $sql = <<<END
+            UPDATE telegram_queue
+               SET state = 'sent'
+             WHERE id = $id
+               AND deleted IS NULL;
+END;
+        $res = self::exec($sql);
+        if ($res === false) { return null; }
+        return true;
+    }
+
+    static public function markAsUnsentInTelegramMessageQueue ($id, $countLimit = null)
+    {
+        self::connect();
+        // mark (reset as pending) and increment try_count
+        $sql = <<<END
+            UPDATE telegram_queue
+               SET state = 'pending', try_count = try_count + 1
+             WHERE id = $id
+               AND deleted IS NULL;
+END;
+        $res = self::exec($sql);
+        if ($res === false) { return null; }
+        // read the new try_count
+        $sql = <<<END
+            SELECT try_count
+              FROM telegram_queue
+             WHERE id = $id
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if ($rows === false)   { return null; }
+        if (count($rows) == 0) { return false; }
+        $count = $rows[0]['try_count'];
+        // update state if sent limit is reached
+        if ($countLimit !== null && $count >= $countLimit) {
+            $sql = <<<END
+                UPDATE telegram_queue
+                   SET state = 'error'
+                 WHERE id = $id
+                   AND deleted IS NULL;
+END;
+            $res = self::exec($sql);
+            if ($res === false) { return null; }
+        }
+        // return new try count
+        return $count;
+    }
+
+    ///////////////////////////////////////
+    // RESOURCE : DOWNLOAD QUEUE - TELEGRAM
+    ///////////////////////////////////////
+
+    static public function readFirstInDownloadQueueAndMarkAsSending ($cmType, $tryCount)
+    {
+        self::connect();
+        // closures
+        $unlock = function () {
+            $sql = <<<END
+                UNLOCK TABLES;
+END;
+            self::exec($sql);
+        };
+        // lock the table
+        $sql = <<<END
+            LOCK TABLES resource WRITE;
+END;
+        $res = self::exec($sql);
+        if ($res === false) {
+            $unlock();
+            // TODO Log this
+            return null;
+        }
+        // read the next message to send
+        $sql = <<<END
+            SELECT id, type, file_id 
+              FROM resource
+             WHERE cmType = $cmType 
+               AND state = 'pending'
+               AND try_count = $tryCount
+               AND deleted IS NULL
+             ORDER BY id ASC
+             LIMIT 1;
+END;
+        $rows = self::query($sql);
+        if ($rows === null) {
+            $unlock();
+            // TODO Log this
+            return null;
+        }
+        if (count($rows) == 0) {
+            $unlock();
+            return false;
+        }
+        $res = array_values($rows[0]);
+        // unlock tables and return
+        $unlock();
+        return $res;
+    }
+
+    static public function markAsSentInDownloadQueue ($id, $filename)
+    {
+        self::connect();
+        $sql = <<<END
+            UPDATE resource
+               SET state = 'sent', filename = '$filename'
+             WHERE id = $id
+               AND deleted IS NULL;
+END;
+        $res = self::exec($sql);
+        if ($res === false) { return null; }
+        return true;
+    }
+
+    static public function markAsUnsentInDownloadQueue ($id, $countLimit = null)
+    {
+        self::connect();
+        // mark (reset as pending) and increment try_count
+        $sql = <<<END
+            UPDATE resource
+               SET state = 'pending', try_count = try_count + 1
+             WHERE id = $id
+               AND deleted IS NULL;
+END;
+        $res = self::exec($sql);
+        if ($res === false) { return null; }
+        // read the new try_count
+        $sql = <<<END
+            SELECT try_count
+              FROM resource
+             WHERE id = $id
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if ($rows === false)   { return null; }
+        if (count($rows) == 0) { return false; }
+        $count = $rows[0]['try_count'];
+        // update state if sent limit is reached
+        if ($countLimit !== null && $count >= $countLimit) {
+            $sql = <<<END
+                UPDATE resource
+                   SET state = 'error'
+                 WHERE id = $id
+                   AND deleted IS NULL;
+END;
+            $res = self::exec($sql);
+            if ($res === false) { return null; }
+        }
+        // return new try count
+        return $count;
+    }
+
+    ////////////////////
+    // CHATMEDIUMCHANNEL
+    ////////////////////
+
+    static public function readChatMediumChannelId ($cmType, $cmUserId, $cmBotName)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT id
+              FROM cmchannel
+             WHERE cm_type = $cmType
+               AND cm_user_id = $cmUserId
+               AND cm_bot_name = $cmBotName
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        return $rows[0]['id'];
+    }
+
+    static public function readChatMediumChannel ($id)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT cm_type, cm_user_id, cm_bot_name, cm_chat_info, bbchannel_id
+              FROM cmchannel
+             WHERE id = $id
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        list ($cmType, $cmUserId, $cmBotName, $cmChatInfo, $dbBBchannelId) = array_values($rows[0]);
+        $cmChatInfo = json_decode($cmChatInfo);
+        return [ $cmType, $cmUserId, $cmBotName, $cmChatInfo, $dbBBchannelId ];
+    }
+
+    /**
+     * @param  $cmChannel   ChatMediumChannel
+     * @return bool|null
+     */
+    static public function writeChatMediumChannel ($cmChannel)
+    {
+        self::connect();
+        if ($cmChannel === null) { return null; }
+        $id          = $cmChannel->getId();
+        $cmType      = $cmChannel->getCMtype();
+        $cmUserId    = $cmChannel->getCMuserId();
+        $cmBotName   = $cmChannel->getCMbotName();
+        $cmChatInfo  = self::q(json_encode($cmChannel->getCMchatInfo()));
+        $bbChannelId = $cmChannel->getBBchannel()->getId();
+        if ($id === null) {   // new CMC
+            $sql = <<<END
+                INSERT INTO cmchannel (cm_type, cm_user_id, cm_bot_name, cm_chat_info, bbchannel_id)
+                VALUES ($cmType, '$cmUserId', '$cmBotName', '$cmChatInfo', $bbChannelId);
+END;
+            $id = self::exec($sql, null, true);
+            if ($id === false) { return null; }
+            return $id;
+        }
+        else {   // existing CMC
+            $tgtCmChatInfo = $cmChannel->getCMchatInfo() === null ? 'cm_chat_info' : $cmChatInfo;   // don't overwrite is cmc has null authinfo
+            $sql = <<<END
+                UPDATE cmchannel
+                   SET cm_type = $cmType, cm_user_id = $cmUserId, cm_bot_name = $cmBotName, cm_chat_info = $tgtCmChatInfo, bbchannel_id = $bbChannelId
+                 WHERE id = $id
+                   AND deleted IS NULL;
+END;
+            $rowCount = self::exec($sql);
+            if     ($rowCount === false) { return null;  }
+            elseif ($rowCount == 0)      { return false; }
+            return true;
+        }
+    }
+
+    static public function readCMuserIdForLastUsedCMchannel ($cmBots)   // [ cmType, cmBotName ][]
+    {
+        self::connect();
+        $whereClause = "FALSE";
+        foreach ($cmBots as $cmBotData) {
+            list ($cmType, $cmBotName) = $cmBotData;
+            $whereClause .= " OR cm_type = $cmType AND cm_bot_name = '$cmBotName'";
+        }
+        $sql = <<<END
+            SELECT cm_type, cm_bot_name, cm_user_id 
+              FROM cmchannel
+             WHERE $whereClause
+               AND deleted IS NULL
+             ORDER BY updated DESC
+             LIMIT 1;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        return array_values($rows[0]);
+    }
+
+    static public function readUsedCMchannelBotNames ($cmType, $cmUserId, $onlyFromTheseCMbotNames)
+    {
+        self::connect();
+        $onlyFromTheseCMbotNames[] = true;   // hack
+        $inClause = "'" . implode("', '", $onlyFromTheseCMbotNames) . "'";
+        $sql = <<<END
+            SELECT cm_bot_name
+              FROM cmchannel
+             WHERE cm_type = $cmType
+               AND cm_user_id = '$cmUserId'
+               AND cm_bot_name IN ($inClause)
+               AND deleted IS NULL
+              SORT BY updated ASC;
+END;
+        $rows = self::query($sql);
+        if ($rows === null) { return null;  }
+        $res = [];
+        foreach ($rows as $row) { $res[] = array_values($row); }
+        return $res;
+    }
+
+    static public function readLeastUsedChatMediaBotName ($cmType, $cmUserId)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT cm_bot_name
+              FROM cmchannel
+             WHERE cm_type = $cmType
+               AND cm_user_id = '$cmUserId'
+               AND updated = (
+                   SELECT MIN(updated)
+                     FROM cmchannel
+                    WHERE cm_type = $cmType
+                      AND cm_user_id = '$cmUserId'
+                      AND deleted IS NULL
+                   )
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        return $rows[0]['cm_bot_name'];
+    }
+
+    static public function readMostUsedChatMediaBotName ($cmType, $cmUserId, $exceptThisCMbotName)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT cm_bot_name
+              FROM cmchannel
+             WHERE cm_type = $cmType
+               AND cm_user_id = '$cmUserId'
+               AND cm_bot_name != '$exceptThisCMbotName'
+               AND updated = (
+                   SELECT MAX(updated)
+                     FROM cmchannel
+                    WHERE cm_type = $cmType
+                      AND cm_user_id = '$cmUserId'
+                      AND cm_bot_name != '$exceptThisCMbotName'
+                      AND deleted IS NULL
+                   )
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        return $rows[0]['cm_bot_name'];
+    }
+
+    //////////////////
+    // BOTBASICCHANNEL
+    //////////////////
+
+    static public function readBotBasicChannel ($id, $filterByThisRuntimeId = null)
+    {
+        self::connect();
+        $and = $filterByThisRuntimeId === null ? '' : "AND runtime_id = $filterByThisRuntimeId";
+        $sql = <<<END
+            SELECT runtime_id
+              FROM bbchannel
+             WHERE id = $id
+                   $and
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        return $rows[0]['runtime_id'];   // only one value in array
+    }
+
+    /**
+     * @param  $bbChannel   BotBasicChannel
+     * @return bool|null
+     */
+    static public function writeBotBasicChannel ($bbChannel)
+    {
+        self::connect();
+        if ($bbChannel === null) { return null; }
+        $id          = $bbChannel->getId();
+        $bbRuntimeId = $bbChannel->getBBruntime()->getId();
+        if ($id === null) {   // new BBC
+            $additionalColumn = $bbChannel->isDeleted() ? ", deleted" : '';
+            $additionalValue  = $bbChannel->isDeleted() ? ", NOW()"   : '';
+            $sql = <<<END
+                INSERT INTO bbchannel (runtime_id $additionalColumn)
+                VALUES ($bbRuntimeId $additionalValue);
+END;
+            $id = self::exec($sql, null, true);
+            if ($id === false) { return null; }
+            return $id;
+        }
+        else {   // existing BBC (tunnels are not updated; see specific method)
+            $additionalSet = $bbChannel->isDeleted() ? ", deleted = NOW()" : '';
+            $sql = <<<END
+                UPDATE bbchannel
+                   SET runtime_id = $bbRuntimeId $additionalSet
+                 WHERE id = $id
+                   AND deleted IS NULL;
+END;
+            $rowCount = self::exec($sql);
+            if     ($rowCount === false) { return null;  }
+            elseif ($rowCount == 0)      { return false; }
+            return true;
+        }
+        // TODO que pasa si se manda a grabar (para simbolizar ultimo BBC accedido) un BBC y su BBRTid no cambia? se afecta la columna updated (buscar MySQL; si no, crear columna RAND())
+    }
+
+    /////////////////
+    // BOTBASICTUNNEL
+    /////////////////
+
+    static public function readBotBasicTunnels ($bbcId)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT resource_type, tgt_bbchannel_id
+              FROM bbtunnel
+             WHERE src_bbchannel_id = $bbcId
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if ($rows === null) { return null;  }
+        $res = [];
+        foreach ($rows as $row) { $res[] = array_values($row); }
+        return $res;
+    }
+
+    /**
+     * @param  $bbChannel   BotBasicChannel
+     * @return bool|null
+     */
+    static public function writeBotBasicTunnels ($bbChannel)
+    {
+        self::connect();
+        if ($bbChannel === null) { return null; }
+        $srcBbcId = $bbChannel->getId();
+        // "rawize" BBC-object tunnels
+        $objTunnelsFlat = [];
+        foreach ($bbChannel->getTunnels() as $resourceType => $targetBbbcs) {
+            foreach ($targetBbbcs as $targetBbc) {   /** @var BotBasicChannel $targetBbc */
+                $objTunnelsFlat[] = $resourceType . "|" . $targetBbc->getId();
+            }
+        }
+        // get existing tunnels (at DB level) and "flatize"
+        $dbTunnelsRaw  = self::readBotBasicTunnels($srcBbcId);
+        $dbTunnelsFlat = [];
+        foreach ($dbTunnelsRaw as $pair) { $dbTunnelsFlat[] = $pair[0] . "|" . $pair[1]; }   // resourceType, tgtBbcId
+        // calcs for the DB operations
+        $split    = function ($pairStr) { return explode('|', $pairStr); };
+        $toDelete = array_map($split, array_diff($dbTunnelsFlat, $objTunnelsFlat));
+        $toInsert = array_map($split, array_diff($objTunnelsFlat, $dbTunnelsFlat));
+        // "delete"
+        foreach ($toDelete as $pair) {
+            list ($resourceType, $tgtBbcId) = $pair;
+            $sql = <<<END
+                UPDATE bbtunnel
+                   SET deleted = NOW()
+                 WHERE resource_type = $resourceType
+                   AND src_bbchannel_id = $srcBbcId
+                   AND tgt_bbchannel_id = $tgtBbcId
+                   AND deleted IS NULL;
+END;
+            $rowCount = self::exec($sql);
+            if ($rowCount === false) { return null; }
+        }
+        // insert
+        foreach ($toInsert as $pair) {
+            list ($resourceType, $tgtBbcId) = $pair;
+            $sql = <<<END
+                INSERT INTO bbtunnel (resource_type, src_bbchannel_id, tgt_bbchannel_id)
+                VALUES ($resourceType, $srcBbcId, $tgtBbcId);
+END;
+            $rowCount = self::exec($sql);
+            if ($rowCount === false) { return null; }
+        }
+        return true;
+    }
+
+    //////////////////
+    // BOTBASICRUNTIME
+    //////////////////
+
+    /**
+     * @param  $cmChannel   ChatMediumChannel
+     * @return              bool|null|int
+     */
+    static public function readBBruntimeIDbyCMC ($cmChannel)
+    {
+        self::connect();
+        $cmType    = $cmChannel->getCMtype();
+        $cmUserId  = $cmChannel->getCMuserId();
+        $cmBotName = $cmChannel->getCMbotName();
+        $sql = <<<END
+            SELECT id 
+              FROM runtime AS rt 
+              JOIN bbchannel AS bbc ON rt.id = bbc.runtime_id
+              JOIN cmchannel AS cmc ON bbc.id = cmc.bbchannel_id
+             WHERE cm_type = $cmType
+               AND cm_user_id = '$cmUserId'
+               AND cm_bot_name = '$cmBotName'
+               AND deleted IS NULL
+             ORDER BY updated DESC
+             LIMIT 1;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        return $rows[0]['id'];
+    }
+
+    static public function readBBruntimeIdByBizModelUserId ($bmUserId)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT id 
+              FROM runtime
+             WHERE bizmodel_user_id = $bmUserId;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        return $rows[0]['id'];
+    }
+
+    static public function readBBruntime ($runtimeId)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT bbcode_cmid, code_major_version, code_minor_version, locale, word, trace, bizmodel_user_id 
+              FROM runtime
+             WHERE id = $runtimeId
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        list ($bbcodeCMid, $major, $minor, $locale, $word, $trace, $bmUserId) = array_values($rows[0]);
+        return [ $bbcodeCMid, $major, $minor, $locale, $word, $trace == 1, $bmUserId ];
+    }
+
+    /**
+     * @param  $bbRuntime   BotBasicRuntime
+     * @return              bool|null
+     */
+    static public function writeBBruntime ($bbRuntime)
+    {
+        self::connect();
+        if ($bbRuntime === null) { return null; }
+        $id                 = $bbRuntime->getId();
+        $bbCodeId           = $bbRuntime->getBBcodeId();
+        $bbCodeMajorVersion = $bbRuntime->getBBcodeMajorVersion();
+        $bbCodeMinorVersion = $bbRuntime->getBBcodeMinorVersion();
+        $locale             = $bbRuntime->getLocale();
+        $word               = self::q($bbRuntime->getWord());
+        $trace              = $bbRuntime->getTrace() ? 1 : 0;
+        $bmUserId           = $bbRuntime->getBMuserId();
+        // new runtime; insert
+        if ($id === null || $id === -1) {
+            $additionalColumn = $bbRuntime->isDeleted() ? ", deleted" : '';
+            $additionalValue  = $bbRuntime->isDeleted() ? ", NOW()"   : '';
+            $sql = <<<END
+                INSERT INTO runtime (bbcode_cmid, code_major_version, code_minor_version, locale, word, trace, bizmodel_user_id $additionalColumn)
+                VALUES ($bbCodeId, '$bbCodeMajorVersion', '$bbCodeMinorVersion', '$locale', '$word', $trace, $bmUserId $additionalValue);
+END;
+            $id = self::exec($sql, null, true);
+            if ($id === false) { return null; }
+            return $id;
+        }
+        // existing resource; update
+        else {
+            $additionalSet = $bbRuntime->isDeleted() ? ", deleted = NOW()" : '';
+            $sql = <<<END
+                UPDATE runtime
+                   SET bbcode_cmid = $bbCodeId, code_major_version = '$bbCodeMajorVersion', code_minor_version = '$bbCodeMinorVersion', 
+                       locale = '$locale', bizmodel_user_id = $bmUserId $additionalSet
+                 WHERE id = $id
+                   AND deleted IS NULL; 
+END;
+            $rowCount = self::exec($sql);
+            if     ($rowCount === false) { return null;  }
+            elseif ($rowCount == 0)      { return false; }
+            return true;
+        }
+    }
+
+    /////////
+    // BBVARS
+    /////////
+
+    /**
+     * @param  BotBasicRuntime  $bbRuntime
+     * @param  BotBasicChannel  $bbChannel
+     * @return array|null
+     */
+    static public function readVars ($bbRuntime, $bbChannel)
+    {
+        self::connect();
+        $rtId  = $bbRuntime->getId();
+        $bbcId = $bbChannel->getId();
+        $sql = <<<END
+            SELECT name, value 
+              FROM bbvars
+             WHERE bbruntime_id = $rtId
+               AND bbchannel_id = $bbcId
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if ($rows === null) { return null; }
+        $res = [];
+        foreach ($rows as $row) { $res[] = array_values($row); }
+        return $res;
+    }
+
+    /**
+     * @param  BotBasicRuntime  $bbRuntime
+     * @param  BotBasicChannel  $bbChannel
+     * @param  string           $name
+     * @param  string|null      $value
+     * @return bool|null
+     */
+    static public function updateVar ($bbRuntime, $bbChannel, $name, $value)   // pass NULL to value in order to delete the var
+    {
+        self::connect();
+        $rtId  = $bbRuntime->getId();
+        $bbcId = $bbChannel->getId();
+        if ($value === null) {   // delete
+            $sql = <<<END
+                UPDATE bbvars
+                   SET deleted = NOW()
+                 WHERE bbruntime_id = $rtId
+                   AND bbchannel_id = $bbcId
+                   AND name = '$name'
+                   AND deleted IS NULL;
+END;
+        }
+        else {   // update a value
+            $value = self::q($value);
+            $sql = <<<END
+                UPDATE bbvars
+                   SET value = '$value'
+                 WHERE bbruntime_id = $rtId
+                   AND bbchannel_id = $bbcId
+                   AND name = '$name'
+                   AND deleted IS NULL;
+END;
+        }
+        $rowCount = self::exec($sql);
+        if     ($rowCount === false) { return null;  }
+        elseif ($rowCount == 0)      { return false; }
+        return true;
+    }
+
+    /////////////
+    // DATAHELPER
+    /////////////
+
+    static public function readDataHelperData ($bmUserId, $key)
+    {
+        self::connect();
+        $key = self::q($key);
+        $sql = <<<END
+            SELECT value
+              FROM datahelper_data
+             WHERE bmuser_id = $bmUserId
+               AND name = '$key'
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        return json_decode($rows[0]['value']);
+    }
+
+    static public function writeDataHelperData ($bmUserId, $key, $value)
+    {
+        self::connect();
+        $key   = self::q($key);
+        $value = self::q($value);
+        $sql = <<<END
+            REPLACE INTO datahelper_data (bmuser_id, name, value)
+            VALUES ($bmUserId, '$key', '$value');
+END;
+        $id = self::exec($sql);
+        if ($id === false) { return null; }
+        return $id;
+    }
+
+    ///////////////
+    // INTERACTIONS
+    ///////////////
+
+    static public function readInteraction ($id)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT type, subtype, cm_type, cm_sequence_id, cm_chat_info, cm_user_id, cm_user_name, cm_user_phone, bbchannel_id, bizmodel_user_id,
+                   text, menu_hook, options
+              FROM interaction
+             WHERE id = $id
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        list ($type, $subType, $cmType, $cmSeqId, $cmChatInfo, $cmUserId, $cmUserName, $cmUserPhone, $bbcId, $bmUserId, $text, $menuhook, $options) = array_values($rows[0]);
+        switch ($type) {
+            case Interaction::TYPE_UPDATE :
+                $res = [ $type, $cmType, $cmSeqId, $cmChatInfo, $cmUserId, $cmUserName, $cmUserPhone, $bbcId, $bmUserId, $text, $menuhook ];
+                break;
+            case Interaction::TYPE_SPLASH :
+                $res = [ $subType, $bbcId, $bmUserId, $text, $options ];
+                break;
+            default :
+                $res = false;
+        }
+        return $res;
+    }
+
+    /**
+     * @param $interaction      Interaction|Update|Splash
+     * @return bool|int|null
+     */
+    static public function writeInteraction ($interaction)
+    {
+        self::connect();
+        if ($interaction === null) { return null; }
+        $sqlInsert = $sqlUpdate = null;
+        $type      = $interaction->getType();
+        switch ($type) {
+            case Interaction::TYPE_UPDATE :
+                $id          = $interaction->getId();
+                $cmType      = $interaction->getCMtype();
+                $cmSeqId     = $interaction->getCMseqId();
+                $cmChatInfo  = $interaction->getCMchatInfo();
+                $cmUserId    = $interaction->getCMuserId();
+                $cmUserName  = $interaction->getCMuserName();
+                $cmUserPhone = $interaction->getCMuserPhone();
+                $text        = $interaction->getText();
+                $menuhook    = $interaction->getMenuhook();
+                $bbChannelId = $interaction->getBBchannelId();
+                $bmUserId    = $interaction->getBizModelUserId();
+                if ($id === null) {   // new Interaction
+                    $sqlInsert = <<<END
+                        INSERT INTO interaction (type, cm_type, cm_sequence_id, cm_chat_info, cm_user_id, cm_user_name, cm_user_phone, text, menu_hook, 
+                                                 bbchannel_id, bizmodel_user_id, created)
+                        VALUES ($type, $cmType, $cmSeqId, '$cmChatInfo', '$cmUserId', '$cmUserName', '$cmUserPhone', '$text', '$menuhook', $bbChannelId, $bmUserId, NOW());
+END;
+                }
+                else {   // existing Interaction
+                    $sqlUpdate = <<<END
+                        UPDATE interaction
+                           SET type = $type, cm_type = $cmType, cm_sequence_id = $cmSeqId, cm_chat_info = $cmChatInfo, 
+                               cm_user_id = '$cmUserId', cm_user_name = '$cmUserName', cm_user_phone = '$cmUserPhone', text = '$text', menu_hook = '$menuhook',
+                               bbchannel_id = $bbChannelId, bizmodel_user_id = $bmUserId
+                         WHERE id = $id
+                           AND deleted IS NULL;
+END;
+                }
+                break;
+            case Interaction::TYPE_SPLASH :
+                $id          = $interaction->getId();
+                $subType     = $interaction->getSubType();
+                $text        = $interaction->getText();
+                $options     = DBbroker::q(json_encode($interaction->getOptions()));
+                if ($id === null) {   // new Interaction
+                    $sqlInsert = <<<END
+                        INSERT INTO interaction (type, subtype, text, options, created)
+                        VALUES ($type, $subType, '$text', '$options', NOW());
+END;
+                }
+                else {   // existing Interaction
+                    $sqlUpdate = <<<END
+                        UPDATE interaction
+                           SET type = $type, subtype = $subType, text = '$text', options = '$options' 
+                         WHERE id = $id
+                           AND deleted IS NULL;
+END;
+                }
+                break;
+            default :
+        }
+        if ($sqlInsert !== null) {
+            $id = self::exec($sqlInsert, null, true);
+            if ($id === false) { return null; }
+            return $id;
+        }
+        if ($sqlUpdate !== null) {
+            $rowCount = self::exec($sqlUpdate);
+            if     ($rowCount === false) { return null;  }
+            elseif ($rowCount == 0)      { return false; }
+            return true;
+        }
+        return null;
+    }
+
+    static public function getLastUpdateSequenceIdFor ($chatMediumType, $chatMediumChatInfo)
+    {
+        self::connect();
+        $type = Interaction::TYPE_UPDATE;
+        $sql = <<<END
+            SELECT MAX(sequence_id) AS maximun
+              FROM interaction
+             WHERE type = $type
+               AND cm_type = $chatMediumType
+               AND cm_chat_info = '$chatMediumChatInfo'
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if ($rows === null) { return null; }
+        $max = $rows[0]['maximum'];
+        return $max === null ? false : $max;
+    }
+
+    static public function createMenuhookSignature ($menuhookData)
+    {
+        self::connect();
+        $menuhookData = self::q(json_encode($menuhookData));
+        $signature    = md5(rand());
+        $sql = <<<END
+            INSERT INTO menuhook_signature (data, signature) 
+            VALUES ('$menuhookData', '$signature');
+END;
+        $newId = self::exec($sql);
+        if ($newId === false) { return null; }
+        return $newId;
+    }
+
+    static public function readMenuhookDataByIdAndSignature ($menuhookId, $signature)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT data
+              FROM menuhook_signature
+             WHERE id = $menuhookId
+               AND signature = '$signature'
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        $menuhookData = json_decode($rows[0]['data']);
+        return $menuhookData;
+    }
+
+    ////////////
+    // RESOURCES
+    ////////////
+
+    static public function readResource ($id)
+    {
+        self::connect();
+        $sql = <<<END
+            SELECT type, chatmedium_authinfo, chatmedium_type, file_id, filename, content, download_state
+              FROM resource
+             WHERE id = $id
+               AND deleted IS NULL;
+END;
+        $rows = self::query($sql);
+        if     ($rows === null)    { return null;  }
+        elseif (count($rows) == 0) { return false; }
+        list ($type, $cmType, $cmAuthInfo, $fileId, $filename, $content, $downloadState) = array_values($rows[0]);
+        $content = json_decode($content);
+        return [ $type, $cmType, $cmAuthInfo, $fileId, $filename, $content, $downloadState ];
+    }
+
+    /**
+     * @param  $resource           InteractionResource
+     * @param  $doDownload  bool
+     * @return null|int
+     */
+    static public function writeResource ($resource, $doDownload = false)
+    {
+        self::connect();
+        if ($resource === null) { return null; }
+        $id            = $resource->id;
+        $type          = $resource->type;
+        $cmType        = $resource->cmType;
+        $cmcAuthInfo   = $resource->cmcAuthInfo;
+        $fileId        = $resource->fileId;
+        $filename      = $resource->filename;
+        $content       = DBbroker::q(json_encode($resource->content));
+        $downloadState = $doDownload ? 'pending' : ($resource->downloadState === null ? 'avoided' : $resource->downloadState);
+        // new resource; insert
+        if ($id === null || $id === -1) {
+            if ($resource->clonedFrom !== null) {
+                $type = InteractionResource::TYPE_CLONED;
+                $sql = <<<END
+                    INSERT INTO resource (type, cloned_from_id, download_state)
+                    VALUES ($type, $id, 'nonapplicable');
+END;
+            }
+            else {
+                $sql = <<<END
+                    INSERT INTO resource (type, chatmedium_type, chatmedium_authinfo, file_id, filename, content, download_state)
+                    VALUES ($type, $cmType, $cmcAuthInfo, '$fileId', '$filename', '$content', '$downloadState');
+END;
+            }
+            $id = self::exec($sql, null, true);
+            if ($id === false) { return null; }
+            return $id;
+        }
+        // existing resource; update
+        else {
+            $sql = <<<END
+                UPDATE resource
+                   SET type = $type, chatmedium_type = $cmType, chatmedium_authinfo = $cmcAuthInfo, file_id = '$fileId', filename = '$filename', 
+                       content = '$content', download_state = '$downloadState' 
+                 WHERE id = $id
+                   AND deleted IS NULL; 
+END;
+            $rowCount = self::exec($sql);
+            if     ($rowCount === false) { return null;  }
+            elseif ($rowCount == 0)      { return false; }
+            return true;
+        }
+    }
+
+    static public function storeFile ($filename)
+    {
+        // TODO copy file from $filename to a new, generic store for files for all chatmedia; then return the new filename
+        return $filename;
+    }
+
+    ////////////////////////////
+    // GENERIC DB ACCESS METHODS
+    ////////////////////////////
+
+    static private function connect ($disconnectFirst = false)
+    {
+        if (! $disconnectFirst && self::$dbh !== null) { return true; }
+        try {
+            self::disconnect();
+            self::$dbh = new PDO(BOTBASIC_DB_CONN_STR, BOTBASIC_DB_USER, BOTBASIC_DB_PASSWORD, [ PDO::ATTR_PERSISTENT => true ]);
+            return true;
+        } catch (PDOException $e) {
+            Log::register(Log::TYPE_DATABASE, "No es posible conectarse a la BD de BotBasic", [ Log::ATTRIB_EXCEPTION, $e ]);
+            return false;
+        }
+    }
+
+    static private function disconnect ()
+    {
+        self::$dbh = null;
+    }
+
+    static private function dbError ()
+    {
+        if (self::$dbh === null) {
+            return "DB_NOT_CONNECTED";
+        }
+        $ei  = self::$dbh->errorInfo();
+        $res = $ei[0] . ($ei[1] === null ? '' : '/' . $ei[1]) . ($ei[2] === null ? '/NONE' : '/' . $ei[2]);
+        return $res;
+    }
+
+    static private function query ($sql, $when = null)
+    {
+        if (self::$dbh === null) {
+            Log::register(Log::TYPE_DATABASE, "base de datos no conectada al intentar Query sobre: $sql", null);
+            return [];
+        }
+        $res = self::$dbh->query($sql);
+        if ($res === false) {
+            $error = self::dbError() . ($when === null ? '' : " WHEN $when");
+            Log::register(Log::TYPE_DATABASE, $error, null);
+        }
+        return $res;
+    }
+
+    static private function exec ($sql, $when = null, $returnLastInsertId = false)
+    {
+        if (self::$dbh === null) {
+            Log::register(Log::TYPE_DATABASE, "base de datos no conectada al intentar Exec sobre: $sql", null);
+            return $returnLastInsertId ? -1 : 0;
+        }
+        $res = self::$dbh->exec($sql);
+        if ($res === false) {
+            $error = self::dbError() . ($when === null ? '' : " WHEN $when");
+            Log::register(Log::TYPE_DATABASE, $error, null);
+        }
+        if ($returnLastInsertId) { return intval(self::$dbh->lastInsertId()); }
+        else                     { return $res;                               }   // affected rows count
+    }
+
+    static public function beginTransaction ()
+    {
+        // TODO
+    }
+
+    static public function commit ()
+    {
+        // TODO
+    }
+
+    static public function rollback ()
+    {
+        // TODO
+    }
+
+    static public function q ($str)   // quote
+    {
+        if (self::$dbh === null) {
+            Log::register(Log::TYPE_DATABASE, "base de datos no conectada al intentar Quote", null);
+            return $str;
+        }
+        return self::$dbh->quote($str);
+    }
+
+    //////////////////////////////////////////////
+    // DAEMON ROUTINES
+    // used when this file is invoked from the CLI
+    //////////////////////////////////////////////
+
+    private function conditionalLog ($content, $cmType, $minSecsToRelog)
+    {
+        $lastLogTime = DBbroker::readLastlogtimeForDownloadDaemon($cmType);   // unix time
+        if ($lastLogTime === null) {
+            // TODO Log this
+        }
+        $now = time();
+        if ($minSecsToRelog === null || $now - $lastLogTime > $minSecsToRelog) {
+            // TODO Log $content (intented function)
+            $res = DBbroker::writeCurrentLastlogtimeForDownloadDaemon($cmType);   // TODO "res" above (message queue)
+            if ($res === null) {
+                // TODO Log this
+            }
+        }
+    }
+
+    private function unqueueStart ($cmType, $tryCount, $minSecsToRelog)
+    {
+        $record = DBbroker::readFirstInDownloadQueueAndMarkAsSending($cmType, $tryCount);
+        if ($record === null) {
+            $this->conditionalLog([], $cmType, $minSecsToRelog);   // TODO "db error"
+            return null;
+        }
+        return $record;   // can be false if no message must be sent
+    }
+
+    private function unqueueCommit ($id, $filename, $cmType, $minSecsToRelog)
+    {
+        $res = DBbroker::markAsSentInDownloadQueue($id, $filename);
+        if ($res === null) {
+            $this->conditionalLog([], $cmType, $minSecsToRelog);   // TODO "db error"
+        }
+    }
+
+    private function unqueueRollback ($id, $cmType, $maxDownloadAttempts, $minSecsToRelog)
+    {
+        $attempsCount = DBbroker::markAsUnsentInDownloadQueue($id, $maxDownloadAttempts);
+        if ($attempsCount === null) {
+            $this->conditionalLog([], $cmType, $minSecsToRelog);   // TODO "db error"
+        }   // db error
+        elseif ($attempsCount === false) {
+            $this->conditionalLog([], $cmType, $minSecsToRelog);   // TODO id not found
+        }
+        elseif ($attempsCount < $maxDownloadAttempts) {
+            $this->conditionalLog([], $cmType, $minSecsToRelog);   // TODO "max send attemps for the message"
+        }
+    }
+
+    // if $howMany == -1 this will not stop
+    public function attemptToDownload ($cmType, $howMany, $interDelayMsecs, $maxDownloadAttempts, $minSecsToRelog)
+    {
+        $count = 0;
+        while (true) {
+            for ($tryCount = 0; $tryCount < $maxDownloadAttempts; $tryCount++) {
+                $record = $this->unqueueStart($cmType, $tryCount, $minSecsToRelog);
+                if ($record === null || $record === false) { return; }
+                list ($id, $type, $cmAuthInfo, $fileId) = $record;
+                $cm  = ChatMedium::create($cmType);
+                $url = $cm->getDownloadUrl($cmAuthInfo, $fileId);
+                if     ($url === null)  {}   // this ChatMedium doesn't allow to download MM content OR error in SQL when getting the cmBotName based on cmType (including no row for the ID)
+                elseif ($url === false) {
+                    // TODO Log this: unable to download (in Telegram: time to download expired)
+                }
+                else {
+                    $filename = $this->filenameForResource($id, $type);
+                    if ($filename === null) {
+                        // Log this (can't create directory)
+                        $res = null;
+                    }
+                    else {
+                        $res = $this->downloadFile($url, $filename);
+                    }
+                    if ($res === null) {
+                        $this->unqueueRollback($id, $cmType, $tryCount, $minSecsToRelog);
+                    }
+                    else {
+                        $newFilename = $this->postProcessDownload($filename, $type);
+                        if ($newFilename === null) { $this->unqueueRollback($id, $cmType, $maxDownloadAttempts, $minSecsToRelog); }
+                        else                       { $this->unqueueCommit($id, $newFilename, $cmType, $minSecsToRelog);           }
+                    }
+                }
+                if ($howMany != -1 && ++$count > $howMany) { break 2; }
+                sleep($interDelayMsecs);
+            }
+        }
+    }
+
+    private function filenameForResource ($id, $type)
+    {
+        $basedir  = BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR;
+        $typedir  = InteractionResource::typeString($type);
+        $datedir  = date("Ym");
+        $dir      = "$basedir/$typedir/$datedir";
+        $filename = "$dir/$id";
+        if (! is_dir($dir)) {
+            $res = mkdir($dir, 0775, true);
+            if ($res === false) { return null; }
+        }
+        return $filename;
+    }
+
+    private function downloadFile ($url, $filename)
+    {
+        $inputStream  = $this->inputStream($url);
+        $outputStream = fopen($filename, "w");
+        $res = stream_copy_to_stream($inputStream, $outputStream);
+        fclose($inputStream);
+        fclose($outputStream);
+        return $res === false ? null : true;
+    }
+
+    private function inputStream ($url)
+    {
+        // adapted from WebRouterTelegram
+        $rawInput  = fopen($url, 'r');
+        $tmpStream = fopen('php://temp', 'r+');
+        stream_copy_to_stream($rawInput, $tmpStream);
+        rewind($tmpStream);
+        return $tmpStream;
+    }
+
+    private function postProcessDownload ($filename, $type)   // type is not used yet
+    {
+        $this->doDummy($type);
+        $proc = null;
+        switch ($type = mime_content_type($filename)) {
+            case 'video/mpeg' : if ($proc !== null) { $proc = [ 'mpeg2mp3 -silent -delete', 'mp3' ]; } break;
+            case 'video_avi'  : if ($proc !== null) { $proc = [ 'avi2mp3  -silent -delete', 'mp3' ]; } break;
+        }
+        // TODO both scripts should be refined
+        if ($proc === null) { return $filename; }
+        $oldFilename = $filename;
+        $pos = strrpos($oldFilename, ".");
+        if ($pos !== false) { $filename = substr($oldFilename, 0, $pos) . "." . $proc[1]; }
+        else                { $filename = $oldFilename                  . "." . $proc[1]; }
+        $output = [];
+        $res    = -1;
+        exec(BOTBASIC_DOWNLOADDAEMONS_SCRIPTSDIR . "/" . $proc[0] . " $oldFilename $filename", $output, $res);
+        return $res === 0 ? $filename : $oldFilename;
+    }
+
+    private function doDummy ($arg) {}   // do nothing (this is for IDE spoofing)
+
+}
+

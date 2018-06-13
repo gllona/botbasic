@@ -1,0 +1,284 @@
+<?php
+/**
+ * Superclase para todos los medios de chat (Telegram, Whatsapp, ...)
+ *
+ * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
+ * @license     http://www.venicua.com/botbasic/license     Licencia de BotBasic
+ * @see         http://www.venicua.com/botbasic             Referencia de BotBasic
+ * @version     1.0 - 01.jan.2017
+ * @since       0.1 - 01.jul.2016
+ */
+
+
+
+namespace botbasic;
+
+
+
+/**
+ * Clase ChatMedium
+ *
+ * Representación funcional, desde el punto de vista de BotBasic, de una chatapp. El WebRouter instancia a una subclase de esta clase,
+ * según la chatapp de la cual provenga la petición, y ejecuta su método run(). Las respuestas provenientes de la ejecución de código
+ * BotBasic se reflejan normalmente en el renderizado de Splashes (textos, menús y recursos multimedia) que son transmitidos a la chatapp
+ * por medio de métodos de esta clase y sus subclases.
+ *
+ * @package botbasic
+ */
+abstract class ChatMedium
+{
+
+
+
+    /** @var array Definición de los bots del programa BotBasic; cada uno está asociado a un conjunto de bots de cada ChatMedium,
+     *             y estas definiciones se reflejan (con las mismas claves del mapa) en ChatMediumTelegram:$cmBots; cada entrada es:
+     *             [ bbCode => [ bbcodeCodename, majorversionnumber, bbcodeBotname ], ... ] */
+    static private $bbBots = [
+        10 => [ 'neuropower', '1', 'bot1' ],
+        11 => [ 'neuropower', '1', 'bot2' ],
+        12 => [ 'neuropower', '1', 'bot3' ],
+    ];
+    // TODO config (& CMTelegram et al)
+
+    /** @const Tipo de ChatMedium que consiste en un simulador de interacciones por línea de comandos */
+    const TYPE_CLISTUB  = 101;
+
+    /** @const Tipo de ChatMedium que consiste en un simulador de interacciones por formulario web */
+    const TYPE_WEBSTUB  = 102;
+
+    /** @const Tipo de ChatMedium principal que implementa la comunicación con Telegram */
+    const TYPE_TELEGRAM = 111;
+
+    /** @const Tipo de ChatMedium principal destinado a uso futuro (cuando WhatsApp implemente su bot's API) */
+    const TYPE_WHATSAPP = 112;
+
+    /** @var array Nombres de los tipos de ChatMedium; deben corresponder a los sufijos de los nombres de las subclases (ChatMediumXXX) */
+    static protected $typeStrings = [
+        self::TYPE_CLISTUB  => 'CliStub',
+        self::TYPE_WEBSTUB  => 'WebStub',
+        self::TYPE_TELEGRAM => 'Telegram',
+        self::TYPE_WHATSAPP => 'Whatsapp',
+    ];
+
+    /** @const Indice de mensaje autónomo: no se puede crear el ChatMediumChannel */
+    const MSG_EXCEPTION_CANT_CREATE_CMC   = 101;
+
+    /** @const Indice de mensaje autónomo: se ha borrado un BotBasicChannel con CHANNEL DELETE */
+    const MSG_BBCHANNEL_WAS_DELETED       = 102;
+
+    /** @const Indice de mensaje autónomo: se ha reusado un canal y destinado a un nuevo propósito */
+    const MSG_BBCHANNEL_WAS_REUSED_PREFIX = 103;
+    // TODO implementar CHANNEL new TO x y FOR msg
+
+    /** @var array Mapa que contiene los textos de los mensajes MSG_..., según locale (otros textos localizados están en la clase BotBasic) */
+    static private $messages = [
+        "es" => [
+            self::MSG_EXCEPTION_CANT_CREATE_CMC   => "Lo sentimos, no es posible acceder al sistema en este momento.",
+            self::MSG_BBCHANNEL_WAS_DELETED       => "Este canal de comunicación ha sido desactivado.",
+            self::MSG_BBCHANNEL_WAS_REUSED_PREFIX => "Este canal de comunicación está dedicado ahora a: ",
+        ],
+        "en" => [
+            self::MSG_EXCEPTION_CANT_CREATE_CMC   => "Sorry, can't access system at this time.",
+            self::MSG_BBCHANNEL_WAS_DELETED       => "This communication channel has been deactivated.",
+            self::MSG_BBCHANNEL_WAS_REUSED_PREFIX => "This communication channel is now dedicated to: ",
+        ],
+    ];
+
+    /** @var int Indica el tipo del ChatMedium, como una de las constantes TYPE_... */
+    public $type;
+
+    /** @var string Es necesario definir el locale del ChatMedium aquí y no solo en el runtime para posibilitar la emisión de mensajes
+     *              antes de la creación del runtime */
+    private $locale = BOTBASIC_DEFAULT_LOCALE;
+    // TODO verificar si con la directiva LOCALE se está afectando a estos valores (se debería hacer)
+
+
+
+    /**
+     * Retorna la definición completa (credenciales) de los bots de cada ChatMedium (por lo que este es un método abstracto), como un
+     * arreglo indexado con las mismas claves que $bbBots
+     *
+     * @return null
+     */
+    static protected function cmBots () { return null; }   // redefine each subclass
+
+    static public function getCMbotNames ($cmType, $pattern = null)
+    {
+        $className = "ChatMedium" . self::typeString($cmType);   /** @var ChatMedium $className */
+        $bots      = $className::cmBots();
+        $names     = [];
+        foreach ($bots as $idx => $someBots) {
+            foreach ($someBots as $bot) {
+                if ($pattern !== null) { if (1 === preg_match($pattern, $bot[0])) { $names[] = $bot[0]; } }
+                else                   {                                            $names[] = $bot[0];   }
+            }
+        }
+        return $names;
+    }
+
+    // returns [ cmType, aCMdefaultBotNameForTheCMtype ][]
+    // default cmBotNames appear as ChatMediumSubclass::$cmBots[anyIndex][0][0]
+    static public function getDefaultCMbots ()
+    {
+        $defaultCMbots = [];
+        foreach (self::allChatMediaTypes() as $cmCode) {
+            $className = "ChatMedium" . self::typeString($cmCode);   /** @var ChatMedium $className */
+            foreach ($className::cmBots() as $cmBotCode => $cmBotDataArray) { $defaultCMbots[] = [ $cmCode, $cmBotDataArray[0][0] ]; }
+        }
+        return $defaultCMbots;
+    }
+
+    static public function allChatMediaTypes ()
+    {
+        return array_keys(self::$typeStrings);
+    }
+
+    static public function typeString ($type)
+    {
+        return isset(self::$typeStrings[$type]) ? self::$typeStrings[$type] : null;
+    }
+
+    static public function getMessage ($code, $locale)
+    {
+        if (! isset(self::$messages[$locale]) || ! isset(self::$messages[$locale][$code])) { return null; }
+        return self::$messages[$locale][$code];
+    }
+
+    static final public function create ($type)
+    {
+        switch ($type) {
+            case self::TYPE_CLISTUB     : $res = new ChatMediumCliStub();  break;
+            case self::TYPE_WEBSTUB     : $res = new ChatMediumWebStub();  break;
+            case self::TYPE_TELEGRAM    : $res = new ChatMediumTelegram(); break;
+            case self::TYPE_WHATSAPP    :
+            default                     : $res = null;
+        }
+        return $res;
+    }
+
+    abstract public function getCMbotCredentialsByScriptName ($scriptName, $cmBots = null);
+
+    abstract protected function getCMbotCredentialsByBBinfo ($bbCodename, $bbMajorVersionNumber, $bbBotName, $cmBots = null);
+
+    static public function getCMbotSpecialIndex ($anOldCMbotName) { return $anOldCMbotName; }   // redefine in subclasses
+
+    abstract public function getCMbotNameBySpecialIndex ($idx);
+
+    /**
+     * @param  string       $scriptName
+     * @param  array|null   $cmBots
+     * @return mixed
+     */
+    abstract public function getAuthInfoForDownloadsByScriptName ($scriptName, $cmBots = null);
+
+    static public function getBBcodename                       ($bbCodeId) { return self::$bbBots[$bbCodeId][0]; }
+    static public function getBBlastestAllowedCodeMajorVersion ($bbCodeId) { return self::$bbBots[$bbCodeId][1]; }
+    static public function getBBbotName                        ($bbCodeId) { return self::$bbBots[$bbCodeId][2]; }
+
+    protected function getBBbotIndexByBBinfo ($bbCodename, $bbMajorVersionNumber, $bbBotName)
+    {
+        foreach (self::$bbBots as $idx => $triple) {
+            if ($bbCodename == $triple[0] && $bbMajorVersionNumber == $triple[1] && $bbBotName == $triple[2]) { return $idx; }
+        }
+        return null;
+    }
+
+    //////////////
+    // ENTER PHASE
+    //////////////
+
+    // last two arguments are for ChatMedia TYPE_ fake and dummy
+    abstract public function undressUpdate ($dressedUpdate, $cmAuthInfo, $textToPut = null, $userIdToPut = null);
+
+    /**
+     * @param $scriptName
+     * @param $update       Update
+     */
+    final public function run ($scriptName, $update)
+    {
+        // save the new update in DB
+        $update->writeToDB();
+        // process the update according to the bot identity
+        $cmBotCredentials = $this->getCMbotCredentialsByScriptName($scriptName);   // [ bbCodeId, cmBotName, cmScriptName, cmBotTokenOrPassword ]
+        $cmType           = $this->type;
+        $cmUserId         = $update->getCMuserId();
+        $cmBotName        = $cmBotCredentials[1];
+        $cmChatInfo       = $update->getCMchatInfo();
+        $bbCodeId         = $cmBotCredentials[0];
+        $cmc              = ChatMediumChannel::makeFromCM($cmType, $cmUserId, $cmBotName, $cmChatInfo, $this, $bbCodeId);
+        if ($cmc === null) {
+            // TODO Log this
+            // show some feedback: condicion anormal del sistema
+            $msg    = self::$messages[$this->locale][self::MSG_EXCEPTION_CANT_CREATE_CMC];
+            $toPost = $this->dressSplash($msg, null, null, [$cmBotName, $cmUserId, $cmChatInfo]);
+            $res = $this->display($toPost);
+            if ($res === false) {
+                // TODO Log this
+            }
+        }
+        else {
+            $res = $cmc->orderExecution($update);
+            if ($res === false) {
+                // TODO Log this
+            }
+        }
+    }
+
+    abstract public function getDownloadUrl ($cmAuthInfo, $fileId);
+
+    /////////////
+    // EXIT PHASE
+    /////////////
+
+    /**
+     * @param $splashes     Splash[]
+     * @param $cmChannel    ChatMediumChannel
+     */
+    public function render ($splashes, $cmChannel)
+    {
+        $textsAndResources = [];
+        $options           = [];
+        // join all sequential enqueued texts for doing for them only one ChatMedium request
+        $currentText       = '';
+        foreach ($splashes as $splash) {
+            $type = $splash->getSubType();
+            switch ($type) {
+                case Splash::SUBTYPE_TEXT :
+                    $currentText .= ($currentText == '' ? '' : '\n') . $splash->getText();
+                    break;
+                case Splash::SUBTYPE_RESOURCE :
+                    if ($currentText != '') { $textsAndResources[] = $currentText; $currentText = ''; }
+                    $textsAndResources[] = $splash->getResource();
+                    break;
+                case Splash::SUBTYPE_MENU :
+                    if ($splash->getText() !== null) { $currentText .= ($currentText == '' ? '' : '\n') . $splash->getText(); }
+                    $options = array_merge($options, $splash->getOptions());
+                    break 2;   // avoid processing of splashes that were enqueued after the menu enqueue operation (shouldn't happen)
+            }
+        }
+        if ($currentText != '') { $textsAndResources[] = $currentText; }
+        // post to ChatMedium
+        for ($i = 0; $i < count($textsAndResources); $i++) {
+            $textOrResource = $textsAndResources[$i];
+            if (is_string($textOrResource)) { $text = $textOrResource; $resource = null;            }
+            else                            { $text = null;            $resource = $textOrResource; }
+            $postOptionsNow = $i == count($textsAndResources) - 1;
+            $infoToPost = $this->dressSplash($text, $postOptionsNow ? ($options == [] ? null : $options) : null, $resource, $cmChannel);
+            $res = $this->display($infoToPost);
+            if (! $res) {
+                // TODO Log this
+            }
+        }
+    }
+
+    abstract public function dressSplash ($text, $menuOptions, $resource, $cmChannelOrCmChatInfo);
+
+    abstract public function display ($infoToPost);
+
+    public function setLocale ($locale)
+    {
+        $this->locale = $locale;
+    }
+
+}
+

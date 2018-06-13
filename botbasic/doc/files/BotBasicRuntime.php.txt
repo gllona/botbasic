@@ -1,0 +1,1880 @@
+<?php
+/**
+ * Runtime (entorno de ejecución) de BotBasic
+ *
+ * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
+ * @license     http://www.venicua.com/botbasic/license     Licencia de BotBasic
+ * @see         http://www.venicua.com/botbasic             Referencia de BotBasic
+ * @version     1.0 - 01.jan.2017
+ * @since       0.1 - 01.jul.2016
+ */
+
+
+
+namespace botbasic;
+
+include_once "bbautoloader.php";
+
+
+
+/**
+ * Clase BotBasicRuntime
+ *
+ * Clase principal del runtime (entorno de ejecución) de un programa BotBasic, la cual está asociada a varios BotBasicChannels y a su vez,
+ * cada uno de estos, a varios ChatMediumChannels, de los cuales sólo uno (el último activo según ChatMedium) está cargado en memoria a la vez.
+ *
+ * @package botbasic
+ */
+class BotBasicRuntime extends BotBasic implements Closable
+{
+
+
+
+    //////////////////////////////
+    // DEFINITIONS AND CONSTRUCTOR
+    //////////////////////////////
+
+
+
+    // "state" attributes (see defaults in ::create())
+
+    /** @var null|string Locale actual de la ejecución del programa BotBasic; forma parte del estado y se guarda en BD */
+    private $locale             = null;
+
+    /** @var null|array Mapa de variables de BotBasic asociadas al runtime y que no han pasado por un RESET ... CHANNEL, como:
+                        [ name => [ bool-tainting, value-or-nullForDeletion ], ... ] */
+    private $vars               = null;
+
+    /** @var null|string Palabra "mágica" que permite aceptar un valor por defecto en un INPUT; forma parte del estado y se guarda en BD */
+    private $word               = null;   // TODO read/save
+
+    /** @var null|string Indicador de si se ha activado/desactivado el trace de BotBasic con TRACE/NOTRACE; forma parte del estado y se guarda en BD */
+    private $trace              = null;   // TODO read/save
+
+    /** @var bool Indica si el canal está marcado para borrado, como producto de un CHANNEL DELETE */
+    private $deleted            = false;
+
+    // heap attributes
+
+    /** @var null|array Canal target para los siguientes Splashes generados con PRINT, INPUT y MENU; puede fijarse también con ON; está expresado como:
+     *                  [ bbBotName, bizModelUserId, bbChannelId ] */
+    private $on                 = null;
+
+    /** @var null|array Secuencia de textos que se deben convertir en Splashes cuando se ejecute submitRendering() */
+    private $prints             = null;
+
+    /** @var null|array Secuencia de MENUs que se deben convertir en Splashes cuando se ejecute submitRendering().
+     *                  La multiplicidad es mayor que uno porque los targets pueden ser otros BotBasicChannels */
+    private $menus              = null;
+
+    /** @var null|array Secuencia de INPUTs que se deben convertir en Splashes cuando se ejecute submitRendering().
+     *                  La multiplicidad es mayor que uno porque los targets pueden ser otros BotBasicChannels */
+    private $inputs             = null;
+
+    /** @var null|array Títulos preacumulados para MENU e INPUT a través de la directiva TITLE */
+    private $menuAndInputTitles = null;
+
+    /** @var null|array Opciones preacumuladas para MENU a través de las directivas OPTION y OPTIONS */
+    private $menuOptions        = null;
+
+    /** @var null|array Definición del paginador del menú, según la directiva PAGER, como:
+                        [ pagerSpec, pagerArg ] */
+    private $menuPager          = null;
+
+    /** @var null|bool Indica si la última operación DATA GET no consiguió un valor con la clave especificada en la BD */
+    private $dataGetEmpty       = null;
+
+    /** @var bool Indica si se ha ejecutado un ABORT (para evitar la ejecución del código BotBasic de un hook posterior) */
+    private $aborted            = false;
+
+    // references
+
+    /** @var BizModelAdapter Implementa la relación */
+    private $bmAdapter          = null;
+
+    /** @var Update Contenido de la interacción proveniente de la chatapp; debe ser fijada antes de llamar a route() */
+    private $update             = null;
+
+    // "runtime signature" attributes
+
+    /** @var null|int ID del runtime, según la BD, o null para runtimes nuevos */
+    private $id                 = null;
+
+    /** @var null|int Cada bot de un programa en BotBasic tiene un ID expresado como un índice de un mapa en ChatMedium */
+    private $bbCodeId           = null;
+
+    /** @var null|string Versión mayor del programa de BotBasic que se ejecuta en este runtime; puede actualizarse automáticamente */
+    private $bbCodeMajorVersion = null;
+
+    /** @var null|string Versión menor del programa de BotBasic que se ejecuta en este runtime; puede actualizarse automáticamente */
+    private $bbCodeMinorVersion = null;
+
+    /** @var null|int ID del "usuario del modelo de negocio" al cual está asociado este runtime, o null si no hay asociación previa;
+     *                las directivas CHANNEL no tienen efecto si este atributo es null */
+    private $bmUserId           = null;
+
+    /** @var BotBasicRuntime[] Store para todas las instancias de esta clase */
+    static private $store       = [];
+
+
+
+    public  function getId                        () { return $this->id;                                                                                }
+    public  function getLocale                    () { return $this->locale;                                                                            }
+    public  function getWord                      () { return $this->word;                                                                              }
+    public  function getTrace                     () { return $this->trace;                                                                             }
+    public  function getBMuserId                  () { return $this->bmUserId;                                                                          }
+    public  function getVars                      () { return $this->vars;                                                                              }
+    public  function getBBcodeId                  () { return $this->bbCodeId;                                                                          }
+    public  function getBBcodeMajorVersion        () { return $this->bbCodeMajorVersion;                                                                }
+    public  function getBBcodeMinorVersion        () { return $this->bbCodeMinorVersion;                                                                }
+    private function getBBcodename                () { return ChatMedium::getBBcodename($this->bbCodeId);                                               }
+    private function getBBlastestCodeMajorVersion () { return ChatMedium::getBBlastestAllowedCodeMajorVersion($this->bbCodeId);                         }
+    public  function getBBbotName                 () { return ChatMedium::getBBbotName($this->bbCodeId);                                                }
+    private function getBBchannels                () { return BotBasicChannel::getFromStoreByRuntimeId($this);                                          }
+    private function getBBchannelsIndexed         () { $res = []; foreach ($this->getBBchannels() as $bbc) { $res[$bbc->getId()] = $bbc; } return $res; }
+    public  function getCurrentBBchannel          () { return $this->getBBchannels()[0];                                                                }
+
+    public function isDeleted ()    { return $this->deleted;                        }
+    public function setAsDeleted () { $this->deleted = true; $this->tainting(true); }
+
+
+
+    protected function __construct ($bbCodeId, $bbCodeVersion = null)
+    {
+        parent::__construct();
+        $this->bbCodeId = $bbCodeId;
+        $bbCodeName = $this->getBBcodename();
+        // if no BB code version was passed, infer it as the lastest allowed
+        if ($bbCodeVersion === null) {
+            $bbCodeVersion = DBbroker::readLastBBCodeVersionForCodename($bbCodeName, $this->getBBlastestCodeMajorVersion());
+            if ($bbCodeVersion === null)  { return; }   // TODO Log this and abort everything (flag as unable to execute anything and use later in execute())
+            if ($bbCodeVersion === false) { return; }   // TODO same
+        }
+        $bbMajorCodeversion = self::getMajorCodeVersionFor($bbCodeVersion);
+        $bbMinorCodeversion = self::getMinorCodeVersionFor($bbCodeVersion);
+        // load the BB code
+        $code = DBbroker::readBBcode($bbCodeName, $bbMajorCodeversion, $bbMinorCodeversion);
+        if ($code === null)  { return; }   // TODO same
+        if ($code === false) { return; }   // TODO same
+        // fill fields
+        list ($bbCodeId, $bbVersion, , $this->messages, $this->menus, $this->magicvars, $this->primitives, $this->bots) = $code;
+        $this->bbCodeId           = $bbCodeId;
+        $this->bbCodeMajorVersion = $bbMajorCodeversion;
+        $this->bbCodeMinorVersion = $bbMinorCodeversion;
+        // a security check
+        if ($bbVersion > BOTBASIC_LANG_VERSION) { return; }   // TODO same (this is an old interpreter, for the code version read from DB) (string comparision)
+        // store
+        self::$store[] = $this;
+    }
+
+
+
+    /**
+     * @param  int                  $bbCodeId
+     * @param  ChatMediumChannel    $cmChannel
+     * @param  bool                 $createBBCandCMC
+     * @return BotBasicRuntime|null
+     */
+    static public function create ($bbCodeId, $cmChannel, $createBBCandCMC = false)
+    {
+        // verificar correctitud de BizModelAdapter (la existencia de metodos mv_, pr_ y mn_ fue verificado cuando se compilo el codigo de BB)
+        if (! is_subclass_of("BizModelAdapter", "BizModelAdapterTemplate")) {
+            // TODO Log this: "BizModelAdapter PHP class must extend BizModelAdapterTemplate"
+            return null;
+        }
+        // if it's a new CMC triplet, assign default values
+        $rtId = DBbroker::readBBruntimeIDbyCMC($cmChannel);
+        if ($rtId === null) { return null; }
+        if ($rtId === false) {
+            $rt = new BotBasicRuntime($bbCodeId);
+            $rt->locale    = $rt->getDefaultLocale();
+            $rt->word      = null;
+            $rt->trace     = false;
+            $rt->bmUserId  = null;
+            $rt->vars      = [];
+            $rt->initRunStructs();   // TODO revisar si se debe llamar desde algun otro lugar y si hay algo fijado aqui que debe ser pasado a DB
+            // assign new ID
+            $rtId = DBbroker::writeBBruntime($rt);
+            if ($rtId === null) { return null; }
+            $rt->id = $rtId;
+        }
+        // if it's an existing runtime associated to the CMC triplet, load it
+        else {
+            $rt = self::loadById($rtId);
+            if ($rt === null) { return null; }
+        }
+        // optionally create a BBC associated to the new RT (CMC will be associated automatically when get from the CMC store)
+        if ($createBBCandCMC) {
+            $bbc = BotBasicChannel::createFromBBRT($rt, $cmChannel->getCMtype(), $cmChannel->getCMuserId(), $cmChannel->getCMbotName());
+            if ($bbc === null) { return null; }
+        }
+        // try to upgrade the BBcode
+        $rt->updateBBcode();
+        // ready
+        return $rt;
+    }
+
+
+
+    static public function loadById ($runtimeId, $loadDefaultBBCandCMC = false)
+    {
+        // check if in store
+        foreach (self::$store as $rt) {
+            if ($rt->id == $runtimeId) { return $rt; }
+        }
+        // if not, read from DB
+        $data = DBbroker::readBBruntime($runtimeId);
+        if     ($data === null)  { return null; }   // TODO log this
+        elseif ($data === false) { return null; }   // TODO log this
+        list ($bbCodeId, $bbCodeMajorVersion, $bbCodeMinorVersion, $locale, $word, $trace, $bmUserId) = $data;
+        // create the object
+        $rt = new BotBasicRuntime($bbCodeId, "$bbCodeMajorVersion.$bbCodeMinorVersion");
+        $rt->locale    = $locale;
+        $rt->word      = $word;
+        $rt->trace     = $trace;
+        $rt->bmUserId  = $bmUserId;
+        $rt->id        = $runtimeId;
+        $rt->vars      = [];
+        $vars          = DBbroker::readVars($runtimeId, null);
+        if ($vars === null) { return null; }   // TODO Log this
+        foreach ($vars as $varData) {
+            list ($name, $value) = $varData;
+            $rt->vars[$name] = [ false, $value ];
+        }
+        // if should load (default) BBC and CMC...
+        if ($loadDefaultBBCandCMC) {
+            $cmBots = ChatMedium::getDefaultCMbots();   // [ cmType, cmBotName ][]
+            $data   = DBbroker::readCMuserIdForLastUsedCMchannel($cmBots);
+            if ($data === null)  { return null; }   // TODO log this
+            if ($data === false) { return null; }   // TODO log this
+            list ($cmType, $cmBotName, $cmUserId) = $data;
+            $bbc = BotBasicChannel::createFromBBRT($rt, $cmType, $cmUserId, $cmBotName);
+            if ($bbc === null) { return null; }
+        }
+        // ready
+        return $rt;
+    }
+
+
+
+    static public function loadByBizModelUserId ($bmUserId)
+    {
+        // check if in store
+        foreach (self::$store as $rt) {
+            if ($rt->bmUserId == $bmUserId) { return $rt; }
+        }
+        // if not, read from DB
+        $rtId = DBbroker::readBBruntimeIdByBizModelUserId($bmUserId);
+        if ($rtId === null)      { return null; }   // TODO log this
+        elseif ($rtId === false) { return null; }   // TODO log this
+        return self::loadById($rtId, true);
+    }
+
+
+
+    private function updateBBcode ($updateAlsoMajorVersion = false)
+    {
+        $bbCodeName = $this->getBBcodename();
+        // if should update major version code, do it
+        if ($updateAlsoMajorVersion) {
+            $bbCodeVersion = DBbroker::readLastBBCodeVersionForCodename($bbCodeName, $this->getBBlastestCodeMajorVersion());
+            if ($bbCodeVersion === null)  { return; }   // TODO Log this
+            if ($bbCodeVersion === false) { return; }   // TODO Log this
+            $bbMajorCodeversion = self::getMajorCodeVersionFor($bbCodeVersion);
+            $bbMinorCodeversion = self::getMinorCodeVersionFor($bbCodeVersion);
+            $code = DBbroker::readBBcode($bbCodeName, $bbMajorCodeversion, $bbMinorCodeversion);
+            if ($code === null)  { return; }   // TODO Log this
+            if ($code === false) { return; }   // TODO Log this
+            list ($bbCodeId, $bbVersion, , $messages, $menus, $magicvars, $primitives, $bots) = $code;
+            if ($bbVersion > BOTBASIC_LANG_VERSION) { return; }   // can't upgrade; a newer BB interpreter is needed TODO Log this
+            $this->messages           = $messages;
+            $this->menus              = $menus;
+            $this->magicvars          = $magicvars;
+            $this->primitives         = $primitives;
+            $this->bots               = $bots;
+            $this->bbCodeId           = $bbCodeId;
+            $this->bbCodeMajorVersion = $bbMajorCodeversion;
+            $this->bbCodeMinorVersion = $bbMinorCodeversion;
+            return;
+        }
+        // if updating only minor version code: get all routes used currently by active bbChannels
+        // at the same time get all the labels for each route stoppoint for each BBC
+        $data = DBbroker::readAllRouteQueuesAndBBlabelsForBBruntime($this->id, $this->bbCodeMajorVersion, $this->getBBbotName());
+        if ($data === null) { return; }   // TODO log this
+        $oldRouteLabelsAndLinenos = [];
+        foreach ($data as $triplet) {
+            list ($bbcId, $routeQueue, $labels) = $triplet;
+            // get the label for the stoppoint lineno that was stored in the each route
+            foreach ($routeQueue as $routeIdx => $route) {
+                if (BotBasicChannel::isForeignRoute($route)) { continue; }   // ignore input/menu routes set from foreign BBC's
+                // the following code will happen only one per BBC (no more than one non-foreign route can be set for a specific BBC)
+                $lineno = BotBasicChannel::getRouteLineno($route);
+                if ($lineno === null) { continue; }   // a 'default' route
+                $matched = null;
+                foreach ($labels as $labelName => $labelLineno) {
+                    if ($lineno == $labelLineno) { $matched = [ $labelName, $labelLineno ]; break; }
+                }
+                // if an active stoppoint has no associated label for the current BB code version, can't upgrade
+                if ($matched === null) { return; }
+                // store
+                $oldRouteLabelsAndLinenos[$bbcId] = $matched;   // create the key in the array excluding BBCs with route 'default'
+                break;
+            }
+        }
+        // try to match labels to the new code version, from the newest to the oldest
+        $data = DBbroker::readNewerBBcodeVersions($this->getBBcodename(), $this->bbCodeMajorVersion, $this->bbCodeMinorVersion, $this->getBBbotName());   // got newest to oldest
+        if ($data === null)  { return; }   // TODO log this
+        $newRouteLabelsAndLinenos = null;
+        $newMinorCodeVersion      = null;
+        foreach ($data as $triplet) {
+            list (, $minor, $labels) = $triplet;   // first elem is $major
+            $newRouteLabelsAndLinenos = [];
+            foreach ($oldRouteLabelsAndLinenos as $bbcId => $pair) {
+                list ($label, ) = $pair;
+                // if no match is found for a current label, can't upgrade to that version; try with the previous most inmediate code version
+                if (! isset($labels[$label])) { continue 2; }
+                // store
+                $newRouteLabelsAndLinenos[$bbcId] = [ $label, $labels[$label] ];
+            }
+            $newMinorCodeVersion = $minor;
+            break;
+        }
+        // if no new code version is available where all active stoppoints labels can be matched, can't upgrade
+        if ($newMinorCodeVersion === null) { return; }
+        // upgrade the routes of each BBC (taint them)
+        $bbcs = [];   /** @var BotBasicChannel[] $bbcs */
+        foreach (array_keys($newRouteLabelsAndLinenos) as $bbcId) {
+            $bbc = BotBasicChannel::load($bbcId, $this);
+            if ($bbc === null)  { return; }   // can't upgrade TODO Log this
+            if ($bbc === false) { return; }   // can't upgrade TODO Log this
+            $bbcs[$bbcId] = $bbc;
+        }
+        foreach ($newRouteLabelsAndLinenos as $bbcId => $pair) {
+            list (, $newLineno) = $pair;
+            $bbc = $bbcs[$bbcId];
+            $routeIdxs = $bbc->getRouteQueueIndexes();
+            foreach ($routeIdxs as $routeIdx) {
+                if ($bbc->getRouteType($routeIdx) == 'default' || BotBasicChannel::isForeignRoute(null, $bbc, $routeIdx)) { continue; }   // process only the max-one non-foreign route
+                $bbc->setRouteLineno($newLineno, $routeIdx);
+                $bbc->tainting(true);
+                break;
+            }
+        }
+        // update and taint the RT
+        $program = DBbroker::readBBcode($bbCodeName, $this->getBBcodeMajorVersion(), $newMinorCodeVersion);
+        if ($program === null)  { return; }   // TODO same
+        if ($program === false) { return; }   // TODO same
+        if ($program[1] > BOTBASIC_LANG_VERSION) { return; }   // TODO same (this is an old interpreter, for the code version read from DB) (string comparision)
+        list ($bbCodeId, , , $this->messages, $this->menus, $this->magicvars, $this->primitives, $this->bots) = $program;
+        $this->bbCodeId           = $bbCodeId;
+        $this->bbCodeMinorVersion = $newMinorCodeVersion;
+        $this->tainting(true);
+        // ready! the new, upgraded routes are now in the BBC store for all the channels and will we saved when closing()
+    }
+
+
+
+    ////////////
+    // UTILITIES
+    ////////////
+
+
+
+    protected function addError ($lineno, $message, $isBBerror = false)
+    {
+        Log::register(Log::TYPE_RUNTIME, "Intento de uso de addError() en modo runtime con: [lineno:$lineno] [BBerror:" . ($isBBerror ? "true" : "false") . "] [$message]", []);
+    }
+
+
+
+    ///////////////////////////////////////////////////////////////////
+    // ROUTING ACTION (ENTERING PROCESS) (INCLUDING RUNWITH() HANDLERS)
+    ///////////////////////////////////////////////////////////////////
+
+
+
+    protected function initRunStructs ()
+    {
+        $this->menuAndInputTitles = [];                     // each: value
+        $this->menuOptions        = [];                     // each: see Interaction:: helpers for menuhooks
+        $this->menuPager          = [ null, null ];         // [ pagerType, pagerTypeArg ]
+        $this->dataGetEmpty       = true;                   // if last DATA GET directive got no match by key in DB
+        $this->word               = null;                   // string
+        // TODO $word must be saved in DB as rt state (check if...)
+        $this->on                 = [ null, null, null ];   // [ bot, domainUserId, bbChannelId ]
+        $this->prints             = [];                     // each: [ value, on[] ]
+        $this->inputs             = [];                     // each: [ 'input', $dataType, $title, $word, $targetBbcId, $toVar, $fromValue ]
+        $this->menus              = [];                     // each: [ 'predefmenu', $bot, $lineno, $menuName, $options, $pager, $targetBbcId, $toVars, $contextObject ]
+                                                            //   or: [ 'stdmenu', $bot, $lineno, $options, $pager, $targetBbcId, $toVar ]
+        // previuos state was set when reading/creating the runtime
+    }
+
+
+
+    public function execute ($update)
+    {
+        $this->update = $update;
+        $this->route();
+        $this->flushEverything();
+    }
+
+
+
+    private function route ()
+    {
+        $type    = $this->getCurrentBBchannel()->getRouteType();
+        $route   = $this->getCurrentBBchannel()->getRouteContent();
+        $text    = $this->getEntryText();
+        $hook    = $this->getMenuhook();
+        $catched = false;
+
+        // create the BMAdapter instance
+        $bmp = BizModelProvider::create($this->getCurrentBBchannel());
+        $bma = BizModelAdapter::create($bmp);
+        if (! is_subclass_of($bma, "BizModelAdapterTemplate")) {
+            // TODO Log this
+            return;
+        }
+        $this->bmAdapter = $bma;
+
+        // special case for event "fake" updates
+        if ($this->getEventCommand() !== null) {
+            $lineno   = $this->getEventhookStartPoint();
+            if ($lineno !== null) {
+                $this->runPart($lineno);
+            }
+            if (! $this->aborted) {   // TODO volatile std false; change to true with ABORT (new) sentence
+                $lineno = $this->getEventStartPoint();
+                if ($lineno !== null) {
+                    $this->runPart($lineno);
+                }
+                else {
+                    // TODO log this (an event was fired that has no BB-code handler)
+                }
+            }
+            return;
+        }
+
+        // type-and-content-based routing
+        if ($type == 'input' && $text !== null) {
+            $lineno   = $this->getInputhookStartPoint();
+            if ($lineno !== null) {
+                $this->runPart($lineno);
+            }
+            if (! $this->aborted) {
+                list ($bot, $lineno, $dataType, $title, $word, $fromValue) = $route;
+                $this->invokeInputStep2($bot, $lineno, $dataType, $title, $word, $fromValue, $text);
+                $catched = true;
+            }
+        }
+        elseif (($type == 'stdmenu' || $type == 'predefmenu') && $hook !== null) {
+            $route[] = null;   // hack for next line
+            $hook    = Interaction::decodeMenuhook($hook);
+            if ($hook === null) {
+                // do nothing (suspect a "bad client" hack)
+                // TODO Log this
+            }
+            else {
+                list ($key, $menuHookLineno)                           = $hook;
+                list ($bot, $lineno, $options, $pager, $contextObject) = $route;
+                if ($menuHookLineno != $lineno) {
+                    // do nothing (pressed an old menu option)
+                }
+                else {
+                    $lineno   = $this->getMenuhookStartPoint();
+                    if ($lineno !== null) {
+                        $this->runPart($lineno);
+                    }
+                    if (! $this->aborted) {
+                        $this->invokeMenuStep2($bot, $lineno, $options, $pager, $contextObject, $key);
+                    }
+                }
+            }
+            $catched = true;
+        }
+        elseif ($type == 'stdmenu' || $type == 'predefmenu') {   // $hook === null
+            // TODO el usuario debe elegir una opcion de menu; informar creando y mandando un splash y listo
+        }
+        elseif ($type == 'default' && $text !== null) {
+            $lineno = $this->getEntryhookStartPoint();
+            if ($lineno !== null) {
+                $this->runPart($lineno);
+            }
+            if (! $this->aborted) {
+                $lineno = $this->getMainCodeStartPoint();
+                if ($lineno !== null) {
+                    $this->runPart($lineno);
+                }
+            }
+        }
+        else {
+            // TODO log this (routetype incorrecto || otro route en combinacion invalida)
+        }
+
+        // tunnels forwarding
+        if ($this->update->hasResources() || $text !== null && ! $catched) {
+            $splash = $this->update->convertToSplash();
+            $this->getCurrentBBchannel()->sendToTunnels($splash);
+        }
+    }
+
+
+
+    private function runPart ($lineno)
+    {
+        $bot = $this->getBBbotName();
+        $this->completeOn();
+        $this->runWith($bot, true, "runner", $lineno);
+    }
+
+
+
+    private function getEntryhookStartPoint ()
+    {
+        $bot = $this->getBBbotName();
+        if (! isset($this->bots[$bot]['specialHooks'][self::BBCODEHOOK_ENTRY])) { return null; }
+        return      $this->bots[$bot]['specialHooks'][self::BBCODEHOOK_ENTRY];
+    }
+
+
+
+    private function getMenuhookStartPoint ()
+    {
+        $bot = $this->getBBbotName();
+        if (! isset($this->bots[$bot]['specialHooks'][self::BBCODEHOOK_MENU])) { return null; }
+        return      $this->bots[$bot]['specialHooks'][self::BBCODEHOOK_MENU];
+    }
+
+
+
+    private function getInputhookStartPoint ()
+    {
+        $bot = $this->getBBbotName();
+        if (! isset($this->bots[$bot]['specialHooks'][self::BBCODEHOOK_INPUT])) { return null; }
+        return      $this->bots[$bot]['specialHooks'][self::BBCODEHOOK_INPUT];
+    }
+
+
+
+    private function getEventhookStartPoint ()
+    {
+        $bot = $this->getBBbotName();
+        if (! isset($this->bots[$bot]['specialHooks'][self::BBCODEHOOK_EVENT])) { return null; }
+        return      $this->bots[$bot]['specialHooks'][self::BBCODEHOOK_EVENT];
+    }
+
+
+
+    private function getMainCodeStartPoint ()
+    {
+        $bot  = $this->getBBbotName();
+        $text = trim($this->getEntryText());
+        foreach ($this->bots[$bot]['commonHooks'] as $hook => $lineno) {
+            if ($text == $hook) { return $lineno; }
+        }
+        foreach ($this->bots[$bot]['regexpHooks'] as $hook => $lineno) {
+            if (1 === preg_match($hook, $text)) { return $lineno; }
+        }
+        return null;
+    }
+
+
+
+    private function getEventStartPoint ()
+    {
+        $bot   = $this->getBBbotName();
+        $event = $this->getEventCommand();
+        foreach ($this->bots[$bot]['eventHooks'] as $hook => $lineno) {
+            if ($event == $hook) { return $lineno; }
+        }
+        return null;
+    }
+
+
+
+    ///////////////
+    // EXIT PROCESS
+    ///////////////
+
+
+
+    protected function flushEverything ()
+    {
+        $this->submitRendering();
+        $this->close();
+    }
+
+
+
+    private function submitRendering ()
+    {
+        $bbcPool = [];   /** @var BotBasicChannel[] $bbcPool */
+
+        $completeOn = function (&$onArray)
+        {
+            if ($onArray === null)    { $onArray = [];                              }
+            if (! isset($onArray[0])) { $onArray[0] = $this->getBBbotName();        }
+            if (! isset($onArray[1])) { $onArray[1] = $this->bmUserId;              }
+            if (! isset($onArray[2])) {
+                if ($this->getBBbotName() && $onArray[1] == $this->bmUserId) {   // myself
+                    $onArray[2] = $this->getCurrentBBchannel();
+                }
+                else {
+                    $rt = BotBasicRuntime::loadByBizModelUserId($onArray[1]);
+                    if ($rt === null) { $onArray = null;                          }   // TODO log this
+                    else              { $onArray[2] = $rt->getCurrentBBchannel(); }
+                }
+            }
+            // TODO al procesar en runtime una directiva con ON o la ON misma, no aceptar que no tenga on[1] si el nombre de bot on[0] no es el del codigo que se esta parseando
+        };
+
+        $onIsOnMe = function (&$onArray)
+        {
+            return $onArray !== null && $onArray[0] == $this->getBBbotName() && $onArray[1] == $this->bmUserId && $onArray[2] == $this->getCurrentBBchannel();
+        };
+
+        $getBBchannel = function ($onArray = null) use ($bbcPool)
+        {
+            list ($botName, $userId, $bbChannelId) = $onArray;
+            $bbcs = $this->getBBchannelsIndexed();
+            if ($onArray !== null && $botName ==  $this->getBBbotName() && $userId  ==  $this->bmUserId && isset($bbcs[$bbChannelId])) {
+                $bbcPool[$bbChannelId] = $bbcs[$bbChannelId];
+            }
+            if (! isset($bbcPool[$bbChannelId])) {
+                $bbcPool[$bbChannelId] = DBbroker::readBotBasicChannel($bbChannelId);   // [ cmType, cmUserId, cmBotName ]
+            }
+            return $bbcPool[$bbChannelId];
+        };
+
+        // prints
+        foreach ($this->prints as $print) {
+            list ($value, $on) = $print;
+            $completeOn($on);
+            if ($on === null) { continue; }   // TODO log4debug (no se encontro un default BBC para un RT foraneo)
+            $bbc = $getBBchannel($on);   /** @var BotBasicChannel $bbc */
+            if ($bbc === null) { continue; }   // TODO log4debug
+            $splash = Splash::createWithText($value);
+            $bbc->getCMchannel()->enqueue($splash);
+        }
+
+        // menus
+        foreach ($this->menus as $menu) {
+            list ($predefMenuName, $predefMenuArgs, $titles, $options, $pager, $toVars, $lineno, $bot, $on) = $menu;   // TODO check assignment of this order in runner4menu
+            if ($toVars !== null) {   // a menu was requested
+                $completeOn($on);
+                if ($on === null) { continue; }   // TODO log4debug (no se encontro un default BBC para un RT foraneo)
+                $bbc = $getBBchannel($on);
+                if ($bbc === null) { continue; }   // TODO log4debug
+                if ($predefMenuName !== null) {
+                    $bbc->enqueueRoutePredefMenu($bot, $lineno, $predefMenuName, $options, $pager, $this->getCurrentBBchannel()->getId(), $toVars);
+                    if ($onIsOnMe($on)) { $rt = $this;                            }
+                    else                { $bbc = $getBBchannel($on); $rt = $this; }   // $rt = $bbc->getBBruntime();   // not as in the comment because logic should be executed in the calling RT
+                    $rt->callMenu($predefMenuName, $predefMenuArgs, $titles, $options, $pager, $lineno, $bot, $bbc);   // see next list() for descripcion de $options   // called f() sets target route
+                }
+                else {
+                    // routing at target
+                    $bbc->enqueueRouteStdMenu($bot, $lineno, $options, $pager, $this->getCurrentBBchannel()->getId(), $toVars[0]);
+                    // process titles as prints
+                    foreach ($titles as $value) {
+                        $splash = Splash::createWithText($value);
+                        $bbc->getCMchannel()->enqueue($splash);
+                    }
+                    // pager (start); for now show a simple pager with prev and next buttons
+                    list ($pagerSpec, ) = $pager;   // $pagerArg = $pager[1] is not used yet
+                    $codifiedOptions = [];
+                    if ($pagerSpec !== null) {
+                        if ($pagerSpec == 'pagerLong') { $codifiedOptions[] = Interaction::encodeMenuhook('<<', '<<', null, null, $bbc, $lineno); }
+                        $codifiedOptions[] =                                  Interaction::encodeMenuhook('<',  '<',  null, null, $bbc, $lineno);
+                    }
+                    // make menu options; transform to custom keyboard keys
+                    foreach ($options as $option) {
+                        list ($key, $value, $gotoOrGosub, $gotoGosubTargetLineno) = $option;   // TODO store as here in runner4option(s) + runner4menu
+                        $codifiedOptions[] = Interaction::encodeMenuhook($key, $value, $gotoOrGosub, $gotoGosubTargetLineno, $bbc, $lineno);
+                    }
+                    // pager (end)
+                    if ($pagerSpec !== null) {
+                        $codifiedOptions[] =                                  Interaction::encodeMenuhook('>',  '>',  null, null, $bbc, $lineno);
+                        if ($pagerSpec == 'pagerLong') { $codifiedOptions[] = Interaction::encodeMenuhook('>>', '>>', null, null, $bbc, $lineno); }
+                    }
+                    $splash = Splash::createWithMenu($codifiedOptions);
+                    $bbc->getCMchannel()->enqueue($splash);
+                }
+            }
+        }
+
+        // input (should be exclusive with menu)
+        foreach ($this->inputs as $input) {
+            list ($dataType, $titles, $word, $toVar, $fromVarValue, $lineno, $bot, $on) = $input;
+            if ($toVar !== null) {   // an input was requested
+                $completeOn($on);
+                if ($on === null) { continue; }   // TODO log4debug (no se encontro un default BBC para un RT foraneo)
+                $bbc = $getBBchannel($on);
+                if ($bbc === null) { continue; }   // TODO log4debug
+                // routing at the target
+                $bbc->enqueueRouteInput($bot, $lineno, $dataType, $titles, $word, $this->getCurrentBBchannel()->getId(), $toVar, $fromVarValue);
+                // process titles as prints
+                foreach ($titles as $value) {
+                    $splash = Splash::createWithText($value);
+                    $bbc->getCMchannel()->enqueue($splash);
+                }
+                // show a helper text according to the dataType
+                $prompt = $this->buildInputHelperForDatatype($this->locale, $dataType);
+                $splash = Splash::createWithText($prompt);
+                $bbc->getCMchannel()->enqueue($splash);
+
+                // TODO en runner4word, se captura el valor actual de la variable indicada y se almacena en $this->word
+                // TODO mientras que si se trata de una clausula en un menu, se captura tambien en ese momento (su valor) --> getLvalValue()
+                // TODO al encolar un INPUT, no colocar $fromVar sino $fromVarValue
+
+                // when there is a default value and a word, show the info before prompting for input
+                if ($word !== null && $word !== '' && $fromVarValue !== null) {
+                    $prompt = $this->buildInputPromptForDefaultValue($this->locale, $word, $fromVarValue);
+                    $splash = Splash::createWithText($prompt);
+                    $bbc->getCMchannel()->enqueue($splash);
+
+                    // TODO hay un problema a considerar: el locale del bot actual esta definiendo el del splash en el bot destino cuando se usa on[]
+                    // TODO el problema no es grave, dejar asi por ahora
+                }
+            }
+        }
+
+        // render at the multiple ChatMedia
+        foreach ($bbcPool as $bbc) {
+            $bbc->orderRendering();
+        }
+
+        // reset buffers
+        $this->menus = $this->inputs = $this->prints = [];
+    }
+
+
+
+    public function save ()
+    {
+        if (! ($this->tainting() || $this->id === null || $this->deleted)) { return true; }
+        $res = DBbroker::writeBBruntime($this);
+        if     ($res === null) { return null;      }    // TODO Log this
+        elseif (is_int($res))  { $this->id = $res; }
+        foreach ($this->vars as $name => $varData) {
+            list ($tainted, $value) = $varData;
+            if (! $tainted) { continue; }
+            $res = DBbroker::updateVar($this, null, $name, $value);
+            if     ($res === null)  {}   // TODO log this
+            elseif ($res === false) {}   // TODO log this
+        }
+        $this->tainting(false);
+        return true;
+    }
+
+
+
+    public function close ()
+    {
+        $this->save();
+        foreach ($this->getBBchannels() as $bbc) {
+            $bbc->close();
+        }
+    }
+
+
+
+    public function tainting ($state = null)
+    {
+        static $theState = false;
+        if ($state === null)   { return $theState; }
+        if (! is_bool($state)) { return null; }
+        $theState = $state;
+        return null;
+    }
+
+
+
+    ////////////////////////////////////////////////////
+    // NAMESPACE OBJECTS ACCESSORS INCLUDING VARS ACCESS
+    ////////////////////////////////////////////////////
+
+
+
+    public function getBizModelUserId ()
+    {
+        return $this->bmUserId;
+    }
+
+
+
+    public function setBizModelUserId ($value)
+    {
+        if     (! is_integer($value))      { return null; }
+        elseif ($value == $this->bmUserId) { return true; }
+        elseif (false)                     { return false; }   // TODO condicion debe ser: cuando el userId no existe en la BD [pregunta: como se crea un nuevo usuario] [algo que el BB developer tiene que implementar en BMA?]
+        // TODO cuando el valor pasado es distinto al valor existente, se cambia todo el contexto
+        // TODO esto es llamado tanto desde BMA como desde USERID FROM ...
+        // TODO (escrito later) esto está actualmente en runner4userid; extraer de allí si es pertinente
+        return true;
+    }
+
+
+
+    public function dataHelperLoader ($key)
+    {
+        if ($this->bmUserId === null) { return null; }
+        $res = DBbroker::readDataHelperData($this->bmUserId, $key);
+        if ($res === null) { return null;                                }   // TODO Log this
+        else               { return $res === false ? null : $res->value; }
+    }
+
+
+
+    public function dataHelperSaver ($key, $value)
+    {
+        if ($this->bmUserId === null) { return null; }
+        $toSave = [ 'value' => $value ];
+        $res = DBbroker::writeDataHelperData($this->bmUserId, $key, $toSave);
+        if ($res === null) { return null; }   // TODO Log this
+        else               { return true; }
+    }
+
+
+
+    private function getAllVarNames ()
+    {
+        $res = [];
+        foreach ($this->vars as $name => $pair) {
+            if ($pair[1] !== null) { $res[] = $name; }
+        }
+        return $res;
+    }
+
+
+
+    /**
+     * @param  string               $name
+     * @param  null|BotBasicChannel $bbChannel
+     * @return bool
+     */
+    private function isSetVar ($name, $bbChannel = null)
+    {
+        $res = false;
+        if ($bbChannel !== null) { $res = $bbChannel->getCommonVar($name, $this) !== null;                                      }
+        if ($res === false)      { $res = $this->isMessageName($name) || $this->isCommonVar($name) || $this->isMagicVar($name); }
+        return $res;
+    }
+
+
+
+    /**
+     * @param  string   $name
+     * @param  int      $lineno
+     * @param  string   $bot
+     * @param  bool     $processMessageEntities
+     * @return string
+     */
+    private function getVar ($name, $lineno, $bot, $processMessageEntities = true)
+    {
+        if ($this->isMagicVar($name)) {
+            $res = $this->getMagicVar($name, $lineno, $bot);
+        }
+        else {
+            if     ($this->isCommonVar($name))   { $spec = $this->getCommonVar($name);            }
+            elseif ($this->isMessageName($name)) { $spec = $this->messages[$this->locale][$name]; }
+            else                                 { $spec = self::NOTHING;                         }
+            $res = $processMessageEntities ? $this->processMessageSpec($spec, $lineno, $bot, $name) : $spec;
+        }
+        return $res === null ? self::NOTHING : $res;
+    }
+
+
+
+    /**
+     * @param  string   $name
+     * @param  string   $value
+     * @param  int      $lineno
+     * @param  string   $bot
+     * @param  bool     $queryBBchannel
+     */
+    private function setVar ($name, $value, $lineno, $bot, $queryBBchannel = true)
+    {
+        if ($this->isMagicVar($name)) { $this->setMagicVar( $name, $value, $lineno, $bot);   }
+        else                          { $this->setCommonVar($name, $value, $queryBBchannel); }   // isCommonVar OR overwritting a message name
+    }
+
+
+
+    private function getMagicVar ($name, $lineno, $bot)
+    {
+        if (! $this->isMagicVar($name)) {
+            return null;
+        }
+        $accessor = self::MAGICVARS_PHPACCESSOR_PREFIX . $name;
+        if (! method_exists($this->bmAdapter, $accessor)) {
+            Log::register(Log::TYPE_RUNTIME, "getMagicVar: no se puede hallar el metodo '$accessor' en el objeto BizModelAdapter", [ [ Log::ATTRIB_BB_LINENO, $lineno ], [ Log::ATTRIB_BB_BOT, $bot ] ]);
+            $res = self::NOTHING;
+        } else {
+            $res = $this->bmAdapter->$accessor();
+            if ($res === null) {
+                $res = self::NOTHING;
+            }
+        }
+        return $res;
+    }
+
+
+
+    public function setMagicVar ($name, $value, $lineno, $bot)
+    {
+        if (! $this->isMagicVar($name)) {
+            return null;
+        }
+        $accessor = self::MAGICVARS_PHPACCESSOR_PREFIX . $name;
+        if (! method_exists($this->bmAdapter, $accessor)) {
+            Log::register(Log::TYPE_RUNTIME, "setMagicVar: no se puede hallar el metodo '$accessor' en el objeto BizModelAdapter", [ [ Log::ATTRIB_BB_LINENO, $lineno ], [ Log::ATTRIB_BB_BOT, $bot ] ]);
+        } else {
+            $this->bmAdapter->$accessor($value);
+        }
+    }
+
+
+
+    /**
+     * @param  string   $name
+     * @param  bool     $queryBBchannel
+     * @param  bool     $fromBizModelAdapter
+     * @return string|null
+     */
+    public function getCommonVar ($name, $queryBBchannel = true, $fromBizModelAdapter = false)
+    {
+        if (! $this->isCommonVar($name)) {
+            if (! $fromBizModelAdapter) {}   // TODO log this
+            return $fromBizModelAdapter ? null : self::NOTHING;
+        }
+        if     ($queryBBchannel)           { $res = $this->getCurrentBBchannel()->getCommonVar($name, $this); }
+        elseif (isset($this->vars[$name])) { $res = $this->vars[$name][1];                                    }
+        else                               { $res = self::NOTHING;                                            }
+        return $res;
+    }
+
+
+
+    /**
+     * @param  string   $name
+     * @param  string   $value
+     * @param  bool     $queryBBchannel
+     */
+    public function setCommonVar ($name, $value, $queryBBchannel = true)
+    {
+        if (! $this->isCommonVar($name)) {
+            // TODO log this
+        }
+        if ($queryBBchannel) { $this->getCurrentBBchannel()->setCommonVar($name, $value, $this); }
+        else                 { $this->vars[$name] = [ true, $value ];                            }
+    }
+
+
+
+    /**
+     * @param  string   $name
+     * @param  bool     $erase
+     * @param  bool     $queryBBchannel
+     */
+    public function resetCommonVar ($name, $erase, $queryBBchannel = true)
+    {
+        if (! $this->isCommonVar($name)) {
+            // TODO log this
+        }
+        if ($queryBBchannel) { $this->getCurrentBBchannel()->resetCommonVar($name, $erase, $this); }
+        else                 { $this->vars[$name] = [ true, $erase ? null : self::NOTHING ];       }
+    }
+
+
+
+    private function processMessageSpec ($spec, $lineno, $bot, $lvalName)
+    {
+        $errContext = [ [ Log::ATTRIB_BB_LINENO, $lineno ], [ Log::ATTRIB_BB_BOT, $bot ] ];
+        // determine the replacements
+        $toReplace  = [];
+        while (($pos1 = strrpos($spec, '{')) !== false) {
+            $pos2 = strpos($spec, '}', $pos1 + 1);
+            if ($pos2 === false) {
+                Log::register(Log::TYPE_BBCODE, "texto en '$lvalName' invalido: '{','}' desbalanceados: [$spec]", $errContext);
+                return null;
+            }
+            if ($pos2 - 1 < $pos1 + 1) {
+                Log::register(Log::TYPE_BBCODE, "texto en '$lvalName' invalido: template vacio: [$spec]", $errContext);
+                return null;
+            }
+            $name = substr($spec, $pos1 + 1, $pos2 - $pos1 - 1);
+            if (! ($this->isPrimitive($name) || $this->isLvalue($name))) {
+                Log::register(Log::TYPE_BBCODE, "texto en '$lvalName' invalido: '$name' no es primitiva o variable: [$spec]", $errContext);
+                return null;
+            }
+            if ($this->isPrimitive($name) && ! $this->checkPrimitiveArgcounts($name, 0, 1)) {
+                Log::register(Log::TYPE_BBCODE, "texto en '$lvalName' invalido: '$name' debe ser una primitiva con 0 argumentos IN y 1 argument OUT: [$spec]", $errContext);
+                return null;
+            }
+            if ($this->isPrimitive($name)) { $res = $this->callPrimitive($name, [], $lineno, $bot); $res = ! is_array($res) || $res[0] === null ? self::NOTHING : $res[0]; }
+            else                           { $res = $this->getVar($name, $lineno, $bot, false);                                                                            }
+            $toReplace[] = [ $pos1, $pos2 - $pos1 + 1, $res ];
+            $spec = substr_replace($spec, '<', $pos1, 1); $spec = substr_replace($spec, '>', $pos2, 1);   // avoid matching of {} in the next iteration
+        }
+        // do the replacements
+        foreach ($toReplace as $what) {
+            list ($pos1, $pos2, $res) = $what;
+            $spec = substr_replace($spec, $res, $pos1, $pos2 - $pos1 + 1);
+        }
+        return $spec;
+    }
+
+
+
+    private function callPrimitive ($primitive, $args, $lineno, $bot)
+    {
+        if (! $this->isPrimitive($primitive)) {
+            return null;
+        }
+        $accessor = self::PRIMITIVES_PHPACCESSOR_PREFIX . $primitive;
+        if (! method_exists($this->bmAdapter, $accessor)) {
+            Log::register(Log::TYPE_RUNTIME, "callPrimitive: no se puede hallar el metodo '$accessor' en el objeto BizModelAdapter", [ [ Log::ATTRIB_BB_LINENO, $lineno ], [ Log::ATTRIB_BB_BOT, $bot ] ]);
+            return self::NOTHING;
+        }
+        $res = $this->bmAdapter->$accessor($args, $lineno, $bot);
+        if ($res === null) {
+            $res = self::NOTHING;
+        }
+        return $res !== null && ! is_array($res) ? [ $res ] : $res;
+    }
+
+
+
+    /**
+     * @param  string           $menuName
+     * @param  array            $args
+     * @param  string           $title
+     * @param  array            $options
+     * @param  array            $pager
+     * @param  int              $lineno
+     * @param  string           $bot
+     * @param  BotBasicChannel  $bbChannel
+     */
+    private function callMenu ($menuName, $args, $title, $options, $pager, $lineno, $bot, $bbChannel)
+    {
+        if (! $this->isMenu($menuName)) {
+            // TODO Log: menu not found in code
+            return;
+        }
+        $accessor = self::MENUS_PHPACCESSOR_PREFIX . $menuName;
+        if (! method_exists($this->bmAdapter, $accessor)) {
+            Log::register(Log::TYPE_RUNTIME, "callMenu: no se puede hallar el metodo '$accessor' en el objeto BizModelAdapter", [ [ Log::ATTRIB_BB_LINENO, $lineno ], [ Log::ATTRIB_BB_BOT, $bot ] ]);
+            return;
+        }
+        $res = $this->bmAdapter->$accessor($args, $title, $options, $pager, $lineno, $bot, $bbChannel);
+        if ($res === null) {
+            // TODO Log: error condition when executing predefined menu
+        }
+    }
+
+
+
+    //////////////////////
+    // NAMESPACE UTILITIES
+    //////////////////////
+
+
+
+    private function rvals2values ($arrayOfRvals, $lineno, $bot)
+    {
+        $res = [];
+        foreach ($arrayOfRvals as $rval) { $res[] = $this->getRvalValue($rval, $lineno, $bot); }
+        return $res;
+    }
+
+
+
+    private function getRvalValue ($rval, $lineno, $bot)
+    {
+        if     ($this->isExpressionDirective($rval)) { $method = "runner4" . strtolower($this->tokensByName[$rval]); $val = $this->$method(); }
+        elseif ($this->isNumber($rval))              { $val = $rval;                                                                          }
+        elseif ($this->isNoargsPrimitive($rval))     { $val = $this->callPrimitive($rval, [], $lineno, $bot);                                 }
+        elseif ($this->isMagicVar($rval))            { $val = $this->getLvalValue($rval, $lineno, $bot);                                      }
+        elseif ($this->isCommonVar($rval))           { $val = $this->getLvalValue($rval, $lineno, $bot);                                      }
+        elseif ($this->isMessageName($rval))         { $val = $this->getLvalValue($rval, $lineno, $bot);                                      }
+        else {
+            $val = self::NOTHING;
+            Log::register(Log::TYPE_RUNTIME, "error evaluando rvalue [$rval/TYPE:" . gettype($rval) . "]", [ [ Log::ATTRIB_BB_LINENO, $lineno ], [ Log::ATTRIB_BB_BOT, $bot ] ]);
+        }
+        return $val;
+    }
+
+
+
+    private function getLvalValue ($lval, $lineno, $bot)
+    {
+        return $this->getVar($lval, $lineno, $bot);
+    }
+
+
+
+    private function getEntryText ()
+    {
+        if ($this->update->getType() != Interaction::TYPE_UPDATE) {
+            // TODO Log this
+            return null;
+        }
+        return $this->update->getText();
+    }
+
+
+
+    private function getMenuhook ()
+    {
+        if ($this->update->getType() != Interaction::TYPE_UPDATE) {
+            // TODO Log this
+            return null;
+        }
+        return $this->update->getMenuhook();
+    }
+
+
+
+    private function getEventCommand ()
+    {
+        if ($this->update->getType() != Interaction::TYPE_UPDATE) {
+            // TODO Log this
+            return null;
+        }
+        return $this->update->getEventCommand();
+    }
+
+
+
+    ////////////////////////////////
+    // RUNNER AND ITS HELPER METHODS
+    ////////////////////////////////
+
+
+
+    private function runner ($bot, $lineno, &$parsedContent)
+    {
+        $directive = $parsedContent[0];
+        $method = $this->tokensByName[$directive];
+        $method = "runner4" . $method;
+        $this->$method($parsedContent, $lineno, $bot);   // no return value needed
+        return true;
+    }
+
+
+
+    public function completeOn ($botName = null, $bizModelUserId = null, $bbChannelId = null)
+    {
+        if (!( $botName === null && $bizModelUserId === null && $bbChannelId === null ||
+               $botName === $this->getBBbotName() && $bizModelUserId === null && $bbChannelId === null ||
+               // is_string($botName) && $botName != $this->getBBbotName() && is_int($bizModelUserId) && $bbChannelId === null ||
+               is_string($botName) && $botName != $this->getBBbotName() && is_int($bizModelUserId) && is_int($bbChannelId) )) {
+            // TODO Log this (invalid combination)
+            return null;
+        }
+        if ($botName        === null) { $botName = $this->getBBbotName();                                                        }
+        if ($bizModelUserId === null) { $bizModelUserId = $this->bmUserId; $bbChannelId = $this->getCurrentBBchannel()->getId(); }
+        // when uncommenting in the if above, implement something like:
+        // if ($bizModelUserId === null) { $bizModelUserId = $this->bmUserId; }   // a replacement
+        // if ($bbChannelId === null) { $bbChannelId = $bizModelUserId == $this->bmUserId ? $this->getCurrentBBchannel()->getId() : DBbroker::readDefaultChannelIdForBMuserId($bizModelUserId); }
+        return [ $botName, $bizModelUserId, $bbChannelId ];
+    }
+
+
+
+    public function resetAfterSplash ($resetAlsoWordDirective = false)
+    {
+        $this->menuAndInputTitles = [];
+        $this->menuOptions        = [];
+        $this->menuPager          = [ null, null ];
+        $this->on                 = $this->completeOn();
+        if ($resetAlsoWordDirective) { $this->word = null; }
+    }
+
+
+
+    public function splashHelperPrint ($text, $botName = null, $bizModelUserId = null, $bbChannelId = null)
+    {
+        $on = $this->completeOn($botName, $bizModelUserId, $bbChannelId);
+        if ($on === null) { return; }
+        $this->prints[] = [ $text, $on ];
+    }
+
+
+
+    public function splashHelperMenu ($predefMenuName, $predefMenuArgs, $titles, $options, $pager, $toVars, $srcLineno, $srcBot, $botName = null, $bmUserId = null, $bbChannelId = null)
+    {
+        $on = $this->completeOn($botName, $bmUserId, $bbChannelId);
+        if ($on === null) { return; }
+        $this->menus[] = [ $predefMenuName, $predefMenuArgs, is_string($titles) ? [ $titles ] : $titles, $options, $pager, $toVars, $srcLineno, $srcBot, $on ];
+    }
+
+    public function splashHelperMenuMakeOption ($value, $gosubOrGoto = null, $targetLinenoForGosubOrGoto = null)
+    {
+        return [ $value, strtoupper($gosubOrGoto), $targetLinenoForGosubOrGoto ];
+    }
+
+
+
+    public function splashHelperInput ($dataType, $titles, $word, $toVar, $fromVar, $srcLineno, $srcBot, $botName = null, $bmUserId = null, $bbChannelId = null)
+    {
+        $on = $this->completeOn($botName, $bmUserId, $bbChannelId);
+        if ($on === null) { return; }
+        $this->inputs[] = [ $dataType, is_string($titles) ? [ $titles ] : $titles, $word, $toVar, $fromVar, $srcLineno, $srcBot, $on ];
+    }
+
+
+
+    /////////////////////
+    // RUNNER4... METHODS
+    /////////////////////
+
+
+
+    protected function evalLogicPredicate ($directive, &$args, $lineno, $bot)
+    {
+        $arg0 =                                     $this->getRvalValue($args[0], $lineno, $bot);
+        $arg1 = ! isset($args[1]) ? self::NOTHING : $this->getRvalValue($args[1], $lineno, $bot);
+        switch ($directive) {
+            case $this->TOK('NOT')   : $res = ! $this->evalLogicPredicate($args[0], array_slice($args, 1), $lineno, $bot); break;
+            case $this->TOK('EQ')    : $res = $arg0 == $arg1;                                                              break;
+            case $this->TOK('NEQ')   : $res = $arg0 != $arg1;                                                              break;
+            case $this->TOK('GT')    : $res = $arg0 >  $arg1;                                                              break;
+            case $this->TOK('GTE')   : $res = $arg0 >= $arg1;                                                              break;
+            case $this->TOK('LT')    : $res = $arg0 <  $arg1;                                                              break;
+            case $this->TOK('LTE')   : $res = $arg0 <= $arg1;                                                              break;
+            case $this->TOK('EMPTY') : $res = $arg0 == $this->TOK('DATA') ? $this->dataGetEmpty : $arg0 == self::NOTHING;  break;
+            default                  :
+                if (! $this->isNoargsPrimitive($directive)) {
+                    Log::register(Log::TYPE_BBCODE, "primitiva '$directive' usada como predicado logico debe tener 0 argumentos IN y 1 argumento OUT", [ [ Log::ATTRIB_BB_LINENO, $lineno ], [ Log::ATTRIB_BB_BOT, $bot ] ]);
+                    $res = false;
+                } else {
+                    $res = $this->callPrimitive($arg0, $args, $lineno, $bot);
+                    if     (is_int($res))    { $res = $res != 0;             }
+                    elseif (is_string($res)) { $res = $res != self::NOTHING; }
+                    elseif (! is_bool($res)) { $res = false;                 }
+                }
+        }
+        return $res;
+    }
+
+    private function runner4botname ()
+    {
+        return $this->getBBbotName();
+    }
+
+    private function runner4entrytype ()
+    {
+        if     ($this->update === null)                                                   { $type = 'empty';                                                                 }
+        elseif ($this->update->getText() === null)                                        { $type = 'text';                                                                  }
+        elseif (count($this->update->getResources()) == 0)                                { $type = 'empty';                                                                 }
+        elseif (InteractionResource::isValidType($this->update->getResources()[0]->type)) { $type = InteractionResource::typeString($this->update->getResources()[0]->type); }
+        else                                                                              { $type = 'unknown';                                                               }
+        return $type;
+    }
+
+    private function runner4entrytext ()
+    {
+        if ($this->update === null) { return self::NOTHING; }
+        $res = $this->update->getText();
+        return $res === null ? self::NOTHING : $res;
+    }
+
+    private function runner4entryid ()
+    {
+        if ($this->update === null) { return self::NOTHING; }
+        $resources = $this->update->getResources();
+        if (count($resources) == 0) { return self::NOTHING; }
+        return $resources[0]->id;
+    }
+
+    private function runner4goto (&$parsedContent, $lineno, $bot)
+    {
+        $this->doDummy([ $lineno, $bot ]);
+        return $parsedContent[1];
+    }
+
+    private function runner4gosub (&$parsedContent, $lineno, $bot)
+    {
+        $values = [];
+        foreach ($parsedContent[2] as $rval) {
+            $values[] = $this->getRvalValue($rval, $lineno, $bot);
+        }
+        $this->getCurrentBBchannel()->callStackPush($lineno, $values);
+        return $parsedContent[1];
+    }
+
+    private function runner4args (&$parsedContent, $lineno, $bot)
+    {
+        // get last GOSUB info
+        $top = $this->getCurrentBBchannel()->callStackTop();
+        if ($top === null) {
+            Log::register(Log::TYPE_BBCODE, "Error: call stack vacia (no se ejecuto un GOSUB previo antes de ARGS)", [ [ Log::ATTRIB_BB_LINENO, $lineno ], [ Log::ATTRIB_BB_BOT, $bot ] ]);
+            $gosubArgs = array_fill(0, count($parsedContent) - 1, self::NOTHING);
+        } else {
+            $gosubArgs = $top[1];
+        }
+        // check number of arguments in GSOUB+ARGS (should coincide)
+        $argsArgs                         = $parsedContent[1];
+        $theseMoreValuesInGosubThanInArgs = count($gosubArgs) - count($argsArgs);
+        if ($theseMoreValuesInGosubThanInArgs != 0) {
+            Log::register(Log::TYPE_BBCODE, "Error: la cantidad de argumentos de un ARGS no coincide con la de un GOSUB previo", [ [ Log::ATTRIB_BB_LINENO, $lineno ], [ Log::ATTRIB_BB_BOT, $bot ] ]);
+            if ($theseMoreValuesInGosubThanInArgs < 0) {
+                for ($i = 0; $i < -$theseMoreValuesInGosubThanInArgs; $i++) { $gosubArgs[] = self::NOTHING; }
+            }
+        }
+        // assign the args to the named lvalues
+        for ($i = 0; $i < count($argsArgs); $i++) {
+            $this->setVar($argsArgs[$i], $gosubArgs[$i], $lineno, $bot);
+        }
+        // done
+        return -1;
+    }
+
+    private function runner4return (&$parsedContent, $lineno, $bot)
+    {
+        $this->doDummy([ $parsedContent ]);
+        // get last GOSUB info and pop from the call stack
+        $top = $this->getCurrentBBchannel()->callStackPop();
+        if ($top === null) {
+            Log::register(Log::TYPE_BBCODE, "Error: call stack vacia (no se ejecuto un GOSUB previo antes de RETURN; stopping without output...)", [ [ Log::ATTRIB_BB_LINENO, $lineno ], [ Log::ATTRIB_BB_BOT, $bot ] ]);
+            $this->running($bot, false);
+        }
+        // calculate and return last context lineno
+        $lineno      = $top[0];
+        $linenos     = array_keys($this->bots[$bot]['sentences']);
+        $finalLineno = $linenos[ count($this->bots[$bot]['sentences']) - 1 ];
+        if ($lineno == $finalLineno) {
+            $this->running($bot, false);
+            return -1;
+        } else {
+            $nextLineno = $linenos[ array_search($lineno, $linenos) + 1 ];
+            return $nextLineno;
+        }
+    }
+
+    private function runner4call (&$parsedContent, $lineno, $bot)
+    {
+        $primitiveName = $parsedContent[1][0];
+        $srcVars       = $parsedContent[1][1];
+        $tgtVars       = isset($parsedContent[3]) ? $parsedContent[3] : null;
+        $callVals      = [];
+        foreach ($srcVars[2] as $rval) {
+            $callVals[] = $this->getRvalValue($rval, $lineno, $bot);
+        }
+        $retVals = $this->callPrimitive($primitiveName, $callVals, $lineno, $bot);
+        if (is_array($retVals)) {
+            for ($i = 0; $i < count($retVals); $i++) {
+                $retVals[$i] = is_numeric($retVals[$i]) || is_string($retVals[$i]) ? $retVals[$i] : (
+                               $retVals[$i] === true  ? 1 : (
+                               $retVals[$i] === false ? 0 :
+                               self::NOTHING ));
+            }
+        }
+        if ($tgtVars == $this->TOK('OPTIONS')) {
+            $this->menuOptions = [];
+            foreach ($retVals as $retVal) { $this->menuOptions[] = $this->splashHelperMenuMakeOption($retVal); }
+        }
+        elseif ($tgtVars !== null) {
+            if (! is_array($retVals)) {
+                // TODO Log this
+                $retVals = array_fill(0, count($tgtVars), self::NOTHING);
+            }
+            if (count($retVals) != count($callVals)) {
+                // TODO Log this
+                for ($i = count($retVals); $i < count($callVals); $i++) { $retVals[$i] = self::NOTHING; }
+            }
+            for ($i = 0; $i < count($tgtVars); $i++) {
+                $this->setCommonVar($tgtVars[$i], $retVals[$i]);
+            }
+        }
+        return -1;
+    }
+
+    private function runner4on (&$parsedContent, $lineno, $bot)
+    {
+        $this->doDummy([ $lineno, $bot ]);
+        $this->on = $this->completeOn($parsedContent[1],
+                                      isset($parsedContent[2]) ? $parsedContent[2] : null,
+                                      isset($parsedContent[3]) ? $parsedContent[3] : null);
+        return -1;
+    }
+
+    private function runner4print (&$parsedContent, $lineno, $bot)
+    {
+        $rvals           =& $parsedContent[1];
+        $isOnAllChannels =  isset($parsedContent[3]) && $parsedContent[3] == $this->TOK('CHANNELS');
+        if ($isOnAllChannels) {
+            $ons = [];
+            foreach ($this->getBBchannels() as $bbc) { $ons[] = [ $this->getBBbotName(), $this->getBizModelUserId(), $bbc->getId() ]; }
+        }
+        else {
+            $ons = [ is_array($parsedContent[3]) ? $parsedContent[3] : $this->on ];
+        }
+        foreach ($ons as $on) {
+            for ($pos = 0; $pos < count($rvals); $pos++) {
+                $this->splashHelperPrint($this->getRvalValue($rvals[$pos], $lineno, $bot), isset($on[0]) ? $on[0] : null, isset($on[1]) ? $on[1] : null, isset($on[2]) ? $on[2] : null);
+            }
+        }
+        $this->resetAfterSplash();
+        return -1;
+    }
+
+    private function runner4end (&$parsedContent, $lineno, $bot)
+    {
+        $this->doDummy([ $parsedContent, $lineno ]);
+        $this->running($bot, false);
+        return -1;
+    }
+
+    private function runner4rem (&$parsedContent, $lineno, $bot)
+    {
+        if (BOTBASIC_DEBUG && BOTBASIC_LOG_REMS_WHEN_DEBUG) {
+            $comment = join(self::SEP, array_slice($parsedContent, 1));
+            Log::register(Log::TYPE_BBCODE, "REM: $comment", [ [ Log::ATTRIB_BB_LINENO, $lineno], [ Log::ATTRIB_BB_BOT, $bot ] ]);
+        }
+    }
+
+    private function runner4option (&$parsedContent, $lineno, $bot)
+    {
+        if (! isset($parsedContent[2])) { $derive = null;              $to = null;              }
+        else                            { $derive = $parsedContent[2]; $to = $parsedContent[3]; }
+        $this->menuOptions[] = $this->splashHelperMenuMakeOption($this->getRvalValue($parsedContent[1], $lineno, $bot), $derive, $to);
+        return -1;
+    }
+
+    private function runner4options (&$parsedContent, $lineno, $bot)
+    {
+        foreach ($parsedContent[1] as $option) {
+            $this->menuOptions[] = $this->splashHelperMenuMakeOption($this->getRvalValue($option, $lineno, $bot));
+        }
+        return -1;
+    }
+
+    private function runner4title (&$parsedContent, $lineno, $bot)
+    {
+        $this->menuAndInputTitles = array_merge($this->menuAndInputTitles, $this->rvals2values(array_slice($parsedContent, 1), $lineno, $bot));
+        return -1;
+    }
+
+    private function runner4pager (&$parsedContent, $lineno, $bot)
+    {
+        $this->doDummy([ $lineno, $bot ]);
+        $this->menuPager = $parsedContent[1];
+        return -1;
+    }
+
+    private function runner4menu (&$parsedContent, $lineno, $bot)
+    {
+        $predefMenuName   = $parsedContent[1][0];
+        $predefMenuArgs   = $this->rvals2values($parsedContent[1][1], $lineno, $bot);
+        $titles           = $this->rvals2values(array_merge($this->menuAndInputTitles, ($pos = array_search('TITLE', $parsedContent)) === false ? [] : [ $parsedContent[$pos+1] ]), $lineno, $bot);
+        $theseOptions     = ($pos = array_search('OPTIONS', $parsedContent)) === false ? [] : [ $parsedContent[$pos+1] ];
+        $theseOptionsFull = []; foreach ($theseOptions as $option) { $theseOptionsFull[] = $this->splashHelperMenuMakeOption($this->getRvalValue($option, $lineno, $bot)); }
+        $options          = array_merge($this->menuOptions, $theseOptions);
+        $pager            = ($pos = array_search('PAGER', $parsedContent)) === false ? [ null, null ] : $parsedContent[$pos+1];
+        $on               = ($pos = array_search('ON',    $parsedContent)) === false ? $this->on      : $parsedContent[$pos+1];
+        $toVars           = ($pos = array_search('TO',    $parsedContent)) === false ? []             : $parsedContent[$pos+1];
+        $this->splashHelperMenu($predefMenuName, $predefMenuArgs, $titles, $options, $pager, $toVars, $lineno, $bot, isset($on[0]) ? $on[0] : null, isset($on[1]) ? $on[1] : null, isset($on[2]) ? $on[2] : null);
+        $this->resetAfterSplash();
+        if ($on[0] == $this->getBBbotName() && $on[2] == $this->getCurrentBBchannel()->getId()) { $this->running($bot, false); }
+        return -1;
+    }
+
+    private function runner4word (&$parsedContent, $lineno, $bot)
+    {
+        $this->word = $this->getRvalValue($parsedContent[1], $lineno, $bot);
+        return -1;
+    }
+
+    private function runner4input (&$parsedContent, $lineno, $bot)
+    {
+        $dataType    = $parsedContent[1];
+        $titles      = $this->rvals2values(array_merge($this->menuAndInputTitles, ($pos = array_search('TITLE', $parsedContent)) === false ? [] : [ $parsedContent[$pos+1] ]), $lineno, $bot);
+        $on          = ($pos = array_search('ON',   $parsedContent)) === false ? $this->on   : $parsedContent[$pos+1];
+        $word        = ($pos = array_search('WORD', $parsedContent)) === false ? $this->word : $parsedContent[$pos+1];   // "inactive" by BB syntax
+        $toVar       = ($pos = array_search('TO',   $parsedContent)) === false ? null : $parsedContent[$pos+1];
+        $fromVar     = ($pos = array_search('FROM', $parsedContent)) === false ? null : $this->getRvalValue($parsedContent[$pos+1], $lineno, $bot);
+        $this->splashHelperInput($dataType, $titles, $word, $toVar, $fromVar, $lineno, $bot, isset($on[0]) ? $on[0] : null, isset($on[1]) ? $on[1] : null, isset($on[2]) ? $on[2] : null);
+        $this->resetAfterSplash(true);
+        if ($on[0] == $this->getBBbotName() && $on[2] == $this->getCurrentBBchannel()->getId()) { $this->running($bot, false); }
+        return -1;
+    }
+
+    private function runner4set (&$parsedContent, $lineno, $bot)
+    {
+        list ($name, $expr) = $parsedContent[1];
+        $value = $this->getRvalValue($expr, $lineno, $bot);
+        $pos = array_search('ON', $parsedContent);
+        $bbcId = null;
+        if ($pos === false) {
+            $this->getCurrentBBchannel()->setVar($name, $value, $lineno, $bot);
+        }
+        else {
+            list ($tgtBot, $bmUsedId) = $parsedContent[$pos+1];
+            $rt = BotBasicRuntime::loadByBizModelUserId($bmUsedId);
+            if ($rt === null) {}   // TODO Log this
+            else {
+                if ($rt->getBBbotName() != $tgtBot) {}   // TODO Log this
+                else                                { $rt->setVar($name, $value, $lineno, $bot, false); }            }
+        }
+        return -1;
+    }
+
+    private function runner4reset (&$parsedContent, $lineno, $bot)
+    {
+        $this->doDummy([ $lineno, $bot ]);
+        $hasWord    = array_search('WORD',    $parsedContent) !== false;
+        $hasAll     = array_search('ALL',     $parsedContent) !== false;
+        $hasChannel = array_search('CHANNEL', $parsedContent) !== false;
+        if ($hasWord) {
+            $this->word = null;
+        }
+        else {
+            if ($hasAll) {
+                if ($hasChannel) { $names = $this->getAllVarNames();                        }
+                else             { $names = $this->getCurrentBBchannel()->getAllVarNames(); }
+            }
+            else {
+                $names = $parsedContent[1];
+            }
+            foreach ($names as $name) {
+                if (! $hasChannel) { $this->resetCommonVar($name, true, false);                       }
+                else               { $this->getCurrentBBchannel()->resetCommonVar($name, true, null); }
+            }
+        }
+        return -1;
+    }
+
+    private function runner4incdecmuldivmodHelper (&$parsedContent, $lineno, $bot, $oper)
+    {
+        $neutral       = [ '/' => 1, '*' => 1, '%' => 1, '+' => 0, '-' => 0 ];
+        $defaultAmount = $neutral[$oper];
+        $name          = $parsedContent[1];
+        $amount        = isset($parsedContent[2]) ? $this->getRvalValue($parsedContent[2], $lineno, $bot) : 1;   // only +/- can come without default addition/substraction term
+        if (! is_numeric($amount)) { $amount = 1; }
+        if (! $this->isSetVar($name, $this->getCurrentBBchannel())) { $value = $defaultAmount; $this->setCommonVar($name, $value); }
+        else                                                        { $value = $this->getCommonVar($name);                         }
+        switch ($oper) {
+            case '+' : $value += $amount; break;
+            case '-' : $value -= $amount; break;
+            case '*' : $value *= $amount; break;
+            case '/' : $value /= $amount; break;
+            case '%' : $value %= $amount; break;
+        }
+        $this->setVar($name, $value, $lineno, $bot);
+        return -1;
+
+    }
+
+    private function runner4inc (&$parsedContent, $lineno, $bot)
+    {
+        return $this->runner4incdecmuldivmodHelper($parsedContent, $lineno, $bot, '+');
+    }
+
+    private function runner4dec (&$parsedContent, $lineno, $bot)
+    {
+        return $this->runner4incdecmuldivmodHelper($parsedContent, $lineno, $bot, '-');
+    }
+
+    private function runner4mul (&$parsedContent, $lineno, $bot)
+    {
+        return $this->runner4incdecmuldivmodHelper($parsedContent, $lineno, $bot, '*');
+    }
+
+    private function runner4div (&$parsedContent, $lineno, $bot)
+    {
+        return $this->runner4incdecmuldivmodHelper($parsedContent, $lineno, $bot, '/');
+    }
+
+    private function runner4mod (&$parsedContent, $lineno, $bot)
+    {
+        return $this->runner4incdecmuldivmodHelper($parsedContent, $lineno, $bot, '%');
+    }
+
+    private function runner4concat (&$parsedContent, $lineno, $bot)
+    {
+        $name          = $parsedContent[1][0];
+        $toConcatNames = array_slice($parsedContent[1], 1);
+        $value         = $this->isSetVar($name, $this->getCurrentBBchannel()) ? $this->getVar($name, $lineno, $bot) : self::NOTHING;
+        foreach ($toConcatNames as $toConcatName) {
+            $toConcatValue = $this->isSetVar($toConcatName, $this->getCurrentBBchannel()) ? $this->getVar($toConcatName, $lineno, $bot) : self::NOTHING;
+            $value .= $toConcatValue;
+        }
+        $this->setVar($name, $value, $lineno, $bot);
+        return -1;
+
+    }
+
+    private function runner4split (&$parsedContent, $lineno, $bot)
+    {
+        $spacesSpec = '/ +/';
+        list (, $splits, , $tgtVars) = $parsedContent;
+        list ($splitSpec, $toSplit)  = $splits;
+        if (1 == preg_match('/^\/.*\/$/', $splitSpec)) {
+            $valid = (@preg_match($splitSpec, '') !== false);
+            if (! $valid) { $splitSpec = $spacesSpec; }   // TODO also Log as BB error (bad regexp)
+        }
+        $splitted = preg_split($splitSpec, $toSplit);
+        for ($i = count($splitted); $i < count($tgtVars); $i++) { $splitted[$i] = self::NOTHING;                             }
+        for ($i = 0; $i < count($tgtVars); $i++)                { $this->setVar($tgtVars[$i], $splitted[$i], $lineno, $bot); }
+        return -1;
+    }
+
+    private function runner4log (&$parsedContent, $lineno, $bot)
+    {
+        foreach ($parsedContent[1] as $varName) {
+            $message = $this->getRvalValue($varName, $lineno, $bot);
+            // TODO Log $message as an intended BB log entry
+        }
+        return -1;
+    }
+
+    private function runner4locale (&$parsedContent, $lineno, $bot)
+    {
+        $this->doDummy([ $lineno, $bot ]);
+        $newLocale = $parsedContent[1];
+        if ($this->isLocale($newLocale)) { $this->locale = $newLocale; }
+        return -1;
+    }
+
+    private function runner4abort (&$parsedContent, $lineno, $bot)
+    {
+        $this->doDummy([ $parsedContent, $lineno, $bot ]);
+        $this->aborted = true;
+        return -1;
+    }
+
+    private function runner4data (&$parsedContent, $lineno, $bot)
+    {
+        list (, $oper, $dbVarName, , $varName) = $parsedContent;
+        $dbKey = $this->getVar($dbVarName, $lineno, $bot);
+        if ($dbKey === null || $dbKey == self::NOTHING) {
+            // TODO Log this (BB logic error)
+        }
+        else {
+            if ($oper == $this->TOK('GET')) {
+                $this->dataGetEmpty = false;
+                $dbValue            = $this->dataHelperLoader($dbKey);
+                if     ($dbValue === false) { $dbValue = 0;                                         }
+                elseif ($dbValue === true)  { $dbValue = 1;                                         }
+                elseif ($dbValue === null)  { $dbValue = self::NOTHING; $this->dataGetEmpty = true; }
+                $this->setVar($varName, $dbValue, $lineno, $bot);
+            }
+            else {   // SET
+                $dbValue = $this->getRvalValue($varName, $lineno, $bot);
+                $res = $this->dataHelperSaver($dbKey, $dbValue);
+                if ($res === null) {}   // TODO Log this
+            }
+        }
+        return -1;
+    }
+
+    private function runner4channel (&$parsedContent, $lineno, $bot)
+    {
+        $oper = $parsedContent[1];
+        if ($oper == $this->TOK('DELETE')) {
+            // determine what to delete
+            $toDeleteTmp = [];
+            if ($parsedContent[2] == $this->TOK('ALL')) { $toDeleteTmp   = $this->getBBchannels();                                 }
+            else                                        { $toDeleteTmp[] = BotBasicChannel::load($parsedContent[2], $this, false); }
+            $toDelete = [];   /** @var BotBasicChannel[] $toDelete */
+            foreach ($toDeleteTmp as $bbc) {
+                if ($bbc !== null && $bbc->getId() != $this->getCurrentBBchannel()->getId() && ! $bbc->isDefaultBBchannel()) { $toDelete[] = $bbc; }
+            }
+            // delete
+            foreach ($toDelete as $bbc) {
+                $message = ChatMedium::getMessage(ChatMedium::MSG_BBCHANNEL_WAS_DELETED, $this->locale);
+                $this->splashHelperPrint($message, $this->getBBbotName(), $this->bmUserId, $bbc->getId());
+                $bbc->setAsDeleted();
+            }
+        }
+        else {   // current|new
+            list ($channelIdVarName, $cmBotNameVarName) = $parsedContent[3];
+            if ($oper == $this->TOK('current')) {
+                $channelId = $this->getCurrentBBchannel()->getId();
+                $cmBotName = $this->getCurrentBBchannel()->getCMchannel()->getCMbotName();
+            }
+            else {   // new
+                $chPurposeVarName = isset($parsedContent[5]) ? $parsedContent[5][0] : null;
+                $chPurpose        = $chPurposeVarName === null ? null : $this->getVar($chPurposeVarName, $lineno, $bot);
+                $cmBotName        = $this->bmAdapter->makeAcmBotName($this->getBBbotName());
+                if ($cmBotName === null) {
+                    $channelId = self::NOTHING;
+                    $cmBotName = self::NOTHING;
+                }
+                else {
+                    $previousBbcs      = $this->getBBchannels();
+                    $cmType            = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
+                    $cmUserId          = $this->getCurrentBBchannel()->getCMchannel()->getCMuserId();
+                    $bbc               = BotBasicChannel::createFromBBRT($this, $cmType, $cmUserId, $cmBotName);
+                    $previouslyPresent = false;
+                    foreach ($previousBbcs as $aBbc) { if ($bbc->getId() == $aBbc->getId()) { $previouslyPresent = true; } }
+                    if (! $previouslyPresent) {
+                        $res = $bbc->save();
+                        if ($res === null) { $channelId = $cmBotName = self::NOTHING; }
+                        else               { $channelId = $bbc->getId();              }
+                    }
+                    else {
+                        $channelId = $bbc->getId();
+                        if ($chPurpose !== null) {   // signal the new channel purpose to the user
+                            $prefix  = ChatMedium::getMessage(ChatMedium::MSG_BBCHANNEL_WAS_REUSED_PREFIX, $this->locale);
+                            $message = $prefix . $chPurpose;
+                            $this->splashHelperPrint($message, $this->getBBbotName(), $this->bmUserId, $channelId);
+                        }
+                    }
+                }
+            }
+            if ($channelId !== self::NOTHING) {
+                $this->setVar($channelIdVarName, $channelId, $lineno, $bot);
+                $this->setVar($cmBotNameVarName, $cmBotName, $lineno, $bot);
+            }
+        }
+        return -1;
+    }
+
+    private function runner4tunnel (&$parsedContent, $lineno, $bot)
+    {
+        list (, $tunnelSpec, , $srcChannelId, , $tgtChannelSpec) = $parsedContent;
+        list ($tgtBotVarName, $tgtUserId, $tgtChannelId)         = $tgtChannelSpec;
+        $tgtBotName = $this->getVar($tgtBotVarName, $lineno, $bot);
+        $srcBbc     = BotBasicChannel::load($srcChannelId, $this, false);
+        if ($srcBbc === null) {
+            // TODO Log BB src bbc not found
+        }
+        else {
+            $tgtBbc = BotBasicChannel::load($tgtChannelId, null, false);
+            if ($tgtBbc === null) {
+                // TODO Log BB tgt bbc not found
+            }
+            elseif ($tgtUserId !== $tgtBbc->getBBruntime()->getBizModelUserId()) {
+                // TODO Log BB userid bbchannel mismatch
+            }
+            elseif ($tgtBotName !== $tgtBbc->getBBruntime()->getBBbotName()) {
+                // TODO Log BB botname mismatch
+            }
+            else {
+                $types = [];
+                switch ($tunnelSpec) {
+                    case $this->TOK('nothing')    : $srcBbc->removeTunnels(null, $tgtBbc); break;
+                    case $this->TOK('all')        : $types = [ InteractionResource::TYPE_TEXT, InteractionResource::TYPE_AUDIO, InteractionResource::TYPE_DOCUMENT, InteractionResource::TYPE_IMAGE, InteractionResource::TYPE_LOCATION, InteractionResource::TYPE_VIDEO, InteractionResource::TYPE_VOICE ]; break;
+                    case $this->TOK('allButText') : $types = [                                 InteractionResource::TYPE_AUDIO, InteractionResource::TYPE_DOCUMENT, InteractionResource::TYPE_IMAGE, InteractionResource::TYPE_LOCATION, InteractionResource::TYPE_VIDEO, InteractionResource::TYPE_VOICE ]; break;
+                    case $this->TOK('text')       : $types = [ InteractionResource::TYPE_TEXT ];     break;
+                    case $this->TOK('image')      : $types = [ InteractionResource::TYPE_IMAGE ];    break;
+                    case $this->TOK('audio')      : $types = [ InteractionResource::TYPE_AUDIO ];    break;
+                    case $this->TOK('voice')      : $types = [ InteractionResource::TYPE_VOICE ];    break;
+                    case $this->TOK('video')      : $types = [ InteractionResource::TYPE_VIDEO ];    break;
+                    case $this->TOK('document')   : $types = [ InteractionResource::TYPE_DOCUMENT ]; break;
+                    case $this->TOK('location')   : $types = [ InteractionResource::TYPE_LOCATION ]; break;
+                }
+                foreach ($types as $type) { $srcBbc->addTunnel($type, $tgtBbc); }
+            }
+        }
+        return -1;
+    }
+
+    private function runner4userid (&$parsedContent, $lineno, $bot)
+    {
+        list (, $oper, , $varName) = $parsedContent;
+        if ($oper == $this->TOK('TO')) {
+            $userId = $this->bmUserId === null ? self::NOTHING : $this->bmUserId;
+            $this->setVar($varName, $userId, $lineno, $bot);
+        }
+        else {   // FROM
+            $userId = $this->getVar($varName, $lineno, $bot);
+            if (! is_int($userId)) {
+                // TODO Log @BB: userId (as content of varnam) is not numeric
+            }
+            elseif (! $this->getCurrentBBchannel()->isDefaultBBchannel()) {
+                // TODO Log @BB: solo se puede hacer la operacion en el default channel
+            }
+            elseif ($userId == $this->bmUserId) {}   // do nothing
+            else {
+                // verificar que el userId especificado tenga un runtime previamente creado y cargarlo
+                $rt = BotBasicRuntime::loadByBizModelUserId($userId);
+                if     ($rt === null)         {}   // TODO Log this
+                elseif ($rt === false)        {}   // TODO Log this: userId not found as a previous user
+                elseif ($rt->id == $this->id) {}   // do nothing
+                else {
+                    // hacer flush de los splashes acumulados en el runtime actual
+                    $this->submitRendering();
+                    // asociar el CMC actual al default BBC del nuevo runtime cargado
+                    $rt->getCurrentBBchannel()->rawAttachCMchannel($this->getCurrentBBchannel()->getCMchannel());
+                    // detener la ejecucion del programa sobre el runtime actual
+                    $this->running($bot, false);
+                    // marcar como borrado el runtime y el bbchannel originales
+                    $this->getCurrentBBchannel()->setAsDeleted();
+                    $this->setAsDeleted();
+                }
+            }
+        }
+        return -1;
+    }
+
+    private function runner4trace (&$parsedContent, $lineno, $bot)
+    {
+        $this->doDummy([ $parsedContent, $lineno, $bot ]);
+        $this->trace = true;
+        return -1;
+    }
+
+    private function runner4notrace (&$parsedContent, $lineno, $bot)
+    {
+        $this->doDummy([ $parsedContent, $lineno, $bot ]);
+        $this->trace = false;
+        return -1;
+    }
+
+
+
+    private function IDEspoofer ()
+    {
+        $a = $b = $c = null;
+        $this->doDummy              ($a);
+        $this->runner               ($a, $b, $c);
+        $this->runner4botname       ();
+        $this->runner4entrytype     ();
+        $this->runner4entrytext     ();
+        $this->runner4entryid       ();
+        $this->runner4goto          ($a, $b, $c);
+        $this->runner4on            ($a, $b, $c);
+        $this->runner4print         ($a, $b, $c);
+        $this->runner4end           ($a, $b, $c);
+        $this->runner4rem           ($a, $b, $c);
+        $this->runner4gosub         ($a, $b, $c);
+        $this->runner4args          ($a, $b, $c);
+        $this->runner4return        ($a, $b, $c);
+        $this->runner4call          ($a, $b, $c);
+        $this->runner4menu          ($a, $b, $c);
+        $this->runner4option        ($a, $b, $c);
+        $this->runner4options       ($a, $b, $c);
+        $this->runner4word          ($a, $b, $c);
+        $this->runner4title         ($a, $b, $c);
+        $this->runner4pager         ($a, $b, $c);
+        $this->runner4input         ($a, $b, $c);
+        $this->runner4set           ($a, $b, $c);
+        $this->runner4reset         ($a, $b, $c);
+        $this->runner4inc           ($a, $b, $c);
+        $this->runner4dec           ($a, $b, $c);
+        $this->runner4mul           ($a, $b, $c);
+        $this->runner4div           ($a, $b, $c);
+        $this->runner4mod           ($a, $b, $c);
+        $this->runner4concat        ($a, $b, $c);
+        $this->runner4split         ($a, $b, $c);
+        $this->runner4log           ($a, $b, $c);
+        $this->runner4locale        ($a, $b, $c);
+        $this->runner4abort         ($a, $b, $c);
+        $this->runner4data          ($a, $b, $c);
+        $this->runner4channel       ($a, $b, $c);
+        $this->runner4tunnel        ($a, $b, $c);
+        $this->runner4userid        ($a, $b, $c);
+        $this->runner4trace         ($a, $b, $c);
+        $this->runner4notrace       ($a, $b, $c);
+    }
+
+    private function doDummy ($arg) {}   // do nothing (this is for IDE spoofing)
+
+
+
+}
+

@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/botbasic.html">\botbasic</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">217</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">17</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-816069598"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-816069598" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1610339668"></a>
+                                <a href="../namespaces/botbasic.html" style="margin-left: 30px; padding-left: 0">botbasic</a>
+            </div>
+            <div id="namespace-1610339668" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/botbasic.Closable.html">Closable</a></li>
+                                                    <li class="interface"><a href="../classes/botbasic.Initializable.html">Initializable</a></li>
+                                                    <li class="interface"><a href="../classes/botbasic.LogbotChatMedium.html">LogbotChatMedium</a></li>
+                                                                                                    <li class="class"><a href="../classes/botbasic.BizModelAdapter.html">BizModelAdapter</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BizModelAdapterTemplate.html">BizModelAdapterTemplate</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BizModelProvider.html">BizModelProvider</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasic.html">BotBasic</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasicChannel.html">BotBasicChannel</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasicParser.html">BotBasicParser</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasicRuntime.html">BotBasicRuntime</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMedium.html">ChatMedium</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumChannel.html">ChatMediumChannel</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumCliStub.html">ChatMediumCliStub</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumTelegram.html">ChatMediumTelegram</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumWebStub.html">ChatMediumWebStub</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.DBbroker.html">DBbroker</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Interaction.html">Interaction</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.InteractionResource.html">InteractionResource</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Log.html">Log</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Splash.html">Splash</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Update.html">Update</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouter.html">WebRouter</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouterCliStub.html">WebRouterCliStub</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouterTelegram.html">WebRouterTelegram</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouterWebStub.html">WebRouterWebStub</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/botbasic.html">\botbasic</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\botbasic</small>Splash</h1>
+                    <p><em>Clase Splash</em></p>
+                    <p>Refleja un texto, menú o contenido multimedia que es enviado a una chatapp desde el servidor de BotBasic.</p>
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.Interaction.html#method_getDefauls" class="">getDefauls()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_readFromDB" class="">readFromDB()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_save" class="">save()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_encodeMenuhook" class="">encodeMenuhook()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_registerEncodedMenuhooks" class="">registerEncodedMenuhooks()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_decodeMenuhook" class="">decodeMenuhook()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_setText" class="">setText()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_setBizIntelligencyInfo" class="">setBizIntelligencyInfo()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_addResource" class="">addResource()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_hasResource" class="">hasResource()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_getId" class="">getId()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_getType" class="">getType()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_getBBchannelId" class="">getBBchannelId()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_getBizModelUserId" class="">getBizModelUserId()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_getText" class="">getText()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_getResources" class="">getResources()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_hasResources" class="">hasResources()</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#method_getSubType" class="">getSubType()</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#method_getOptions" class="">getOptions()</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#method_getTheResource" class="">getTheResource()</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#method_createWithText" class="">createWithText()</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#method_createWithResource" class="">createWithResource()</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#method_createWithMenu" class="">createWithMenu()</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#method_createByCloning" class="">createByCloning()</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#method_createFromUpdate" class="">createFromUpdate()</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#method_addMenuOptions" class="">addMenuOptions()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.Interaction.html#constant_TYPE_UPDATE" class="">TYPE_UPDATE</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#constant_TYPE_SPLASH" class="">TYPE_SPLASH</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#constant_TAG_MENU_NEW_ROW" class="">TAG_MENU_NEW_ROW</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#constant_TAG_MENU_PAGER_STARTS" class="">TAG_MENU_PAGER_STARTS</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#constant_TAG_MENU_PAGER_FIRST" class="">TAG_MENU_PAGER_FIRST</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#constant_TAG_MENU_PAGER_LAST" class="">TAG_MENU_PAGER_LAST</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#constant_TAG_MENU_PAGER_PREV" class="">TAG_MENU_PAGER_PREV</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#constant_TAG_MENU_PAGER_NEXT" class="">TAG_MENU_PAGER_NEXT</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#constant_TAG_MENU_PAGER_PAGE" class="">TAG_MENU_PAGER_PAGE</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#constant_MENU_MAX_OPTIONS_TO_SHOW" class="">MENU_MAX_OPTIONS_TO_SHOW</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#constant_SUBTYPE_TEXT" class="">SUBTYPE_TEXT</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#constant_SUBTYPE_MENU" class="">SUBTYPE_MENU</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#constant_SUBTYPE_RESOURCE" class="">SUBTYPE_RESOURCE</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.Splash.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_create" class="">create()</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#method_fillFields" class="">fillFields()</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#method_getResource" class="">getResource()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.Interaction.html#property_id" class="">$id</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#property_type" class="">$type</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#property_bbcId" class="">$bbcId</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#property_bmUserId" class="">$bmUserId</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#property_text" class="">$text</a><br />
+                                                                    <a href="../classes/botbasic.Interaction.html#property_resources" class="">$resources</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.Interaction.html#property_encodedMenuHooksStore" class="">$encodedMenuHooksStore</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#property_subType" class="">$subType</a><br />
+                                                                    <a href="../classes/botbasic.Splash.html#property_options" class="">$options</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/botbasic.Splash.html"><div class="path-wrapper">botbasic/Splash.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">botbasic</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                
+                                        <div class="namespace-wrapper"><a href="../classes/botbasic.Interaction.html">\botbasic\Interaction</a></div>
+                                                                                                    <div class="namespace-wrapper">\botbasic\Splash</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_UPDATE" name="constant_TYPE_UPDATE" class="anchor"></a>
+            <article id="constant_TYPE_UPDATE" class="constant">
+                <h3 class="">TYPE_UPDATE</h3>
+                <pre class="signature">TYPE_UPDATE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Tipo de Interaction en sentido chatapp hacia sistema (&quot;update&quot;)</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPE_SPLASH" name="constant_TYPE_SPLASH" class="anchor"></a>
+            <article id="constant_TYPE_SPLASH" class="constant">
+                <h3 class="">TYPE_SPLASH</h3>
+                <pre class="signature">TYPE_SPLASH</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Tipo de Interaction en sentido sistema hacia chatapp (&quot;splash&quot;)</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TAG_MENU_NEW_ROW" name="constant_TAG_MENU_NEW_ROW" class="anchor"></a>
+            <article id="constant_TAG_MENU_NEW_ROW" class="constant">
+                <h3 class="">TAG_MENU_NEW_ROW</h3>
+                <pre class="signature">TAG_MENU_NEW_ROW</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Indicador para salto de fila en la definición de filas de opciones de menús</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TAG_MENU_PAGER_STARTS" name="constant_TAG_MENU_PAGER_STARTS" class="anchor"></a>
+            <article id="constant_TAG_MENU_PAGER_STARTS" class="constant">
+                <h3 class="">TAG_MENU_PAGER_STARTS</h3>
+                <pre class="signature">TAG_MENU_PAGER_STARTS</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Indicador para salto de fila en la definición de filas de opciones de menús</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TAG_MENU_PAGER_FIRST" name="constant_TAG_MENU_PAGER_FIRST" class="anchor"></a>
+            <article id="constant_TAG_MENU_PAGER_FIRST" class="constant">
+                <h3 class="">TAG_MENU_PAGER_FIRST</h3>
+                <pre class="signature">TAG_MENU_PAGER_FIRST</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Indicador de botón '&lt;&lt;' o similar en la definición del paginador de un menú</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TAG_MENU_PAGER_LAST" name="constant_TAG_MENU_PAGER_LAST" class="anchor"></a>
+            <article id="constant_TAG_MENU_PAGER_LAST" class="constant">
+                <h3 class="">TAG_MENU_PAGER_LAST</h3>
+                <pre class="signature">TAG_MENU_PAGER_LAST</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Indicador de botón '&gt;&gt;' en la definición del paginador de un menú</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TAG_MENU_PAGER_PREV" name="constant_TAG_MENU_PAGER_PREV" class="anchor"></a>
+            <article id="constant_TAG_MENU_PAGER_PREV" class="constant">
+                <h3 class="">TAG_MENU_PAGER_PREV</h3>
+                <pre class="signature">TAG_MENU_PAGER_PREV</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Indicador de botón '&lt;' en la definición del paginador de un menú</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TAG_MENU_PAGER_NEXT" name="constant_TAG_MENU_PAGER_NEXT" class="anchor"></a>
+            <article id="constant_TAG_MENU_PAGER_NEXT" class="constant">
+                <h3 class="">TAG_MENU_PAGER_NEXT</h3>
+                <pre class="signature">TAG_MENU_PAGER_NEXT</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Indicador de botón '&gt;' en la definición del paginador de un menú</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TAG_MENU_PAGER_PAGE" name="constant_TAG_MENU_PAGER_PAGE" class="anchor"></a>
+            <article id="constant_TAG_MENU_PAGER_PAGE" class="constant">
+                <h3 class="">TAG_MENU_PAGER_PAGE</h3>
+                <pre class="signature">TAG_MENU_PAGER_PAGE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Indicador de botón de número de página en la definición del paginador de un menú</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_MENU_MAX_OPTIONS_TO_SHOW" name="constant_MENU_MAX_OPTIONS_TO_SHOW" class="anchor"></a>
+            <article id="constant_MENU_MAX_OPTIONS_TO_SHOW" class="constant">
+                <h3 class="">MENU_MAX_OPTIONS_TO_SHOW</h3>
+                <pre class="signature">MENU_MAX_OPTIONS_TO_SHOW</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Máximo número de opciones de menú a desplegar</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_SUBTYPE_TEXT" name="constant_SUBTYPE_TEXT" class="anchor"></a>
+            <article id="constant_SUBTYPE_TEXT" class="constant">
+                <h3 class="">SUBTYPE_TEXT</h3>
+                <pre class="signature">SUBTYPE_TEXT</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Subtipo de Interaction para el tipo Splash: texto</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_SUBTYPE_MENU" name="constant_SUBTYPE_MENU" class="anchor"></a>
+            <article id="constant_SUBTYPE_MENU" class="constant">
+                <h3 class="">SUBTYPE_MENU</h3>
+                <pre class="signature">SUBTYPE_MENU</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Subtipo de Interaction para el tipo Splash: menú (texto + opciones)</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_SUBTYPE_RESOURCE" name="constant_SUBTYPE_RESOURCE" class="anchor"></a>
+            <article id="constant_SUBTYPE_RESOURCE" class="constant">
+                <h3 class="">SUBTYPE_RESOURCE</h3>
+                <pre class="signature">SUBTYPE_RESOURCE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>Subtipo de Interaction para el tipo Splash: recurso multimedia</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_id" name="property_id" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$id</h3>
+                <pre class="signature">$id : null|integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|integer
+                &mdash; ID del Interaction, según como está en BD                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_type" name="property_type" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$type</h3>
+                <pre class="signature">$type : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; Tipo de Interaction (TYPE_...)                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_bbcId" name="property_bbcId" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$bbcId</h3>
+                <pre class="signature">$bbcId : null|integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|integer
+                &mdash; ID del BotBasicChannel asociado                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_bmUserId" name="property_bmUserId" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$bmUserId</h3>
+                <pre class="signature">$bmUserId : null|integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|integer
+                &mdash; ID del BizModelUserId asociado al runtime que está asociado a este Interaction; este valor debe ser llenado a efectos
+               de poder implementar business intelligence sólo por medio del análisis de la tabla interaction de la BD                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_text" name="property_text" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$text</h3>
+                <pre class="signature">$text : null|string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|string
+                &mdash; Texto del Interaction (si hubiere); se refleja directamente y no como un Resource por su simplicidad y frecuencia                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_resources" name="property_resources" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$resources</h3>
+                <pre class="signature">$resources : array&lt;mixed,\botbasic\InteractionResource&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,<a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a>&gt;
+                &mdash; Recursos multimedia asociados a un Interaction                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_encodedMenuHooksStore" name="property_encodedMenuHooksStore" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$encodedMenuHooksStore</h3>
+                <pre class="signature">$encodedMenuHooksStore : array&lt;mixed,array&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,array&gt;
+                &mdash; Buffer para acumular los INSERT a BD que serán aplicados, cada uno, por la codificación de una opción de menú                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_subType" name="property_subType" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$subType</h3>
+                <pre class="signature">$subType : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; Subtipo (SUBTYPE_...)                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_options" name="property_options" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$options</h3>
+                <pre class="signature">$options : array|null</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array|null
+                &mdash; opciones del menú; se trata de un arreglo de resultados de Interaction::encodeMenuhook()                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getDefauls" name="method_getDefauls" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getDefauls()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getDefauls() : array</pre>
+                <p><em>Retorna un arreglo asociativo con los valores por defecto que deben ser insertados en un registro de una tabla asociada en la BD</em></p>
+                <p>Los atributos se deben retornar en el orden especificado en la definición del esquema de la tabla y no deben contener a los campos:
+id, updated, deleted.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_readFromDB" name="method_readFromDB" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">readFromDB()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">readFromDB(integer  <span class="argument">$id</span>) : \botbasic\Splash|\botbasic\Update|null</pre>
+                <p><em>Lee de la BD una Interaction a partir de su ID</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$id </td>
+                                <td><p>ID en BD del Interaction</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.Splash.html">\botbasic\Splash</a>|<a href="../classes/botbasic.Update.html">\botbasic\Update</a>|null
+                                            &mdash; <p>Instancia leida de BD, o null en caso de error de BD</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_save" name="method_save" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">save()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">save() : boolean|null</pre>
+                <p><em>Guarda en BD una Interaction, creando el registro si no existe previamente</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean|null
+                                            &mdash; <p>true en caso de éxito; null en caso de error de BD</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_encodeMenuhook" name="method_encodeMenuhook" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">encodeMenuhook()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">encodeMenuhook(string|integer  <span class="argument">$key</span>, mixed  <span class="argument">$value</span>, null|string  <span class="argument">$gotoOrGosub</span>, null|string  <span class="argument">$gotoGosubTargetLineno</span>, \botbasic\BotBasicChannel  <span class="argument">$bbChannel</span>, integer  <span class="argument">$lineno</span>, boolean  <span class="argument">$isTag = false</span>, null|integer|string  <span class="argument">$tagAttribute = null</span>) : null|array&lt;mixed,string&gt;|integer</pre>
+                <p><em>Codifica una opción de menú para un Splash, aportando un elemento de seguridad que evita manipulaciones por parte de clientes de chatapps
+modificados</em></p>
+                <p>Las opciones deben ser codificadas para hacer opaco el contenido de lso atributos de las opciones de menús (ver parámetros) a las chatapps.
+Nótese que, en el caso de Telegram, no sólo el código fuente del cliente para Android está disponible, sino que la especificación es cbierta
+y Telegram provee un API que permite crear apps que interactúen con sus servidores. Esto quiere decir que si se envía información funcional
+como parte de las opciones de menús, ellas pueden ser leidas y hasta modificadas por esos clientes. Sumado esto a que para el runtime es
+imposible determinar qué cliente (app) se está usando para la chatapp (el original, uno modificado, una app con Telegram embebido, ...), se
+puede inferir que incluir información funcional en las opciones representa riesgo operacional.</p>
+<p>Los valores sensibles que están asociados a opciones de menús son guardados por medio de este método en BD (tabla &quot;menuhook_signature&quot;);
+cada entrada contendrá los datos, un ID y un signature generado al azar. Los últimos dos viajan hacia la chatapp. Cuando se activa una
+opción de menú, se verifica el signature contra el ID en la BD, y si coinciden se acepta la interacción y se recuperan los datos sensibles.
+Los datos sensibles, por tanto, no están disponibles para la chatapp.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string|integer</td>
+                                <td>$key </td>
+                                <td><p>&quot;Clave&quot; asociada a la etiqueta; esta es la que recibe el programa BotBasic al procesar
+una opción de menú que es activada desde una chatapp</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$value </td>
+                                <td><p>Etiqueta a ser mostrada en la chatapp cuando se construye el menú (no se codifica actualmente)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>null|string</td>
+                                <td>$gotoOrGosub </td>
+                                <td><p>Modalidad (opcional) de la opción de menú (según OPTION ... GOTO u OPTION ... GOSUB)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>null|string</td>
+                                <td>$gotoGosubTargetLineno </td>
+                                <td><p>Cuando está definida el parámetro anterior, aquí se especifica el lineno destino</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/botbasic.BotBasicChannel.html">\botbasic\BotBasicChannel</a></td>
+                                <td>$bbChannel </td>
+                                <td><p>BotBasicChannel al cual está asociada la interacción</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$lineno </td>
+                                <td><p>Lineno del punto de ejecución en el que se codifica la opción de menú</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$isTag </td>
+                                <td><p>Indica si $key es un tag, es decir, una de las constantes de Interaction::TAG_...</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>null|integer|string</td>
+                                <td>$tagAttribute </td>
+                                <td><p>Atributo del tag: se usa un entero para especificar número de página para botones de paginador</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    null|array&lt;mixed,string&gt;|integer
+                                            &mdash; <p>Arreglo con la etiqueta y una &quot;clave&quot; generada a ser enviada a la chatapp junto con la etiqueta,
+que sirve para decodificar; $key si se trata de un TAG de formato; o null en caso de error de BD</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_registerEncodedMenuhooks" name="method_registerEncodedMenuhooks" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">registerEncodedMenuhooks()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">registerEncodedMenuhooks(array&lt;mixed,array&gt;  <span class="argument">$encodedMenuHooks</span>) : boolean|null</pre>
+                <p><em>Una vez que se han generado todas las opciones de menú codificadas, se debe pasar la colección de ellas por aquí para registralas en BD</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array&lt;mixed,array&gt;</td>
+                                <td>$encodedMenuHooks </td>
+                                <td><p>Arreglo con todas las opciones codificadas con encodeMenuhook(); los elementos que no sean arreglos serán ignorados</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean|null
+                                            &mdash; <p>null en caso de error de BD; true en caso de éxito</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_decodeMenuhook" name="method_decodeMenuhook" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">decodeMenuhook()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">decodeMenuhook(string  <span class="argument">$encodedHookFromChatClient</span>) : array|null</pre>
+                <p><em>Una vez que se recibe un evento menuhook por parte de una chatapp, este método permite decodificar la &quot;clave&quot; recibida, previamente
+codificada con encodeMenuhook(), y obtener de BD los valores sensibles previamente almacenados</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$encodedHookFromChatClient </td>
+                                <td><p>&quot;Clave&quot; precodificada y recibida desde la chatapp</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array|null
+                                            &mdash; <p>[ key, gotoOrGosub, gotoOrGosubTargetLineno, bbChannelId, lineno ],
+o null en caso de error de BD o de haber recibido una opción de menú forjada</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setText" name="method_setText" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setText()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setText(  <span class="argument">$text</span>) </pre>
+                <p><em>Fija directamente el texto de un Interaction a un valor dado</em></p>
+                <p>Este método no debería ser usado directamente. Está disponible sólo para fijar información para la activación de eventos de tiempo
+(por medio de Updates &quot;fake&quot;) al estilo de &quot;$eventword arg1 arg2 arg3...&quot;</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$text </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setBizIntelligencyInfo" name="method_setBizIntelligencyInfo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setBizIntelligencyInfo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setBizIntelligencyInfo(integer  <span class="argument">$bbChannelId</span>, integer|null  <span class="argument">$bizModelUserId</span>) </pre>
+                <p><em>Fija información de business intelligence sobre el Splash o Update, que permitirá luego efectuar análisis utilizando únicamente como
+fuente a la tabla interaction de la BD</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$bbChannelId </td>
+                                <td><p>ID del BotBasicChannel</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer|null</td>
+                                <td>$bizModelUserId </td>
+                                <td><p>ID del BizModel user, o null de no estar fijado aún por la lógica del programa BotBasic</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addResource" name="method_addResource" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addResource()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addResource(\botbasic\InteractionResource  <span class="argument">$resource</span>) </pre>
+                <p><em>Agrega un InteractionResource a un Interaction</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a></td>
+                                <td>$resource </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_hasResource" name="method_hasResource" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">hasResource()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">hasResource(integer  <span class="argument">$type</span>) : boolean</pre>
+                <p><em>Determina si un Interaction posee un InteractionResource de un tipo determinado</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type </td>
+                                <td><p>Tipo del resource; una de las constantes InteractionResource::TYPE_...</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getId" name="method_getId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getId() : integer|null</pre>
+                <p><em>Obtiene el ID de un Interaction, según haya sido fijado durante su inserción en BD</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getType" name="method_getType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getType() : integer</pre>
+                <p><em>Obtiene el valor del TYPE_.</em></p>
+                <p>.. de la instancia, asociado a la subclase de la cual se trate</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getBBchannelId" name="method_getBBchannelId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getBBchannelId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getBBchannelId() : integer|null</pre>
+                <p><em>Obtiene el ID del BotBasicChannel asociado al Interaction</em></p>
+                <p>Estos ID se almacenan en BD a efectos de business intelligence</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getBizModelUserId" name="method_getBizModelUserId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getBizModelUserId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getBizModelUserId() : integer|null</pre>
+                <p><em>Obtiene el ID del BizModel user asociado al Interaction</em></p>
+                <p>Estos ID se almacenan en BD a efectos de business intelligence</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getText" name="method_getText" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getText()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getText() : null|string</pre>
+                <p><em>Obtiene el texto del Interaction, si está definido</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    null|string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getResources" name="method_getResources" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getResources()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getResources(array&lt;mixed,integer&gt;|integer|null  <span class="argument">$exceptTypes = null</span>) : array&lt;mixed,\botbasic\InteractionResource&gt;</pre>
+                <p><em>Obtiene un arreglo con los resources contenidos en el Interaction, si hubiere, o un arreglo vacío si no hay</em></p>
+                <p>Cuando el Interaction tiene texto, se debe recuperar con getText().</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array&lt;mixed,integer&gt;|integer|null</td>
+                                <td>$exceptTypes </td>
+                                <td><p>Una o más constantes InteractionResource::TYPE_... que se omitirán del resultado; o null para no exceptuar</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,<a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a>&gt;
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_hasResources" name="method_hasResources" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">hasResources()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">hasResources() : boolean</pre>
+                <p><em>Indica si un Interaction tiene asociados resources distintos a texto</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getSubType" name="method_getSubType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getSubType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getSubType() : integer</pre>
+                <p><em>Obtiene el subtipo del Splash, una de las constantes SUBTYPE_.</em></p>
+                <p>..</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOptions" name="method_getOptions" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOptions()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOptions() : array|null</pre>
+                <p><em>Obtiene las opciones de menú del Splash, si están definidas</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTheResource" name="method_getTheResource" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTheResource()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTheResource() : \botbasic\InteractionResource|null</pre>
+                <p><em>Obtiene el primer recurso incluido en el Splash, si es que existen</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a>|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createWithText" name="method_createWithText" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createWithText()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createWithText(string  <span class="argument">$text</span>) : \botbasic\Splash|null</pre>
+                <p><em>Factory method; crea un Splash con subtipo texto y el contenido especificado</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$text </td>
+                                <td><p>Texto</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.Splash.html">\botbasic\Splash</a>|null
+                                            &mdash; <p>null es retornado si el argumento no es texto</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createWithResource" name="method_createWithResource" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createWithResource()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createWithResource(\botbasic\InteractionResource  <span class="argument">$resource</span>) : \botbasic\Splash|null</pre>
+                <p><em>Factory method; crea un Splash con subtipo recurso y el contenido especificado</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a></td>
+                                <td>$resource </td>
+                                <td><p>Recurso</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.Splash.html">\botbasic\Splash</a>|null
+                                            &mdash; <p>null es retornado si el argumento no es una instancia de InteractionResource</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createWithMenu" name="method_createWithMenu" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createWithMenu()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createWithMenu(array&lt;mixed,array&gt;  <span class="argument">$options</span>, null|string  <span class="argument">$title = null</span>) : \botbasic\Splash|null</pre>
+                <p><em>Factory method; crea un Splash con subtipo menú y el contenido especificado</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array&lt;mixed,array&gt;</td>
+                                <td>$options </td>
+                                <td><p>Opciones del menú, cada una codificada con Interaction::encodeMenuhook()</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>null|string</td>
+                                <td>$title </td>
+                                <td><p>Texto del menú mostrado previo a las opciones</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.Splash.html">\botbasic\Splash</a>|null
+                                            &mdash; <p>null es retornado si el argumento no es una instancia de InteractionResource</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createByCloning" name="method_createByCloning" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createByCloning()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createByCloning() : \botbasic\Splash</pre>
+                <p><em>Factory method; crea un Splash como un clon del especificado</em></p>
+                <p>La clonación clona a su vez los InteractionResources agregados, y cada uno de ellos quedará como un clon para el cual el contenido/archivo
+multimedia correspondiente no será descargado más de una vez en el sistema, a fin de evitar ineficiencias en storage.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.Splash.html">\botbasic\Splash</a>
+                                            &mdash; <p>Nueva instancia clonada</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createFromUpdate" name="method_createFromUpdate" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createFromUpdate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createFromUpdate(\botbasic\Update|null  <span class="argument">$update</span>) : \botbasic\Splash</pre>
+                <p><em>Factory method; crea un Splash como un espejo de la información contenida en un Update</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/botbasic.Update.html">\botbasic\Update</a>|null</td>
+                                <td>$update </td>
+                                <td><p>Update que sirve de espejo isomorfo para el nuevo Splash</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.Splash.html">\botbasic\Splash</a>
+                                            &mdash; <p>Nueva instancia</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addMenuOptions" name="method_addMenuOptions" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addMenuOptions()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addMenuOptions(array&lt;mixed,array&gt;  <span class="argument">$options</span>) : null|boolean</pre>
+                <p><em>Agrega a un Splash de tipo menú las opciones especificadas</em></p>
+                <p>Si hay opciones previamente agregadas en este Splash, las nuevas se concatenan a las anteriores.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array&lt;mixed,array&gt;</td>
+                                <td>$options </td>
+                                <td><p>Opciones (posiblemente adicionales) codificadas con Interaction::encodeMenuhook()</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    null|boolean
+                                            &mdash; <p>null si el argumento no es un arreglo o si el Splash no es de tipo menú; true de otro modo</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct() </pre>
+                <p><em>Constructor; no debe ser llamado directamente sino desde el constructor de las subclases</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_create" name="method_create" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">create()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">create(integer  <span class="argument">$type</span>) : \botbasic\Splash|\botbasic\Update</pre>
+                <p><em>Factory method para las subclases; las crea con los atributos con sus valores por defecto</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type </td>
+                                <td><p>Una de las constantes TYPE_...</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.Splash.html">\botbasic\Splash</a>|<a href="../classes/botbasic.Update.html">\botbasic\Update</a>
+                                            &mdash; <p>Instancia creada</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fillFields" name="method_fillFields" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">fillFields()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fillFields(array  <span class="argument">$values</span>) </pre>
+                <p><em>Método auxiliar usado por readFromDB() para fijar los atributos de cada instancia que se está creando</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$values </td>
+                                <td><p>Atributos a fijar, en el orden requerido por la implementación específica en cada subclase</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getResource" name="method_getResource" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getResource()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getResource(integer  <span class="argument">$type</span>) : \botbasic\InteractionResource|string|null</pre>
+                <p><em>Obtiene el primer Interaction del tipo especificado que esté asociado al Interaction, o null si no se encuentra</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type </td>
+                                <td><p>Tipo del resource; una de las constantes InteractionResource::TYPE_...</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.InteractionResource.html">\botbasic\InteractionResource</a>|string|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/botbasic.Interaction.html"><div class="path-wrapper">\botbasic\Interaction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">Splash.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/botbasic/Splash.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/botbasic.html">\botbasic</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 19th, 2017 at 17:39.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

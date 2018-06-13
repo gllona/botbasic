@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>BotBasic Parser upload form</title>
+</head>
+<body style="font-family: monospace">
+
+<h1>BotBasic :: Parser input</h1>
+<hr>
+
+<form enctype="multipart/form-data" method="POST" action="../../botbasic/BotBasicParser.php">
+<table>
+
+<tr><td>Code name:</td>
+    <td><input type="text" name="codename"></td>
+    </tr>
+<tr><td>File name:</td>
+    <td><input type="file" name="filename"></td>
+    </tr>
+<tr><td>Save to DB:</td>
+    <td><input type="checkbox" name="save_to_db"></td>
+    </tr>
+    <tr><td>User ID:</td>
+        <td><input type="text" name="user_id"></td>
+    </tr>
+    <tr><td>Password:</td>
+        <td><input type="password" name="password"></td>
+    </tr>
+<tr><td></td>
+    <td><input type="submit" value="Parse"></td>
+    </tr>
+
+</table>
+</form>
+
+<hr>
+
+</body>
+</html>

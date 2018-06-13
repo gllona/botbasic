@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>BotBasic Runtime Update Simulator</title>
+
+
+
+<script language="Javascript" type="text/javascript">
+
+    var botKeys = [ 1000, 1200 ];
+    var bots    = [];
+    bots[1000]  = [ 'neuropowerbot',  'fake_10_00.php' ];
+    bots[1200]  = [ 'neuropower_bot', 'fake_12_00.php' ];
+
+    function start ()
+    {
+        var menu = document.getElementById("menu");
+        menu.options[menu.options.length] = new Option("Select...", -1);
+        for (var i = 0; i < botKeys.length; i++) {
+            var botk  = botKeys[i];
+            var label = bots[botk][0];
+            menu.options[menu.options.length] = new Option(label, botk);
+        }
+    }
+
+    function menuHandler ()
+    {
+        var form = document.getElementById("form");
+        var menu = document.getElementById("menu");
+        var botk = menu.options[menu.selectedIndex].value;
+        if (botk == -1) { var action = "";            }
+        else            {     action = bots[botk][1]; }
+        form.action = action;
+    }
+
+</script>
+
+
+
+
+</head>
+<body style="font-family: monospace" onload="start();">
+
+<h1>BotBasic :: Runtime update simulator</h1>
+<p>BotBasic responses will be thrown to directory .../logs/webstub/</p>
+<hr>
+
+<form id="form" method="POST" action="">
+<table>
+
+<tr><td>Bot/channel:</td>
+    <td><select id="menu" onchange="menuHandler();"></select></td>
+    </tr>
+<tr><td>SeqId:</td>
+    <td><input type="text" name="id"></td>
+    </tr>
+<tr><td>ChatId:</td>
+    <td><input type="text" name="chatId"></td>
+    </tr>
+<tr><td>UserId:</td>
+    <td><input type="text" name="userId"></td>
+    </tr>
+<tr><td>Menuhook:</td>
+    <td><input type="text" name="menuhook"></td>
+    </tr>
+<tr><td>Text:</td>
+    <td><textarea cols="40" rows="4" name="text"></textarea></td>
+    </tr>
+<tr><td></td>
+    <td><input type="submit" value="Send"></td>
+    </tr>
+
+</table>
+</form>
+
+<hr>
+
+</body>
+</html>

@@ -1,0 +1,473 @@
+<?php
+/**
+ * Canal de BotBasic (BotBasic implementa la posibilidad de múltiples canales de comunicación para cada usuario/rol)
+ *
+ * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
+ * @license     http://www.venicua.com/botbasic/license     Licencia de BotBasic
+ * @see         http://www.venicua.com/botbasic             Referencia de BotBasic
+ * @version     1.0 - 01.jan.2017
+ * @since       0.1 - 01.jul.2016
+ */
+
+
+
+namespace botbasic;
+
+
+
+/**
+ * Clase BotBasicChannel
+ *
+ * Implementa un canal de BotBasic, que a su vez está reflejado en un bot distinto para cada ChatMedium. Si una BotBasic app tiene 3 bots
+ * en cada uno de 2 ChatMedia, entonces hay un máximo de 6 ChatMediumChannels y 3 BotBasicChannels.
+ *
+ * @package botbasic
+ */
+class BotBasicChannel implements Closable
+{
+
+
+
+    /** @var null|int ID del BotBasicChannel según la tabla bbchannel de la BD */
+    private $id      = null;
+
+    /** @var array túneles vigentes apĺicables al canal, en la forma:
+     *             [ InteractionResource::TYPE_... => [ tgtBBchannel1, tgtBBchannel2, ... ], ... ] */
+    private $tunnels = [];
+
+    // "state" attributes
+
+    /** @var array Mapa de variables de BotBasic específicas del canal, como:
+     *             [ name => [ bool-tainted, value-or-null-for-deletion ], ... ] */
+    private $vars                = [];
+
+    /** @var array|null Stack del runtime (siempre asociado a cada canal) usado por GOSUB y RETURN */
+    private $callStack           = null;
+    // TODO implementar GOSUB abc TO var1 var2 + RETURN val1 val2
+
+    /** @var array|null Cola de rutas de ejecución; contiene todos los INPUT y MENU que deben ser ejecutados por el canal (en secuencia);
+     *                  si está vacía el routing se hace de acuerdo al match de hooks según el programa de BotBasic */
+    private $routeQueue          = null;
+
+    /** @var bool Indica si el canal está marcado para borrado, como producto de un CHANNEL DELETE */
+    private $deleted             = false;
+
+    /** @var array Contiene todos los BizModelAdapter indexados por BotBasicChannel::id */
+    static private $storeForBMAs = [ -1 => [] ];
+
+    /** @var BotBasicRuntime Instancia de BotBasicRuntime */
+    private $rt = null;
+
+    /** @var BotBasicChannel[] Store para todas las instancias de esta clase */
+    static private $store = [];
+
+
+
+    public function getId        () { return $this->id;                                               }
+    public function getVars      () { return $this->vars;                                             }
+    public function getBBruntime () { return $this->rt;                                               }
+    public function getTunnels   () { return $this->tunnels;                                          }
+    public function getCMchannel () { return ChatMediumChannel::getFromStoreByBBchannelId($this->id); }
+    public function getBBcodeId  () { return $this->rt->getBBcodeId();                                }
+
+    public function isDefaultBBchannel () { return $this->getCMchannel()->isAdefaultCMchannel(); }
+    public function isDeleted ()          { return $this->deleted;                               }
+    public function setAsDeleted ()       { $this->deleted = true; $this->tainting(true);        }
+
+    private function __construct ($id, $runtime, $vars = [], $tunnels = [])
+    {
+        $this->id         = $id;
+        $this->rt         = $runtime;
+        $this->tunnels    = $tunnels;
+        $this->vars       = $vars;
+        $this->callStack  = [];
+        $this->routeQueue = [];
+        // route[]: elems: [ type, content... ] ; can be:
+        //                 [ 'input',      bot, lineno, dataType, title, word, fromValue                                       ]
+        //                 [ 'stdmenu',    bot, lineno, options, pager                                                         ]
+        //                 [ 'predefmenu', bot, lineno, options, pager, object-used-for-context-can-be-anything-initially-null ]
+        self::$store[] = $this;
+    }
+
+    /**
+     * @param  $bbCodeId            int
+     * @param  $cmChannel           ChatMediumChannel
+     * @return                      BotBasicChannel|null
+     */
+    static public function createFromCMC ($bbCodeId, $cmChannel)
+    {
+        $rt = BotBasicRuntime::create($bbCodeId, $cmChannel);
+        if ($rt === null) { return null; }   // TODO log
+        $bbc = new BotBasicChannel(null, $rt);
+        $id = DBbroker::writeBotBasicChannel($bbc);   // because id is null, then dbbroker will do an insert and return the id
+        if ($id === null) { return null; }    // TODO Log this
+        $bbc->id = $id;
+        return $bbc;
+    }
+
+    static public function createFromBBRT ($runtime, $cmType, $cmUserId, $cmBotName)
+    {
+        // try to get from the CMC store
+        $cmc = ChatMediumChannel::makeFromBBC($cmType, $cmUserId, $cmBotName, null, true);
+        if ($cmc !== null) { return $cmc->getBBchannel(); }
+        // not found? create a new one
+        $bbc = new BotBasicChannel(null, $runtime);
+        $id = DBbroker::writeBotBasicChannel($bbc);   // because id is null, then dbbroker will do an insert and return the id
+        if ($id === null) { return null; }    // TODO Log this
+        $bbc->id = $id;
+        // cascade creation to CMC
+        $cmc = ChatMediumChannel::makeFromBBC($cmType, $cmUserId, $cmBotName, $bbc);
+        if ($cmc === null) { return null; }    // TODO Log this
+        // ready
+        return $bbc;
+    }
+
+    /**
+     * @param  BotBasicChannel      $id
+     * @param  BotBasicRuntime      $runtime
+     * @return BotBasicChannel|null
+     */
+    static public function load ($id, $runtime = null, $logIfNotFound = true)   // pass $rt to avoid BBRT load but assignment
+    {
+        // check if in store
+        foreach (self::$store as $bbc) {
+            if ($bbc->id == $id) { return $bbc; }
+        }
+        // if not, read from DB
+        $rtId = DBbroker::readBotBasicChannel($id, $runtime === null ? null : $runtime->getId());
+        if     ($rtId === null)  { return null; }    // TODO Log this
+        elseif ($rtId === false) { return null; }    // TODO if ($logIfNotFound) { Log this }
+        // load BBRT if not passed
+        if ($runtime === null) {
+            $runtime = BotBasicRuntime::loadById($rtId, true);
+            if ($runtime === null) { return null; }   // TODO log
+        }
+        // create the object and store
+        $bbc = new BotBasicChannel($id, $runtime);
+        // load vars
+        $bbc->vars = [];
+        $vars      = DBbroker::readVars(null, $bbc->id);
+        if ($vars === null) { return null; }   // TODO Log this
+        foreach ($vars as $varData) {
+            list ($name, $value) = $varData;
+            $bbc->vars[$name] = [ false, $value ];
+        }
+        // tunnels loading
+        $data = DBbroker::readBotBasicTunnels($id);
+        if ($data === null)  { return null; }    // TODO Log this
+        foreach ($data as $targetSpec) {
+            list ($resourceType, $targetBbcId) = $targetSpec;
+            $targetBbc = self::load($targetBbcId, $runtime);
+            if ($targetBbc === null) { return null; }   // TODO log
+            $bbc->addTunnel($resourceType, $targetBbc);
+        }
+        // ready
+        return $bbc;
+    }
+
+    /**
+     * @param  $runtimeId
+     * @return BotBasicChannel[]
+     */
+    static public function getFromStoreByRuntimeId ($runtimeId)
+    {
+        $res = [];
+        foreach (self::$store as $bbc) {
+            if ($bbc->rt->getId() == $runtimeId) { $res[$bbc->id] = $bbc; }
+        }
+        return $res;
+    }
+
+    /**
+     * @param  ChatMediumChannel    $cmChannel
+     */
+    public function rawAttachCMchannel ($cmChannel)
+    {
+        $cmChannel->setBBchannel($this);
+        $cmChannel->tainting(true);
+    }
+
+    public function addTunnel ($resourceType, $targetBbc)
+    {
+        $this->removeTunnels($resourceType, $targetBbc);
+        $this->tunnels[$resourceType][] = $targetBbc;
+        $this->tainting(true);
+    }
+
+    public function removeTunnels ($resourceType = null, $targetBbcs = null)
+    {
+        // if no resource type passed, delete all tunnels
+        if ($resourceType === null) {
+            $this->tunnels = [];
+            return;
+        }
+        // if $targetBbcs is not array (but not null), convert it
+        if ($targetBbcs !== null && ! is_array($targetBbcs)) { $targetBbcs = [ $targetBbcs ]; }
+        // iterate thru tunnels
+        foreach ($this->tunnels as $thisResourceType => $theseTargetBbcs) {
+            if ($resourceType != $thisResourceType) { continue; }
+            // if no targetBbcs passed, delete all targets
+            if ($targetBbcs === null) {
+                $this->tunnels[$thisResourceType] = [];
+                continue;
+            }
+            // else, delete specific targets
+            foreach ($theseTargetBbcs as $thisTargetBbc) {
+                if (in_array($thisTargetBbc, $targetBbcs)) {
+                    $this->tunnels[$thisResourceType] = array_filter($this->tunnels[$thisResourceType],
+                        function ($bbc) use ($thisTargetBbc) { return $bbc != $thisTargetBbc; }
+                    );
+                }
+            }
+        }
+        $this->tainting(true);
+    }
+
+    public function getAllVarNames ()
+    {
+        $res = [];
+        foreach ($this->vars as $name => $pair) {
+            if ($pair[1] !== null) { $res[] = $name; }
+        }
+        return $res;
+    }
+
+    // TODO check if needed
+    public function isSetVar ($name)
+    {
+        return isset($this->vars[$name]) && $this->vars[$name][1] !== null;
+    }
+
+    public function setVar ($name, $value, $lineno, $bot)
+    {
+        if ($this->getBBruntime()->isMagicVar($name)) { $this->getBBruntime()->setMagicVar($name, $value, $lineno, $bot); }
+        else                                          { $this->setCommonVar($name, $value, $this->getBBruntime());        }   // isCommonVar OR overwritting a message name
+    }
+
+    /**
+     * @param  string           $name
+     * @param  BotBasicRuntime  $rt
+     * @return string
+     */
+    public function getCommonVar ($name, $rt)
+    {
+        $res = isset($this->vars[$name]) ? $this->vars[$name][1] : null;
+        if ($res === null && $rt !== null) { return $rt->getCommonVar($name, false); }
+        else                               { return $res;                            }
+    }
+
+    /**
+     * @param  string           $name
+     * @param  string           $value
+     * @param  BotBasicRuntime  $rt
+     */
+    public function setCommonVar ($name, $value, $rt)
+    {
+        if ($this->isSetVar($name)) { $this->vars[$name] = [ true, $value ];   }
+        elseif ($rt !== null)       { $rt->setCommonVar($name, $value, false); }
+        else                        {}   // TODO log4debug
+    }
+
+    /**
+     * @param  string           $name
+     * @param  bool             $erase
+     * @param  BotBasicRuntime  $rt
+     */
+    public function resetCommonVar ($name, $erase, $rt)
+    {
+        if ($this->isSetVar($name)) {
+            if ($erase) { $this->vars[$name] = [ true, null ];                     }
+            else        { $this->vars[$name] = [ true, BotBasicRuntime::NOTHING ]; }
+        }
+        elseif ($rt !== null) { $rt->resetCommonVar($name, $erase, false); }
+        else                  {}   // nothing (intended)
+    }
+
+    public function callStackPush ($fromLineno, $args)
+    {
+        $this->callStack[] = [ $fromLineno, $args ];
+        $this->tainting(true);
+    }
+
+    public function callStackPop ()
+    {
+        if (count($this->callStack) == 0) { return null; }
+        $last = array_pop($this->callStack);
+        $this->tainting(true);
+        return $last[0];
+    }
+
+    public function callStackTop ()
+    {
+        if (count($this->callStack) == 0) { return null; }
+        return $this->callStack[count($this->callStack) - 1];
+    }
+
+    public function enqueueRouteInput ($bot, $lineno, $dataType, $title, $word, $targetBbcId, $toVar, $fromValue)
+    {
+        $data = [ 'input', $bot, $lineno, $dataType, $title, $word, $targetBbcId, $toVar, $fromValue ];
+        array_unshift($this->routeQueue, $data);
+        $this->tainting(true);
+    }
+
+    public function enqueueRouteStdMenu ($bot, $lineno, $options, $pager, $targetBbcId, $toVar)
+    {
+        $data = [ 'stdmenu', $bot, $lineno, $options, $pager, $targetBbcId, $toVar ];
+        array_unshift($this->routeQueue, $data);
+        $this->tainting(true);
+    }
+
+    public function enqueueRoutePredefMenu ($bot, $lineno, $menuName, $options, $pager, $targetBbcId, $toVars, $contextObject = null)
+    {
+        $data = [ 'predefmenu', $bot, $lineno, $menuName, $options, $pager, $targetBbcId, $toVars, $contextObject ];
+        array_unshift($this->routeQueue, $data);
+        $this->tainting(true);
+    }
+
+    public function getRouteQueueIndexes ()
+    {
+        return array_keys($this->routeQueue);
+    }
+
+    public function setRouteLineno ($lineno, $routeIndex = null)
+    {
+        if ($routeIndex === null) { $routeIndex = count($this->routeQueue) - 1; }
+        if (! isset($this->routeQueue[$routeIndex])) { return; }   // TODO Log4debug
+        if ($this->routeQueue[$routeIndex][0] != 'default') { $this->routeQueue[$routeIndex][2] = $lineno; }
+    }
+
+    public function getRouteType ($routeIndex = null)
+    {
+        if ($routeIndex === null) { $routeIndex = count($this->routeQueue) - 1; }
+        if (! isset($this->routeQueue[$routeIndex])) { return null; }   // TODO Log4debug
+        return $this->routeQueue[$routeIndex][0];
+    }
+
+    public function getRouteContent ($routeIndex = null)
+    {
+        if ($routeIndex === null) { $routeIndex = count($this->routeQueue) - 1; }
+        if (! isset($this->routeQueue[$routeIndex])) { return null; }   // TODO Log4debug
+        return array_slice($this->routeQueue[$routeIndex], 1);
+    }
+
+    /**
+     * @param  null|array           $route
+     * @param  null|BotBasicChannel $bbc
+     * @param  null|int             $routeIndex
+     * @return bool|null
+     */
+    static public function isForeignRoute ($route = null, $bbc = null, $routeIndex = null)   // if $route is null will get the route from the index or the first queue elem if not specified (of $bbc)
+    {
+        if ($route === null) {
+            if ($bbc === null)        { return null;                               }   // TODO log4debug
+            if ($routeIndex === null) { $routeIndex = count($bbc->routeQueue) - 1; }
+            $route = $bbc->routeQueue[$routeIndex];
+        }
+        switch ($route[0]) {
+            case 'input'      : $res = $route[6] !== null; break;
+            case 'stdmenu'    : $res = $route[5] !== null; break;
+            case 'predefmenu' : $res = $route[6] !== null; break;
+            default           : $res = true;   // can't happen
+        }
+        return $res;
+        // TODO verificar que cuando se hace un enqueue() de un route, cuando sea NO-foraneo, el bbcId sea null aunque haya sido especificado en BB con un self-ON
+    }
+
+    static public function getRouteLineno ($fullRoute)
+    {
+        return $fullRoute[0] == 'default' ? null : $fullRoute[2];
+    }
+
+    public function orderExecution ($update)
+    {
+        return $this->rt->execute($update);
+    }
+
+    /**
+     * @param Splash $splash
+     */
+    public function sendToTunnels ($splash)
+    {
+        if ($this->deleted) { return; }
+        // splash clones will be created and associated to new BBCs; included (optional) resource will be common to all
+        foreach ($this->tunnels as $resourceType => $tgtBbbcs) {
+            if ($splash->getType() != $resourceType) { continue; }
+            $firstTime = true;
+            $theSplash = $splash;
+            foreach ($tgtBbbcs as $tgtBbc) {   /** @var BotBasicChannel $tgtBbc */
+                if ($firstTime) { $firstTime = false;                      }
+                else            { $theSplash = $splash->createByCloning(); }
+                $tgtBbc->orderEnqueueing($theSplash);
+            }
+        }
+    }
+
+    public function orderEnqueueing ($splash)
+    {
+        if ($this->deleted) { return; }
+        $this->getCMchannel()->enqueue($splash);
+    }
+
+    public function orderRendering ()
+    {
+        $this->getCMchannel()->render();
+    }
+
+    public function getForBizModelAdapter ($name, $bbChannelId = false)   // pass false for global context, true for current bbchannel context, or any bbc id for that context
+    {
+        $empty = [];
+        if ($bbChannelId === true)  { $bbChannelId = $this->id;                                                                        }
+        if ($bbChannelId === false) { $store =& self::$storeForBMAs[-1];                                                               }
+        else                        { $store =& isset(self::$storeForBMAs[$bbChannelId]) ? self::$storeForBMAs[$bbChannelId] : $empty; }
+        return isset($store[$name]) ? $store[$name] : null;
+    }
+    // TODO ESTOS SON LOS METODOS QUE DEBEN SER CAMBIADOS AL EFECTUAR LOS CAMBIOS SEÑALADOS EN BIZMODELADAPTERTEMPLATE
+
+    public function setForBizModelAdapter ($name, $value, $bbChannelId = false)   // idem
+    {
+        $empty = [];
+        if ($bbChannelId === true)  { $bbChannelId = $this->id;                                                                        }
+        if ($bbChannelId === false) { $store =& self::$storeForBMAs[-1];                                                               }
+        else                        { $store =& isset(self::$storeForBMAs[$bbChannelId]) ? self::$storeForBMAs[$bbChannelId] : $empty; }
+        $store[$name] = $value;
+    }
+    // TODO ESTOS SON LOS METODOS QUE DEBEN SER CAMBIADOS AL EFECTUAR LOS CAMBIOS SEÑALADOS EN BIZMODELADAPTERTEMPLATE
+
+    public function save ($saveTunnels = true)
+    {
+        if (! ($this->tainting() || $this->id === null || $this->deleted)) { return true; }
+        $res = DBbroker::writeBotBasicChannel($this);
+        if     ($res === null) { return null;      }    // TODO Log this
+        elseif (is_int($res))  { $this->id = $res; }
+        foreach ($this->vars as $name => $varData) {
+            list ($tainted, $value) = $varData;
+            if (! $tainted) { continue; }
+            $res = DBbroker::updateVar(null, $this, $name, $value);
+            if     ($res === null)  {}   // TODO log this
+            elseif ($res === false) {}   // TODO log this
+        }
+        if ($saveTunnels) {
+            $res = DBbroker::writeBotBasicTunnels($this);
+            if ($res === null) { return null; }    // TODO Log this
+        }
+        $this->tainting(false);
+        return true;
+    }
+
+    public function close ()
+    {
+        $this->save();
+        $this->getCMchannel()->close();
+    }
+
+    public function tainting ($state = null)
+    {
+        static $theState = false;
+        if ($state === null)   { return $theState; }
+        if (! is_bool($state)) { return null; }
+        $theState = $state;
+        return null;
+    }
+
+}
+

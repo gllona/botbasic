@@ -1,0 +1,274 @@
+<?php
+/**
+ * Componente de conexión entre BotBasic y el modelo de negocio, desde el punto de vista del último
+ *
+ * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
+ * @license     http://www.venicua.com/botbasic/license     Licencia de BotBasic
+ * @see         http://www.venicua.com/botbasic             Referencia de BotBasic
+ * @version     1.0 - 01.jan.2017
+ * @since       0.1 - 01.jul.2016
+ */
+
+
+
+namespace botbasic;
+
+
+
+/**
+ * Clase BizModelAdapter
+ *
+ * Provee el placeholder para las rutinas de PHP que implementan variables mágicas, menús predefinidos y primitivas de BotBasic.
+ *
+ * Las funciones de la implementación deben seguir las convenciones de nombres:
+ *
+ * * Variables mágicas: mv_nombrevariablemagica_set() y mv_nombrevariablemagica_get()
+ * * Primitivas: pr_nombreprimitiva()
+ * * Menús predefinidos: mn_nombremenupredefinido()
+ *
+ * Ver los ejemplos incluidos para explicacion de los parametros y valores de retorno.
+ *
+ * Así mismo, el modelo de negocios debe implementar métodos abstractos heredados de la superclase que son requeridos por el ambiente de
+ * ejecución de BotBasic. Se proveen ejemplos.
+ *
+ * Esta clase es instanciada por el runtime de BotBasic y cada instancia está asociada a un canal de BotBasic. Si bien esta es una clase
+ * abierta (única en BotBasic) abierta a su modificación por parte del desarrollador del modelo de negocio, tanto el parser como el runtime
+ * verifican que la clase herede de la superclase apropiada y contenga los métodos que son requeridos.
+ *
+ * El desarrollador de aplicaciones BotBasic no debe instanciar esta clase, sino colocar en ella los métodos requeridos por el runtime
+ * de acuerdo a la especificación del programa elaborado en BotBasic.
+ *
+ * @package botbasic
+ */
+class BizModelAdapter extends BizModelAdapterTemplate
+{
+
+
+
+    //////////////////////////////
+    // BOTBASIC-PROVIDED UTILITIES
+    //////////////////////////////
+
+
+
+    /*
+    // UTILIDADES HEREDADAS DE LA SUPERCLASE, DISPONIBLES PARA EL DESARROLLADOR
+
+    protected function getBizModelUserId ()       { return parent::getBizModelUserId();       }
+    protected function setBizModelUserId ($value) { return parent::setBizModelUserId($value); }
+
+    // pass true in $bbChannelId to get/save the value associated to the current channel; pass false for global (all bbchannels) context; or pass an specific bbc id
+    protected function get ($name,         $bbChannelId = false) { return parent::get($name, $bbChannelId); }
+    protected function set ($name, $value, $bbChannelId = false) { return parent::set($name, $bbChannelId); }
+    protected function getCommonVar ($name)                      { return parent::getCommonVar($name);      }
+    protected function loadFromDB ($key)                         { return parent::loadFromDB($key);         }
+    protected function saveToDB ($key, $value)                   { return parent::saveToDB($key, $value);   }
+
+    protected function updatedChatMediaChannelBotName ($anOldCMbotName) { return parent::updatedChatMediaChannelBotName($anOldCMbotName); }
+    protected function setCMchannelBotNameMagicVar ($name, $value)      { return parent::setCMchannelBotNameMagicVar($name, $value);      }
+    protected function getCMchannelBotNameMagicVar ($name)              { return parent::getCMchannelBotNameMagicVar($name);              }
+
+    const CHANNELS_POLICY_ROUNDROBIN = parent::CHANNELS_POLICY_ROUNDROBIN;
+    const CHANNELS_POLICY_LEASTUSED  = parent::CHANNELS_POLICY_LEASTUSED;
+    const CHANNELS_POLICY_MOSTUSED   = parent::CHANNELS_POLICY_MOSTUSED;
+    protected function computeNextCMchannelBotName ($regExpPattern, $policy, $baseChatMediaType, $baseChannelName = null) { return parent::computeNextCMchannelBotName($regExpPattern, $policy, $baseChatMediaType, $baseChannelName); }
+    protected function getCMchannelBotNames ($regExpPattern, $baseChatMediaType)                                          { return parent::getCMchannelBotNames($regExpPattern, $baseChatMediaType);                                   }
+
+    protected function bbPrint ($text,                                                                                     $botName = null, $bmUserId = null, $bbChannelId = null) { return parent::bbPrint($text,                                                                                     $botName, $bmUserId, $bbChannelId); }
+    protected function bbMenu  ($predefMenuName, $predefMenuArgs, $titles, $options, $pager, $toVars, $srcLineno, $srcBot, $botName = null, $bmUserId = null, $bbChannelId = null) { return parent::bbMenu ($predefMenuName, $predefMenuArgs, $titles, $options, $pager, $toVars, $srcLineno, $srcBot, $botName, $bmUserId, $bbChannelId); }
+    protected function bbInput ($dataType, $titles, $word, $toVar, $fromVar, $srcLineno, $srcBot,                          $botName = null, $bmUserId = null, $bbChannelId = null) { return parent::bbInput($dataType, $titles, $word, $toVar, $fromVar, $srcLineno, $srcBot,                          $botName, $bmUserId, $bbChannelId); }
+    */
+
+
+
+    ////////////////////
+    // CHANNELS HANDLERS
+    ////////////////////
+
+
+
+    /**
+     * Genera un nuevo nombre de bot de chatapp a ser utilizado por el programa BotBasic para su asignación a una variable por medio de CHANNEL new
+     *
+     * El desarrollador de BizModelAdapter debe implementar este método en esta clase; para ello puede ayudarse con las utilidades provistas por la superclase.
+     *
+     * ESTE ES UN EJEMPLO BASE PARA LA IMPLEMENTACION DE NEUROPOWER
+     *
+     * @param  string       $bbBotName      Nombre del bot de BotBasic para el cual se debe generar un nombre de bot de chatapp
+     * @return string|null                  Nombre del bot de la chatapp que se va a utilizar por la directiva CHANNEL new
+     */
+    public function makeAcmBotName ($bbBotName)
+    {
+        if ($bbBotName === "bot2") { $chEspecialistasREpattern = '/^\@np[0-9]{2,}/'; }   // Telegram names
+        else                       { $chEspecialistasREpattern = '/^NONE$/';         }   // bot1 or bot3
+        $newCMbotName = $this->computeNextCMchannelBotName($chEspecialistasREpattern, self::CHANNELS_POLICY_LEASTUSED, ChatMedium::TYPE_TELEGRAM);
+        if ($newCMbotName === null) { return null; }
+        return $newCMbotName;
+    }
+
+
+
+    //////////////////////
+    // MAGIC VARS HANDLERS
+    //////////////////////
+
+
+
+    /**
+     * Implementa el setter de la variable mágica "thischannelname"; se deben conservar el prefijo y el sufijo en el nombre del método
+     *
+     * @param  string       $value      Valor de la variable mágica, a asignarle
+     * @param  array        $metadata   Arreglo indexado por strings con valores que identifican el código y la instancia del runtime
+     * @return bool|array               false si el set() se debe aplicar dentro del runtime de BotBasic sin cambiar el valor;
+     *                                  [ stringOentero ] para indicar a BotBasic que aplique el set() con el valor indicado en [0] del arreglo retornado;
+     *                                  true de otro modo (no se hará set() o equivalente en el core de BotBasic)
+     */
+    public function mv_thischannelname_set ($value, $metadata)
+    {
+        $codename = $metadata['codename'];
+        $codebot  = $metadata['codebot' ];
+        $codeline = $metadata['codeline'];
+        error_log("Setting magic var 'thischannelname' to '$value' from $codename/$codebot/$codeline...");
+        return [ 2 * $value ];
+        // return false;
+        // old from here...
+        //$this->set("thischannelnameValue", $value);
+    }
+
+
+
+    /**
+     * Implementa el getter de la variable mágica "thischannelname"; se deben conservar el prefijo y el sufijo en el nombre del método
+     *
+     * @param  array            $metadata   Arreglo indexado por strings con valores que identifican el código y la instancia del runtime
+     * @return string|int|bool              Valor de la variable mágica, según fue asignado; o un string vacío si no lo fue antes;
+     *                                      o false si el get() se debe aplicar dentro del runtime de BotBasic
+     */
+    public function mv_thischannelname_get ($metadata)
+    {
+        $codename = $metadata['codename'];
+        $codebot  = $metadata['codebot' ];
+        $codeline = $metadata['codeline'];
+        error_log("Getting magic var 'thischannelname' from $codename/$codebot/$codeline...");
+        return false;
+        // old from here...
+        //$value = $this->get("thischannelnameValue");
+        //if ($value === null) { return BotBasic::NOTHING; }
+        //$newValue = $this->updatedChatMediaChannelBotName($value);
+        //if ($value != $newValue) { $this->mv_thischannelname_set($newValue); }
+        //return $newValue;
+    }
+
+
+
+    //////////////////////
+    // PRIMITIVES HANDLERS
+    //////////////////////
+
+
+
+    /**
+     * Implementa la primitiva de PHP "thisprimitivename"; se debe conservar el prefijo en el nombre del método
+     *
+     * * Las primitivas pueden retornar string o número
+     * * Los valores booleanos retornados serán convertidos a 0|1 y los null y otros serán fijados a BotBasic::NOTHING
+     * * La cantidad de valores de retorno debe coincidir con la definición de la primitiva en el programa BotBasic
+     * * Para primitivas que retornan un solo valor, se puede obviar su encapsulamiento en un arreglo al retornarlo
+     *
+     * IMPLEMENTACION DE EJEMPLO
+     *
+     * @param  string[]                 $args           Argumentos del menu predefinido
+     * @param  array                    $metadata       Arreglo indexado por strings con valores que identifican el código y la instancia del runtime
+     * @return string|string[]|null                     Valor o valores producidos por la primitiva, o null para primitivas que no retornan datos
+     */
+    public function pr_ThisPrimitiveName ($args, $metadata)
+    {
+        $codename = $metadata['codename'];
+        $codebot  = $metadata['codebot' ];
+        $codeline = $metadata['codeline'];
+        return "hello primitive! from $codename/$codebot/$codeline";
+    }
+
+
+
+    public function pr_TiraUnDado ($args, $metadata)
+    {
+        return rand(1, 6);
+    }
+
+
+
+    public function pr_SumaYpromedio ($args, $metadata)
+    {
+        if (count($args) == 0) { return [ 0, 0 ]; }
+        $suma = 0;
+        foreach ($args as $arg) { $suma += $arg; }
+        return [ $suma, $suma / count($args) ];
+    }
+
+
+
+    public function pr_LogueaEsto ($args, $metadata)
+    {
+        error_log("LogueaEsto recibe " . implode(',', $args));
+        // return null;   // works with the comment
+    }
+
+
+
+    public function pr_OpcionesDeMenu ($args, $metadata)
+    {
+        return [ 2010, 2020, 2030, 2040, 2050, 2060 ];
+    }
+
+
+
+    /////////////////
+    // MENUS HANDLERS
+    /////////////////
+
+
+
+    /**
+     * Implementa el menú predefinido "thismenuname"; se debe conservar el prefijo en el nombre del método
+     *
+     * * La cantidad de valores de retorno debe coincidir con la definición del menú en el programa BotBasic
+     * * La excepción es cuando en la definición, el último argumento indica cantidad variable de argumentos
+     *
+     * IMPLEMENTACION DE EJEMPLO
+     *
+     * @param  string[]             $args           Argumentos del menu predefinido
+     * @param  string[]             $titles         Títulos del menú predefinido
+     * @param  string[]             $options        Textos de las opciones del menú
+     * @param  array                $pager          Paginador, en forma: [ pagerSpec, pagerArg ]
+     * @param  mixed|null           $contextObject  Objeto opcional que sirve de contexto al menú
+     * @param  null|string          $key            null si se invoca la primera vez; la clave de la opción presionada de otro modo
+     * @param  array                $metadata       Arreglo indexado por strings con valores que identifican el código y la instancia del runtime
+     * @return null|string|string[]                 null si no ha finalizado la ejecución del menú; el o los valores de retorno de otro modo
+     */
+    public function mn_ThisMenuName ($args, $titles, $options, $pager, $contextObject, $key, $metadata)
+    {
+        return "selected option";
+    }
+
+
+
+    ///////////////
+    // TESTING AREA (botbasic development)
+    ///////////////
+
+
+
+    public function mn_SegundoMenu       ($args, $titles, $options, $pager, $lineno, $bot, $contextObject, $key = null) {}
+    public function pr_SegundaPrimitiva  ($args, $lineno, $bot) {}
+    public function pr_TerceraPrimitiva  ($args, $lineno, $bot) {}
+    public function pr_CuartaPrimitiva   ($args, $lineno, $bot) {}
+    public function pr_LogicPrimitive    ($args, $lineno, $bot) {}
+    public function pr_NonLogicPrimitive ($args, $lineno, $bot) {}
+    public function mv_magicVar_get      () {}
+    public function mv_magicVar_set      () {}
+
+
+
+}
+

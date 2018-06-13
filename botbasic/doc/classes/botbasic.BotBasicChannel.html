@@ -1,0 +1,2899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/botbasic.html">\botbasic</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">217</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">17</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2102196872"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-2102196872" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1945646670"></a>
+                                <a href="../namespaces/botbasic.html" style="margin-left: 30px; padding-left: 0">botbasic</a>
+            </div>
+            <div id="namespace-1945646670" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/botbasic.Closable.html">Closable</a></li>
+                                                    <li class="interface"><a href="../classes/botbasic.Initializable.html">Initializable</a></li>
+                                                    <li class="interface"><a href="../classes/botbasic.LogbotChatMedium.html">LogbotChatMedium</a></li>
+                                                                                                    <li class="class"><a href="../classes/botbasic.BizModelAdapter.html">BizModelAdapter</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BizModelAdapterTemplate.html">BizModelAdapterTemplate</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BizModelProvider.html">BizModelProvider</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasic.html">BotBasic</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasicChannel.html">BotBasicChannel</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasicParser.html">BotBasicParser</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.BotBasicRuntime.html">BotBasicRuntime</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMedium.html">ChatMedium</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumChannel.html">ChatMediumChannel</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumCliStub.html">ChatMediumCliStub</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumTelegram.html">ChatMediumTelegram</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.ChatMediumWebStub.html">ChatMediumWebStub</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.DBbroker.html">DBbroker</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Interaction.html">Interaction</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.InteractionResource.html">InteractionResource</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Log.html">Log</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Splash.html">Splash</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.Update.html">Update</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouter.html">WebRouter</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouterCliStub.html">WebRouterCliStub</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouterTelegram.html">WebRouterTelegram</a></li>
+                                                    <li class="class"><a href="../classes/botbasic.WebRouterWebStub.html">WebRouterWebStub</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/botbasic.html">\botbasic</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\botbasic</small>BotBasicChannel</h1>
+                    <p><em>Clase BotBasicChannel</em></p>
+                    <p>Implementa un canal de BotBasic, que a su vez está reflejado en un bot distinto para cada ChatMedium. Si una BotBasic app tiene 3 bots
+en cada uno de 2 ChatMedia, entonces hay un máximo de 6 ChatMediumChannels y 3 BotBasicChannels.</p>
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getId" class="">getId()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getVars" class="">getVars()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getCallStack" class="">getCallStack()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_toogleCallStack" class="">toogleCallStack()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getRouteQueue" class="">getRouteQueue()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getBBruntime" class="">getBBruntime()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getTunnels" class="">getTunnels()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getCMchannel" class="">getCMchannel()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getCMchannelByCMtype" class="">getCMchannelByCMtype()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getBBcodeId" class="">getBBcodeId()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_isDefaultBBchannel" class="">isDefaultBBchannel()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_isDeleted" class="">isDeleted()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_setAsDeleted" class="">setAsDeleted()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getDefauls" class="">getDefauls()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_createFromCMC" class="">createFromCMC()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_createFromBBRT" class="">createFromBBRT()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_load" class="">load()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_setRuntime" class="">setRuntime()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getFromStoreByRuntimeId" class="">getFromStoreByRuntimeId()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_setAsCurrent" class="">setAsCurrent()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_addTunnel" class="">addTunnel()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_removeTunnels" class="">removeTunnels()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getAllVarNames" class="">getAllVarNames()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_isSetVar" class="">isSetVar()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_setVar" class="">setVar()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getCommonVar" class="">getCommonVar()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_setCommonVar" class="">setCommonVar()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_resetCommonVar" class="">resetCommonVar()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_resetAllChannelHelper" class="">resetAllChannelHelper()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_callStackPush" class="">callStackPush()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_callStackPop" class="">callStackPop()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_callStackTop" class="">callStackTop()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_callStackReset" class="">callStackReset()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_enqueueRouteInput" class="">enqueueRouteInput()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_enqueueRoutePredefMenu" class="">enqueueRoutePredefMenu()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_enqueueRouteStdMenu" class="">enqueueRouteStdMenu()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_updateRouteStdMenu" class="">updateRouteStdMenu()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getRouteQueueIndexes" class="">getRouteQueueIndexes()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_setRouteOpenedFlag" class="">setRouteOpenedFlag()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getRouteOpenedFlag" class="">getRouteOpenedFlag()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_setRouteLineno" class="">setRouteLineno()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getRouteType" class="">getRouteType()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getRouteContent" class="">getRouteContent()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_isForeignRoute" class="">isForeignRoute()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getRouteLineno" class="">getRouteLineno()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_popRoute" class="">popRoute()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_orderExecution" class="">orderExecution()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_followRoutes" class="">followRoutes()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_sendToTunnels" class="">sendToTunnels()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_orderEnqueueing" class="">orderEnqueueing()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_orderRendering" class="">orderRendering()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_getForBizModelAdapter" class="">getForBizModelAdapter()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_setForBizModelAdapter" class="">setForBizModelAdapter()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_save" class="">save()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_close" class="">close()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_closeAll" class="">closeAll()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_tainting" class="">tainting()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#method_calcRouteOpenedFlag" class="">calcRouteOpenedFlag()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#property_id" class="">$id</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#property_tunnels" class="">$tunnels</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#property_vars" class="">$vars</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#property_callStack" class="">$callStack</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#property_routeQueue" class="">$routeQueue</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#property_deleted" class="">$deleted</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#property_storeForBMAs" class="">$storeForBMAs</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#property_rt" class="">$rt</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#property_store" class="">$store</a><br />
+                                                                    <a href="../classes/botbasic.BotBasicChannel.html#property_taintingState" class="">$taintingState</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/botbasic.BotBasicChannel.html"><div class="path-wrapper">botbasic/BotBasicChannel.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">botbasic</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\botbasic\BotBasicChannel</div>
+                            </dd>
+
+                                                                            <dt>Implements</dt>
+                                                        <dd><a href="../classes/botbasic.Initializable.html"><div class="namespace-wrapper">\botbasic\Initializable</div></a></dd>
+                                                                                <dd><a href="../classes/botbasic.Closable.html"><div class="namespace-wrapper">\botbasic\Closable</div></a></dd>
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_id" name="property_id" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$id</h3>
+                <pre class="signature">$id : null|integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                null|integer
+                &mdash; ID del BotBasicChannel según la tabla bbchannel de la BD                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_tunnels" name="property_tunnels" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$tunnels</h3>
+                <pre class="signature">$tunnels : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                &mdash; túneles vigentes apĺicables al canal, en la forma:
+            [ InteractionResource::TYPE_... =&gt; [ tgtBBchannel1, tgtBBchannel2, ... ], ... ]                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_vars" name="property_vars" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$vars</h3>
+                <pre class="signature">$vars : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                &mdash; Mapa de variables de BotBasic específicas del canal, como:
+            [ name =&gt; [ bool-tainted, value-or-null-for-deletion ], ... ]                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_callStack" name="property_callStack" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$callStack</h3>
+                <pre class="signature">$callStack : array|null</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array|null
+                &mdash; Stack del runtime (siempre asociado a cada canal) usado por GOSUB y RETURN                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_routeQueue" name="property_routeQueue" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$routeQueue</h3>
+                <pre class="signature">$routeQueue : array|null</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array|null
+                &mdash; Cola de rutas de ejecución; contiene todos los INPUT y MENU que deben ser ejecutados por el canal (en secuencia);
+                 si está vacía el routing se hace de acuerdo al match de hooks según el programa de BotBasic                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_deleted" name="property_deleted" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$deleted</h3>
+                <pre class="signature">$deleted : boolean</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                boolean
+                &mdash; Indica si el canal está marcado para borrado, como producto de un CHANNEL DELETE                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_storeForBMAs" name="property_storeForBMAs" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$storeForBMAs</h3>
+                <pre class="signature">$storeForBMAs : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                &mdash; Contiene todos los BizModelAdapter indexados por BotBasicChannel::id                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_rt" name="property_rt" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$rt</h3>
+                <pre class="signature">$rt : \botbasic\BotBasicRuntime</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/botbasic.BotBasicRuntime.html">\botbasic\BotBasicRuntime</a>
+                &mdash; Instancia de BotBasicRuntime                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_store" name="property_store" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$store</h3>
+                <pre class="signature">$store : array&lt;mixed,\botbasic\BotBasicChannel&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,<a href="../classes/botbasic.BotBasicChannel.html">\botbasic\BotBasicChannel</a>&gt;
+                &mdash; Store para todas las instancias de esta clase                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_taintingState" name="property_taintingState" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$taintingState</h3>
+                <pre class="signature">$taintingState : boolean</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                boolean
+                &mdash; Indica el estado usado en tainting() de la interfaz Closable                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getId" name="method_getId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getId() : integer|null</pre>
+                <p><em>Retorna el ID de la instancia tal como está en BD, o null si no está almacenada aún</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getVars" name="method_getVars" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getVars()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getVars() : array</pre>
+                <p><em>Retorna el arreglo asociativo que contiene las variables del programa BotBasic asociadas específicamente al canal del programa BotBasic</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCallStack" name="method_getCallStack" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCallStack()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCallStack() : array</pre>
+                <p><em>Retorna el arreglo que contiene la pila de contextos de ejecución de GOSUB&#039;s</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_toogleCallStack" name="method_toogleCallStack" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">toogleCallStack()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">toogleCallStack() </pre>
+                <p><em>Asigna temporalmente un stack vacío para los contextos de ejecución de GOSUB&#039;s</em></p>
+                <p>Este método se debe usar sólo para el mecanismo de preservación del stack al ejecutar hooks (entry, menú, ...). A diferencia de otros
+métodos, aquí no es necesario aplicar tainting(true) pues se trata de restituir un stack recién obtenido con getCallStack().</p>
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRouteQueue" name="method_getRouteQueue" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRouteQueue()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRouteQueue() : array</pre>
+                <p><em>Retorna el arreglo que contiene la cola de contextos de ejecución de BotBasic para route()</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getBBruntime" name="method_getBBruntime" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getBBruntime()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getBBruntime() : \botbasic\BotBasicRuntime</pre>
+                <p><em>Obtiene la instancia de BotBasicRuntime asociada a esta instancia</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.BotBasicRuntime.html">\botbasic\BotBasicRuntime</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTunnels" name="method_getTunnels" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTunnels()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTunnels() : array</pre>
+                <p><em>Obtiene la estructura de datos que almacena los túneles a los que este canal envía contenido</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCMchannel" name="method_getCMchannel" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCMchannel()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCMchannel() : \botbasic\ChatMediumChannel|null</pre>
+                <p><em>Obtiene la instancia de ChatMediumChannel a la cual está asociado este canal del programa BotBasic</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.ChatMediumChannel.html">\botbasic\ChatMediumChannel</a>|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCMchannelByCMtype" name="method_getCMchannelByCMtype" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCMchannelByCMtype()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCMchannelByCMtype(integer  <span class="argument">$cmType</span>) : \botbasic\ChatMediumChannel|null</pre>
+                <p><em>Obtiene la instancia de ChatMediumChannel asociada a este canal del programa BotBasic, para el ChatMedium especificado, si hubiese</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$cmType </td>
+                                <td><p>Una de las constantes ChatMedium::TYPE_...</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.ChatMediumChannel.html">\botbasic\ChatMediumChannel</a>|null
+                                            &mdash; <p>Instancia de ChatMediumChannel; o null si no estuviese definida para el BotBasicChannel</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getBBcodeId" name="method_getBBcodeId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getBBcodeId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getBBcodeId() : integer|null</pre>
+                <p><em>Obtiene el bbCodeId del programa BotBasic, el cual tiene sentido a la luz de las estructuras ChatMedium::$bbBots y ChatMediumXXX::$cmBots</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isDefaultBBchannel" name="method_isDefaultBBchannel" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">isDefaultBBchannel()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isDefaultBBchannel() : boolean</pre>
+                <p><em>Indica si este canal del programa BotBasic es un &quot;default channel&quot; sobre el cual se deben emitir Splashes de proveniencia foránea</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isDeleted" name="method_isDeleted" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">isDeleted()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isDeleted() : boolean</pre>
+                <p><em>Indica si el canal del programa BotBasic ha sido eliminado por medio de una directiva CHANNEL DELETE</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setAsDeleted" name="method_setAsDeleted" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setAsDeleted()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setAsDeleted() </pre>
+                <p><em>Fija el canal del programa BotBasic como eliminado, a fin de poder implementar la directiva CHANNEL DELETE</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getDefauls" name="method_getDefauls" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getDefauls()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getDefauls() : array</pre>
+                <p><em>Retorna un arreglo asociativo con los valores por defecto que deben ser insertados en un registro de una tabla asociada en la BD</em></p>
+                <p>Los atributos se deben retornar en el orden especificado en la definición del esquema de la tabla y no deben contener a los campos:
+id, updated, deleted.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createFromCMC" name="method_createFromCMC" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createFromCMC()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createFromCMC(integer  <span class="argument">$bbCodeId</span>, \botbasic\ChatMediumChannel  <span class="argument">$cmChannel</span>) : \botbasic\BotBasicChannel|null</pre>
+                <p><em>Factory method invocado desde ChatMediumChannel</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$bbCodeId </td>
+                                <td><p>&quot;bbCodeId&quot; que refleja la identidad del bot de BotBasic en su asociación a bots de chatapps</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/botbasic.ChatMediumChannel.html">\botbasic\ChatMediumChannel</a></td>
+                                <td>$cmChannel </td>
+                                <td><p>Instancia de ChatMediumChannel asociada</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.BotBasicChannel.html">\botbasic\BotBasicChannel</a>|null
+                                            &mdash; <p>Nueva instancia; o null si no se pudo crear la instancia de BotBasicRuntime o hubo error de BD</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createFromBBRT" name="method_createFromBBRT" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createFromBBRT()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createFromBBRT(\botbasic\BotBasicRuntime  <span class="argument">$runtime</span>, integer  <span class="argument">$cmType</span>, integer  <span class="argument">$cmUserId</span>, string  <span class="argument">$cmBotName</span>) : \botbasic\BotBasicChannel|null</pre>
+                <p><em>Factory method invocado desde BotBasicRuntime</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/botbasic.BotBasicRuntime.html">\botbasic\BotBasicRuntime</a></td>
+                                <td>$runtime </td>
+                                <td><p>Instancia del runtime asociada</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$cmType </td>
+                                <td><p>Una de las constantes ChatMedium::TYPE_...</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$cmUserId </td>
+                                <td><p>User ID del usuario en la chatapp</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$cmBotName </td>
+                                <td><p>Nombre del bot de la chatapp</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.BotBasicChannel.html">\botbasic\BotBasicChannel</a>|null
+                                            &mdash; <p>Nueva instancia; o null en caso de error de BD o de creación de la instancia de ChatMediumChannel</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_load" name="method_load" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">load()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">load(integer  <span class="argument">$id</span>, \botbasic\BotBasicRuntime|null  <span class="argument">$runtime = null</span>, boolean  <span class="argument">$logIfNotFound = true</span>, \botbasic\ChatMediumChannel|null  <span class="argument">$updateThisCmcReference = null</span>) : \botbasic\BotBasicChannel|null</pre>
+                <p><em>Carga una instancia de esta clase desde la BD a partir de su ID, incluyendo la carga subsecuente de variables y túneles</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$id </td>
+                                <td><p>ID de la instancia</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/botbasic.BotBasicRuntime.html">\botbasic\BotBasicRuntime</a>|null</td>
+                                <td>$runtime </td>
+                                <td><p>Instancia de BotBasicRuntime a la que asociar esta; o null para cargar la correspondiente</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$logIfNotFound </td>
+                                <td><p>Si es false, no se registrará en bitácora el evento de que no se consiga la entrada en BD por su ID</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/botbasic.ChatMediumChannel.html">\botbasic\ChatMediumChannel</a>|null</td>
+                                <td>$updateThisCmcReference </td>
+                                <td><p>Instancia de ChatMediumChannel opcional a la que actualizar la referencia al BotBasicChannel cargado</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/botbasic.BotBasicChannel.html">\botbasic\BotBasicChannel</a>|null
+                                            &mdash; <p>La instancia; o null en caso de error de carga</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setRuntime" name="method_setRuntime" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setRuntime()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setRuntime(\botbasic\BotBasicRuntime  <span class="argument">$runtime</span>) </pre>
+                <p><em>Fija la referencia al runtime</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/botbasic.BotBasicRuntime.html">\botbasic\BotBasicRuntime</a></td>
+                                <td>$runtime </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getFromStoreByRuntimeId" name="method_getFromStoreByRuntimeId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getFromStoreByRuntimeId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getFromStoreByRuntimeId(integer  <span class="argument">$runtimeId</span>) : array&lt;mixed,\botbasic\BotBasicChannel&gt;</pre>
+                <p><em>Ubica las instancias que estén almacenada en el store a partir de un ID del runtime asociado</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$runtimeId </td>
+                                <td><p>ID de la instancia a ubicar</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,<a href="../classes/botbasic.BotBasicChannel.html">\botbasic\BotBasicChannel</a>&gt;
+                                            &mdash; <p>Colección de instancias ubicadas</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setAsCurrent" name="method_setAsCurrent" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setAsCurrent()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setAsCurrent() </pre>
+                <p><em>Fija esta instancia como el &quot;current channel&quot; del runtime respectivo</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addTunnel" name="method_addTunnel" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addTunnel()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addTunnel(integer  <span class="argument">$resourceType</span>, \botbasic\BotBasicChannel  <span class="argument">$targetBbc</span>) </pre>
+                <p><em>Agrega un túnel a la estructura de túneles entre instancias de BotBasicChannel, en la que esta instancia actúa como canal origen</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$resourceType </td>
+                                <td><p>Una de las constantes InteractionResource::TYPE_...</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/botbasic.BotBasicChannel.html">\botbasic\BotBasicChannel</a></td>
+                                <td>$targetBbc </td>
+                                <td><p>Canal destino</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_removeTunnels" name="method_removeTunnels" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">removeTunnels()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">removeTunnels(null|integer  <span class="argument">$resourceType = null</span>, null|\botbasic\BotBasicChannel|array&lt;mixed,\botbasic\BotBasicChannel&gt;  <span class="argument">$targetBbcs = null</span>) </pre>
+                <p><em>Elimina túneles en los que esta instancia actúa como canal origen</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>null|integer</td>
+                                <td>$resourceType </td>
+                                <td><p>Una de las constantes InteractionResource::TYPE_...;
+o null para borrar los túneles de todos los tipos de resource</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>null|<a href="../classes/botbasic.BotBasicChannel.html">\botbasic\BotBasicChannel</a>|array&lt;mixed,<a href="../classes/botbasic.BotBasicChannel.html">\botbasic\BotBasicChannel</a>&gt;</td>
+                                <td>$targetBbcs </td>
+                                <td><p>Uno o más instancias de BotBasicChannels que indican los destinos de los túneles
+que deben ser borrados; o null para borrar todos los túneles del tipo de resource indicado</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getAllVarNames" name="method_getAllVarNames" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getAllVarNames()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getAllVarNames() : array&lt;mixed,string&gt;</pre>
+                <p><em>Obtiene los nombres de todas las variables del programa BotBasic registradas en esta instancia</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,string&gt;
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isSetVar" name="method_isSetVar" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">isSetVar()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isSetVar(string  <span class="argument">$name</span>) : boolean</pre>
+                <p><em>Indica si un nombre de variable de programa BotBasic está asignado en esta instancia específica</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Nombre de la variable</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setVar" name="method_setVar" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setVar()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setVar(string  <span class="argument">$name</span>, string  <span class="argument">$value</span>, integer  <span class="argument">$lineno</span>, string  <span class="argument">$bot</span>) </pre>
+                <p><em>Fija el valor de una variable de forma que esté asociada específicamente a esta instancia de canal de programa BotBasic y no al runtime</em></p>
+                <p>Cuando la variable sea una variable mágica, se invoca a su manejador en el runtime.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Nombre de la variable</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$value </td>
+                                <td><p>Valor de la variable</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$lineno </td>
+                                <td><p>Número de línea del programa BotBasic desde el que se ejecuta la asignación</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$bot </td>
+                                <td><p>Nombre del bot del programa BotBasic que ejecuta la asignación</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCommonVar" name="method_getCommonVar" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCommonVar()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCommonVar(string  <span class="argument">$name</span>, \botbasic\BotBasicRuntime  <span class="argument">$runtime</span>) : string|null</pre>
+                <p><em>Obtiene el valor de una variable común del programa BotBasic que esté registrada en esta instancia</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Nombre de la variable</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/botbasic.BotBasicRuntime.html">\botbasic\BotBasicRuntime</a></td>
+                                <td>$runtime </td>
+                                <td><p>Instancia del runtime a partir de la cual se buscará el valor si no se consigue en esta instancia</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string|null
+                                            &mdash; <p>Valor de la variable; o null si no está fijada ni en esta instancia ni en el runtime</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setCommonVar" name="method_setCommonVar" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setCommonVar()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setCommonVar(string  <span class="argument">$name</span>, string  <span class="argument">$value</span>, \botbasic\BotBasicRuntime  <span class="argument">$runtime</span>) </pre>
+                <p><em>Asigna a una variable un nuevo valor dentro del estado de este canal, a menos que no esté previamente inicializada con un RESET .</em></p>
+                <p>.. CHANNEL,
+en cuyo caso la asignación se deriva al runtime pasado (a menos que se pase null)</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Nombre de la variable</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$value </td>
+                                <td><p>Nuevo valor de la variable</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/botbasic.BotBasicRuntime.html">\botbasic\BotBasicRuntime</a></td>
+                                <td>$runtime </td>
+                                <td><p>Runtime en el que se asignará el valor de no estar presente previamente en este canal</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_resetCommonVar" name="method_resetCommonVar" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">resetCommonVar()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">resetCommonVar(string  <span class="argument">$name</span>, boolean  <span class="argument">$deleteNotInitialize</span>) </pre>
+                <p><em>Resetea el valor de una variable inicializándola en null o self::NOTHING</em></p>
+                <p>Inicializarla a null equivale efectivamente a su eliminación; la fijación a NOTHING equivale a incluir la variable dentro del
+mapa de variables del canal, de modo que cada SET/GET posterior afectará el estado del canal y no el del runtime.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Nombre de la variable</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$deleteNotInitialize </td>
+                                <td><p>Fija el valor en null en vez de self::NOTHING</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_resetAllChannelHelper" name="method_resetAllChannelHelper" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">resetAllChannelHelper()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">resetAllChannelHelper() </pre>
+                <p><em>Ejecuta la semántica de un RESET ALL CHANNEL</em></p>
+                <p>Se resetean las variables y el stack del canal, pero las rutas quedan intactas</p>
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_callStackPush" name="method_callStackPush" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">callStackPush()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">callStackPush(integer  <span class="argument">$fromLineno</span>, array&lt;mixed,string&gt;  <span class="argument">$args</span>, array&lt;mixed,string&gt;|null  <span class="argument">$toVars</span>) </pre>
+                <p><em>Apila las referencias de un contexto de ejecución de una subrutina del programa BotBasic (que se crea con un GOSUB)</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$fromLineno </td>
+                                <td><p>Número de línea del calling context</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array&lt;mixed,string&gt;</td>
+                                <td>$args </td>
+                                <td><p>Valores de los argumentos del GOSUB</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array&lt;mixed,string&gt;|null</td>
+                                <td>$toVars </td>
+                                <td><p>Nombres de variables a las que serán asignadas los valores del subsecuente RETURN, o null si no hay</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_callStackPop" name="method_callStackPop" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">callStackPop()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">callStackPop() : null|array</pre>
+                <p><em>Desapila un contexto de ejecución de una subrutina del programa BotBasic, a momento de un RETURN</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    null|array
+                                            &mdash; <p>Calling context más reciente en forma: [ fromLineno, args, toVars ]; o null si no hay contextos apilados</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_callStackTop" name="method_callStackTop" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">callStackTop()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">callStackTop() : null|array</pre>
+                <p><em>Retorna el tope de la pila de los contextos de ejecución de subrutinas del programa BotBasic</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    null|array
+                                            &mdash; <p>Calling context más reciente en forma: [ fromLineno, args, toVars ]; o null si no hay contextos apilados</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_callStackReset" name="method_callStackReset" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">callStackReset()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">callStackReset() </pre>
+                <p><em>Limpia la cola del call stack; este método es llamado cuando se encuentra un END en la ejecución del programa BotBasic</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_enqueueRouteInput" name="method_enqueueRouteInput" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">enqueueRouteInput()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">enqueueRouteInput(string  <span class="argument">$bot</span>, integer  <span class="argument">$lineno</span>, string  <span class="argument">$dataType</span>, array&lt;mixed,string&gt;|null  <span class="argument">$titles</span>, string|null  <span class="argument">$word</span>, integer  <span class="argument">$targetBbcId</span>, string  <span class="argument">$toVar</span>, string|null  <span class="argument">$fromValue</span>, boolean  <span class="argument">$opened</span>, boolean  <span class="argument">$dontEnqueue = false</span>, boolean  <span class="argument">$displayRepeatEntry = false</span>) </pre>
+                <p><em>Encola en este canal una ruta de contexto de operación pendiente proveniente de la ejecución de un INPUT</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$bot </td>
+                                <td><p>Nombre del bot que convoca la operación</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$lineno </td>
+                                <td><p>Número de línea del programa BotBasic que convoca la operación</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$dataType </td>
+                                <td><p>Tipo de dato; uno de: 'date', 'positiveInteger', 'positiveDecimal', 'string'</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array&lt;mixed,string&gt;|null</td>
+                                <td>$titles </td>
+                                <td><p>Títulos asociados al INPUT, que son desplegados como PRINTs; o null si no hay</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$word </td>
+                                <td><p>Palabra que acepta el valor por defecto $fromValue; o null si no aplica</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$targetBbcId </td>
+                                <td><p>ID del BotBasicChannel sobre el que debe efectuarse la afectación de $toVar</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$toVar </td>
+                                <td><p>Nombre de la variable del programa BotBasic en la que se almacenará el resultado del INPUT</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$fromValue </td>
+                                <td><p>Valor por defecto a ser usado en caso de introducción de $word; o null si no aplica</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$opened </td>
+                                <td><p>Indica si la ruta se encolará como &quot;abierta&quot;, en cuyo caso se manifestará una interacción</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$dontEnqueue </td>
+                                <td><p>Si es false, no se encolará la ruta de contexto de ejecución (para steps 2 si no se ha hecho popRoute())</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$displayRepeatEntry </td>
+                                <td><p>Si es true, se mostrará antes de los demás un texto que indica al usuario que debe repetir la entrada del dato</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_enqueueRoutePredefMenu" name="method_enqueueRoutePredefMenu" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">enqueueRoutePredefMenu()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">enqueueRoutePredefMenu(string  <span class="argument">$bot</span>, integer  <span class="argument">$lineno</span>, string  <span class="argument">$menuName</span>, array&lt;mixed,string&gt;  <span class="argument">$menuArgs</span>, array&lt;mixed,string&gt;|null  <span class="argument">$titles</span>, array  <span class="argument">$options</span>, array|null  <span class="argument">$pager</span>, integer  <span class="argument">$targetBbcId</span>, array&lt;mixed,string&gt;  <span class="argument">$toVars</span>, boolean  <span class="argument">$opened</span>, mixed|null  <span class="argument">$contextObject = null</span>) </pre>
+                <p><em>Encola en este canal una ruta de contexto de operación pendiente proveniente de la ejecución de un MENU predefinido</em></p>
+                <p>TODO: AUN NO PROBADO; ELIMINAR FUNCIONALIDAD DE MENUS PREDEFINIDOS PARA EL PRIMER LANZAMIENTO DE BB</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$bot </td>
+                                <td><p>Nombre del bot que convoca la operación</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$lineno </td>
+                                <td><p>Número de línea del programa BotBasic que convoca la operación</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$menuName </td>
+                                <td><p>Nombre del menú predefinido, que se corresponde con un método de BizModelAdapter</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array&lt;mixed,string&gt;</td>
+                                <td>$menuArgs </td>
+                                <td><p>Argumentos del menu predefinido</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array&lt;mixed,string&gt;|null</td>
+                                <td>$titles </td>
+                                <td><p>Títulos asociados al menú; o null si no están definidos</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$options </td>
+                                <td><p>Opciones del menú, codificadas con Interaction::encodeMenuhook()</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$pager </td>
+                                <td><p>Especificación del paginador del menú, de forma: [ pagerSpec, pagerArgs ]</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$targetBbcId </td>
+                                <td><p>ID del BotBasicChannel sobre el que debe efectuarse la afectación de $toVar</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array&lt;mixed,string&gt;</td>
+                                <td>$toVars </td>
+                                <td><p>Nombre de las variables del programa BotBasic en las que se almacenarán los resultados del INPUT</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$opened </td>
+                                <td><p>Indica si la ruta se encolará como &quot;abierta&quot;, en cuyo caso se manifestará una interacción</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed|null</td>
+                                <td>$contextObject </td>
+                                <td><p>Objeto opcional que sirve de contexto a la rutina de BizModelAdapter</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_enqueueRouteStdMenu" name="method_enqueueRouteStdMenu" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">enqueueRouteStdMenu()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">enqueueRouteStdMenu(string  <span class="argument">$bot</span>, integer  <span class="argument">$lineno</span>, array&lt;mixed,string&gt;|null  <span class="argument">$titles</span>, array  <span class="argument">$options</span>, array|null  <span class="argument">$pager</span>, integer  <span class="argument">$targetBbcId</span>, string  <span class="argument">$toVar</span>, boolean  <span class="argument">$opened</span>, null|string  <span class="argument">$pagerAction = null</span>, null|integer  <span class="argument">$pagerActionArg = null</span>) </pre>
+                <p><em>Encola en este canal una ruta de contexto de operación pendiente proveniente de la ejecución de un MENU estándar</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$bot </td>
+                                <td><p>Nombre del bot que convoca la operación</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$lineno </td>
+                                <td><p>Número de línea del programa BotBasic que convoca la operación</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array&lt;mixed,string&gt;|null</td>
+                                <td>$titles </td>
+                                <td><p>Títulos asociados al menú; o null si no están definidos</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$options </td>
+                                <td><p>Opciones del menú, codificadas con Interaction::encodeMenuhook()</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$pager </td>
+                                <td><p>Especificación del paginador del menú, de forma: [ pagerSpec, pagerArgs ]</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$targetBbcId </td>
+                                <td><p>ID del BotBasicChannel sobre el que debe efectuarse la afectación de $toVar</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$toVar </td>
+                                <td><p>Nombre de la variable del programa BotBasic en la que se almacenará el resultado del INPUT</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$opened </td>
+                                <td><p>Indica si la ruta se encolará como &quot;abierta&quot;, en cuyo caso se manifestará una interacción</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>null|string</td>
+                                <td>$pagerAction </td>
+                                <td><p>Si se ha presionado un botón del paginador, aquí se recibe el valor del $key del menuhook asociado;
+en este caso se considera que la ruta ya está encolada y se ignoran todos los argumentos anteriores</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>null|integer</td>
+                                <td>$pagerActionArg </td>
+                                <td><p>Cuando $pagerAction indica un tag de número de página, aquí se pasa el número de página seleccionada</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateRouteStdMenu" name="method_updateRouteStdMenu" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateRouteStdMenu()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateRouteStdMenu(string  <span class="argument">$pagerAction</span>, integer|null  <span class="argument">$pagerActionArg = null</span>) </pre>
+                <p><em>Actualiza en este canal la ruta de contexto de operación pendiente prioritaria a partir de la activación de una opción de un paginador
+de un MENU estándar</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$pagerAction </td>
+                                <td><p>Una de las constantes Interaction::TAG<em>MENU</em>{FIRST,LAST,PREV,NEXT,PAGE}</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer|null</td>
+                                <td>$pagerActionArg </td>
+                                <td><p>Número de página a mostrar, cuando la acción es TAG_MENU_PAGE</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRouteQueueIndexes" name="method_getRouteQueueIndexes" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRouteQueueIndexes()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRouteQueueIndexes() : array&lt;mixed,integer&gt;</pre>
+                <p><em>Obtiene índices que representan a todos las rutas de contexto de operación pendiente de esta instancia</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,integer&gt;
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setRouteOpenedFlag" name="method_setRouteOpenedFlag" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setRouteOpenedFlag()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setRouteOpenedFlag(boolean  <span class="argument">$opened</span>, integer|null  <span class="argument">$routeIndex = null</span>) </pre>
+                <p><em>Fija el atributo opened/closed de una ruta de contexto de operación pendiente de esta instancia</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$opened </td>
+                                <td><p>Atributo de ruta abierta</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer|null</td>
+                                <td>$routeIndex </td>
+                                <td><p>Indice dentro del rango obtenido por getRouteQueueIndexes(); o null para la ruta más recientemente encolada</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRouteOpenedFlag" name="method_getRouteOpenedFlag" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRouteOpenedFlag()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRouteOpenedFlag(integer|null  <span class="argument">$routeIndex = null</span>) : boolean|null</pre>
+                <p><em>Obtiene el atributo opened/closed de una ruta de contexto de operación pendiente de esta instancia</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer|null</td>
+                                <td>$routeIndex </td>
+                                <td><p>Indice dentro del rango obtenido por getRouteQueueIndexes(); o null para la ruta más recientemente encolada</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean|null
+                                            &mdash; <p>Atributo de ruta abierta; o null si el índice es inválido</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setRouteLineno" name="method_setRouteLineno" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setRouteLineno()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setRouteLineno(integer  <span class="argument">$lineno</span>, integer|null  <span class="argument">$routeIndex = null</span>) </pre>
+                <p><em>Fija el lineno de una ruta de contexto de operación pendiente de esta instancia</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$lineno </td>
+                                <td><p>Número de línea del programa BotBasic</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer|null</td>
+                                <td>$routeIndex </td>
+                                <td><p>Indice dentro del rango obtenido por getRouteQueueIndexes(); o null para la ruta más recientemente encolada</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRouteType" name="method_getRouteType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRouteType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRouteType(integer|null  <span class="argument">$routeIndex = null</span>) : string|null</pre>
+                <p><em>Obtiene el tipo de una ruta de contexto de operación pendiente de esta instancia</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer|null</td>
+                                <td>$routeIndex </td>
+                                <td><p>Indice dentro del rango obtenido por getRouteQueueIndexes(); o null para la ruta más recientemente encolada</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string|null
+                                            &mdash; <p>Uno de: 'input', 'stdmenu', 'predefmenu'; o null si no hay ruta asociada al índice o no hay ninguna ruta</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRouteContent" name="method_getRouteContent" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRouteContent()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRouteContent(integer|null  <span class="argument">$routeIndex = null</span>) : string|null</pre>
+                <p><em>Obtiene el contenido de una ruta de contexto de operación pendiente de esta instancia</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer|null</td>
+                                <td>$routeIndex </td>
+                                <td><p>Indice dentro del rango obtenido por getRouteQueueIndexes(); o null para la ruta más recientemente encolada</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string|null
+                                            &mdash; <p>Según el tipo de ruta es:
+input:      [ bot, lineno, dataType, title, word, targetBbcId, toVar, fromValue ],
+stdmenu:    [ bot, lineno, options, pager, targetBbcId, toVar ],
+predefmenu: [ bot, lineno, menuName, options, pager, targetBbcId, toVars, contextObject ];
+o null si no hay ruta asociada al índice o no hay ninguna ruta</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isForeignRoute" name="method_isForeignRoute" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">isForeignRoute()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isForeignRoute(\botbasic\BotBasicChannel  <span class="argument">$bbc</span>, null|integer  <span class="argument">$routeIndex = null</span>, null|array  <span class="argument">$fullRoute = null</span>) : boolean|null</pre>
+                <p><em>Indica si una ruta de contexto de ejecución es foránea (ON sobre un BotBasicChannel distinto al de quien remitió la ruta) o no</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/botbasic.BotBasicChannel.html">\botbasic\BotBasicChannel</a></td>
+                                <td>$bbc </td>
+                                <td><p>Si no se pasa la ruta, se extraerá de la instancia de esta clase pasada</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>null|integer</td>
+                                <td>$routeIndex </td>
+                                <td><p>Indice de la ruta en el rango de getRouteQueueIndexes(); o null para la ruta más recientemente encolada</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>null|array</td>
+                                <td>$fullRoute </td>
+                                <td><p>Ruta, en su representación completa: array_merge( [ getRouteType() ], getRouteContent() );
+si se pasa null se tomará la ruta más recientemente encolada</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean|null
+                                            &mdash; <p>null si los primeros dos argumentos son null; indicador de si la ruta es foránea si no</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRouteLineno" name="method_getRouteLineno" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRouteLineno()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRouteLineno(array  <span class="argument">$fullRoute</span>) : null</pre>
+                <p><em>Obtiene el lineno de una ruta de contexto de ejecución</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$fullRoute </td>
+                                <td><p>Ruta, en su representación indicada en isForeignRoute()</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    null
+                                            &mdash; <p>Lineno asociado a la ejecución del encolado</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_popRoute" name="method_popRoute" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">popRoute()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">popRoute() </pre>
+                <p><em>Elimina la ruta de contexto de operación que tenga mayor antiguedad en la cola de rutas</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_orderExecution" name="method_orderExecution" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">orderExecution()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">orderExecution(\botbasic\Update  <span class="argument">$update</span>) </pre>
+                <p><em>Ordena al runtime la ejecución del programa BotBasic a partir de un Update genérico, como respuesta a un mensaje similar desde ChatMediumChannel</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/botbasic.Update.html">\botbasic\Update</a></td>
+                                <td>$update </td>
+                                <td><p>Insumo para la ejecución</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_followRoutes" name="method_followRoutes" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">followRoutes()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">followRoutes() </pre>
+                <p><em>Si en la cola de rutas de contextos de ejecución la primera de ellas está cerrada, la abre e inicia su ejecución</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_sendToTunnels" name="method_sendToTunnels" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">sendToTunnels()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">sendToTunnels(\botbasic\Update  <span class="argument">$update</span>) </pre>
+                <p><em>Envía un Splash a los túneles de este canal del programa BotBasic</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/botbasic.Update.html">\botbasic\Update</a></td>
+                                <td>$update </td>
+                                <td><p>Update a ser desplegado a través de los túneles, luego de convertido en Splash</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_orderEnqueueing" name="method_orderEnqueueing" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">orderEnqueueing()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">orderEnqueueing(\botbasic\Splash  <span class="argument">$splash</span>) </pre>
+                <p><em>Ordena el encolado de una salida hacia la chatapp generada por el programa BotBasic</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/botbasic.Splash.html">\botbasic\Splash</a></td>
+                                <td>$splash </td>
+                                <td><p>Salida; no se enviará a los túneles sino directamente a la instancia asociada de ChatMediumChannel</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_orderRendering" name="method_orderRendering" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">orderRendering()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">orderRendering() </pre>
+                <p><em>Una vez encoladas todas las salidas, la invocación a este método dispara su envío efectivo hacia las chatapps a través de un mecanismo
+asíncrono que evita los tiempos de espera en el acceso a los web services de las chatapps</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getForBizModelAdapter" name="method_getForBizModelAdapter" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getForBizModelAdapter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getForBizModelAdapter(string  <span class="argument">$name</span>, boolean  <span class="argument">$bbChannelId = false</span>) : mixed|null</pre>
+                <p><em>Implementa un store (get) disponible para el BizModelAdapter con valores asociados al BotBasicChannel o a todos los BotBasicChannels en general</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Nombre de la variable de BotBasic</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$bbChannelId </td>
+                                <td><p>ID del canal BotBasic que define el store del cual obtener el valor, o false para el store general</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed|null
+                                            &mdash; <p>Valor recuperado, o null si no existe el nombre indicado</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setForBizModelAdapter" name="method_setForBizModelAdapter" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setForBizModelAdapter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setForBizModelAdapter(string  <span class="argument">$name</span>, mixed  <span class="argument">$value</span>, boolean  <span class="argument">$bbChannelId = false</span>) </pre>
+                <p><em>Implementa un store (set) disponible para el BizModelAdapter con valores asociados al BotBasicChannel o a todos los BotBasicChannels en general</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Nombre de la variable de BotBasic</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$value </td>
+                                <td><p>Valor de la variable</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$bbChannelId </td>
+                                <td><p>ID del canal BotBasic que define el store en el cual asignar el valor, o false para el store general</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_save" name="method_save" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">save()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">save(boolean  <span class="argument">$saveTunnels = true</span>) : boolean|null</pre>
+                <p><em>Guarda la instancia en BD</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$saveTunnels </td>
+                                <td><p>Indica si adicionalmente se deben guardar los túneles en la BD</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean|null
+                                            &mdash; <p>null en caso de error de BD; true en caso de éxito</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_close" name="method_close" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">close()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">close(boolean  <span class="argument">$cascade</span>) </pre>
+                <p><em>Mecanismo de housekeeping del status de las instancias de clases que implementen esta interfaz (almacenamiento en BD, .</em></p>
+                <p>..)</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$cascade </td>
+                                <td><p>Indica si se debe invocar close() para los objetos agregados/compuestos por esta instancia
+que implementen esta misma interfaz</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_closeAll" name="method_closeAll" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">closeAll()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">closeAll() </pre>
+                <p><em>Invoca a close() para todas las instancias creadas de objetos que implementen esta interfaz</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_tainting" name="method_tainting" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">tainting()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">tainting(null|boolean  <span class="argument">$state = null</span>) : boolean</pre>
+                <p><em>Define o consulta el estado de modificación de una instancia, a fin de facilitar la implementación de close()</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>null|boolean</td>
+                                <td>$state </td>
+                                <td><p>null para consultar, true para definir activación del guardado de la instancia, false para su desactivación</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>Estado del tainting</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(integer|null  <span class="argument">$id</span>, \botbasic\BotBasicRuntime  <span class="argument">$runtime</span>, array|null  <span class="argument">$callStack = array()</span>, array|null  <span class="argument">$routeQueue = array()</span>, array|null  <span class="argument">$vars = array()</span>, array|null  <span class="argument">$tunnels = array()</span>) </pre>
+                <p><em>Constructor</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer|null</td>
+                                <td>$id </td>
+                                <td><p>ID de la instancia</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/botbasic.BotBasicRuntime.html">\botbasic\BotBasicRuntime</a></td>
+                                <td>$runtime </td>
+                                <td><p>Instancia asociada de BotBasicRuntime</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$callStack </td>
+                                <td><p>Estructura que contiene al call stack de ejecución del runtime; o null para inicializar una</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$routeQueue </td>
+                                <td><p>Estructura que contiene la cola de interacciones pendientes del canal; o null para inicializar una</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$vars </td>
+                                <td><p>Estructura que contiene las variables del programa BotBasic específicamente asociadas al canal; o null para inicializar una</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$tunnels </td>
+                                <td><p>Estructura que contiene los túneles en los que este canal es origen; o null para inicializar una</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_calcRouteOpenedFlag" name="method_calcRouteOpenedFlag" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">calcRouteOpenedFlag()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">calcRouteOpenedFlag(boolean  <span class="argument">$openedAsShouldBe</span>, boolean  <span class="argument">$routeIsAlreadyEnqueued</span>) : boolean</pre>
+                <p><em>Calcula el parámetro que indica si la ruta de contexto de operación pendiente debe estar abierta (mostrar salida a chatapp al ordenarla)</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$openedAsShouldBe </td>
+                                <td><p>El indicador deseado, a ser modificado (o no) por este cálculo</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$routeIsAlreadyEnqueued </td>
+                                <td><p>Indica si la ruta ya ha sido encolada en el canal</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>Indicador calculado</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">BotBasicChannel.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/botbasic/BotBasicChannel.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/botbasic.html">\botbasic</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 19th, 2017 at 17:39.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

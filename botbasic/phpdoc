@@ -1,0 +1,3 @@
+#!/bin/bash
+
+../../phpdocumentor/bin/phpdoc -d . -f ../bizmodel/BizModelAdapter.php -t doc --template="clean"

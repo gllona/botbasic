@@ -1,0 +1,140 @@
+<?php
+/**
+ * Interacción entre el usuario y el sistema, en ese sentido
+ *
+ * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
+ * @license     http://www.venicua.com/botbasic/license     Licencia de BotBasic
+ * @see         http://www.venicua.com/botbasic             Referencia de BotBasic
+ * @version     1.0 - 01.jan.2017
+ * @since       0.1 - 01.jul.2016
+ */
+
+
+
+namespace botbasic;
+
+
+
+/**
+ * Clase Update
+ *
+ * Refleja a cada uno de los mensajes enviados por un usuario a la BotBasic app a través de un bot asociada desde la chatapp.
+ *
+ * @package botbasic
+ */
+class Update extends Interaction
+{
+
+
+
+    /** @var int Tipo del ChatMedia del que proviene el update (ChatMedia::TYPE_...) */
+    private $cmType       = null;
+
+    /** @var int ID secuencial entregado por la chatapp, que refleja el orden de recepción de mensajes por sus servidores desde las apps móviles,
+     *           y que permite (con un buffer de tiempo en la entrada del pipeline) ordenar los updates tal como han sido emitidos por el usuario,
+     *           para facilitar el procesamiento de estas interacciones sin tener que procesar después updates que han sido emitidos antes */
+    private $cmSeqId      = -1;
+    // TODO implementar un buffer de tiempo en la entrada del pipeline
+
+    /** @var null|mixed Provee la información de autenticación que debe ser utilizada para descargar recursos multimedia asociados a este update */
+    private $cmChatInfo   = null;
+
+    /** @var string ID del usuario de la chatapp, según la chatapp */
+    private $cmUserId     = null;
+
+    /** @var string Nombre del usuario de la chatapp, según la chatapp; no es utilizado por BotBasic */
+    private $cmUserName   = null;
+
+    /** @var string Teléfono del usuario de la chatapp, cuando la chatapp lo reporta; no es utilizado por BotBasic */
+    private $cmUserPhone  = null;
+
+    /** @var string Cuando el update es el resultado de un click en una opción de menú, el hook asociado se refleja aquí */
+    private $menuhook     = null;
+
+    /** @var string|null Permite crear Updates "fake" que son utilizados para disparar eventos (por tiempo) a procesar por los runtimes */
+    private $eventCommand = null;
+
+
+
+    protected function __construct ()
+    {
+        parent::__construct(self::TYPE_UPDATE);
+    }
+
+    static public function createByAttribs ($cmType, $cmSeqId, $cmChatInfo, $cmUserId, $cmUserName, $cmUserPhone, $text, $menuhook)
+    {
+        $u = self::create(self::TYPE_UPDATE);
+        $u->fillFields([ $cmType, $cmSeqId, $cmChatInfo, $cmUserId, $cmUserName, $cmUserPhone, $text, $menuhook ]);
+        return $u;
+    }
+
+    protected function fillFields ($values)
+    {
+        list ($cmType, $cmSeqId, $cmChatInfo, $cmUserId, $cmUserName, $cmUserPhone, $text, $menuhook) = $values;
+        $this->cmType      = $cmType;
+        $this->cmSeqId     = $cmSeqId;
+        $this->cmChatInfo  = $cmChatInfo;
+        $this->cmUserId    = $cmUserId;
+        $this->cmUserName  = $cmUserName;
+        $this->cmUserPhone = $cmUserPhone;
+        $this->text        = $text;
+        $this->menuhook    = $menuhook;
+    }
+
+    protected function setIntelligencyInfo ($bbChannelId, $bizModelUserId)   // TODO llamar desde el close() del runtime y luego inmediatamente regrabar el update
+    {
+        $this->bbcId    = $bbChannelId;
+        $this->bmUserId = $bizModelUserId;
+    }
+
+    static public function createFakeForEvent ($eventCommand, $eventData)
+    {
+        $u = self::create(self::TYPE_UPDATE);
+        $u->eventCommand = $eventCommand;
+        $u->text         = $eventData;
+        return $u;
+    }
+
+    public function addResource ($resource)
+    {
+        $this->resources[] = $resource;
+    }
+
+    public function hasResource ($type)
+    {
+        return $this->getResource($type) !== null;
+    }
+
+    private function getResource ($type)
+    {
+        foreach ($this->resources as $r) {
+            if ($r->type == $type) { return $r; }
+        }
+        return null;
+    }
+
+    public function hasValidSequence ()
+    {
+        if ($this->cmSeqId == -1) { return true; }
+        $lastSeqId = DBbroker::getLastUpdateSequenceIdFor($this->cmType, $this->cmChatInfo);
+        if ($lastSeqId === null) {}   // TODO log this
+        return $lastSeqId === false ? true : $this->cmSeqId > $lastSeqId;
+    }
+
+    public function getCMtype ()       { return $this->cmType;                                          }
+    public function getCMseqId ()      { return $this->cmSeqId;                                         }
+    public function getCMchatInfo ()   { return $this->cmChatInfo;                                      }
+    public function getCMuserId ()     { return $this->cmUserId;                                        }
+    public function getCMuserName ()   { return $this->cmUserName;                                      }
+    public function getCMuserPhone ()  { return $this->cmUserPhone;                                     }
+    public function getMenuhook ()     { return $this->menuhook;                                        }
+    public function getEventCommand () { return $this->eventCommand;                                   }
+    public function getImage ()        { return $this->getResource(InteractionResource::TYPE_IMAGE);    }
+    public function getAudio ()        { return $this->getResource(InteractionResource::TYPE_AUDIO);    }
+    public function getDocument ()     { return $this->getResource(InteractionResource::TYPE_DOCUMENT); }
+    public function getVideo ()        { return $this->getResource(InteractionResource::TYPE_VIDEO);    }
+    public function getCaption ()      { return $this->getResource(InteractionResource::TYPE_CAPTION);  }
+    public function getLocation ()     { return $this->getResource(InteractionResource::TYPE_LOCATION); }
+
+}
+

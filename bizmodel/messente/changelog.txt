@@ -1,0 +1,57 @@
+Changelog
+========================
+
+0.1.8 (05.10.2016)
+---------------
+Added missing error message for response "FAILED 102"
+
+
+0.1.7 (10.2013)
+---------------
+* More refined examples (moved to examples subfolder)
+* Include cURL version in the User Agent header
+* Internal cleanups
+* Use backup server when main API endpoint is failing
+* Added missing error code descriptions
+* New function "get_country_price()" to ask for country-specific prices
+
+
+0.1.6 (03.07.2012)
+---------------
+* Updated example with "From:" field.
+* Add "Disable autoconvert" to example.
+* Changed from POST to GET requests for easier debugging
+* Fixed "autoconvert" parameter (was incorrectly "autocorrect")
+
+
+0.1.5 (04.06.2012)
+---------------
+* Add dlr-url parameter to API Example
+* Added global "dlr-url" value for constructor, that can be overriden with send_sms() "dlr-url" paramter.
+
+
+0.1.4 (29.05.2012)
+---------------
+* Fixed IP address detection
+
+
+0.1.3 (11.05.2012)
+---------------
+* Added custom User Agent string to identify PHP Library version that is being used
+
+
+0.1.2 (11.05.2012)
+---------------
+* Added cURL error validation - big thanks to Priit Perna
+* Fixed example HTML code
+
+
+0.1.1 (11.05.2012)
+---------------
+* Fixed an error with Squid proxy, see http://www.php.net/manual/en/function.curl-setopt.php#106891 for more details.
+
+
+0.1 (28.03.2012)
+---------------
+* Initial import of PHP wrapper
+* Minimalistic example
