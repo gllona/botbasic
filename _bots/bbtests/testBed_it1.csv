@@ -1,0 +1,359 @@
+BOTBASIC						
+MAGIC	BotBasic 01.00	BB adaptado para T3 - tests adicionales				
+VERSION	1.0.124	TG bot :: bbtests				
+BOTS	main monitor					
+						
+						
+						
+MESSAGES						
+name		es				
+						
+tagEmpty		empty				
+tagFull		full				
+tagNormal		normal				
+tagMixto		mixto				
+parBmuidRemoto		12				
+parBmuidLocal		11				
+parBmuidMalo		9999				
+parEmailTo		gllona@gmail.com				
+optTestsAdiciones		Adiciones por T3				
+optTestsCanales		Canales				
+optTestsLuegoTaller		Tests luego de taller				
+optBugsComplejos		Bugs complejos				
+optEmptyOptions		(IF) EMPTY OPTIONS (THEN)				
+optClearOptions		CLEAR OPTIONS				
+optCountOptions		COUNT OPTIONS TO ...				
+optInputPhone		INPUT phone ...				
+optInputEmail		INPUT email ...				
+optCallNormal		CALL normal				
+optCallMixto		CALL mixto				
+optMenuVacio		MENU con cero OPTIONS				
+optCanalPrint		PRINT ON ...				
+optCanalPrintMalo		PRINT ON ... (uId incorrecto)				
+optCanalMenu		MENU ON ...				
+optCanalInput		INPUT ON ...				
+optCanalSetEnviar		SET ... ON ... (send)				
+optCanalSetLimpiar		CLEAR (received)				
+optCanalSetRecibir		PRINT (received)				
+optCanalOn		ON ... (fijar)				
+optCanalClearOn		CLEAR ON				
+optPagerDummy		PAGER 11 12 13 ... (long)				
+optPagerDummyCorto		PAGER 11 12 13 ... (short)				
+optPagerBasico		PAGER [ val, ... ]				
+optPagerMixto		PAGER [ [ key, val], ... ]				
+optAppVersion		APPVERSION				
+optRuntimeId		RUNTIMEID				
+optPrimInvocadaForanea		Primitiva activada foráneamente				
+optInputForaneoPrintLocal		INPUT foraneo PRINT local				
+optInputForaneoPrintRemoto		INPUT foraneo PRINT remoto				
+optInputForaneoPrintDoble		INPUT foraneo PRINT doble				
+optMenuForaneoPrintLocal		MENU foraneo PRINT local				
+optMenuForaneoPrintRemoto		MENU foraneo PRINT remoto				
+optMenuForaneoPrintDoble		MENU foraneo PRINT doble				
+optAlgo		Algo				
+optOtraCosa		Otra cosa				
+txtArrancar		Inicialización efectuada; ahora /arrancar				
+txtEsperando		Esperando por 'res'...				
+txtResult		Resultado es res=[{res}]				
+txtEOT		Continuar con /menu				
+txtRumor		BizModelUser {uId} dice: {msg}				
+txtPromptRemoto		BizModelUser {uId} solicita dato:				
+txtPromptLocal		Ingresa dato a enviar:				
+txtGotoMenu		Probar con /menu				
+txtEnviandoVal		Enviando {val}...				
+txtVerMemento		Memento es [{memento}]				
+txtFijandoOn		ON fijado al otro canal				
+txtReseteandoOn		ON reseteado				
+txtMenu		Elige para probar menú:				
+txtUnMenu		Elige algo acá:				
+txtOkRes		"Ok, y res es ""{res}"""				
+txtUnDato		Dame un dato:				
+txtEmailSubject		Esto no se cayó del árbol				
+txtEmailBody		Ahora un ñandú se comió a toda palabra esdrújula. \n\nY este es el fin de los ñángaras.				
+						
+txtPregunta		Este es el texto de la pregunta #{veces}				
+optResponderYa		Responder ya				
+optNoRelevante		No es relevante				
+optNoHayRespuesta		No habrá respuesta				
+txtNoHayPreguntas		No hay preguntas disponibles				
+txtWrapPreguntaAresponder		Ayúdame a responder esta pregunta que me hicieron: \n{pregunta}				
+txtGraciasPorNada		Gracias por nada				
+txtTuRespuesta		Tu respuesta:				
+txtGraciasPorRespuesta		Gracias por la respuesta				
+						
+						
+						
+MENUS						
+name		description		in	out	remarks
+						
+						
+						
+MAGICVARS						
+name		description				
+						
+						
+						
+PRIMITIVES						
+name		description		in	out	remarks
+						
+TestPrimitiveMixedCall				intNumOpciones strTagTipoRetornoAoptions	...	
+TestOptionsBasicas				--	...	
+TestOptionsMixtas				--	...	
+TestEmailT3				strTo strSubject strBody	--	
+						
+						
+						
+PROGRAM						
+main	main	main		monitor	monitor	monitor
+						
+						
+						
+ENTRYHOOK	entryhook	USERID TO uId		ENTRYHOOK	entryhook	USERID TO uId
+		IF NOT EMPTY uId THEN END				IF NOT EMPTY uId THEN END
+		PRINT txtArrancar				PRINT txtArrancar
+		USERID FROM parBmuidLocal				USERID FROM parBmuidRemoto
+		END				END
+						
+/start	start	PRINT txtGotoMenu		/start	start	PRINT txtGotoMenu
+		END				END
+						
+/menu /arrancar	menu	OPTION optTestsAdiciones GOSUB menuAdiciones		/menu /arrancar	menu	OPTION optCanalPrint GOSUB canalPrint
+		OPTION optTestsCanales GOSUB menuCanales				OPTION optCanalSetLimpiar GOSUB canalSetLimpiar
+		OPTION optTestsLuegoTaller GOSUB menuLuegoTaller				OPTION optCanalSetRecibir GOSUB canalSetRecibir
+		OPTION optBugsComplejos GOTO menuBugsComplejos				MENU TO ruta
+		MENU TO ruta				PRINT txtEOT
+		PRINT txtEOT				END
+		END				
+					canalPrint	INPUT string TITLE txtPromptLocal TO msg
+	menuAdiciones	OPTION optEmptyOptions GOSUB emptyOptions				PRINT txtRumor ON main parBmuidLocal
+		OPTION optClearOptions GOSUB clearOptions				RETURN
+		OPTION optCountOptions GOSUB countOptions				
+		OPTION optInputPhone GOSUB inputPhone			canalSetLimpiar	CLEAR memento
+		OPTION optInputEmail GOSUB inputEmail				PRINT txtVerMemento
+		OPTION optCallNormal GOSUB callNormal				RETURN
+		OPTION optCallMixto GOSUB callMixto				
+		OPTION optMenuVacio GOSUB menuVacio			canalSetRecibir	PRINT txtVerMemento
+		MENU TO ruta				RETURN
+		RETURN				
+						
+	menuCanales	OPTION optCanalPrint GOSUB canalPrint				
+		OPTION optCanalPrintMalo GOSUB canalPrintMalo				
+		OPTION optCanalInput GOSUB canalInput				
+		OPTION optCanalMenu GOSUB canalMenu				
+		OPTION optCanalSetEnviar GOSUB canalSetEnviar				
+		OPTION optCanalOn GOSUB canalOn				
+		OPTION optCanalClearOn GOSUB canalClearOn				
+		MENU TO ruta				
+		RETURN				
+						
+	menuLuegoTaller	OPTION optPagerDummy GOSUB pagerDummy				
+		OPTION optPagerDummyCorto GOSUB pagerDummy2				
+		OPTION optPagerBasico GOSUB pagerBasico				
+		OPTION optPagerMixto GOSUB pagerMixto				
+		OPTION optAppVersion GOSUB appVersion				
+		OPTION optRuntimeId GOSUB runtimeId				
+		MENU TO ruta				
+		RETURN				
+						
+	canalPrint	INPUT string TITLE txtPromptLocal TO msg				
+		PRINT txtRumor ON monitor parBmuidRemoto				
+		RETURN				
+						
+	canalPrintMalo	LOG 12345678				
+		INPUT string TITLE txtPromptLocal TO msg				
+		PRINT txtRumor ON monitor parBmuidMalo				
+		RETURN				
+						
+	canalInput	PRINT txtEsperando				
+		INPUT string TITLE txtPromptRemoto ON monitor parBmuidRemoto TO res				
+		PRINT txtResult				
+		RETURN				
+						
+	canalMenu	PRINT txtEsperando				
+		MENU TITLE txtPromptRemoto OPTIONS 21 22 23 ON monitor parBmuidRemoto TO res				
+		PRINT txtResult				
+		RETURN				
+						
+	canalSetEnviar	INPUT string TITLE txtPromptLocal TO val				
+		PRINT txtEnviandoVal				
+		SET memento val ON monitor parBmuidRemoto				
+		RETURN				
+						
+	canalOn	PRINT txtEsperando				
+		ON monitor parBmuidRemoto				
+		MENU TITLE txtPromptRemoto OPTIONS 91 92 93 TO res				
+		RETURN				
+						
+	canalClearOn	ON monitor parBmuidRemoto				
+		SET res 88				
+		PRINT txtResult				
+		CLEAR ON				
+		SET res 99				
+		PRINT txtResult				
+		RETURN				
+						
+	emptyOptions	OPTIONS 1 2 3				
+		SET res tagFull : PRINT txtEsperando				
+		IF EMPTY OPTIONS THEN PRINT tagEmpty ELSE PRINT tagFull				
+		RETURN				
+						
+	clearOptions	OPTIONS 1 2 3				
+		SET res tagFull : PRINT txtEsperando				
+		IF EMPTY OPTIONS THEN PRINT tagEmpty ELSE PRINT tagFull				
+		CLEAR OPTIONS				
+		SET res tagEmpty : PRINT txtEsperando				
+		IF EMPTY OPTIONS THEN PRINT tagEmpty ELSE PRINT tagFull				
+		RETURN				
+						
+	countOptions	COUNT OPTIONS TO n				
+		SET res 0 : PRINT txtEsperando				
+		COUNT OPTIONS TO res				
+		PRINT res				
+		OPTIONS 1 2 3 4 5				
+		SET res 5 : PRINT txtEsperando				
+		COUNT OPTIONS TO res				
+		PRINT res				
+		RETURN				
+						
+	inputPhone	INPUT phone TO res				
+		PRINT res				
+		RETURN				
+						
+	inputEmail	INPUT email TO res				
+		PRINT res				
+		RETURN				
+						
+	callNormal	CALL TestPrimitiveMixedCall 4 tagNormal TO OPTIONS				
+		MENU TO ruta				
+		PRINT ruta				
+		RETURN				
+						
+	callMixto	CALL TestPrimitiveMixedCall 7 tagMixto TO OPTIONS				
+		MENU TO ruta				
+		PRINT ruta				
+		RETURN				
+						
+	menuVacio	MENU TO res				
+		PRINT txtResult				
+		RETURN				
+						
+	pagerDummy	OPTIONS 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29				
+		MENU TITLE txtMenu PAGER pagerLong 5 TO res				
+		PRINT txtResult				
+		RETURN				
+						
+	pagerDummy2	OPTIONS 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29				
+		MENU TITLE txtMenu PAGER pagerShort 5 TO res				
+		PRINT txtResult				
+		RETURN				
+						
+	pagerBasico	CALL TestOptionsBasicas TO OPTIONS				
+		MENU TITLE txtMenu PAGER pagerLong 5 TO res				
+		PRINT txtResult				
+		RETURN				
+						
+	pagerMixto	CALL TestOptionsMixtas TO OPTIONS				
+		MENU TITLE txtMenu PAGER pagerLong 5 TO res				
+		PRINT txtResult				
+		RETURN				
+						
+	appVersion	PRINT APPVERSION				
+		RETURN				
+						
+	runtimeId	PRINT RUNTIMEID				
+		RETURN				
+						
+	menuBugsComplejos	OPTION optPrimInvocadaForanea GOSUB primInvocadaForanea				
+		OPTION optInputForaneoPrintLocal GOSUB inpForaneoPrLocal				
+		OPTION optInputForaneoPrintRemoto GOSUB inpForaneoPrRemoto				
+		OPTION optInputForaneoPrintDoble GOSUB inpForaneoPrDoble				
+		OPTION optMenuForaneoPrintLocal GOSUB menForaneoPrLocal				
+		OPTION optMenuForaneoPrintRemoto GOSUB menForaneoPrRemoto				
+		OPTION optMenuForaneoPrintDoble GOSUB menForaneoPrDoble				
+		MENU TO ruta				
+		END				
+						
+	primInvocadaForanea	MENU TITLE txtUnMenu OPTIONS optAlgo optOtraCosa ON monitor parBmuidRemoto TO res	 			
+		CALL TestOptionsBasicas TO OPTIONS				
+		PRINT txtOkRes				
+		RETURN				
+						
+	inpForaneoPrLocal	INPUT positiveInteger TITLE txtUnDato ON monitor parBmuidRemoto TO res				
+		PRINT txtOkRes				
+		RETURN				
+						
+	inpForaneoPrRemoto	INPUT positiveInteger TITLE txtUnDato ON monitor parBmuidRemoto TO res				
+		PRINT txtOkRes ON monitor parBmuidRemoto				
+		RETURN				
+						
+	inpForaneoPrDoble	INPUT positiveInteger TITLE txtUnDato ON monitor parBmuidRemoto TO res				
+		PRINT txtOkRes : PRINT txtOkRes ON monitor parBmuidRemoto				
+		RETURN				
+						
+	menForaneoPrLocal	MENU TITLE txtUnDato OPTIONS optAlgo optOtraCosa ON monitor parBmuidRemoto TO res	 			
+		PRINT txtOkRes				
+		RETURN				
+						
+	menForaneoPrRemoto	MENU TITLE txtUnDato OPTIONS optAlgo optOtraCosa ON monitor parBmuidRemoto TO res	 			
+		PRINT txtOkRes ON monitor parBmuidRemoto				
+		RETURN				
+						
+	menForaneoPrDoble	MENU TITLE txtUnDato OPTIONS optAlgo optOtraCosa ON monitor parBmuidRemoto TO res	 			
+		PRINT txtOkRes : PRINT txtOkRes ON monitor parBmuidRemoto				
+		RETURN				
+						
+/printdual		SET res 9999				
+		PRINT txtOkRes				
+		PRINT txtOkRes ON monitor parBmuidRemoto				
+		END				
+						
+/printforaneo		INPUT positiveInteger TITLE txtUnDato ON monitor parBmuidRemoto TO res				
+		PRINT txtOkRes				
+		PRINT txtOkRes ON monitor parBmuidRemoto				
+		END				
+						
+/primthenprint		CALL TestEmailT3 parEmailTo txtEmailSubject txtEmailBody				
+		SET res 1010				
+		PRINT txtOkRes				
+		END				
+						
+		REM los 3 casos anteriores son parte de las pruebas de los bugs complejos taller				
+						
+/elsegoto		REM caso de sospecha en el GOTO del ELSE del IF LT al final				
+		SET veces 0				
+	responder1	INC veces				
+		SET idPregunta 999 : SET pregunta txtPregunta : REM CALL NimaPreguntaGente TO idPregunta pregunta	 			
+		OPTIONS optResponderYa optNoRelevante optNoHayRespuesta				
+		IF EMPTY idPregunta THEN PRINT txtNoHayPreguntas txtEOT : END				
+		SET titulo txtWrapPreguntaAresponder				
+		MENU TITLE titulo TO ruta				
+		IF EQ ruta optNoHayRespuesta THEN PRINT txtGraciasPorNada : GOTO responder3				
+		IF NEQ ruta optNoRelevante THEN GOTO responder2				
+		CLEAR respuesta				
+		REM CALL NimaAgregarRespuesta idPregunta -1 respuesta				
+		IF LT veces 3 THEN GOTO responder1 ELSE GOTO responder3				
+	responder2	INPUT string TITLE txtTuRespuesta TO respuesta				
+		REM CALL NimaAgregarRespuesta idPregunta 3 respuesta				
+		PRINT txtGraciasPorRespuesta				
+	responder3	PRINT txtEOT				
+		END				
+						
+/inputto3		TRACE				
+		PRINT 1				
+		INPUT string TITLE txtUnDato TO res				
+		PRINT txtOkRes				
+		PRINT 2				
+		INPUT string TITLE txtUnDato TO res tipo				
+		PRINT txtOkRes : SET res tipo : PRINT txtOkRes				
+		PRINT 3				
+		INPUT string TITLE txtUnDato TO res tipo caption				
+		PRINT txtOkRes : SET res tipo : PRINT txtOkRes : SET res caption : PRINT txtOkRes				
+		NOTRACE				
+		END				
+						
+/location1		TRACE				
+		INPUT location TITLE txtTuLocation TO loc tipo				
+		SET res loc : PRINT txtOkRes				
+		SET res tipo : PRINT txtOkRes				
+		NOTRACE				
+		END				

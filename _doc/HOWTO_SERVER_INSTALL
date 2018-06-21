@@ -1,0 +1,469 @@
+================================
+BOTBASIC
+FRESH SERVER INSTALL HOWTO
+(ejemplo para servidor "botton")
+================================
+
+### SOP INSTALL
+
+* Instalar Ubuntu Server 16.04
+  Cuenta de usuario sudoer: gorka (cualquier pass)
+  Incluir LAMP server y otros:
+    sudo apt-get install apache2 mysql-server php7.0 libapache2-mod-php7.0 php7.0-mysql php7.0-curl php7.0-json mysql-client phpmyadmin
+    sudo apt-get install openssh-server curl htop vim zip mplayer lame
+
+* ip link --> averiguar nombre de wlan iface
+  Editar /etc/network/interfaces (copiar del botton actual)
+  sudo reboot
+  Ya debe haber conexion wifi
+
+* sudo apt-get update && sudo apt-get upgrade && sudo reboot
+
+* Eliminar accion de suspend cuando se cierra la tapa del laptop
+  sudo sh -c 'echo "HandleLidSwitch=ignore" >> /etc/systemd/logind.conf'
+  sudo reboot (para activar)
+
+* Minimizar muerte de red y cierre de puertos
+  crontab -e
+    */1 * * * * wget -q -O /dev/null --no-check-certificate http://google.com:80
+    */1 * * * * wget -q -O /dev/null --no-check-certificate http://portquiz.net:80
+    */1 * * * * wget -q -O /dev/null --no-check-certificate http://portquiz.net:88
+    */1 * * * * wget -q -O /dev/null --no-check-certificate http://portquiz.net:443
+    */1 * * * * wget -q -O /dev/null --no-check-certificate http://portquiz.net:8443
+    */3 * * * * wget -q -O /dev/null --no-check-certificate http://portquiz.net:25
+ Los comandos anteriores se pueden poner en /home/gorka/botbasic/duckdns.org/cisco.sh (así está en la sección crontab estándar; ver abajo)
+
+* Cada servidor tiene un puerto de entrada (80,88,443,8443) que debe ser redireccionado en el router
+  En Cisco RV110W: Firewall > Single Port Forwarding
+
+### EXTRA ACCOUNTS
+
+* Crear cuenta "apagar"
+  sudo useradd -c "apagar account" -g 0 -m -s /bin/bash apagar
+  sudo usermod -aG sudo apagar
+  sudo passwd apagar
+    (apagar)
+  sudo vi /home/apagar/.bashrc
+    Agregar al final
+      sudo /sbin/shutdown -h now
+
+* Repetir para cuenta "reiniciar"
+  sudo useradd -c "reiniciar account" -g 0 -m -s /bin/bash reiniciar
+  sudo usermod -aG sudo reiniciar
+  sudo passwd reiniciar
+    (reiniciar)
+  sudo vi /home/reiniciar/.bashrc
+    Agregar al final
+      sudo /sbin/reboot
+
+* Repetir para cuenta "red"
+  sudo useradd -c "network restart account" -g 0 -m -s /bin/bash red
+  sudo usermod -aG sudo red
+  sudo passwd red
+    (red)
+  sudo vi /home/red/.bashrc
+    Agregar al final
+      exec sudo /etc/init.d/networking restart
+
+* sudo visudo
+  Agregar al final
+    apagar ALL = NOPASSWD : ALL
+    reiniciar ALL = NOPASSWD : ALL
+    red ALL = NOPASSWD : ALL
+
+### HOSTS, NFS
+
+* sudo vi /etc/hosts
+    192.168.1.100   hp-envy
+  Y en hp-envy
+    192.168.1.101   botton
+
+* Instalar NFS
+  sudo apt-get install nfs-kernel-server nfs-common
+  (as gorka) mkdir ~/botbasic
+  sudo vi /etc/exports
+    /home/gorka/botbasic   hp-envy(rw,sync,no_root_squash,subtree_check)
+  sudo exportfs -ra
+  showmount -e
+
+* Montar en hp-envy:
+  sudo apt-get install nfs-common
+  mkdir /home/gorka/botbasic/botton
+  Asi se haria a mano: mount -t nfs whirlwind:/mnt/MyData/public /mnt/public
+  sudo vi /etc/fstab
+    botton:/home/gorka/botbasic     /home/gorka/botbasic/botton     nfs     bg,intr,soft,timeo=5,retrans=5,actimeo=10,retry=5
+  sudo mount /home/gorka/botbasic/botton
+
+### SSH, SUDO, passwd-things
+
+* En hp-envy:
+  cd ~/.ssh
+  ssh-keygen -t rsa
+    Nombre de la clave: hpenvy-for-botton
+    No passphrase
+
+* ssh-copy-id -i ~/.ssh/hpenvy-for-botton.pub gorka@botton
+
+* sudo visudo
+  Agregar al final
+    gorka ALL = NOPASSWD : ALL
+  logout, login, sudo; ahora no debe preguntar passwd
+
+* Eliminar password facil de usuario gorka:
+  En hp-envy: crear una entrada en hp-envy con keepassx
+  ssh gorka@botton
+  passwd (pegar dos veces)
+
+* sudo vi /etc/ssh/sshd_config
+  Agregar al final
+    AllowUsers gorka
+  sudo service ssh restart
+  (esto restringe ssh para otros usuarios distintos a gorka; util para apagar account)
+
+### DYNAMIC DNS
+
+* https://www.duckdns.org
+  Login with google
+  Add domain (definir uno ej: "botton")
+
+* Copiar el script actualizador del IP en maquina botton
+  (sustituir adecuadamente <token-largo-asignado-por-duckdns>)
+  mkdir duckdns.org
+  vi ~/botbasic/duckdns.org/duck.sh
+    echo url="https://www.duckdns.org/update?domains=telegrambots&token=<token-largo-asignado-por-duckdns>&ip=" | curl -k -o /home/gorka/botbasic/duckdns.org/duck.log -K -
+  chmod +x ~/botbasic/duckdns.org/duck.sh
+  touch ~/botbasic/duckdns.org/duck.log
+  crontab -e
+    */2 * * * * /home/gorka/botbasic/duckdns.org/duck.sh >/dev/null 2>&1
+
+### STARTSSL / SSL CERTIFICATE / generar cert / NO USAR
+
+* https://www.startssl.com --> https://www.startcomca.com
+  Login: One-time password
+  Certificates Wizard > DV SSL Certificate > 
+  Free certificate
+  DV SSL certificate
+
+* Si hay renovaciones/validaciones pendientes se deben resolver antes de continuar; ver abajo
+
+* Add domain
+  botton.duckdns.org
+  Continuar como en seccion de abajo hasta validar el dominio
+
+* En botton:
+  cd ~/botbasic/duckdns.org
+  openssl req -newkey rsa:2048 -keyout botton-duckdns-org-csr.key -out botton-duckdns-org-csr.csr
+  passphrase: 5+ssl
+  Llenar country, provincia, city, email; no llenar empresa
+  Llenar FQDN: botton.duckdns.org
+  Copiar estos dos archivos generados en hp-envy:~/telegram/duckdns.org/botton.duckdns.org (para qué?)
+  Copiar el CSR generado en la web de startssl.com
+  Click here and download certificate (ZIP)
+  Copiarlo en botton:~/botbasic/duckdns.org
+  Descomprimirlo y descomprimir bundle apache
+  Se requieren alli el .key generado con openssl y los dos archivos descomprimidos
+
+* Eliminar el passphrase del .key
+  mv botton-duckdns-org-csr.key botton-duckdns-org-csr.key.with-passphrase
+  openssl rsa -in botton-duckdns-org-csr.key.with-passphrase -out botton-duckdns-org-csr.key
+
+### STARTSSL / SSL CERTIFICATE / validate domains for certs (each 3 months? and for new domains) / NO USAR
+
+* Habilitar puerto entrante 25 en el router wifi hacia el postfix de hp-envy
+
+* Para cada dominio a validar, configurar el postfix segun
+  https://www.digitalocean.com/community/tutorials/how-to-install-and-setup-postfix-on-ubuntu-14-04
+  https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-on-ubuntu-16-04
+  Claves
+    sudo dpkg-reconfigure postfix
+    sudo vi /etc/postfix/main.cf
+      myhostname = botton.duckdns.org
+    sudo vi /etc/postfix/virtual
+      (agregar alias si no esta)
+      (agregar direcciones "postmaster@...")
+    sudo postmap /etc/postfix/virtual
+    sudo service postfix restart
+    Probar enviando un correo a la cuenta postmaster@ y chequear con mail en cta gorka de hp-envy
+
+* https://www.startssl.com
+  Validations wizard
+  Domain Validation (for SSL certificate)
+  Seleccionar el dominio a validar desde la barra derecha (Domain Validations)
+  Enviar el codigo de validacion a "webmaster@..."
+
+* En hpenvy, cta gorka
+  mail
+  Identificar codigo de validacion y meterlo en la web startssl
+
+* Deshabilitar puerto entrante 25 en el router wifi
+
+### LETS ENCRYPT / SSL CERTIFICATE / USAR
+
+* Instalar certbot
+  sudo apt-get install software-properties-common
+  sudo add-apt-repository ppa:certbot/certbot
+  sudo apt-get update
+  sudo apt-get install python-certbot-apache
+
+* Generar el certificado
+  sudo certbot --apache --domains botton.duckdns.org certonly
+
+* Programar la renovación automatica
+  crontab -e
+    Insertar:
+      14 3 * * 1 sudo certbot renew --pre-hook "service apache2 stop" --post-hook "service apache2 start" >/dev/null 2>/dev/null
+
+### APACHE
+
+* Crear la entrada "botton.local" apuntando a 127.0.0.1 en /etc/hosts
+
+* Deshabilitar el host virtual por defecto de apache2 con a2dissite
+  sudo a2dissite 000-default.conf
+
+* Generar /etc/apache2/sites-available/botton.local.conf:
+  Include /etc/apache2/mods-available/php7.0.conf
+  <VirtualHost *:80>
+    ServerName botton.local
+    DocumentRoot /home/gorka/botbasic/httpdocs
+    <Directory /home/gorka/botbasic/httpdocs>
+  #   Order allow,deny
+  #   Allow from all
+      Require all granted
+    </Directory>
+    ErrorLog  /home/gorka/botbasic/logs/error.log
+    CustomLog /home/gorka/botbasic/logs/access.log combined
+  </VirtualHost>
+
+* Habilitar acceso a phpmyadmin sobre el host virtual recien creado:
+  mkdir -p /home/gorka/botbasic/httpdocs/scripts
+  ln -s /usr/share/phpmyadmin/ /home/gorka/botbasic/httpdocs/scripts/phpmyadmin
+
+* STARTSSL (no usar)
+  Generar /etc/apache2/sites-available/botton.duckdns.org.conf:
+  	Include /etc/apache2/mods-available/php7.0.conf
+  	#LoadModule ssl_module modules/mod_ssl.so
+  	#Listen 8443
+  	<VirtualHost *:8443>
+  	  DocumentRoot /home/gorka/botbasic/httpdocs/webhooks
+  	  <Directory   /home/gorka/botbasic/httpdocs/webhooks>
+  	#   Order allow,deny
+  	#   Allow from all
+    #   AllowOverride None
+  	    Require all granted
+  	  </Directory>
+  	  ErrorLog  /home/gorka/botbasic/logs/error.log
+  	  CustomLog /home/gorka/botbasic/logs/access.log combined
+  	  SSLEngine on
+  	  SSLProtocol all -SSLv2 -SSLv3
+  	  SSLCipherSuite ALL:!DH:!EXPORT:!RC4:+HIGH:+MEDIUM:!LOW:!aNULL:!eNULL
+  	  SSLCertificateFile      /etc/ssl/certs/botton.duckdns.org.crt
+  	  SSLCertificateKeyFile   /etc/ssl/private/botton.duckdns.org.key
+  	  SSLCertificateChainFile /etc/ssl/certs/StartSSL_apache_root_bundle.crt
+    # CustomLog /home/odroid/botbasic/logs/ssl_request_log "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+  	</VirtualHost>
+
+* LETSENCRYPT (usar)
+  Generar /etc/apache2/sites-available/botton.duckdns.org.conf:
+    Include /etc/apache2/mods-available/php7.0.conf
+    #LoadModule ssl_module modules/mod_ssl.so
+    #Listen 8443
+    <VirtualHost *:8443>
+      DocumentRoot /home/gorka/botbasic/httpdocs/webhooks
+      <Directory   /home/gorka/botbasic/httpdocs/webhooks>
+    #   Order allow,deny
+    #   Allow from all
+    #   AllowOverride None
+        Require all granted
+      </Directory>
+      ErrorLog  /home/gorka/botbasic/logs/error.log
+      CustomLog /home/gorka/botbasic/logs/access.log combined
+      SSLEngine on
+      SSLProtocol all -SSLv2 -SSLv3
+      SSLCipherSuite ALL:!DH:!EXPORT:!RC4:+HIGH:+MEDIUM:!LOW:!aNULL:!eNULL
+      SSLCertificateFile    /etc/letsencrypt/live/botton.duckdns.org/fullchain.pem
+      SSLCertificateKeyFile /etc/letsencrypt/live/botton.duckdns.org/privkey.pem
+    </VirtualHost>
+
+* mkdir /home/gorka/botbasic/logs
+  chmod 775 /home/gorka/botbasic/logs
+  sudo chgrp www-data /home/gorka/botbasic/logs
+
+* Asegurarse de descargar http://www.startssl.com/certs/sub.class1.server.ca.pem según https://www.startcomca.com/index/support?v=21
+  cd ~/botbasic/duckdns.org
+  sudo cp 1_root_bundle.crt /etc/ssl/certs/StartSSL_apache_root_bundle.crt
+  sudo cp 2_botton.duckdns.org.crt /etc/ssl/certs/botton.duckdns.org.crt
+  #sudo cp botton-duckdns-org-csr.key /etc/ssl/private/botton.duckdns.org.key
+  sudo cp sub.class1.server.ca.pem /etc/ssl/certs/StartSSL_sub.class1.server.ca.pem
+
+* cd /etc/apache2/sites-available
+  sudo a2ensite botton.duckdns.org.conf
+  sudo a2ensite botton.local.conf
+  sudo a2enmod ssl
+  sudo vi ../ports.conf
+    Agregar al final
+      Listen 8443
+
+* Si el a2ensite anterior da un warning de locale:
+  locale
+  Para cada uno de los listados:
+  sudo locale-gen "es_PA.UTF-8" (por ejemplo)
+  a2dissite y a2ensite
+
+* Tuning, según:
+    - http://www.jeffgeerling.com/blog/3-small-tweaks-make-apache-fly, http://serverfault.com/questions/353828/finding-average-size-of-single-apache-process-for-setting-maxclients
+    - https://www.linode.com/docs/web-servers/lamp/install-lamp-on-ubuntu-16-04
+  sudo vi /etc/apache2/mods-available/mpm_prefork.conf
+    <IfModule mpm_prefork_module>
+      StartServers 20
+      MinSpareServers 10
+      MaxSpareServers 20
+      MaxClients 120
+      ServerLimit 120
+      MaxRequestsPerChild 100
+    </IfModule>
+  En vez de lo anterior: configuración colocada en Odroid:
+      StartServers               20
+      MinSpareServers             5
+      MaxSpareServers            20
+      MaxRequestWorkers          55
+      MaxConnectionsPerChild   1000
+  sudo vi /etc/apache2/apache2.conf
+    KeepAlive Off
+      (cambiar el valor del KeepAlive que está preconfigurado)
+  sudo vi /etc/php/7.0/apache2/php.ini
+    memory_limit = 32M
+    max_input_time = 30
+
+* sudo service apache2 restart
+
+### PHP
+
+* Default timezone:
+  sudo vi /etc/php/7.0/apache2/php.ini
+    date.timezone = "America/Panama"
+
+### FIREWALL TUNNELS
+
+Descargar e instalar ngrok incluyendo la configuracion local del token de autorizacion
+Se requiere una cuenta PRO cuando se quiera permitir 2 procesos online de ngrok simultáneos
+
+* Instalar y configurar el acceso web al shell:
+  sudo apt-get install openssl shellinabox
+  sudo vi /etc/default/shellinabox
+    SHELLINABOX_ARGS="--no-beep --disable-ssl"
+  sudo /etc/init.d/shellinabox restart
+
+* Descargar y configurar ngrok con el token de acceso
+  https://ngrok.com/download
+  ./ngrok authtoken <token>
+
+* NGROK FREE: a ejecutar cuando se quiera abrir los tuneles (uno u otro):
+  ngrok http -host-header=botton.local 80
+  ngrok http 4200
+  URLs: dinamicos
+
+* NGROK PRO: a ejecutar cuando se quiera abrir los tuneles (ambos):
+  ngrok http -auth="botbasic:password-que-se-le-quiera-poner" -subdomain bbparser -host-header=panama_bot.local 80
+  ngrok http -auth="botbasic:password-que-se-le-quiera-poner" -subdomain bbshell 4200
+  URLs: http://bbshell.ngrok.io http://bbparser.ngrok.io/scripts/parser/parser_upload_form.html
+
+* Para automatizar lo anterior (at bott time) con plan PRO:
+  crontab -e
+    Agregar:
+      @reboot /home/gorka/botbasic/ng-bbparser daemon
+      @reboot /home/gorka/botbasic/ng-bbshell daemon
+
+* Restringir acceso remoto a logs:
+  sudo useradd -g www-data -m -s /bin/bash botbasic
+  sudo passwd botbasic
+    (crear contraseña)
+  su botbasic
+  cd
+  mkdir logs
+  cd logs
+  ln -s /home/gorka/telegram/panama_bot/logs/ botbasic
+  ln -s /home/gorka/telegram/panama_bot/httpdocs/bizmodel/logs/ bizmodel
+  exit
+
+### UPS (APC)
+
+* Conectar el UPS al servidor para que haga auto-shutdown cuando la batería del UPS esté por agotarse. Seguir instrucciones de:
+  https://www.cyberciti.biz/faq/debian-ubuntu-centos-rhel-install-apcups/
+
+* Asegurarse de que el servicio correrá ahora y con el boot:
+  sudo /etc/init.d/apcupsd start
+  sudo systemctl enable apcupsd.service
+
+* Para listar los servicios (si fuera necesario):
+  system V: service --status-all
+  systemd:  systemctl list-unit-files --type=service
+
+* Como parte de la instalación se debe instalar la utilidad web de monitoreo del UPS:
+  sudo apt-get install apcupsd-cgi
+  sudo a2enmod cgi
+  sudo vi /etc/apache2/sites-available/000-default.conf
+    agregar dentro de VirtualHosts:
+        ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+        <Directory "/usr/lib/cgi-bin">
+          Options +ExecCGI
+          AddHandler cgi-script .cgi .pl
+          Options FollowSymLinks
+          Require all granted
+        </Directory>
+  sudo service apache2 restart
+  Probar navegando a http://botton/cgi-bin/apcupsd/multimon.cgi
+
+### CRONTAB estándar
+
+* Contenido:
+    @reboot /home/gorka/botbasic/ng-bbparser daemon
+    @reboot /home/gorka/botbasic/ng-bbshell daemon
+    14 3 * * 1 sudo certbot renew --pre-hook "service apache2 stop" --post-hook "service apache2 start" >/dev/null 2>/dev/null
+    0 0 * * * /home/gorka/botbasic/backup/backup-databases >/dev/null 2>&1
+    */1 * * * * /home/gorka/botbasic/duckdns.org/cisco.sh >/dev/null 2>&1
+    */5 * * * * /home/gorka/botbasic/duckdns.org/duck.sh >/dev/null 2>&1
+    */1 * * * * /home/gorka/botbasic/httpdocs/scripts/telegramsender/launcher.sh 1000 750 >/dev/null 2>/dev/null
+    #*/1 * * * * /home/gorka/botbasic/httpdocs/scripts/downloader/launcher.sh >/dev/null 2>/dev/null
+
+### CODIGO DE BOTBASIC
+
+* cd ~/botbasic
+  mkdir backup backup/mysql
+  mkdir logs logs/bizmodels logs/webstub downloads
+  chmod g+w logs logs/bizmodels logs/webstub downloads
+  sudo chgrp www-data logs logs/bizmodels logs/webstub downloads
+
+* Suponiendo que la MATRIZ DE CODIGO BOTBASIC esté en /media/abcde/botbasic:
+  cp -rpd /media/abcde/botbasic/httpdocs .
+  cp -rpd /media/abcde/botbasic/backup/backup-* .
+  cp -rpd /media/abcde/botbasic/backup/*.cnf .
+
+### PROCEDIMIENTO COMPLETO DE INSTALACION SOBRE ODROID XU-4
+
+* Usar la distribución de Ubuntu Server Xenial 16.04 preinstalada en una SDcard por Hardkernel
+
+* Configurar teclado al teclado Logitech MK220 panameño
+  sudo dpkg-reconfigure keyboard-configuration
+  layout spanish, no spanish latam; right altgraph
+
+* Configurar zona horaria
+  sudo dpkg-reconfigure tzdata
+  America/Panama
+
+* Sudo
+  sudo usermod -aG sudo odroid
+
+* Proceder con la instalación como se describe en las otras secciones de este documento
+
+* Deshabilitar arranque en modo gráfico al bootear
+  sudo systemctl set-default multi-user.target
+    para retornar a modo gráfico al bootear:
+      sudo systemctl set-default graphical.target
+  y reiniciar desde el modo gráfico
+
+* Colocar contraseña segura
+  Probar: (a) acceso desde hp-envy de forma que no pida passwd; (b) que sudo no pida passwd
+  passwd
+    (haberlo generado con keepassx)
+
+### EOF

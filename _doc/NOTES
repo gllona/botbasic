@@ -1,0 +1,8 @@
+# Extra directories at .../httpdocs/.. level:
+
+- backup
+- backup/mysql
+- downloads
+- logs
+- logs/bizmodel
+- logs/webstub

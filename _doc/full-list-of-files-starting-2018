@@ -1,0 +1,2108 @@
+.:
+total 672
+drwxrwxr-x  3 gorka gorka   4096 jul  7  2017 backup
+drwxrwxr-x 10 gorka gorka   4096 jun  1  2017 bbapps
+-rw-r--r--  1 gorka gorka  77798 nov 14  2016 BB_crono.xlsx
+-rw-r--r--  1 gorka gorka 488630 jul  5  2017 BB.xlsx
+-rw-rw-r--  1 gorka gorka   5592 jun 14  2017 bots.zip
+-rw-rw-r--  1 gorka gorka  26508 jul  5  2017 bugs
+-rwxrwxr-x  1 gorka gorka    267 jun  9  2017 count-php-lines
+drwxr-xr-x  2 gorka gorka   4096 sep 13  2016 _distribs
+drwxr-xr-x  7 gorka gorka   4096 jun 25  2017 dns_ssl
+drwxrwxr-x  2 gorka gorka   4096 sep  7  2016 downloads
+-rw-rw-r--  1 gorka gorka   9515 jul  5  2017 HOWTO_BBAPPS_CONFIGURATION
+-rw-r--r--  1 gorka gorka  17078 jul  5  2017 HOWTO_SERVER_INSTALL
+drwxr-xr-x  9 gorka gorka   4096 may  6  2017 httpdocs
+drwxrwxr-x  4 gorka gorka   4096 may 10  2017 logs
+-rwxrwxr-x  1 gorka gorka    306 jun 24  2017 ng-bbparser
+-rwxrwxr-x  1 gorka gorka    248 jun 24  2017 ng-bbshell
+lrwxrwxrwx  1 gorka gorka     17 jul  5  2017 phpdocumentor -> ../phpdocumentor/
+-rw-rw-r--  1 gorka gorka   5327 jun 24  2017 work
+
+./backup:
+total 500
+-rwxrwx--- 1 gorka gorka   1222 may 12  2017 backup-databases
+-rwxrwx--- 1 gorka gorka    304 may 12  2017 backup-to-cloud
+-rw-rw---- 1 gorka gorka      0 jul  5  2017 database.log
+-rw-rw-r-- 1 gorka gorka 481751 jul  7  2017 dbs_before_utf8mb4.tar.gz
+drwxrwx--- 2 gorka gorka  12288 jul  5  2017 mysql
+-rwxrwx--- 1 gorka gorka     58 may 12  2017 mysql.cnf
+-rwxrwx--- 1 gorka gorka      7 may 12  2017 zippass.cnf
+
+./backup/mysql:
+total 12992
+-rw-rw---- 1 gorka gorka 2769634 may 12  2017 botbasic_2017-04-26.sql.zip
+-rw-rw---- 1 gorka gorka  106907 may 12  2017 botbasic_2017-05-12.sql.zip
+-rw-rw---- 1 gorka gorka  106909 may 13  2017 botbasic_2017-05-13.sql.zip
+-rw-rw---- 1 gorka gorka  106909 may 14  2017 botbasic_2017-05-14.sql.zip
+-rw-rw---- 1 gorka gorka  115139 may 15  2017 botbasic_2017-05-15.sql.zip
+-rw-rw---- 1 gorka gorka  116383 may 16  2017 botbasic_2017-05-16.sql.zip
+-rw-rw---- 1 gorka gorka  155782 may 17  2017 botbasic_2017-05-17.sql.zip
+-rw-rw---- 1 gorka gorka  155783 may 18  2017 botbasic_2017-05-18.sql.zip
+-rw-rw---- 1 gorka gorka  165254 may 19  2017 botbasic_2017-05-19.sql.zip
+-rw-rw---- 1 gorka gorka  165256 may 20  2017 botbasic_2017-05-20.sql.zip
+-rw-rw---- 1 gorka gorka  165340 may 21  2017 botbasic_2017-05-21.sql.zip
+-rw-rw---- 1 gorka gorka  165445 may 22  2017 botbasic_2017-05-22.sql.zip
+-rw-rw---- 1 gorka gorka  166299 may 23  2017 botbasic_2017-05-23.sql.zip
+-rw-rw---- 1 gorka gorka  167990 may 24  2017 botbasic_2017-05-24.sql.zip
+-rw-rw---- 1 gorka gorka  167990 may 25  2017 botbasic_2017-05-25.sql.zip
+-rw-rw---- 1 gorka gorka  169883 may 31  2017 botbasic_2017-05-31.sql.zip
+-rw-rw---- 1 gorka gorka  169965 jun  1  2017 botbasic_2017-06-01.sql.zip
+-rw-rw---- 1 gorka gorka  169966 jun  2  2017 botbasic_2017-06-02.sql.zip
+-rw-rw---- 1 gorka gorka  187370 jun  3  2017 botbasic_2017-06-03.sql.zip
+-rw-rw---- 1 gorka gorka  187369 jun  4  2017 botbasic_2017-06-04.sql.zip
+-rw-rw---- 1 gorka gorka  188284 jun  5  2017 botbasic_2017-06-05.sql.zip
+-rw-rw---- 1 gorka gorka  195674 jun  6  2017 botbasic_2017-06-06.sql.zip
+-rw-rw---- 1 gorka gorka  200484 jun  7  2017 botbasic_2017-06-07.sql.zip
+-rw-rw---- 1 gorka gorka  204700 jun  8  2017 botbasic_2017-06-08.sql.zip
+-rw-rw---- 1 gorka gorka  204873 jun  9  2017 botbasic_2017-06-09.sql.zip
+-rw-rw---- 1 gorka gorka  204931 jun 10  2017 botbasic_2017-06-10.sql.zip
+-rw-rw---- 1 gorka gorka  205191 jun 11  2017 botbasic_2017-06-11.sql.zip
+-rw-rw---- 1 gorka gorka  205193 jun 12  2017 botbasic_2017-06-12.sql.zip
+-rw-rw---- 1 gorka gorka  208853 jun 13  2017 botbasic_2017-06-13.sql.zip
+-rw-rw---- 1 gorka gorka  209058 jun 14  2017 botbasic_2017-06-14.sql.zip
+-rw-rw---- 1 gorka gorka  209053 jun 15  2017 botbasic_2017-06-15.sql.zip
+-rw-rw---- 1 gorka gorka  209053 jun 16  2017 botbasic_2017-06-16.sql.zip
+-rw-rw---- 1 gorka gorka  212229 jun 17  2017 botbasic_2017-06-17.sql.zip
+-rw-rw---- 1 gorka gorka  212229 jun 18  2017 botbasic_2017-06-18.sql.zip
+-rw-rw---- 1 gorka gorka  212930 jun 19  2017 botbasic_2017-06-19.sql.zip
+-rw-rw---- 1 gorka gorka  215082 jun 20  2017 botbasic_2017-06-20.sql.zip
+-rw-rw---- 1 gorka gorka  224245 jun 21  2017 botbasic_2017-06-21.sql.zip
+-rw-rw---- 1 gorka gorka  224704 jun 22  2017 botbasic_2017-06-22.sql.zip
+-rw-rw---- 1 gorka gorka  224886 jun 23  2017 botbasic_2017-06-23.sql.zip
+-rw-rw---- 1 gorka gorka  226030 jun 24  2017 botbasic_2017-06-24.sql.zip
+-rw-rw---- 1 gorka gorka  239261 jun 25  2017 botbasic_2017-06-25.sql.zip
+-rw-rw---- 1 gorka gorka  241248 jun 26  2017 botbasic_2017-06-26.sql.zip
+-rw-rw---- 1 gorka gorka  242882 jun 27  2017 botbasic_2017-06-27.sql.zip
+-rw-rw---- 1 gorka gorka  248605 jun 28  2017 botbasic_2017-06-28.sql.zip
+-rw-rw---- 1 gorka gorka  249634 jun 29  2017 botbasic_2017-06-29.sql.zip
+-rw-rw---- 1 gorka gorka  254085 jun 30  2017 botbasic_2017-06-30.sql.zip
+-rw-rw---- 1 gorka gorka  254737 jul  1  2017 botbasic_2017-07-01.sql.zip
+-rw-rw---- 1 gorka gorka  254802 jul  2  2017 botbasic_2017-07-02.sql.zip
+-rw-rw---- 1 gorka gorka  255283 jul  3  2017 botbasic_2017-07-03.sql.zip
+-rw-rw---- 1 gorka gorka  257007 jul  4  2017 botbasic_2017-07-04.sql.zip
+-rw-rw---- 1 gorka gorka  261829 jul  5  2017 botbasic_2017-07-05.sql.zip
+-rw-rw---- 1 gorka gorka    1251 may 12  2017 nima_2017-05-12.sql.zip
+-rw-rw---- 1 gorka gorka    1251 may 13  2017 nima_2017-05-13.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 14  2017 nima_2017-05-14.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 15  2017 nima_2017-05-15.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 16  2017 nima_2017-05-16.sql.zip
+-rw-rw---- 1 gorka gorka    1251 may 17  2017 nima_2017-05-17.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 18  2017 nima_2017-05-18.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 19  2017 nima_2017-05-19.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 20  2017 nima_2017-05-20.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 21  2017 nima_2017-05-21.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 22  2017 nima_2017-05-22.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 23  2017 nima_2017-05-23.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 24  2017 nima_2017-05-24.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 25  2017 nima_2017-05-25.sql.zip
+-rw-rw---- 1 gorka gorka    1250 may 31  2017 nima_2017-05-31.sql.zip
+-rw-rw---- 1 gorka gorka    1249 jun  1  2017 nima_2017-06-01.sql.zip
+-rw-rw---- 1 gorka gorka    1251 jun  2  2017 nima_2017-06-02.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun  3  2017 nima_2017-06-03.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun  4  2017 nima_2017-06-04.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun  5  2017 nima_2017-06-05.sql.zip
+-rw-rw---- 1 gorka gorka    1249 jun  6  2017 nima_2017-06-06.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun  7  2017 nima_2017-06-07.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun  8  2017 nima_2017-06-08.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun  9  2017 nima_2017-06-09.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun 10  2017 nima_2017-06-10.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun 11  2017 nima_2017-06-11.sql.zip
+-rw-rw---- 1 gorka gorka    1251 jun 12  2017 nima_2017-06-12.sql.zip
+-rw-rw---- 1 gorka gorka    1251 jun 13  2017 nima_2017-06-13.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun 14  2017 nima_2017-06-14.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun 15  2017 nima_2017-06-15.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun 16  2017 nima_2017-06-16.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun 17  2017 nima_2017-06-17.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun 18  2017 nima_2017-06-18.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun 19  2017 nima_2017-06-19.sql.zip
+-rw-rw---- 1 gorka gorka    1251 jun 20  2017 nima_2017-06-20.sql.zip
+-rw-rw---- 1 gorka gorka    1251 jun 21  2017 nima_2017-06-21.sql.zip
+-rw-rw---- 1 gorka gorka    1250 jun 22  2017 nima_2017-06-22.sql.zip
+-rw-rw---- 1 gorka gorka    1274 jun 23  2017 nima_2017-06-23.sql.zip
+-rw-rw---- 1 gorka gorka    1275 jun 24  2017 nima_2017-06-24.sql.zip
+-rw-rw---- 1 gorka gorka    1274 jun 25  2017 nima_2017-06-25.sql.zip
+-rw-rw---- 1 gorka gorka    1275 jun 26  2017 nima_2017-06-26.sql.zip
+-rw-rw---- 1 gorka gorka    1275 jun 27  2017 nima_2017-06-27.sql.zip
+-rw-rw---- 1 gorka gorka    1275 jun 28  2017 nima_2017-06-28.sql.zip
+-rw-rw---- 1 gorka gorka    1275 jun 29  2017 nima_2017-06-29.sql.zip
+-rw-rw---- 1 gorka gorka    1274 jun 30  2017 nima_2017-06-30.sql.zip
+-rw-rw---- 1 gorka gorka    1273 jul  1  2017 nima_2017-07-01.sql.zip
+-rw-rw---- 1 gorka gorka    1274 jul  2  2017 nima_2017-07-02.sql.zip
+-rw-rw---- 1 gorka gorka    1274 jul  3  2017 nima_2017-07-03.sql.zip
+-rw-rw---- 1 gorka gorka    1273 jul  4  2017 nima_2017-07-04.sql.zip
+-rw-rw---- 1 gorka gorka    1273 jul  5  2017 nima_2017-07-05.sql.zip
+-rw-rw---- 1 gorka gorka    7608 may 20  2017 T3_2017-05-20.sql.zip
+-rw-rw---- 1 gorka gorka    7608 may 21  2017 T3_2017-05-21.sql.zip
+-rw-rw---- 1 gorka gorka    7608 may 22  2017 T3_2017-05-22.sql.zip
+-rw-rw---- 1 gorka gorka    7608 may 23  2017 T3_2017-05-23.sql.zip
+-rw-rw---- 1 gorka gorka    7608 may 24  2017 T3_2017-05-24.sql.zip
+-rw-rw---- 1 gorka gorka    7608 may 25  2017 T3_2017-05-25.sql.zip
+-rw-rw---- 1 gorka gorka    7608 may 31  2017 T3_2017-05-31.sql.zip
+-rw-rw---- 1 gorka gorka    7607 jun  1  2017 T3_2017-06-01.sql.zip
+-rw-rw---- 1 gorka gorka    7609 jun  2  2017 T3_2017-06-02.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun  3  2017 T3_2017-06-03.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun  4  2017 T3_2017-06-04.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun  5  2017 T3_2017-06-05.sql.zip
+-rw-rw---- 1 gorka gorka    7607 jun  6  2017 T3_2017-06-06.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun  7  2017 T3_2017-06-07.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun  8  2017 T3_2017-06-08.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun  9  2017 T3_2017-06-09.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun 10  2017 T3_2017-06-10.sql.zip
+-rw-rw---- 1 gorka gorka    7607 jun 11  2017 T3_2017-06-11.sql.zip
+-rw-rw---- 1 gorka gorka    7607 jun 12  2017 T3_2017-06-12.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun 13  2017 T3_2017-06-13.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun 14  2017 T3_2017-06-14.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun 15  2017 T3_2017-06-15.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun 16  2017 T3_2017-06-16.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun 17  2017 T3_2017-06-17.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun 18  2017 T3_2017-06-18.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun 19  2017 T3_2017-06-19.sql.zip
+-rw-rw---- 1 gorka gorka    7609 jun 20  2017 T3_2017-06-20.sql.zip
+-rw-rw---- 1 gorka gorka    7608 jun 21  2017 T3_2017-06-21.sql.zip
+-rw-rw---- 1 gorka gorka    7609 jun 22  2017 T3_2017-06-22.sql.zip
+-rw-rw---- 1 gorka gorka    7647 jun 23  2017 T3_2017-06-23.sql.zip
+-rw-rw---- 1 gorka gorka    7648 jun 24  2017 T3_2017-06-24.sql.zip
+-rw-rw---- 1 gorka gorka    7647 jun 25  2017 T3_2017-06-25.sql.zip
+-rw-rw---- 1 gorka gorka    7648 jun 26  2017 T3_2017-06-26.sql.zip
+-rw-rw---- 1 gorka gorka    7647 jun 27  2017 T3_2017-06-27.sql.zip
+-rw-rw---- 1 gorka gorka    7648 jun 28  2017 T3_2017-06-28.sql.zip
+-rw-rw---- 1 gorka gorka    7648 jun 29  2017 T3_2017-06-29.sql.zip
+-rw-rw---- 1 gorka gorka    7647 jun 30  2017 T3_2017-06-30.sql.zip
+-rw-rw---- 1 gorka gorka    7646 jul  1  2017 T3_2017-07-01.sql.zip
+-rw-rw---- 1 gorka gorka    7646 jul  2  2017 T3_2017-07-02.sql.zip
+-rw-rw---- 1 gorka gorka    7646 jul  3  2017 T3_2017-07-03.sql.zip
+-rw-rw---- 1 gorka gorka    7646 jul  4  2017 T3_2017-07-04.sql.zip
+-rw-rw---- 1 gorka gorka    7646 jul  5  2017 T3_2017-07-05.sql.zip
+
+./bbapps:
+total 36
+-rw-r--r-- 1 gorka gorka 2400 jun 13  2016 bandera_panama.png
+drwxrwxr-x 3 gorka gorka 4096 jun 30  2017 bbtests
+drwxrwxr-x 2 gorka gorka 4096 may 14  2017 biblioboquete
+drwxrwxr-x 2 gorka gorka 4096 jun  1  2017 bot14bot
+drwxrwxr-x 2 gorka gorka 4096 may 10  2017 neuropower_fotobot
+drwxr-xr-x 2 gorka gorka 4096 ene 20  2017 _neuropower_orig_notes
+drwxrwxr-x 2 gorka gorka 4096 jun 22  2017 nima
+drwxrwxr-x 2 gorka gorka 4096 may 12  2017 oraloco
+drwxr-xr-x 7 gorka gorka 4096 abr 12  2017 T3
+
+./bbapps/bbtests:
+total 68
+drwxr-xr-x 2 gorka gorka  4096 may 10  2017 hellobots_screenshots
+-rw-rw-r-- 1 gorka gorka 12236 jun 20  2017 testBed_it1.csv
+-rw-r--r-- 1 gorka gorka 51202 jun 20  2017 testBed_it1.ods
+
+./bbapps/bbtests/hellobots_screenshots:
+total 1680
+-rw-r--r-- 1 gorka gorka 138843 nov 25  2016 01_hellobots_bbapp_excel.png
+-rw-r--r-- 1 gorka gorka 101678 nov 25  2016 02_hellobots_bbparser_uploadingapp.png
+-rw-r--r-- 1 gorka gorka 119324 nov 25  2016 03_hellobots_bbparser_resultpage.png
+-rw-r--r-- 1 gorka gorka 203380 nov 25  2016 04_hellobots_telegram_beforetyping.png
+-rw-r--r-- 1 gorka gorka 200918 nov 25  2016 05_hellobots_telegram_aftertyping.png
+-rw-r--r-- 1 gorka gorka 200090 nov 25  2016 06_hellobots_telegram_afterresponse.png
+-rw-r--r-- 1 gorka gorka  89418 nov 25  2016 07_hellobots_cli_simulator.png
+-rw-r--r-- 1 gorka gorka 108800 nov 25  2016 08_hellobots_web_simulator.png
+-rw-r--r-- 1 gorka gorka 131794 dic 29  2016 BB-devconf.png
+-rw-r--r-- 1 gorka gorka  67329 dic 30  2016 botFinal2016codigo.png
+-rw-r--r-- 1 gorka gorka  68910 dic 30  2016 botFinal2016mensajes.png
+-rw-r--r-- 1 gorka gorka  50802 dic 26  2016 menu1.jpeg
+-rw-r--r-- 1 gorka gorka  54659 dic 26  2016 menu2.jpeg
+-rw-r--r-- 1 gorka gorka  52636 dic 26  2016 menu3.jpeg
+-rw-r--r-- 1 gorka gorka  50884 dic 26  2016 menu4.jpeg
+-rw-r--r-- 1 gorka gorka  52239 dic 26  2016 menu5.jpeg
+
+./bbapps/biblioboquete:
+total 140
+-rw-rw-r-- 1 gorka gorka   3852 may 14  2017 biblioboquete_testdrive.csv
+-rw-rw-r-- 1 gorka gorka 137452 may 14  2017 biblioboquete_testdrive.xlsx
+
+./bbapps/bot14bot:
+total 88
+-rw-rw-r-- 1 gorka gorka   678 may 11  2017 bot14bot_BB_v1.csv
+-rw-rw-r-- 1 gorka gorka 84234 may 11  2017 bot14bot_BB_v1.xlsx
+
+./bbapps/neuropower_fotobot:
+total 908
+-rw-rw-r-- 1 gorka gorka  28221 mar 29  2017 fotobot_demo.csv
+-rw-rw-r-- 1 gorka gorka  49568 mar  6  2017 Fotobot_demo_script_v1.docx
+-rw-rw-r-- 1 gorka gorka  71093 mar  7  2017 Fotobot_demo_script_v2.docx
+-rw-rw-r-- 1 gorka gorka 771552 mar 29  2017 fotobot_demo.xlsx
+
+./bbapps/_neuropower_orig_notes:
+total 13004
+-rw-r--r-- 1 gorka gorka    19702 dic  2  2016 NP conversaciones finales.docx
+-rw-r--r-- 1 gorka gorka    66957 jul 18  2016 NP conversaciones v1 feedbackNL.docx
+-rw-r--r-- 1 gorka gorka    35325 jun 29  2016 NP conversaciones v1.odt
+-rw-r--r-- 1 gorka gorka 12705628 jul  3  2016 NP_ER.ods
+-rw-r--r-- 1 gorka gorka   483307 nov 18  2016 NP.xlsx
+
+./bbapps/nima:
+total 20184
+-rw-rw-r-- 1 gorka gorka 8399012 may 14  2017 bot1.mp4.zip
+-rw-rw-r-- 1 gorka gorka 8393503 may 14  2017 bot2.mp4.zip
+-rw-rw-r-- 1 gorka gorka 3659484 may 21  2017 bots3.mp4.zip
+-rw-rw-r-- 1 gorka gorka  130011 jun 22  2017 code.zip
+-rw-rw-r-- 1 gorka gorka   30459 may 24  2017 difusion.zip
+-rw-rw-r-- 1 gorka gorka   30172 may 21  2017 instrucciones.zip
+-rw-rw-r-- 1 gorka gorka    9858 may 11  2017 logo.png.zip
+
+./bbapps/oraloco:
+total 96
+lrwxrwxrwx 1 gorka gorka    35 may 12  2017 insumos oraloco -> /home/gorka/Desktop/insumos oraloco
+-rw-rw-r-- 1 gorka gorka   657 may 11  2017 oraloco.csv
+-rw-rw-r-- 1 gorka gorka 94095 may 11  2017 oraloco.xlsx
+
+./bbapps/T3:
+total 84
+drwxr-xr-x 2 gorka gorka  4096 ene 20  2017 analisis
+drwxrwxr-x 2 gorka gorka  4096 abr 23  2017 desarrollo
+drwxr-xr-x 3 gorka gorka  4096 ene 24  2017 devBaks
+drwxr-xr-x 2 gorka gorka  4096 jun 22  2017 disenho
+drwxr-xr-x 2 gorka gorka  4096 ene 20  2017 _originales
+-rw-rw-r-- 1 gorka gorka 64190 abr 11  2017 T3_crono.xlsx
+
+./bbapps/T3/analisis:
+total 3296
+-rw-r--r-- 1 gorka gorka 2370440 ago 24  2016 00 anexo 3.pdf
+-rw-r--r-- 1 gorka gorka  738691 jun  6  2016 01 T3-Guerrero,Barquet,Lorca.pdf
+-rw-rw-rw- 1 gorka gorka   36703 jul 18  2016 02 bases completas v2 gorka 180716.docx
+-rw-r--r-- 1 gorka gorka   13375 ene 20  2017 02 bases completas v2 gorka 180716 extracto la aplicacion.docx
+-rw-r--r-- 1 gorka gorka   37172 ene 20  2017 03 T3_ER_ultimo2016_atributos.pdf
+-rw-r--r-- 1 gorka gorka    8131 ene 20  2017 03 T3_ER_ultimo2016_atributos.xlsx
+-rw-r--r-- 1 gorka gorka  100211 ene 20  2017 04 T3_ER_ultimo2016_diagrama.pdf
+-rw-r--r-- 1 gorka gorka   57036 dic 22  2016 04 T3_ER_ultimo2016_diagrama.xlsx
+
+./bbapps/T3/desarrollo:
+total 8184
+-rw-rw-r-- 1 gorka gorka  133563 mar 28  2017 CODE
+-rw-rw-r-- 1 gorka gorka    6128 mar 28  2017 MESSAGES
+-rwxrwxr-x 1 gorka gorka     293 mar 28  2017 nonDeclaredStrings_prepareMessages.sh
+-rwxrwxr-x 1 gorka gorka     570 mar 28  2017 nonDeclaredStrings.sh
+-rwxrwxr-x 1 gorka gorka     276 mar 28  2017 nonDeclaredStrings_stringsWithPrefix.sh
+-rw-rw-r-- 1 gorka gorka  194828 abr 23  2017 T3_BB_v1.csv
+-rw-rw-r-- 1 gorka gorka   56956 abr 16  2017 T3_BB_v1 DO 16.xlsx
+-rw-rw-r-- 1 gorka gorka 3615154 abr 11  2017 T3_BB_v1 MA 11 FINAL BEFORE TESTING.xlsx
+-rw-rw-r-- 1 gorka gorka   57144 abr 18  2017 T3_BB_v1 MA 18.xlsx
+-rw-r--r-- 1 gorka gorka   55415 mar 28  2017 T3_BB_v1 MA 28 FINAL DE VERSION DEV PREVIA A COMPILAR.ods
+-rw-rw-r-- 1 gorka gorka   56762 mar 29  2017 T3_BB_v1 MI 29 LUEGO DE COMPILAR.ods
+-rw-rw-r-- 1 gorka gorka 3606899 abr  8  2017 T3_BB_v1 SA 08.xlsx
+-rw-rw-r-- 1 gorka gorka  570441 abr 23  2017 T3_BB_v1.xlsx
+
+./bbapps/T3/devBaks:
+total 4
+drwxr-xr-x 4 gorka gorka 4096 ene 24  2017 bizmodel_ASOF_24012017
+
+./bbapps/T3/devBaks/bizmodel_ASOF_24012017:
+total 100
+-rw-r--r-- 1 gorka gorka  9269 ene 24  2017 Actor.php
+-rw-r--r-- 1 gorka gorka 13005 ene 23  2017 BizModelAdapterDefault.php
+-rw-r--r-- 1 gorka gorka 12998 ene 11  2017 BizModelAdapter.php
+-rw-r--r-- 1 gorka gorka  5783 ene 24  2017 Camion.php
+-rw-r--r-- 1 gorka gorka  6593 ene 24  2017 DBbroker.php
+-rw-r--r-- 1 gorka gorka  3945 ene 24  2017 Especimen.php
+-rw-r--r-- 1 gorka gorka   131 oct 28  2016 index.html
+-rw-r--r-- 1 gorka gorka  7910 ene 23  2017 Log.php
+drwxr-xr-x 2 gorka gorka  4096 ene 23  2017 logs
+-rw-r--r-- 1 gorka gorka  6506 ene 24  2017 Persistable.php
+-rw-r--r-- 1 gorka gorka  1848 ene 24  2017 PersistableTest.php
+-rw-r--r-- 1 gorka gorka  3032 ene 24  2017 Raza.php
+-rw-r--r-- 1 gorka gorka  1013 ene 23  2017 t3defines.php
+-rw-r--r-- 1 gorka gorka     0 ene 24  2017 T3_LOGFILE
+
+./bbapps/T3/devBaks/bizmodel_ASOF_24012017/logs:
+total 8
+-rw-rw-r-- 1 gorka gorka 6419 ene 24  2017 t3.log
+
+./bbapps/T3/disenho:
+total 1760
+-rw-r--r-- 1 gorka gorka  29555 ene 23  2017 clases_analisis_v1.dia
+-rw-r--r-- 1 gorka gorka  29555 ene 23  2017 clases_analisis_v1.pdf
+-rw-r--r-- 1 gorka gorka  30804 ene 23  2017 clases_implementacion_v1.dia
+-rw-r--r-- 1 gorka gorka  30804 ene 23  2017 clases_implementacion_v1.pdf
+-rw-r--r-- 1 gorka gorka 409081 abr 16  2017 T3_design 20170416.xlsx
+-rw-r--r-- 1 gorka gorka 397080 abr 11  2017 T3_design FINAL BEFORE TESTING.xlsx
+-rw-r--r-- 1 gorka gorka 404811 abr 12  2017 T3_design FINAL WITH TEST DATA.xlsx
+-rw-r--r-- 1 gorka gorka 423571 jun 22  2017 T3_design.xlsx
+-rw------- 1 gorka gorka  22018 abr 12  2017 T3_E-R_20170411.pdf
+-rw-r--r-- 1 gorka gorka   7840 abr 17  2017 T3_usuarios_betaTest.xlsx
+
+./bbapps/T3/_originales:
+total 16344
+-rw-r--r-- 1 gorka gorka 6308441 jun 13  2016 agendaDonadorRecolector_Donacion-01.jpg
+-rw-r--r-- 1 gorka gorka 9297605 jun 13  2016 agendaDonadorRecolector_Recolector-03.jpg
+-rw-r--r-- 1 gorka gorka   20492 jun 10  2016 bases completas v1 gorka 100616.docx
+-rw-r--r-- 1 gorka gorka   37823 jun 12  2016 bases completas v1 gorka 100616.odt
+-rw-r--r-- 1 gorka gorka  173548 jun 10  2016 bases completas v1 gorka 100616.pdf
+-rw-rw-rw- 1 gorka gorka   36703 jul 18  2016 bases completas v2 gorka 180716.docx
+-rw-r--r-- 1 gorka gorka   11266 jun  8  2016 bases - conceptual v1.docx
+-rw-r--r-- 1 gorka gorka   35550 jun 10  2016 bases - script.txt
+-rw-r--r-- 1 gorka gorka   57036 dic 22  2016 T3_ER_ultimo2016.xlsx
+-rw-r--r-- 1 gorka gorka  738691 jun  6  2016 T3-Guerrero,Barquet,Lorca.pdf
+
+./_distribs:
+total 120
+-rw-r--r-- 1 gorka gorka 100670 sep 13  2016 krumo_0.2.1a_PHP5-Only.zip
+-rw-r--r-- 1 gorka gorka  19908 sep  2  2016 unirest-php-master.zip
+
+./dns_ssl:
+total 48
+drwxrwxr-x 2 gorka gorka 4096 nov 29  2016 botton.duckdns.org
+-rwxrwx--- 1 gorka gorka  469 jun 25  2017 cisco.sh
+-rw-rw-r-- 1 gorka gorka    2 jul  5  2017 duck.log
+-rwxrwx--- 1 gorka gorka  177 ene 17  2017 duck.sh
+-rw-rw-r-- 1 gorka gorka   51 abr 20  2017 index.html
+drwxrwxr-x 2 gorka gorka 4096 jun 21  2017 odroid0.duckdns.org
+-rw-r--r-- 1 gorka gorka    9 jun 28  2016 passphrase.txt
+-rw-rw-r-- 1 gorka gorka  281 jun 28  2016 _REFERENCES.txt
+-rw-r--r-- 1 gorka gorka 2106 jun 29  2016 StartSSL_apache_root_bundle.crt
+drwxrwxr-x 2 gorka gorka 4096 jun 21  2017 telegrambots.duckdns.org
+drwxrwxr-x 2 gorka gorka 4096 nov 29  2016 telegrambots.duckdns.org_until201706
+drwxr-xr-x 2 gorka gorka 4096 nov 29  2016 telegrambots.logicos.org_unusable
+
+./dns_ssl/botton.duckdns.org:
+total 32
+-rw-rw-r-- 1 gorka gorka  2106 nov 30  2016 1_root_bundle.crt
+-rw-rw-r-- 1 gorka gorka  2451 nov 30  2016 2_botton.duckdns.org.crt
+-rw-rw-r-- 1 gorka gorka  1021 nov 29  2016 botton-duckdns-org-csr.csr
+-rw-rw-r-- 1 gorka gorka  1834 nov 29  2016 botton-duckdns-org-csr.key
+-rw-r--r-- 1 gorka gorka 15852 nov 29  2016 botton.duckdns.org.zip
+
+./dns_ssl/odroid0.duckdns.org:
+total 48
+-rw-rw-r-- 1 gorka gorka  6603 jun 22  2017 1_root_bundle.crt
+-rw-rw-r-- 1 gorka gorka  2577 jun 22  2017 2_odroid0.duckdns.org.crt
+-rw-rw-r-- 1 gorka gorka  1021 jun 21  2017 odroid0-duckdns-org-csr.csr
+-rw-rw-r-- 1 gorka gorka  1834 jun 21  2017 odroid0-duckdns-org-csr.key
+-rw-rw-r-- 1 gorka gorka 26979 jun 21  2017 odroid0.duckdns.org.zip
+
+./dns_ssl/telegrambots.duckdns.org:
+total 52
+-rw-rw-r-- 1 gorka gorka  6603 jun 22  2017 1_root_bundle.crt
+-rw-rw-r-- 1 gorka gorka  2589 jun 22  2017 2_telegrambots.duckdns.org.crt
+-rw-rw-r-- 1 gorka gorka  1029 jun 21  2017 telegrambots-duckdns-org-csr.csr
+-rw-rw-r-- 1 gorka gorka  1675 jun 21  2017 telegrambots-duckdns-org-csr.key
+-rw-rw-r-- 1 gorka gorka  1834 jun 21  2017 telegrambots-duckdns-org-csr.key.with-passphrase
+-rw-rw-r-- 1 gorka gorka 27177 jun 21  2017 telegrambots.duckdns.org.zip
+
+./dns_ssl/telegrambots.duckdns.org_until201706:
+total 32
+-rw-rw-r-- 1 gorka gorka   980 jun 28  2016 certificate_request.csr
+-rw-rw-r-- 1 gorka gorka  1834 jun 28  2016 private_key_with_passphrase.key
+-rw-r--r-- 1 gorka gorka 14947 jun 28  2016 StartSSLcertificates_telegrambots.duckdns.org.zip
+-rw-r--r-- 1 gorka gorka  2143 jun 29  2016 telegrambots.duckdns.org.crt
+-rw-rw-r-- 1 gorka gorka  1679 jun 28  2016 telegrambots.duckdns.org.key
+
+./dns_ssl/telegrambots.logicos.org_unusable:
+total 16
+-rw-r--r-- 1 gorka gorka 14988 jun 24  2016 StartSSLcertificates_telegrambots.logicos.org.zip
+
+./downloads:
+total 0
+
+./httpdocs:
+total 28
+drwxr-xr-x 9 gorka gorka 4096 jul  5  2017 bizmodel
+drwxr-xr-x 4 gorka gorka 4096 jul  5  2017 botbasic
+-rw-r--r-- 1 gorka gorka  131 oct 28  2016 index.html
+drwxr-xr-x 4 gorka gorka 4096 dic 24  2016 krumo
+drwxr-xr-x 9 gorka gorka 4096 may  5  2017 scripts
+drwxrwxr-x 4 gorka gorka 4096 dic 24  2016 unirest
+drwxrwxr-x 3 gorka gorka 4096 may  5  2017 webhooks
+
+./httpdocs/bizmodel:
+total 80
+-rw-r--r-- 1 gorka gorka 45325 jul  5  2017 BizModelAdapter.php
+-rw-r--r-- 1 gorka gorka  3623 jul  5  2017 bmdefines.php
+drwxrwxr-x 2 gorka gorka  4096 abr  6  2017 _distrib
+-rw-r--r-- 1 gorka gorka   131 oct 28  2016 index.html
+drwxrwxr-x 3 gorka gorka  4096 abr  6  2017 messente
+drwxrwxr-x 2 gorka gorka  4096 jul  5  2017 nima
+drwxrwxr-x 2 gorka gorka  4096 may  6  2017 oraloco
+drwxrwxr-x 2 gorka gorka  4096 may 16  2017 phpmailer
+drwxrwxr-x 2 gorka gorka  4096 jul  5  2017 T3
+
+./httpdocs/bizmodel/_distrib:
+total 224
+-rw-rw-r-- 1 gorka gorka  11744 abr  6  2017 Messente-API-master.zip
+-rw-rw-r-- 1 gorka gorka 213266 feb 22  2017 PHPMailer-master.zip
+
+./httpdocs/bizmodel/messente:
+total 28
+-rw-rw-r-- 1 gorka gorka  1418 oct  5  2016 changelog.txt
+-rw-rw-r-- 1 gorka gorka 14205 abr  6  2017 class.messente.php
+drwxrwxr-x 2 gorka gorka  4096 abr  6  2017 examples
+-rw-rw-r-- 1 gorka gorka   798 abr  6  2017 MessenteSmsAutoload.php
+
+./httpdocs/bizmodel/messente/examples:
+total 24
+-rw-rw-r-- 1 gorka gorka 3778 abr  6  2017 example-daemon.php
+-rw-rw-r-- 1 gorka gorka  845 oct  5  2016 example-dlr.php
+-rw-rw-r-- 1 gorka gorka 1321 oct  5  2016 example-full-pricelist.php
+-rw-rw-r-- 1 gorka gorka  851 abr  6  2017 example-simple.php
+-rw-rw-r-- 1 gorka gorka 2316 abr  6  2017 example-sqlite.php
+-rw-rw-r-- 1 gorka gorka 3072 oct  5  2016 messages.db
+
+./httpdocs/bizmodel/nima:
+total 28
+-rw-rw-r-- 1 gorka gorka 8461 may 21  2017 All.php
+-rw-r--r-- 1 gorka gorka 7292 jul  5  2017 DBbroker.php
+-rw-r--r-- 1 gorka gorka 8123 jul  5  2017 Log.php
+
+./httpdocs/bizmodel/oraloco:
+total 0
+
+./httpdocs/bizmodel/phpmailer:
+total 204
+-rw-rw-r-- 1 gorka gorka 146762 may 16  2017 class.phpmailer.php
+-rw-rw-r-- 1 gorka gorka  11006 feb  1  2017 class.pop3.php
+-rw-rw-r-- 1 gorka gorka  42054 feb  1  2017 class.smtp.php
+-rw-rw-r-- 1 gorka gorka   1689 feb  1  2017 PHPMailerAutoload.php
+
+./httpdocs/bizmodel/T3:
+total 260
+-rw-rw-r-- 1 gorka gorka  3339 abr 13  2017 Aclamacion.php
+-rw-rw-r-- 1 gorka gorka  7163 abr 18  2017 Acopio.php
+-rw-r--r-- 1 gorka gorka 20137 abr 18  2017 Actor.php
+-rw-r--r-- 1 gorka gorka  9313 abr 18  2017 Camion.php
+-rw-rw-r-- 1 gorka gorka 12357 may  6  2017 Canje.php
+-rw-rw-r-- 1 gorka gorka  9327 may  6  2017 Colector.php
+-rw-r--r-- 1 gorka gorka  7223 jul  5  2017 DBbroker.php
+-rw-rw-r-- 1 gorka gorka   965 abr 13  2017 DonacionDinero.php
+-rw-rw-r-- 1 gorka gorka  2768 abr 13  2017 Donacion.php
+-rw-rw-r-- 1 gorka gorka   965 abr 13  2017 DonacionPremio.php
+-rw-rw-r-- 1 gorka gorka  9952 may  6  2017 EntregaColectorAcopio.php
+-rw-rw-r-- 1 gorka gorka  3568 abr 13  2017 Entrega.php
+-rw-rw-r-- 1 gorka gorka  3372 abr 13  2017 EntregaRecicladorColector.php
+-rw-rw-r-- 1 gorka gorka  2268 abr 16  2017 Fundacion.php
+-rw-rw-r-- 1 gorka gorka  6869 abr 18  2017 Geosector.php
+-rw-r--r-- 1 gorka gorka   131 oct 28  2016 index.html
+-rw-rw-r-- 1 gorka gorka  2627 abr 13  2017 Invitacion.php
+-rw-r--r-- 1 gorka gorka  8031 jul  5  2017 Log.php
+-rw-rw-r-- 1 gorka gorka  6658 abr 16  2017 Lote.php
+-rw-rw-r-- 1 gorka gorka  2376 abr 13  2017 LoteThreshold.php
+-rw-rw-r-- 1 gorka gorka  4652 may  6  2017 Material.php
+-rw-rw-r-- 1 gorka gorka  2581 abr 13  2017 Notificacion.php
+-rw-rw-r-- 1 gorka gorka  1608 abr 16  2017 Operador.php
+-rw-rw-r-- 1 gorka gorka  2066 abr 13  2017 Pago.php
+-rw-r--r-- 1 gorka gorka 30310 jul  5  2017 Persistable.php
+-rw-rw-r-- 1 gorka gorka  1285 abr 13  2017 Premiable.php
+-rw-rw-r-- 1 gorka gorka  3161 abr 13  2017 Premio.php
+-rw-rw-r-- 1 gorka gorka  2995 abr 13  2017 Procesador.php
+-rw-rw-r-- 1 gorka gorka  6092 may  6  2017 Reciclador.php
+-rw-rw-r-- 1 gorka gorka  2543 abr 13  2017 Ruta.php
+-rw-rw-r-- 1 gorka gorka  4780 abr 18  2017 SponsorCorp.php
+-rw-rw-r-- 1 gorka gorka  5629 may  6  2017 SponsorRetail.php
+-rw-rw-r-- 1 gorka gorka   624 abr 13  2017 Subsidiario.php
+-rw-rw-r-- 1 gorka gorka  4609 abr 13  2017 Transaccion.php
+-rw-rw-r-- 1 gorka gorka  1421 abr 13  2017 Vector.php
+
+./httpdocs/botbasic:
+total 872
+-rw-r--r--  1 gorka gorka   2815 jul  5  2017 bbautoloader.php
+-rw-r--r--  1 gorka gorka   4096 jul  5  2017 bbdefines.php
+-rw-r--r--  1 gorka gorka  18973 jul  5  2017 BizModelAdapterTemplate.php
+-rw-r--r--  1 gorka gorka  14004 jul  5  2017 BizModelProvider.php
+-rw-r--r--  1 gorka gorka  58402 jul  5  2017 BotBasicChannel.php
+-rw-r--r--  1 gorka gorka 128783 jul  5  2017 BotBasicParser.php
+-rw-r--r--  1 gorka gorka  52659 jul  5  2017 BotBasic.php
+-rw-r--r--  1 gorka gorka 185206 jul  5  2017 BotBasicRuntime.php
+-rw-rw-r--  1 gorka gorka  47542 jul  5  2017 BotConfig.php
+-rw-r--r--  1 gorka gorka  23393 jul  5  2017 ChatMediumChannel.php
+-rw-r--r--  1 gorka gorka   7743 jul  5  2017 ChatMediumCliStub.php
+-rw-r--r--  1 gorka gorka  23515 jul  5  2017 ChatMedium.php
+-rw-r--r--  1 gorka gorka  54055 jul  5  2017 ChatMediumTelegram.php
+-rw-r--r--  1 gorka gorka   7853 jul  5  2017 ChatMediumWebStub.php
+-rw-r--r--  1 gorka gorka   1704 jul  5  2017 Closable.php
+-rw-r--r--  1 gorka gorka 113770 jul  5  2017 DBbroker.php
+drwxrwxr-x 38 gorka gorka   4096 ene 19  2017 doc
+-rw-r--r--  1 gorka gorka    131 oct 28  2016 index.html
+-rw-r--r--  1 gorka gorka   1473 jul  5  2017 Initializable.php
+-rw-r--r--  1 gorka gorka  19489 jul  5  2017 Interaction.php
+-rw-r--r--  1 gorka gorka  11890 jul  5  2017 InteractionResource.php
+-rw-r--r--  1 gorka gorka   1445 jul  5  2017 LogbotChatMedium.php
+-rw-r--r--  1 gorka gorka  25672 jul  5  2017 Log.php
+-rwxrwxr-x  1 gorka gorka    110 oct 24  2016 phpdoc
+-rw-r--r--  1 gorka gorka   7545 jul  5  2017 Splash.php
+-rw-r--r--  1 gorka gorka  11978 jul  5  2017 Update.php
+-rw-r--r--  1 gorka gorka   1042 jul  5  2017 WebRouterCliStub.php
+-rw-r--r--  1 gorka gorka   5087 jul  5  2017 WebRouter.php
+-rw-r--r--  1 gorka gorka   1137 jul  5  2017 WebRouterTelegram.php
+-rw-r--r--  1 gorka gorka   1008 jul  5  2017 WebRouterWebStub.php
+
+./httpdocs/botbasic/doc:
+total 224
+drwxrwxr-x 2 gorka gorka  4096 ene 19  2017 classes
+drwxrwxr-x 3 gorka gorka  4096 oct 21  2016 css
+drwxrwxr-x 2 gorka gorka  4096 oct 21  2016 doc
+drwxrwxr-x 4 gorka gorka  4096 jul  5  2017 files
+drwxrwxr-x 2 gorka gorka  4096 oct 21  2016 font
+drwxrwxr-x 2 gorka gorka  4096 oct 21  2016 graphs
+drwxrwxr-x 3 gorka gorka  4096 oct 21  2016 images
+-rw-rw-r-- 1 gorka gorka 80878 ene 19  2017 index.html
+drwxrwxr-x 3 gorka gorka  4096 oct 21  2016 js
+drwxrwxr-x 2 gorka gorka  4096 oct 21  2016 namespaces
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-18
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-1d
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-2e
+drwx------ 2 gorka gorka  4096 ene 19  2017 phpdoc-cache-33
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-37
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-44
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-45
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-4c
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-4e
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-5c
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-61
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-7e
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-89
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-91
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-93
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-94
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-9d
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-a3
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-a4
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-a7
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-ad
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-b4
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-d1
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-d7
+drwx------ 2 gorka gorka  4096 oct 21  2016 phpdoc-cache-f4
+drwx------ 2 gorka gorka  4096 nov  5  2016 phpdoc-cache-ff
+drwxrwxr-x 2 gorka gorka  4096 oct 21  2016 reports
+
+./httpdocs/botbasic/doc/classes:
+total 3180
+-rw-rw-r-- 1 gorka gorka 128322 ene 19  2017 botbasic.BizModelAdapter.html
+-rw-rw-r-- 1 gorka gorka  82595 ene 19  2017 botbasic.BizModelAdapterTemplate.html
+-rw-rw-r-- 1 gorka gorka  74449 ene 19  2017 botbasic.BizModelProvider.html
+-rw-rw-r-- 1 gorka gorka 173241 ene 19  2017 botbasic.BotBasicChannel.html
+-rw-rw-r-- 1 gorka gorka 174771 ene 19  2017 botbasic.BotBasic.html
+-rw-rw-r-- 1 gorka gorka 429556 ene 19  2017 botbasic.BotBasicParser.html
+-rw-rw-r-- 1 gorka gorka 511764 ene 19  2017 botbasic.BotBasicRuntime.html
+-rw-rw-r-- 1 gorka gorka 106499 ene 19  2017 botbasic.ChatMediumChannel.html
+-rw-rw-r-- 1 gorka gorka 130154 ene 19  2017 botbasic.ChatMediumCliStub.html
+-rw-rw-r-- 1 gorka gorka 113027 ene 19  2017 botbasic.ChatMedium.html
+-rw-rw-r-- 1 gorka gorka 181305 ene 19  2017 botbasic.ChatMediumTelegram.html
+-rw-rw-r-- 1 gorka gorka 128957 ene 19  2017 botbasic.ChatMediumWebStub.html
+-rw-rw-r-- 1 gorka gorka  27808 ene 19  2017 botbasic.Closable.html
+-rw-rw-r-- 1 gorka gorka 219953 ene 19  2017 botbasic.DBbroker.html
+-rw-rw-r-- 1 gorka gorka  25552 ene 19  2017 botbasic.Initializable.html
+-rw-rw-r-- 1 gorka gorka  92810 ene 19  2017 botbasic.Interaction.html
+-rw-rw-r-- 1 gorka gorka  69862 ene 19  2017 botbasic.InteractionResource.html
+-rw-rw-r-- 1 gorka gorka  24921 ene 19  2017 botbasic.LogbotChatMedium.html
+-rw-rw-r-- 1 gorka gorka  93396 ene 19  2017 botbasic.Log.html
+-rw-rw-r-- 1 gorka gorka 124116 ene 19  2017 botbasic.Splash.html
+-rw-rw-r-- 1 gorka gorka 147704 ene 19  2017 botbasic.Update.html
+-rw-rw-r-- 1 gorka gorka  36099 ene 19  2017 botbasic.WebRouterCliStub.html
+-rw-rw-r-- 1 gorka gorka  35378 ene 19  2017 botbasic.WebRouter.html
+-rw-rw-r-- 1 gorka gorka  35741 ene 19  2017 botbasic.WebRouterTelegram.html
+-rw-rw-r-- 1 gorka gorka  35638 ene 19  2017 botbasic.WebRouterWebStub.html
+
+./httpdocs/botbasic/doc/css:
+total 164
+-rw-rw-r-- 1 gorka gorka 118578 ene 19  2017 bootstrap-combined.no-icons.min.css
+-rw-rw-r-- 1 gorka gorka  22084 ene 19  2017 font-awesome.min.css
+-rw-rw-r-- 1 gorka gorka   1292 ene 19  2017 jquery.iviewer.css
+drwxrwxr-x 3 gorka gorka   4096 oct 21  2016 phpdocumentor-clean-icons
+-rw-rw-r-- 1 gorka gorka   3542 ene 19  2017 prism.css
+-rw-rw-r-- 1 gorka gorka   8466 ene 19  2017 template.css
+
+./httpdocs/botbasic/doc/css/phpdocumentor-clean-icons:
+total 16
+drwxrwxr-x 2 gorka gorka 4096 oct 21  2016 fonts
+-rw-rw-r-- 1 gorka gorka  731 ene 19  2017 lte-ie7.js
+-rw-rw-r-- 1 gorka gorka  342 ene 19  2017 Read Me.txt
+-rw-rw-r-- 1 gorka gorka 1343 ene 19  2017 style.css
+
+./httpdocs/botbasic/doc/css/phpdocumentor-clean-icons/fonts:
+total 20
+-rw-rw-r-- 1 gorka gorka 3717 ene 19  2017 phpdocumentor-clean-icons.dev.svg
+-rw-rw-r-- 1 gorka gorka 2324 ene 19  2017 phpdocumentor-clean-icons.eot
+-rw-rw-r-- 1 gorka gorka 3662 ene 19  2017 phpdocumentor-clean-icons.svg
+-rw-rw-r-- 1 gorka gorka 2080 ene 19  2017 phpdocumentor-clean-icons.ttf
+-rw-rw-r-- 1 gorka gorka 1832 ene 19  2017 phpdocumentor-clean-icons.woff
+
+./httpdocs/botbasic/doc/doc:
+total 0
+
+./httpdocs/botbasic/doc/files:
+total 1748
+-rw-rw-r-- 1 gorka gorka 18373 oct 21  2016 bbautoloader.html
+-rw-rw-r-- 1 gorka gorka  1288 jul  5  2017 bbautoloader.php.txt
+-rw-rw-r-- 1 gorka gorka 40025 oct 21  2016 bbdefines.html
+-rw-rw-r-- 1 gorka gorka  1294 jul  5  2017 bbdefines.php.txt
+drwxrwxr-x 2 gorka gorka  4096 jul  5  2017 bizmodel
+-rw-rw-r-- 1 gorka gorka 21102 oct 21  2016 BizModelAdapterTemplate.html
+-rw-rw-r-- 1 gorka gorka 19130 jul  5  2017 BizModelAdapterTemplate.php.txt
+-rw-rw-r-- 1 gorka gorka 22262 ene 19  2017 bizmodel.BizModelAdapter.html
+-rw-rw-r-- 1 gorka gorka 21065 oct 21  2016 BizModelProvider.html
+-rw-rw-r-- 1 gorka gorka 14284 jul  5  2017 BizModelProvider.php.txt
+drwxrwxr-x 2 gorka gorka  4096 jul  5  2017 botbasic
+-rw-rw-r-- 1 gorka gorka 19562 ene 19  2017 botbasic.bbautoloader.html
+-rw-rw-r-- 1 gorka gorka 84155 ene 19  2017 botbasic.bbdefines.html
+-rw-rw-r-- 1 gorka gorka 22293 ene 19  2017 botbasic.BizModelAdapterTemplate.html
+-rw-rw-r-- 1 gorka gorka 22254 ene 19  2017 botbasic.BizModelProvider.html
+-rw-rw-r-- 1 gorka gorka 22277 ene 19  2017 botbasic.BotBasicChannel.html
+-rw-rw-r-- 1 gorka gorka 22178 ene 19  2017 botbasic.BotBasic.html
+-rw-rw-r-- 1 gorka gorka 22175 ene 19  2017 botbasic.BotBasicParser.html
+-rw-rw-r-- 1 gorka gorka 22207 ene 19  2017 botbasic.BotBasicRuntime.html
+-rw-rw-r-- 1 gorka gorka 18379 oct 21  2016 BotBasicChannel.html
+-rw-rw-r-- 1 gorka gorka 19061 jul  5  2017 BotBasicChannel.php.txt
+-rw-rw-r-- 1 gorka gorka 22240 ene 19  2017 botbasic.ChatMediumChannel.html
+-rw-rw-r-- 1 gorka gorka 22304 ene 19  2017 botbasic.ChatMediumCliStub.html
+-rw-rw-r-- 1 gorka gorka 22210 ene 19  2017 botbasic.ChatMedium.html
+-rw-rw-r-- 1 gorka gorka 22246 ene 19  2017 botbasic.ChatMediumTelegram.html
+-rw-rw-r-- 1 gorka gorka 22295 ene 19  2017 botbasic.ChatMediumWebStub.html
+-rw-rw-r-- 1 gorka gorka 22291 ene 19  2017 botbasic.Closable.html
+-rw-rw-r-- 1 gorka gorka 22229 ene 19  2017 botbasic.DBbroker.html
+-rw-rw-r-- 1 gorka gorka 20989 oct 21  2016 BotBasic.html
+-rw-rw-r-- 1 gorka gorka 22318 ene 19  2017 botbasic.Initializable.html
+-rw-rw-r-- 1 gorka gorka 22225 ene 19  2017 botbasic.Interaction.html
+-rw-rw-r-- 1 gorka gorka 22244 ene 19  2017 botbasic.InteractionResource.html
+-rw-rw-r-- 1 gorka gorka 22428 ene 19  2017 botbasic.LogbotChatMedium.html
+-rw-rw-r-- 1 gorka gorka 22186 ene 19  2017 botbasic.Log.html
+-rw-rw-r-- 1 gorka gorka 20988 oct 21  2016 BotBasicParser.html
+-rw-rw-r-- 1 gorka gorka 74318 jul  5  2017 BotBasicParser.php.txt
+-rw-rw-r-- 1 gorka gorka 48960 jul  5  2017 BotBasic.php.txt
+-rw-rw-r-- 1 gorka gorka 21016 oct 21  2016 BotBasicRuntime.html
+-rw-rw-r-- 1 gorka gorka 85840 jul  5  2017 BotBasicRuntime.php.txt
+-rw-rw-r-- 1 gorka gorka 22171 ene 19  2017 botbasic.Splash.html
+-rw-rw-r-- 1 gorka gorka 22175 ene 19  2017 botbasic.Update.html
+-rw-rw-r-- 1 gorka gorka 22283 ene 19  2017 botbasic.WebRouterCliStub.html
+-rw-rw-r-- 1 gorka gorka 22263 ene 19  2017 botbasic.WebRouter.html
+-rw-rw-r-- 1 gorka gorka 22232 ene 19  2017 botbasic.WebRouterTelegram.html
+-rw-rw-r-- 1 gorka gorka 22277 ene 19  2017 botbasic.WebRouterWebStub.html
+-rw-rw-r-- 1 gorka gorka 21055 oct 21  2016 ChatMediumChannel.html
+-rw-rw-r-- 1 gorka gorka 11260 jul  5  2017 ChatMediumChannel.php.txt
+-rw-rw-r-- 1 gorka gorka 21117 oct 21  2016 ChatMediumCliStub.html
+-rw-rw-r-- 1 gorka gorka  6543 jul  5  2017 ChatMediumCliStub.php.txt
+-rw-rw-r-- 1 gorka gorka 21023 oct 21  2016 ChatMedium.html
+-rw-rw-r-- 1 gorka gorka 12032 jul  5  2017 ChatMedium.php.txt
+-rw-rw-r-- 1 gorka gorka 21057 oct 21  2016 ChatMediumTelegram.html
+-rw-rw-r-- 1 gorka gorka 26859 jul  5  2017 ChatMediumTelegram.php.txt
+-rw-rw-r-- 1 gorka gorka 21108 oct 21  2016 ChatMediumWebStub.html
+-rw-rw-r-- 1 gorka gorka  7410 jul  5  2017 ChatMediumWebStub.php.txt
+-rw-rw-r-- 1 gorka gorka 21102 oct 21  2016 Closable.html
+-rw-rw-r-- 1 gorka gorka   850 jul  5  2017 Closable.php.txt
+-rw-rw-r-- 1 gorka gorka 21040 oct 21  2016 DBbroker.html
+-rw-rw-r-- 1 gorka gorka 54974 jul  5  2017 DBbroker.php.txt
+-rw-rw-r-- 1 gorka gorka 21034 oct 21  2016 Interaction.html
+-rw-rw-r-- 1 gorka gorka  6466 jul  5  2017 Interaction.php.txt
+-rw-rw-r-- 1 gorka gorka 21053 oct 21  2016 InteractionResource.html
+-rw-rw-r-- 1 gorka gorka  6646 jul  5  2017 InteractionResource.php.txt
+-rw-rw-r-- 1 gorka gorka 20997 oct 21  2016 Log.html
+-rw-rw-r-- 1 gorka gorka  9776 jul  5  2017 Log.php.txt
+-rw-rw-r-- 1 gorka gorka 18361 oct 21  2016 Splash.html
+-rw-rw-r-- 1 gorka gorka  3613 jul  5  2017 Splash.php.txt
+-rw-rw-r-- 1 gorka gorka 20986 oct 21  2016 Update.html
+-rw-rw-r-- 1 gorka gorka  5838 jul  5  2017 Update.php.txt
+-rw-rw-r-- 1 gorka gorka 21094 oct 21  2016 WebRouterCliStub.html
+-rw-rw-r-- 1 gorka gorka  1030 jul  5  2017 WebRouterCliStub.php.txt
+-rw-rw-r-- 1 gorka gorka 21076 oct 21  2016 WebRouter.html
+-rw-rw-r-- 1 gorka gorka  2685 jul  5  2017 WebRouter.php.txt
+-rw-rw-r-- 1 gorka gorka 21041 oct 21  2016 WebRouterTelegram.html
+-rw-rw-r-- 1 gorka gorka  1123 jul  5  2017 WebRouterTelegram.php.txt
+-rw-rw-r-- 1 gorka gorka 21090 oct 21  2016 WebRouterWebStub.html
+-rw-rw-r-- 1 gorka gorka   994 jul  5  2017 WebRouterWebStub.php.txt
+
+./httpdocs/botbasic/doc/files/bizmodel:
+total 16
+-rw-rw-r-- 1 gorka gorka 12953 jul  5  2017 BizModelAdapter.php.txt
+
+./httpdocs/botbasic/doc/files/botbasic:
+total 776
+-rw-rw-r-- 1 gorka gorka   2501 jul  5  2017 bbautoloader.php.txt
+-rw-rw-r-- 1 gorka gorka   3943 jul  5  2017 bbdefines.php.txt
+-rw-rw-r-- 1 gorka gorka  18497 jul  5  2017 BizModelAdapterTemplate.php.txt
+-rw-rw-r-- 1 gorka gorka  13848 jul  5  2017 BizModelProvider.php.txt
+-rw-rw-r-- 1 gorka gorka  58068 jul  5  2017 BotBasicChannel.php.txt
+-rw-rw-r-- 1 gorka gorka 116479 jul  5  2017 BotBasicParser.php.txt
+-rw-rw-r-- 1 gorka gorka  53504 jul  5  2017 BotBasic.php.txt
+-rw-rw-r-- 1 gorka gorka 157414 jul  5  2017 BotBasicRuntime.php.txt
+-rw-rw-r-- 1 gorka gorka  23370 jul  5  2017 ChatMediumChannel.php.txt
+-rw-rw-r-- 1 gorka gorka   8140 jul  5  2017 ChatMediumCliStub.php.txt
+-rw-rw-r-- 1 gorka gorka  26021 jul  5  2017 ChatMedium.php.txt
+-rw-rw-r-- 1 gorka gorka  51186 jul  5  2017 ChatMediumTelegram.php.txt
+-rw-rw-r-- 1 gorka gorka   8353 jul  5  2017 ChatMediumWebStub.php.txt
+-rw-rw-r-- 1 gorka gorka   1705 jul  5  2017 Closable.php.txt
+-rw-rw-r-- 1 gorka gorka 109518 jul  5  2017 DBbroker.php.txt
+-rw-rw-r-- 1 gorka gorka   1474 jul  5  2017 Initializable.php.txt
+-rw-rw-r-- 1 gorka gorka  18856 jul  5  2017 Interaction.php.txt
+-rw-rw-r-- 1 gorka gorka  11256 jul  5  2017 InteractionResource.php.txt
+-rw-rw-r-- 1 gorka gorka   1440 jul  5  2017 LogbotChatMedium.php.txt
+-rw-rw-r-- 1 gorka gorka  25645 jul  5  2017 Log.php.txt
+-rw-rw-r-- 1 gorka gorka   7472 jul  5  2017 Splash.php.txt
+-rw-rw-r-- 1 gorka gorka  10663 jul  5  2017 Update.php.txt
+-rw-rw-r-- 1 gorka gorka   1045 jul  5  2017 WebRouterCliStub.php.txt
+-rw-rw-r-- 1 gorka gorka   4971 jul  5  2017 WebRouter.php.txt
+-rw-rw-r-- 1 gorka gorka   1138 jul  5  2017 WebRouterTelegram.php.txt
+-rw-rw-r-- 1 gorka gorka   1009 jul  5  2017 WebRouterWebStub.php.txt
+
+./httpdocs/botbasic/doc/font:
+total 620
+-rw-rw-r-- 1 gorka gorka  75188 ene 19  2017 FontAwesome.otf
+-rw-rw-r-- 1 gorka gorka  72449 ene 19  2017 fontawesome-webfont.eot
+-rw-rw-r-- 1 gorka gorka 253487 ene 19  2017 fontawesome-webfont.svg
+-rw-rw-r-- 1 gorka gorka 141564 ene 19  2017 fontawesome-webfont.ttf
+-rw-rw-r-- 1 gorka gorka  83760 ene 19  2017 fontawesome-webfont.woff
+
+./httpdocs/botbasic/doc/graphs:
+total 32
+-rw-rw-r-- 1 gorka gorka 18158 ene 19  2017 classes.svg
+-rw-rw-r-- 1 gorka gorka 11937 ene 19  2017 class.html
+
+./httpdocs/botbasic/doc/images:
+total 112
+-rw-rw-r-- 1 gorka gorka 28338 ene 19  2017 apple-touch-icon-114x114.png
+-rw-rw-r-- 1 gorka gorka 12751 ene 19  2017 apple-touch-icon-72x72.png
+-rw-rw-r-- 1 gorka gorka  8358 ene 19  2017 apple-touch-icon.png
+-rw-rw-r-- 1 gorka gorka  5957 ene 19  2017 custom-icons.svg
+-rw-rw-r-- 1 gorka gorka  1150 ene 19  2017 favicon.ico
+-rw-rw-r-- 1 gorka gorka   236 ene 19  2017 hierarchy-item.png
+-rw-rw-r-- 1 gorka gorka   428 ene 19  2017 icon-class-13x13.png
+-rw-rw-r-- 1 gorka gorka  4583 ene 19  2017 icon-class.svg
+-rw-rw-r-- 1 gorka gorka   308 ene 19  2017 icon-interface-13x13.png
+-rw-rw-r-- 1 gorka gorka  4548 ene 19  2017 icon-interface.svg
+-rw-rw-r-- 1 gorka gorka   340 ene 19  2017 icon-trait-13x13.png
+-rw-rw-r-- 1 gorka gorka  4548 ene 19  2017 icon-trait.svg
+drwxrwxr-x 2 gorka gorka  4096 oct 21  2016 iviewer
+
+./httpdocs/botbasic/doc/images/iviewer:
+total 32
+-rw-rw-r-- 1 gorka gorka 1150 ene 19  2017 grab.cur
+-rw-rw-r-- 1 gorka gorka 1150 ene 19  2017 hand.cur
+-rw-rw-r-- 1 gorka gorka 1493 ene 19  2017 iviewer.rotate_left.png
+-rw-rw-r-- 1 gorka gorka 1482 ene 19  2017 iviewer.rotate_right.png
+-rw-rw-r-- 1 gorka gorka 1252 ene 19  2017 iviewer.zoom_fit.png
+-rw-rw-r-- 1 gorka gorka 1420 ene 19  2017 iviewer.zoom_in.png
+-rw-rw-r-- 1 gorka gorka 1416 ene 19  2017 iviewer.zoom_out.png
+-rw-rw-r-- 1 gorka gorka 1091 ene 19  2017 iviewer.zoom_zero.png
+
+./httpdocs/botbasic/doc/js:
+total 240
+-rw-rw-r-- 1 gorka gorka 28756 ene 19  2017 bootstrap.min.js
+-rw-rw-r-- 1 gorka gorka  2429 ene 19  2017 html5.js
+-rw-rw-r-- 1 gorka gorka 96381 ene 19  2017 jquery-1.11.0.min.js
+-rw-rw-r-- 1 gorka gorka 10783 ene 19  2017 jquery.dotdotdot-1.5.9.js
+-rw-rw-r-- 1 gorka gorka  5276 ene 19  2017 jquery.dotdotdot-1.5.9.min.js
+-rw-rw-r-- 1 gorka gorka 38713 ene 19  2017 jquery.iviewer.js
+-rw-rw-r-- 1 gorka gorka 17987 ene 19  2017 jquery.iviewer.min.js
+-rw-rw-r-- 1 gorka gorka  7349 ene 19  2017 jquery.mousewheel.js
+-rw-rw-r-- 1 gorka gorka  1081 ene 19  2017 jquery.smooth-scroll.js
+-rw-rw-r-- 1 gorka gorka 11926 ene 19  2017 prism.min.js
+drwxrwxr-x 3 gorka gorka  4096 oct 21  2016 ui
+
+./httpdocs/botbasic/doc/js/ui:
+total 4
+drwxrwxr-x 2 gorka gorka 4096 oct 21  2016 1.10.4
+
+./httpdocs/botbasic/doc/js/ui/1.10.4:
+total 224
+-rw-rw-r-- 1 gorka gorka 228539 ene 19  2017 jquery-ui.min.js
+
+./httpdocs/botbasic/doc/namespaces:
+total 104
+-rw-rw-r-- 1 gorka gorka 24116 ene 19  2017 botbasic.html
+-rw-rw-r-- 1 gorka gorka 81033 ene 19  2017 default.html
+
+./httpdocs/botbasic/doc/phpdoc-cache-18:
+total 372
+-rw------- 1 gorka gorka 380291 ene 19  2017 phpdoc-cache-file_d9e87358aafbba67a306ce8c16596f02.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-1d:
+total 8
+-rw------- 1 gorka gorka 6295 ene 19  2017 phpdoc-cache-file_018dad37e8600d3e9e816280eb3ddd95.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-2e:
+total 4
+-rw------- 1 gorka gorka 113 ene 19  2017 phpdoc-cache-settings.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-33:
+total 12
+-rw------- 1 gorka gorka 10174 ene 19  2017 phpdoc-cache-file_6e8884fb655d43b28f804f5273aeca46.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-37:
+total 84
+-rw------- 1 gorka gorka 82805 ene 19  2017 phpdoc-cache-file_097fdc195363b26eb75f40a96148e3c3.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-44:
+total 44
+-rw------- 1 gorka gorka 40979 ene 19  2017 phpdoc-cache-file_c6acb4785651aa71881e5106bc7d0ef8.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-45:
+total 528
+-rw------- 1 gorka gorka 539844 ene 19  2017 phpdoc-cache-file_4d6d3c47fb83250b76749911490f122f.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-4c:
+total 84
+-rw------- 1 gorka gorka 10343 ene 19  2017 phpdoc-cache-file_3df26ee5c6d511cc8c0b3038b6b0c1ee.dat
+-rw------- 1 gorka gorka 70442 ene 19  2017 phpdoc-cache-file_a00c4f1365567f90426121913ec2af80.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-4e:
+total 628
+-rw------- 1 gorka gorka 641383 ene 19  2017 phpdoc-cache-file_e6e9b4005aff7f6068ec4e2a7309f4b1.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-5c:
+total 272
+-rw------- 1 gorka gorka 167010 ene 19  2017 phpdoc-cache-file_9a446f29394b10218c5920a53c6a3c6a.dat
+-rw------- 1 gorka gorka 110286 ene 19  2017 phpdoc-cache-file_ae2e9f549edf404ccc365ac5ca319567.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-61:
+total 96
+-rw------- 1 gorka gorka 98241 ene 19  2017 phpdoc-cache-file_8e03a7ea46a2ca20e6f467ee185c3e12.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-7e:
+total 136
+-rw------- 1 gorka gorka 136342 ene 19  2017 phpdoc-cache-file_e77aaf522527cc6b24aeff6e8e4ba34c.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-89:
+total 24
+-rw------- 1 gorka gorka 20839 ene 19  2017 phpdoc-cache-file_54cf4fdb217c17072ba0827dd5d085ca.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-91:
+total 256
+-rw------- 1 gorka gorka 261063 ene 19  2017 phpdoc-cache-file_e4ddb1cdcdf4b95ab3bf45b1bc6f0ae5.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-93:
+total 60
+-rw------- 1 gorka gorka 59316 ene 19  2017 phpdoc-cache-file_df0980cb3f789255357c2a31e9a51b20.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-94:
+total 64
+-rw------- 1 gorka gorka 63903 ene 19  2017 phpdoc-cache-file_fee3d21709fb6a18d5192c90b62213df.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-9d:
+total 12
+-rw------- 1 gorka gorka 9649 ene 19  2017 phpdoc-cache-file_fce9cad52c7c5ad24bc5d302b7469d37.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-a3:
+total 12
+-rw------- 1 gorka gorka 9492 ene 19  2017 phpdoc-cache-file_76567c55f664705b194b7f21fc2c73b2.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-a4:
+total 236
+-rw------- 1 gorka gorka 238377 ene 19  2017 phpdoc-cache-file_e37414cb6417c16539a8f771a10a108a.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-a7:
+total 60
+-rw------- 1 gorka gorka 58435 ene 19  2017 phpdoc-cache-file_ecb8dba907f594200153f33d3daf4c7e.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-ad:
+total 16
+-rw------- 1 gorka gorka 12373 ene 19  2017 phpdoc-cache-file_5e395bdf62c0b2312ef69a9180ec6a2d.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-b4:
+total 40
+-rw------- 1 gorka gorka 36951 ene 19  2017 phpdoc-cache-file_381233be5d479fb13092423e98fce615.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-d1:
+total 120
+-rw------- 1 gorka gorka 122182 ene 19  2017 phpdoc-cache-file_0f8656fa2ee426dc78e10d6fe90ab954.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-d7:
+total 96
+-rw------- 1 gorka gorka 96735 ene 19  2017 phpdoc-cache-file_95a424cd997bc2c2d7f1003d51ced56f.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-f4:
+total 104
+-rw------- 1 gorka gorka 103806 ene 19  2017 phpdoc-cache-file_683b4d829a2a92ec3571773e6b94abda.dat
+
+./httpdocs/botbasic/doc/phpdoc-cache-ff:
+total 12
+-rw------- 1 gorka gorka 9452 ene 19  2017 phpdoc-cache-file_01ba77bf985233209f8051cb45183953.dat
+
+./httpdocs/botbasic/doc/reports:
+total 152
+-rw-rw-r-- 1 gorka gorka  11656 ene 19  2017 deprecated.html
+-rw-rw-r-- 1 gorka gorka 108536 ene 19  2017 errors.html
+-rw-rw-r-- 1 gorka gorka  29358 ene 19  2017 markers.html
+
+./httpdocs/krumo:
+total 92
+-rw-r--r-- 1 gorka gorka 26064 nov 21  2016 class.krumo.php
+drwxr-xr-x 4 gorka gorka  4096 sep 13  2016 docs
+-rw-r--r-- 1 gorka gorka   131 oct 28  2016 index.html
+-rw-r--r-- 1 gorka gorka  1284 nov 21  2016 INSTALL
+-rw-r--r-- 1 gorka gorka   446 nov 21  2016 krumo.ini
+-rw-r--r-- 1 gorka gorka  2196 dic  2  2007 krumo.js
+-rw-r--r-- 1 gorka gorka 26925 dic  2  2007 LICENSE
+-rw-r--r-- 1 gorka gorka  4075 dic  2  2007 README
+drwxr-xr-x 7 gorka gorka  4096 sep 13  2016 skins
+-rw-r--r-- 1 gorka gorka   792 sep 13  2016 TODO
+-rw-r--r-- 1 gorka gorka     6 dic  2  2007 VERSION
+
+./httpdocs/krumo/docs:
+total 124
+-rw-r--r-- 1 gorka gorka   392 ago  1  2007 blank.html
+-rw-r--r-- 1 gorka gorka   723 dic  2  2007 classtrees_Krumo.html
+-rw-r--r-- 1 gorka gorka 18360 ago  1  2007 elementindex.html
+-rw-r--r-- 1 gorka gorka 18479 ago  1  2007 elementindex_Krumo.html
+-rw-r--r-- 1 gorka gorka   676 dic  2  2007 errors.html
+-rw-r--r-- 1 gorka gorka   956 dic  2  2007 index.html
+drwxr--r-- 2 gorka gorka  4096 sep 13  2016 Krumo
+-rw-r--r-- 1 gorka gorka  5100 ago  1  2007 li_Krumo.html
+drwxr--r-- 4 gorka gorka  4096 sep 13  2016 media
+-rw-r--r-- 1 gorka gorka  1469 ago  1  2007 packages.html
+-rw-r--r-- 1 gorka gorka  2027 dic  2  2007 ric_INSTALL.html
+-rw-r--r-- 1 gorka gorka 27810 dic  2  2007 ric_LICENSE.html
+-rw-r--r-- 1 gorka gorka  4762 dic  2  2007 ric_README.html
+-rw-r--r-- 1 gorka gorka  1444 dic  2  2007 ric_TODO.html
+-rw-r--r-- 1 gorka gorka   657 dic  2  2007 ric_VERSION.html
+
+./httpdocs/krumo/docs/Krumo:
+total 40
+-rw-r--r-- 1 gorka gorka  9181 dic  2  2007 _class.krumo.php.html
+-rw-r--r-- 1 gorka gorka 27668 dic  2  2007 krumo.html
+
+./httpdocs/krumo/docs/media:
+total 20
+-rw-r--r-- 1 gorka gorka  428 ago  1  2007 banner.css
+drwxr--r-- 2 gorka gorka 4096 sep 13  2016 images
+drwxr--r-- 2 gorka gorka 4096 sep 13  2016 lib
+-rw-r--r-- 1 gorka gorka 6230 ago  1  2007 stylesheet.css
+
+./httpdocs/krumo/docs/media/images:
+total 204
+-rw-r--r-- 1 gorka gorka 1232 ago  1  2007 AbstractClass_logo.png
+-rw-r--r-- 1 gorka gorka  620 ago  1  2007 AbstractClass.png
+-rw-r--r-- 1 gorka gorka  696 ago  1  2007 AbstractMethod.png
+-rw-r--r-- 1 gorka gorka 1615 ago  1  2007 AbstractPrivateClass_logo.png
+-rw-r--r-- 1 gorka gorka  848 ago  1  2007 AbstractPrivateClass.png
+-rw-r--r-- 1 gorka gorka  874 ago  1  2007 AbstractPrivateMethod.png
+-rw-r--r-- 1 gorka gorka  144 ago  1  2007 blank.png
+-rw-r--r-- 1 gorka gorka  633 ago  1  2007 class_folder.png
+-rw-r--r-- 1 gorka gorka 1600 ago  1  2007 Class_logo.png
+-rw-r--r-- 1 gorka gorka  570 ago  1  2007 Class.png
+-rw-r--r-- 1 gorka gorka  752 ago  1  2007 Constant.png
+-rw-r--r-- 1 gorka gorka  865 ago  1  2007 Constructor.png
+-rw-r--r-- 1 gorka gorka  956 ago  1  2007 Destructor.png
+-rw-r--r-- 1 gorka gorka   90 ago  1  2007 empty.png
+-rw-r--r-- 1 gorka gorka  462 ago  1  2007 file.png
+-rw-r--r-- 1 gorka gorka  492 ago  1  2007 folder.png
+-rw-r--r-- 1 gorka gorka  605 ago  1  2007 function_folder.png
+-rw-r--r-- 1 gorka gorka  596 ago  1  2007 Function.png
+-rw-r--r-- 1 gorka gorka  712 ago  1  2007 Global.png
+-rw-r--r-- 1 gorka gorka  584 ago  1  2007 Index.png
+-rw-r--r-- 1 gorka gorka 1600 ago  1  2007 Interface_logo.png
+-rw-r--r-- 1 gorka gorka 1083 ago  1  2007 Interface.PNG
+-rw-r--r-- 1 gorka gorka  148 ago  1  2007 I.png
+-rw-r--r-- 1 gorka gorka  219 ago  1  2007 Lminus.png
+-rw-r--r-- 1 gorka gorka  224 ago  1  2007 Lplus.png
+-rw-r--r-- 1 gorka gorka  153 ago  1  2007 L.png
+-rw-r--r-- 1 gorka gorka  661 ago  1  2007 Method.png
+-rw-r--r-- 1 gorka gorka   54 ago  1  2007 minus.gif
+-rw-r--r-- 1 gorka gorka  543 ago  1  2007 next_button_disabled.png
+-rw-r--r-- 1 gorka gorka  657 ago  1  2007 next_button.png
+-rw-r--r-- 1 gorka gorka  564 ago  1  2007 package_folder.png
+-rw-r--r-- 1 gorka gorka  668 ago  1  2007 package.png
+-rw-r--r-- 1 gorka gorka 1369 ago  1  2007 Page_logo.png
+-rw-r--r-- 1 gorka gorka  592 ago  1  2007 Page.png
+-rw-r--r-- 1 gorka gorka   56 ago  1  2007 plus.gif
+-rw-r--r-- 1 gorka gorka  541 ago  1  2007 previous_button_disabled.png
+-rw-r--r-- 1 gorka gorka  644 ago  1  2007 previous_button.png
+-rw-r--r-- 1 gorka gorka 1836 ago  1  2007 private_class_logo.png
+-rw-r--r-- 1 gorka gorka 1836 ago  1  2007 PrivateClass_logo.png
+-rw-r--r-- 1 gorka gorka  790 ago  1  2007 PrivateClass.png
+-rw-r--r-- 1 gorka gorka  918 ago  1  2007 PrivateMethod.png
+-rw-r--r-- 1 gorka gorka  772 ago  1  2007 PrivateVariable.png
+-rw-r--r-- 1 gorka gorka  661 ago  1  2007 StaticMethod.png
+-rw-r--r-- 1 gorka gorka  688 ago  1  2007 StaticVariable.png
+-rw-r--r-- 1 gorka gorka  207 ago  1  2007 Tminus.png
+-rw-r--r-- 1 gorka gorka  222 ago  1  2007 Tplus.png
+-rw-r--r-- 1 gorka gorka  152 ago  1  2007 T.png
+-rw-r--r-- 1 gorka gorka  572 ago  1  2007 tutorial_folder.png
+-rw-r--r-- 1 gorka gorka  431 ago  1  2007 tutorial.png
+-rw-r--r-- 1 gorka gorka  668 ago  1  2007 up_button.png
+-rw-r--r-- 1 gorka gorka  688 ago  1  2007 Variable.png
+
+./httpdocs/krumo/docs/media/lib:
+total 20
+-rw-r--r-- 1 gorka gorka 17804 ago  1  2007 classTree.js
+
+./httpdocs/krumo/skins:
+total 20
+drwxr-xr-x 2 gorka gorka 4096 sep 13  2016 blue
+drwxr-xr-x 2 gorka gorka 4096 sep 13  2016 default
+drwxr-xr-x 2 gorka gorka 4096 sep 13  2016 green
+drwxr-xr-x 2 gorka gorka 4096 sep 13  2016 orange
+drwxr-xr-x 2 gorka gorka 4096 sep 13  2016 schablon.com
+
+./httpdocs/krumo/skins/blue:
+total 8
+-rw-r--r-- 1 gorka gorka  141 abr 17  2007 bg.gif
+-rw-r--r-- 1 gorka gorka 3023 jun 16  2007 skin.css
+
+./httpdocs/krumo/skins/default:
+total 8
+-rw-r--r-- 1 gorka gorka  141 abr 17  2007 bg.gif
+-rw-r--r-- 1 gorka gorka 3030 jun 16  2007 skin.css
+
+./httpdocs/krumo/skins/green:
+total 8
+-rw-r--r-- 1 gorka gorka  141 abr 17  2007 bg.gif
+-rw-r--r-- 1 gorka gorka 3027 jun 16  2007 skin.css
+
+./httpdocs/krumo/skins/orange:
+total 8
+-rw-r--r-- 1 gorka gorka  141 abr 17  2007 bg.gif
+-rw-r--r-- 1 gorka gorka 3031 jun 16  2007 skin.css
+
+./httpdocs/krumo/skins/schablon.com:
+total 20
+-rw-r--r-- 1 gorka gorka  102 abr 17  2007 collapsed.gif
+-rw-r--r-- 1 gorka gorka   91 abr 17  2007 dotted.gif
+-rw-r--r-- 1 gorka gorka  101 abr 17  2007 empty.gif
+-rw-r--r-- 1 gorka gorka   99 abr 17  2007 expanded.gif
+-rw-r--r-- 1 gorka gorka 3307 jun 16  2007 skin.css
+
+./httpdocs/scripts:
+total 32
+drwxr-xr-x 2 gorka gorka 4096 jul  5  2017 clistub
+drwxr-xr-x 2 gorka gorka 4096 jul  5  2017 downloader
+drwxrwxr-x 2 gorka gorka 4096 jul  5  2017 hooksetter
+-rw-r--r-- 1 gorka gorka  131 oct 28  2016 index.html
+drwxr-xr-x 3 gorka gorka 4096 jun 22  2017 media
+drwxr-xr-x 2 gorka gorka 4096 nov 21  2016 parser
+drwxr-xr-x 2 gorka gorka 4096 jul  5  2017 telegramsender
+drwxr-xr-x 2 gorka gorka 4096 jul  5  2017 webstub
+
+./httpdocs/scripts/clistub:
+total 8
+-rw-r--r-- 1 gorka gorka 1606 jul  5  2017 stub_cli.php
+-rwxr-xr-x 1 gorka gorka  163 dic  4  2016 stub_cli.sh
+
+./httpdocs/scripts/downloader:
+total 8
+-rwxr-xr-x 1 gorka gorka 1010 jun 24  2017 launcher.sh
+-rw-r--r-- 1 gorka gorka 1606 jul  5  2017 webscript.php
+
+./httpdocs/scripts/hooksetter:
+total 16
+-rw-r--r-- 1 gorka gorka 14192 jul  5  2017 setwebhook.php
+
+./httpdocs/scripts/media:
+total 12
+-rwxr-xr-x 1 gorka gorka 1096 sep  8  2016 avi2mp3.sh
+-rwxr-xr-x 1 gorka gorka 2265 sep  8  2016 mpeg2mp3.sh
+drwxr-xr-x 2 gorka gorka 4096 sep  8  2016 videos
+
+./httpdocs/scripts/media/videos:
+total 16300
+-rw-r--r-- 1 gorka gorka 12983296 sep  7  2016 Funny-English-Teacher-From-Bihar-India.avi
+-rw-r--r-- 1 gorka gorka  1520669 sep  7  2016 test-mpeg_512kb.mp4
+-rw-r--r-- 1 gorka gorka   706564 sep  7  2016 test-mpeg.mpg
+-rw-r--r-- 1 gorka gorka  1472503 sep  7  2016 test-mpeg.ogv
+
+./httpdocs/scripts/parser:
+total 8
+-rwxr-xr-x 1 gorka gorka 162 nov 18  2016 parser_cli.sh
+-rw-r--r-- 1 gorka gorka 799 nov 21  2016 parser_upload_form.html
+
+./httpdocs/scripts/telegramsender:
+total 8
+-rwxr-xr-x 1 gorka gorka 1072 jun 24  2017 launcher.sh
+-rw-r--r-- 1 gorka gorka 1263 jul  5  2017 webscript.php
+
+./httpdocs/scripts/webstub:
+total 12
+-rw-r--r-- 1 gorka gorka 1076 jul  5  2017 fake_10_00.php
+-rw-r--r-- 1 gorka gorka 1076 jul  5  2017 fake_12_00.php
+-rw-r--r-- 1 gorka gorka 1884 may 10  2017 webrouterwebstub_form.html
+
+./httpdocs/unirest:
+total 44
+-rw-rw-r-- 1 gorka gorka   682 ago 11  2016 composer.json
+-rw-r--r-- 1 gorka gorka   131 oct 28  2016 index.html
+-rw-rw-r-- 1 gorka gorka  1099 ago 11  2016 LICENSE
+-rw-rw-r-- 1 gorka gorka   386 ago 11  2016 phpunit.xml
+-rw-rw-r-- 1 gorka gorka 16542 ago 11  2016 README.md
+drwxrwxr-x 3 gorka gorka  4096 ago 11  2016 src
+drwxrwxr-x 4 gorka gorka  4096 ago 11  2016 tests
+
+./httpdocs/unirest/src:
+total 8
+drwxrwxr-x 3 gorka gorka 4096 ago 11  2016 Unirest
+-rw-rw-r-- 1 gorka gorka  299 ago 11  2016 Unirest.php
+
+./httpdocs/unirest/src/Unirest:
+total 36
+-rw-rw-r-- 1 gorka gorka    65 ago 11  2016 Exception.php
+-rw-rw-r-- 1 gorka gorka  1585 ago 11  2016 Method.php
+drwxrwxr-x 2 gorka gorka  4096 ago 11  2016 Request
+-rwxr-xr-x 1 gorka gorka 19361 ago 11  2016 Request.php
+-rw-rw-r-- 1 gorka gorka  2420 ago 11  2016 Response.php
+
+./httpdocs/unirest/src/Unirest/Request:
+total 4
+-rw-rw-r-- 1 gorka gorka 1732 ago 11  2016 Body.php
+
+./httpdocs/unirest/tests:
+total 12
+-rw-rw-r-- 1 gorka gorka    9 ago 11  2016 bootstrap.php
+drwxrwxr-x 2 gorka gorka 4096 ago 11  2016 fixtures
+drwxrwxr-x 2 gorka gorka 4096 ago 11  2016 Unirest
+
+./httpdocs/unirest/tests/fixtures:
+total 4
+-rw-rw-r-- 1 gorka gorka 14 ago 11  2016 upload.txt
+
+./httpdocs/unirest/tests/Unirest:
+total 28
+-rw-rw-r-- 1 gorka gorka  2193 ago 11  2016 BodyTest.php
+-rw-rw-r-- 1 gorka gorka 17033 ago 11  2016 RequestTest.php
+-rw-rw-r-- 1 gorka gorka   948 ago 11  2016 ResponseTest.php
+
+./httpdocs/webhooks:
+total 8
+-rw-r--r-- 1 gorka gorka  131 oct 28  2016 index.html
+drwxr-xr-x 2 gorka gorka 4096 jul  5  2017 telegram
+
+./httpdocs/webhooks/telegram:
+total 164
+-rw-r--r-- 1 gorka gorka  131 oct 28  2016 index.html
+-rw-r--r-- 1 gorka gorka 9412 may  5  2017 panama_bot.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_10_00_278347235423590890123454.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_12_00_934967523854879438679845.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_20_00_789349080985234237899046.php
+-rw-r--r-- 1 gorka gorka  884 jul  5  2017 tgrp_210_00_237245486123689752355454.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_21_00_412676450978972345784385.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_211_00_345457872345454875754468.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_212_00_234235634675689867983454.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_249_00_235556854754345235356856.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_260_00_234346568534655567342367.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_261_00_233485854734665898553444.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_262_00_236543475679123461478740.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_299_00_345868549563486212678545.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_30_00_41267890408723648979068236903477.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_310_00_345547823345565687545438.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_31_00_52358754518112182475568554552353.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_311_00_123615312846513613684316.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_312_00_225845554721721874898990.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_32_00_23545654887545454445198948945755.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_33_00_23542344556446873414588854256223.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_34_00_86232758263546826577748967444388.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_349_00_124897612675636059626267.php
+-rw-r--r-- 1 gorka gorka  884 jul  5  2017 tgrp_35_00_34847741157856854873468634446755.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_360_00_908698055113687895334533.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_36_00_67983241008404134656454105743468.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_361_00_011561095605020755654561.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_362_00_346845865156789651348900.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_37_00_22453454575734135348788656685333.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_39_00_79090954642134137578357745546464.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_399_00_670565665480123655668108.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_800_00_423457834574335448638710.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_801_00_348676165746768411345688.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_820_00_235645654656865434181376.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_821_00_484068789562371984141339.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_822_00_683455683461791812323128.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_823_00_065394504654406578055400.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_830_00_542354553412303858468016.php
+-rw-r--r-- 1 gorka gorka  886 jul  5  2017 tgrp_899_00_235485656856441568687544.php
+
+./logs:
+total 608304
+-rw-rw-r-- 1 gorka gorka 142776406 jul  5  2017 access.log
+-rw-rw-r-- 1 gorka gorka 364258806 may 10  2017 access.log.hasta20170510
+drwxrwxr-x 2 gorka gorka      4096 may 20  2017 bizmodels
+-rw-rw-r-- 1 gorka gorka     80504 jul  5  2017 error.log
+-rw-rw-r-- 1 gorka gorka     18861 jul  5  2017 hooksetter.log
+-rwxrwxr-x 1 gorka gorka        72 dic 24  2016 less-access-log.sh
+-rw-rw-r-- 1 gorka gorka   1098931 jul  5  2017 panama_bot.log
+-rw-rw-r-- 1 gorka gorka    946669 jul  5  2017 runtime.log
+-rw-rw-r-- 1 gorka gorka 113681274 may 10  2017 runtime.log.hasta20170510
+drwxrwxr-x 2 gorka gorka      4096 nov 23  2016 webstub
+
+./logs/bizmodels:
+total 9444
+-rw-rw-r-- 1 gorka gorka 9669538 jun  2  2017 t3.log
+
+./logs/webstub:
+total 8
+-rw-rw-r-- 1 gorka gorka 385 nov 23  2016 ALL.log
+-rw-rw-r-- 1 gorka gorka 385 nov 23  2016 neuropowerbot__gllona
+
+
+
+
+
+.
+├── backup
+│   ├── backup-databases
+│   ├── backup-to-cloud
+│   ├── database.log
+│   ├── dbs_before_utf8mb4.tar.gz
+│   ├── mysql
+│   │   ├── botbasic_2017-04-26.sql.zip
+│   │   ├── botbasic_2017-05-12.sql.zip
+│   │   ├── botbasic_2017-05-13.sql.zip
+│   │   ├── botbasic_2017-05-14.sql.zip
+│   │   ├── botbasic_2017-05-15.sql.zip
+│   │   ├── botbasic_2017-05-16.sql.zip
+│   │   ├── botbasic_2017-05-17.sql.zip
+│   │   ├── botbasic_2017-05-18.sql.zip
+│   │   ├── botbasic_2017-05-19.sql.zip
+│   │   ├── botbasic_2017-05-20.sql.zip
+│   │   ├── botbasic_2017-05-21.sql.zip
+│   │   ├── botbasic_2017-05-22.sql.zip
+│   │   ├── botbasic_2017-05-23.sql.zip
+│   │   ├── botbasic_2017-05-24.sql.zip
+│   │   ├── botbasic_2017-05-25.sql.zip
+│   │   ├── botbasic_2017-05-31.sql.zip
+│   │   ├── botbasic_2017-06-01.sql.zip
+│   │   ├── botbasic_2017-06-02.sql.zip
+│   │   ├── botbasic_2017-06-03.sql.zip
+│   │   ├── botbasic_2017-06-04.sql.zip
+│   │   ├── botbasic_2017-06-05.sql.zip
+│   │   ├── botbasic_2017-06-06.sql.zip
+│   │   ├── botbasic_2017-06-07.sql.zip
+│   │   ├── botbasic_2017-06-08.sql.zip
+│   │   ├── botbasic_2017-06-09.sql.zip
+│   │   ├── botbasic_2017-06-10.sql.zip
+│   │   ├── botbasic_2017-06-11.sql.zip
+│   │   ├── botbasic_2017-06-12.sql.zip
+│   │   ├── botbasic_2017-06-13.sql.zip
+│   │   ├── botbasic_2017-06-14.sql.zip
+│   │   ├── botbasic_2017-06-15.sql.zip
+│   │   ├── botbasic_2017-06-16.sql.zip
+│   │   ├── botbasic_2017-06-17.sql.zip
+│   │   ├── botbasic_2017-06-18.sql.zip
+│   │   ├── botbasic_2017-06-19.sql.zip
+│   │   ├── botbasic_2017-06-20.sql.zip
+│   │   ├── botbasic_2017-06-21.sql.zip
+│   │   ├── botbasic_2017-06-22.sql.zip
+│   │   ├── botbasic_2017-06-23.sql.zip
+│   │   ├── botbasic_2017-06-24.sql.zip
+│   │   ├── botbasic_2017-06-25.sql.zip
+│   │   ├── botbasic_2017-06-26.sql.zip
+│   │   ├── botbasic_2017-06-27.sql.zip
+│   │   ├── botbasic_2017-06-28.sql.zip
+│   │   ├── botbasic_2017-06-29.sql.zip
+│   │   ├── botbasic_2017-06-30.sql.zip
+│   │   ├── botbasic_2017-07-01.sql.zip
+│   │   ├── botbasic_2017-07-02.sql.zip
+│   │   ├── botbasic_2017-07-03.sql.zip
+│   │   ├── botbasic_2017-07-04.sql.zip
+│   │   ├── botbasic_2017-07-05.sql.zip
+│   │   ├── nima_2017-05-12.sql.zip
+│   │   ├── nima_2017-05-13.sql.zip
+│   │   ├── nima_2017-05-14.sql.zip
+│   │   ├── nima_2017-05-15.sql.zip
+│   │   ├── nima_2017-05-16.sql.zip
+│   │   ├── nima_2017-05-17.sql.zip
+│   │   ├── nima_2017-05-18.sql.zip
+│   │   ├── nima_2017-05-19.sql.zip
+│   │   ├── nima_2017-05-20.sql.zip
+│   │   ├── nima_2017-05-21.sql.zip
+│   │   ├── nima_2017-05-22.sql.zip
+│   │   ├── nima_2017-05-23.sql.zip
+│   │   ├── nima_2017-05-24.sql.zip
+│   │   ├── nima_2017-05-25.sql.zip
+│   │   ├── nima_2017-05-31.sql.zip
+│   │   ├── nima_2017-06-01.sql.zip
+│   │   ├── nima_2017-06-02.sql.zip
+│   │   ├── nima_2017-06-03.sql.zip
+│   │   ├── nima_2017-06-04.sql.zip
+│   │   ├── nima_2017-06-05.sql.zip
+│   │   ├── nima_2017-06-06.sql.zip
+│   │   ├── nima_2017-06-07.sql.zip
+│   │   ├── nima_2017-06-08.sql.zip
+│   │   ├── nima_2017-06-09.sql.zip
+│   │   ├── nima_2017-06-10.sql.zip
+│   │   ├── nima_2017-06-11.sql.zip
+│   │   ├── nima_2017-06-12.sql.zip
+│   │   ├── nima_2017-06-13.sql.zip
+│   │   ├── nima_2017-06-14.sql.zip
+│   │   ├── nima_2017-06-15.sql.zip
+│   │   ├── nima_2017-06-16.sql.zip
+│   │   ├── nima_2017-06-17.sql.zip
+│   │   ├── nima_2017-06-18.sql.zip
+│   │   ├── nima_2017-06-19.sql.zip
+│   │   ├── nima_2017-06-20.sql.zip
+│   │   ├── nima_2017-06-21.sql.zip
+│   │   ├── nima_2017-06-22.sql.zip
+│   │   ├── nima_2017-06-23.sql.zip
+│   │   ├── nima_2017-06-24.sql.zip
+│   │   ├── nima_2017-06-25.sql.zip
+│   │   ├── nima_2017-06-26.sql.zip
+│   │   ├── nima_2017-06-27.sql.zip
+│   │   ├── nima_2017-06-28.sql.zip
+│   │   ├── nima_2017-06-29.sql.zip
+│   │   ├── nima_2017-06-30.sql.zip
+│   │   ├── nima_2017-07-01.sql.zip
+│   │   ├── nima_2017-07-02.sql.zip
+│   │   ├── nima_2017-07-03.sql.zip
+│   │   ├── nima_2017-07-04.sql.zip
+│   │   ├── nima_2017-07-05.sql.zip
+│   │   ├── T3_2017-05-20.sql.zip
+│   │   ├── T3_2017-05-21.sql.zip
+│   │   ├── T3_2017-05-22.sql.zip
+│   │   ├── T3_2017-05-23.sql.zip
+│   │   ├── T3_2017-05-24.sql.zip
+│   │   ├── T3_2017-05-25.sql.zip
+│   │   ├── T3_2017-05-31.sql.zip
+│   │   ├── T3_2017-06-01.sql.zip
+│   │   ├── T3_2017-06-02.sql.zip
+│   │   ├── T3_2017-06-03.sql.zip
+│   │   ├── T3_2017-06-04.sql.zip
+│   │   ├── T3_2017-06-05.sql.zip
+│   │   ├── T3_2017-06-06.sql.zip
+│   │   ├── T3_2017-06-07.sql.zip
+│   │   ├── T3_2017-06-08.sql.zip
+│   │   ├── T3_2017-06-09.sql.zip
+│   │   ├── T3_2017-06-10.sql.zip
+│   │   ├── T3_2017-06-11.sql.zip
+│   │   ├── T3_2017-06-12.sql.zip
+│   │   ├── T3_2017-06-13.sql.zip
+│   │   ├── T3_2017-06-14.sql.zip
+│   │   ├── T3_2017-06-15.sql.zip
+│   │   ├── T3_2017-06-16.sql.zip
+│   │   ├── T3_2017-06-17.sql.zip
+│   │   ├── T3_2017-06-18.sql.zip
+│   │   ├── T3_2017-06-19.sql.zip
+│   │   ├── T3_2017-06-20.sql.zip
+│   │   ├── T3_2017-06-21.sql.zip
+│   │   ├── T3_2017-06-22.sql.zip
+│   │   ├── T3_2017-06-23.sql.zip
+│   │   ├── T3_2017-06-24.sql.zip
+│   │   ├── T3_2017-06-25.sql.zip
+│   │   ├── T3_2017-06-26.sql.zip
+│   │   ├── T3_2017-06-27.sql.zip
+│   │   ├── T3_2017-06-28.sql.zip
+│   │   ├── T3_2017-06-29.sql.zip
+│   │   ├── T3_2017-06-30.sql.zip
+│   │   ├── T3_2017-07-01.sql.zip
+│   │   ├── T3_2017-07-02.sql.zip
+│   │   ├── T3_2017-07-03.sql.zip
+│   │   ├── T3_2017-07-04.sql.zip
+│   │   └── T3_2017-07-05.sql.zip
+│   ├── mysql.cnf
+│   └── zippass.cnf
+├── bbapps
+│   ├── bandera_panama.png
+│   ├── bbtests
+│   │   ├── hellobots_screenshots
+│   │   │   ├── 01_hellobots_bbapp_excel.png
+│   │   │   ├── 02_hellobots_bbparser_uploadingapp.png
+│   │   │   ├── 03_hellobots_bbparser_resultpage.png
+│   │   │   ├── 04_hellobots_telegram_beforetyping.png
+│   │   │   ├── 05_hellobots_telegram_aftertyping.png
+│   │   │   ├── 06_hellobots_telegram_afterresponse.png
+│   │   │   ├── 07_hellobots_cli_simulator.png
+│   │   │   ├── 08_hellobots_web_simulator.png
+│   │   │   ├── BB-devconf.png
+│   │   │   ├── botFinal2016codigo.png
+│   │   │   ├── botFinal2016mensajes.png
+│   │   │   ├── menu1.jpeg
+│   │   │   ├── menu2.jpeg
+│   │   │   ├── menu3.jpeg
+│   │   │   ├── menu4.jpeg
+│   │   │   └── menu5.jpeg
+│   │   ├── testBed_it1.csv
+│   │   └── testBed_it1.ods
+│   ├── biblioboquete
+│   │   ├── biblioboquete_testdrive.csv
+│   │   └── biblioboquete_testdrive.xlsx
+│   ├── bot14bot
+│   │   ├── bot14bot_BB_v1.csv
+│   │   └── bot14bot_BB_v1.xlsx
+│   ├── neuropower_fotobot
+│   │   ├── fotobot_demo.csv
+│   │   ├── Fotobot_demo_script_v1.docx
+│   │   ├── Fotobot_demo_script_v2.docx
+│   │   └── fotobot_demo.xlsx
+│   ├── _neuropower_orig_notes
+│   │   ├── NP conversaciones finales.docx
+│   │   ├── NP conversaciones v1 feedbackNL.docx
+│   │   ├── NP conversaciones v1.odt
+│   │   ├── NP_ER.ods
+│   │   └── NP.xlsx
+│   ├── nima
+│   │   ├── bot1.mp4.zip
+│   │   ├── bot2.mp4.zip
+│   │   ├── bots3.mp4.zip
+│   │   ├── code.zip
+│   │   ├── difusion.zip
+│   │   ├── instrucciones.zip
+│   │   └── logo.png.zip
+│   ├── oraloco
+│   │   ├── insumos oraloco -> /home/gorka/Desktop/insumos oraloco
+│   │   ├── oraloco.csv
+│   │   └── oraloco.xlsx
+│   └── T3
+│       ├── analisis
+│       │   ├── 00 anexo 3.pdf
+│       │   ├── 01 T3-Guerrero,Barquet,Lorca.pdf
+│       │   ├── 02 bases completas v2 gorka 180716.docx
+│       │   ├── 02 bases completas v2 gorka 180716 extracto la aplicacion.docx
+│       │   ├── 03 T3_ER_ultimo2016_atributos.pdf
+│       │   ├── 03 T3_ER_ultimo2016_atributos.xlsx
+│       │   ├── 04 T3_ER_ultimo2016_diagrama.pdf
+│       │   └── 04 T3_ER_ultimo2016_diagrama.xlsx
+│       ├── desarrollo
+│       │   ├── CODE
+│       │   ├── MESSAGES
+│       │   ├── nonDeclaredStrings_prepareMessages.sh
+│       │   ├── nonDeclaredStrings.sh
+│       │   ├── nonDeclaredStrings_stringsWithPrefix.sh
+│       │   ├── T3_BB_v1.csv
+│       │   ├── T3_BB_v1 DO 16.xlsx
+│       │   ├── T3_BB_v1 MA 11 FINAL BEFORE TESTING.xlsx
+│       │   ├── T3_BB_v1 MA 18.xlsx
+│       │   ├── T3_BB_v1 MA 28 FINAL DE VERSION DEV PREVIA A COMPILAR.ods
+│       │   ├── T3_BB_v1 MI 29 LUEGO DE COMPILAR.ods
+│       │   ├── T3_BB_v1 SA 08.xlsx
+│       │   └── T3_BB_v1.xlsx
+│       ├── devBaks
+│       │   └── bizmodel_ASOF_24012017
+│       │       ├── Actor.php
+│       │       ├── BizModelAdapterDefault.php
+│       │       ├── BizModelAdapter.php
+│       │       ├── Camion.php
+│       │       ├── DBbroker.php
+│       │       ├── Especimen.php
+│       │       ├── index.html
+│       │       ├── Log.php
+│       │       ├── logs
+│       │       │   └── t3.log
+│       │       ├── Persistable.php
+│       │       ├── PersistableTest.php
+│       │       ├── Raza.php
+│       │       ├── t3defines.php
+│       │       └── T3_LOGFILE
+│       ├── disenho
+│       │   ├── clases_analisis_v1.dia
+│       │   ├── clases_analisis_v1.pdf
+│       │   ├── clases_implementacion_v1.dia
+│       │   ├── clases_implementacion_v1.pdf
+│       │   ├── T3_design 20170416.xlsx
+│       │   ├── T3_design FINAL BEFORE TESTING.xlsx
+│       │   ├── T3_design FINAL WITH TEST DATA.xlsx
+│       │   ├── T3_design.xlsx
+│       │   ├── T3_E-R_20170411.pdf
+│       │   └── T3_usuarios_betaTest.xlsx
+│       ├── _originales
+│       │   ├── agendaDonadorRecolector_Donacion-01.jpg
+│       │   ├── agendaDonadorRecolector_Recolector-03.jpg
+│       │   ├── bases completas v1 gorka 100616.docx
+│       │   ├── bases completas v1 gorka 100616.odt
+│       │   ├── bases completas v1 gorka 100616.pdf
+│       │   ├── bases completas v2 gorka 180716.docx
+│       │   ├── bases - conceptual v1.docx
+│       │   ├── bases - script.txt
+│       │   ├── T3_ER_ultimo2016.xlsx
+│       │   └── T3-Guerrero,Barquet,Lorca.pdf
+│       └── T3_crono.xlsx
+├── BB_crono.xlsx
+├── BB.xlsx
+├── bots.zip
+├── bugs
+├── count-php-lines
+├── _distribs
+│   ├── krumo_0.2.1a_PHP5-Only.zip
+│   └── unirest-php-master.zip
+├── dns_ssl
+│   ├── botton.duckdns.org
+│   │   ├── 1_root_bundle.crt
+│   │   ├── 2_botton.duckdns.org.crt
+│   │   ├── botton-duckdns-org-csr.csr
+│   │   ├── botton-duckdns-org-csr.key
+│   │   └── botton.duckdns.org.zip
+│   ├── cisco.sh
+│   ├── duck.log
+│   ├── duck.sh
+│   ├── index.html
+│   ├── odroid0.duckdns.org
+│   │   ├── 1_root_bundle.crt
+│   │   ├── 2_odroid0.duckdns.org.crt
+│   │   ├── odroid0-duckdns-org-csr.csr
+│   │   ├── odroid0-duckdns-org-csr.key
+│   │   └── odroid0.duckdns.org.zip
+│   ├── passphrase.txt
+│   ├── _REFERENCES.txt
+│   ├── StartSSL_apache_root_bundle.crt
+│   ├── telegrambots.duckdns.org
+│   │   ├── 1_root_bundle.crt
+│   │   ├── 2_telegrambots.duckdns.org.crt
+│   │   ├── telegrambots-duckdns-org-csr.csr
+│   │   ├── telegrambots-duckdns-org-csr.key
+│   │   ├── telegrambots-duckdns-org-csr.key.with-passphrase
+│   │   └── telegrambots.duckdns.org.zip
+│   ├── telegrambots.duckdns.org_until201706
+│   │   ├── certificate_request.csr
+│   │   ├── private_key_with_passphrase.key
+│   │   ├── StartSSLcertificates_telegrambots.duckdns.org.zip
+│   │   ├── telegrambots.duckdns.org.crt
+│   │   └── telegrambots.duckdns.org.key
+│   └── telegrambots.logicos.org_unusable
+│       └── StartSSLcertificates_telegrambots.logicos.org.zip
+├── downloads
+├── HOWTO_BBAPPS_CONFIGURATION
+├── HOWTO_SERVER_INSTALL
+├── httpdocs
+│   ├── bizmodel
+│   │   ├── BizModelAdapter.php
+│   │   ├── bmdefines.php
+│   │   ├── _distrib
+│   │   │   ├── Messente-API-master.zip
+│   │   │   └── PHPMailer-master.zip
+│   │   ├── index.html
+│   │   ├── messente
+│   │   │   ├── changelog.txt
+│   │   │   ├── class.messente.php
+│   │   │   ├── examples
+│   │   │   │   ├── example-daemon.php
+│   │   │   │   ├── example-dlr.php
+│   │   │   │   ├── example-full-pricelist.php
+│   │   │   │   ├── example-simple.php
+│   │   │   │   ├── example-sqlite.php
+│   │   │   │   └── messages.db
+│   │   │   └── MessenteSmsAutoload.php
+│   │   ├── nima
+│   │   │   ├── All.php
+│   │   │   ├── DBbroker.php
+│   │   │   └── Log.php
+│   │   ├── oraloco
+│   │   ├── phpmailer
+│   │   │   ├── class.phpmailer.php
+│   │   │   ├── class.pop3.php
+│   │   │   ├── class.smtp.php
+│   │   │   └── PHPMailerAutoload.php
+│   │   └── T3
+│   │       ├── Aclamacion.php
+│   │       ├── Acopio.php
+│   │       ├── Actor.php
+│   │       ├── Camion.php
+│   │       ├── Canje.php
+│   │       ├── Colector.php
+│   │       ├── DBbroker.php
+│   │       ├── DonacionDinero.php
+│   │       ├── Donacion.php
+│   │       ├── DonacionPremio.php
+│   │       ├── EntregaColectorAcopio.php
+│   │       ├── Entrega.php
+│   │       ├── EntregaRecicladorColector.php
+│   │       ├── Fundacion.php
+│   │       ├── Geosector.php
+│   │       ├── index.html
+│   │       ├── Invitacion.php
+│   │       ├── Log.php
+│   │       ├── Lote.php
+│   │       ├── LoteThreshold.php
+│   │       ├── Material.php
+│   │       ├── Notificacion.php
+│   │       ├── Operador.php
+│   │       ├── Pago.php
+│   │       ├── Persistable.php
+│   │       ├── Premiable.php
+│   │       ├── Premio.php
+│   │       ├── Procesador.php
+│   │       ├── Reciclador.php
+│   │       ├── Ruta.php
+│   │       ├── SponsorCorp.php
+│   │       ├── SponsorRetail.php
+│   │       ├── Subsidiario.php
+│   │       ├── Transaccion.php
+│   │       └── Vector.php
+│   ├── botbasic
+│   │   ├── bbautoloader.php
+│   │   ├── bbdefines.php
+│   │   ├── BizModelAdapterTemplate.php
+│   │   ├── BizModelProvider.php
+│   │   ├── BotBasicChannel.php
+│   │   ├── BotBasicParser.php
+│   │   ├── BotBasic.php
+│   │   ├── BotBasicRuntime.php
+│   │   ├── BotConfig.php
+│   │   ├── ChatMediumChannel.php
+│   │   ├── ChatMediumCliStub.php
+│   │   ├── ChatMedium.php
+│   │   ├── ChatMediumTelegram.php
+│   │   ├── ChatMediumWebStub.php
+│   │   ├── Closable.php
+│   │   ├── DBbroker.php
+│   │   ├── doc
+│   │   │   ├── classes
+│   │   │   │   ├── botbasic.BizModelAdapter.html
+│   │   │   │   ├── botbasic.BizModelAdapterTemplate.html
+│   │   │   │   ├── botbasic.BizModelProvider.html
+│   │   │   │   ├── botbasic.BotBasicChannel.html
+│   │   │   │   ├── botbasic.BotBasic.html
+│   │   │   │   ├── botbasic.BotBasicParser.html
+│   │   │   │   ├── botbasic.BotBasicRuntime.html
+│   │   │   │   ├── botbasic.ChatMediumChannel.html
+│   │   │   │   ├── botbasic.ChatMediumCliStub.html
+│   │   │   │   ├── botbasic.ChatMedium.html
+│   │   │   │   ├── botbasic.ChatMediumTelegram.html
+│   │   │   │   ├── botbasic.ChatMediumWebStub.html
+│   │   │   │   ├── botbasic.Closable.html
+│   │   │   │   ├── botbasic.DBbroker.html
+│   │   │   │   ├── botbasic.Initializable.html
+│   │   │   │   ├── botbasic.Interaction.html
+│   │   │   │   ├── botbasic.InteractionResource.html
+│   │   │   │   ├── botbasic.LogbotChatMedium.html
+│   │   │   │   ├── botbasic.Log.html
+│   │   │   │   ├── botbasic.Splash.html
+│   │   │   │   ├── botbasic.Update.html
+│   │   │   │   ├── botbasic.WebRouterCliStub.html
+│   │   │   │   ├── botbasic.WebRouter.html
+│   │   │   │   ├── botbasic.WebRouterTelegram.html
+│   │   │   │   └── botbasic.WebRouterWebStub.html
+│   │   │   ├── css
+│   │   │   │   ├── bootstrap-combined.no-icons.min.css
+│   │   │   │   ├── font-awesome.min.css
+│   │   │   │   ├── jquery.iviewer.css
+│   │   │   │   ├── phpdocumentor-clean-icons
+│   │   │   │   │   ├── fonts
+│   │   │   │   │   │   ├── phpdocumentor-clean-icons.dev.svg
+│   │   │   │   │   │   ├── phpdocumentor-clean-icons.eot
+│   │   │   │   │   │   ├── phpdocumentor-clean-icons.svg
+│   │   │   │   │   │   ├── phpdocumentor-clean-icons.ttf
+│   │   │   │   │   │   └── phpdocumentor-clean-icons.woff
+│   │   │   │   │   ├── lte-ie7.js
+│   │   │   │   │   ├── Read Me.txt
+│   │   │   │   │   └── style.css
+│   │   │   │   ├── prism.css
+│   │   │   │   └── template.css
+│   │   │   ├── doc
+│   │   │   ├── files
+│   │   │   │   ├── bbautoloader.html
+│   │   │   │   ├── bbautoloader.php.txt
+│   │   │   │   ├── bbdefines.html
+│   │   │   │   ├── bbdefines.php.txt
+│   │   │   │   ├── bizmodel
+│   │   │   │   │   └── BizModelAdapter.php.txt
+│   │   │   │   ├── BizModelAdapterTemplate.html
+│   │   │   │   ├── BizModelAdapterTemplate.php.txt
+│   │   │   │   ├── bizmodel.BizModelAdapter.html
+│   │   │   │   ├── BizModelProvider.html
+│   │   │   │   ├── BizModelProvider.php.txt
+│   │   │   │   ├── botbasic
+│   │   │   │   │   ├── bbautoloader.php.txt
+│   │   │   │   │   ├── bbdefines.php.txt
+│   │   │   │   │   ├── BizModelAdapterTemplate.php.txt
+│   │   │   │   │   ├── BizModelProvider.php.txt
+│   │   │   │   │   ├── BotBasicChannel.php.txt
+│   │   │   │   │   ├── BotBasicParser.php.txt
+│   │   │   │   │   ├── BotBasic.php.txt
+│   │   │   │   │   ├── BotBasicRuntime.php.txt
+│   │   │   │   │   ├── ChatMediumChannel.php.txt
+│   │   │   │   │   ├── ChatMediumCliStub.php.txt
+│   │   │   │   │   ├── ChatMedium.php.txt
+│   │   │   │   │   ├── ChatMediumTelegram.php.txt
+│   │   │   │   │   ├── ChatMediumWebStub.php.txt
+│   │   │   │   │   ├── Closable.php.txt
+│   │   │   │   │   ├── DBbroker.php.txt
+│   │   │   │   │   ├── Initializable.php.txt
+│   │   │   │   │   ├── Interaction.php.txt
+│   │   │   │   │   ├── InteractionResource.php.txt
+│   │   │   │   │   ├── LogbotChatMedium.php.txt
+│   │   │   │   │   ├── Log.php.txt
+│   │   │   │   │   ├── Splash.php.txt
+│   │   │   │   │   ├── Update.php.txt
+│   │   │   │   │   ├── WebRouterCliStub.php.txt
+│   │   │   │   │   ├── WebRouter.php.txt
+│   │   │   │   │   ├── WebRouterTelegram.php.txt
+│   │   │   │   │   └── WebRouterWebStub.php.txt
+│   │   │   │   ├── botbasic.bbautoloader.html
+│   │   │   │   ├── botbasic.bbdefines.html
+│   │   │   │   ├── botbasic.BizModelAdapterTemplate.html
+│   │   │   │   ├── botbasic.BizModelProvider.html
+│   │   │   │   ├── botbasic.BotBasicChannel.html
+│   │   │   │   ├── botbasic.BotBasic.html
+│   │   │   │   ├── botbasic.BotBasicParser.html
+│   │   │   │   ├── botbasic.BotBasicRuntime.html
+│   │   │   │   ├── BotBasicChannel.html
+│   │   │   │   ├── BotBasicChannel.php.txt
+│   │   │   │   ├── botbasic.ChatMediumChannel.html
+│   │   │   │   ├── botbasic.ChatMediumCliStub.html
+│   │   │   │   ├── botbasic.ChatMedium.html
+│   │   │   │   ├── botbasic.ChatMediumTelegram.html
+│   │   │   │   ├── botbasic.ChatMediumWebStub.html
+│   │   │   │   ├── botbasic.Closable.html
+│   │   │   │   ├── botbasic.DBbroker.html
+│   │   │   │   ├── BotBasic.html
+│   │   │   │   ├── botbasic.Initializable.html
+│   │   │   │   ├── botbasic.Interaction.html
+│   │   │   │   ├── botbasic.InteractionResource.html
+│   │   │   │   ├── botbasic.LogbotChatMedium.html
+│   │   │   │   ├── botbasic.Log.html
+│   │   │   │   ├── BotBasicParser.html
+│   │   │   │   ├── BotBasicParser.php.txt
+│   │   │   │   ├── BotBasic.php.txt
+│   │   │   │   ├── BotBasicRuntime.html
+│   │   │   │   ├── BotBasicRuntime.php.txt
+│   │   │   │   ├── botbasic.Splash.html
+│   │   │   │   ├── botbasic.Update.html
+│   │   │   │   ├── botbasic.WebRouterCliStub.html
+│   │   │   │   ├── botbasic.WebRouter.html
+│   │   │   │   ├── botbasic.WebRouterTelegram.html
+│   │   │   │   ├── botbasic.WebRouterWebStub.html
+│   │   │   │   ├── ChatMediumChannel.html
+│   │   │   │   ├── ChatMediumChannel.php.txt
+│   │   │   │   ├── ChatMediumCliStub.html
+│   │   │   │   ├── ChatMediumCliStub.php.txt
+│   │   │   │   ├── ChatMedium.html
+│   │   │   │   ├── ChatMedium.php.txt
+│   │   │   │   ├── ChatMediumTelegram.html
+│   │   │   │   ├── ChatMediumTelegram.php.txt
+│   │   │   │   ├── ChatMediumWebStub.html
+│   │   │   │   ├── ChatMediumWebStub.php.txt
+│   │   │   │   ├── Closable.html
+│   │   │   │   ├── Closable.php.txt
+│   │   │   │   ├── DBbroker.html
+│   │   │   │   ├── DBbroker.php.txt
+│   │   │   │   ├── Interaction.html
+│   │   │   │   ├── Interaction.php.txt
+│   │   │   │   ├── InteractionResource.html
+│   │   │   │   ├── InteractionResource.php.txt
+│   │   │   │   ├── Log.html
+│   │   │   │   ├── Log.php.txt
+│   │   │   │   ├── Splash.html
+│   │   │   │   ├── Splash.php.txt
+│   │   │   │   ├── Update.html
+│   │   │   │   ├── Update.php.txt
+│   │   │   │   ├── WebRouterCliStub.html
+│   │   │   │   ├── WebRouterCliStub.php.txt
+│   │   │   │   ├── WebRouter.html
+│   │   │   │   ├── WebRouter.php.txt
+│   │   │   │   ├── WebRouterTelegram.html
+│   │   │   │   ├── WebRouterTelegram.php.txt
+│   │   │   │   ├── WebRouterWebStub.html
+│   │   │   │   └── WebRouterWebStub.php.txt
+│   │   │   ├── font
+│   │   │   │   ├── FontAwesome.otf
+│   │   │   │   ├── fontawesome-webfont.eot
+│   │   │   │   ├── fontawesome-webfont.svg
+│   │   │   │   ├── fontawesome-webfont.ttf
+│   │   │   │   └── fontawesome-webfont.woff
+│   │   │   ├── graphs
+│   │   │   │   ├── classes.svg
+│   │   │   │   └── class.html
+│   │   │   ├── images
+│   │   │   │   ├── apple-touch-icon-114x114.png
+│   │   │   │   ├── apple-touch-icon-72x72.png
+│   │   │   │   ├── apple-touch-icon.png
+│   │   │   │   ├── custom-icons.svg
+│   │   │   │   ├── favicon.ico
+│   │   │   │   ├── hierarchy-item.png
+│   │   │   │   ├── icon-class-13x13.png
+│   │   │   │   ├── icon-class.svg
+│   │   │   │   ├── icon-interface-13x13.png
+│   │   │   │   ├── icon-interface.svg
+│   │   │   │   ├── icon-trait-13x13.png
+│   │   │   │   ├── icon-trait.svg
+│   │   │   │   └── iviewer
+│   │   │   │       ├── grab.cur
+│   │   │   │       ├── hand.cur
+│   │   │   │       ├── iviewer.rotate_left.png
+│   │   │   │       ├── iviewer.rotate_right.png
+│   │   │   │       ├── iviewer.zoom_fit.png
+│   │   │   │       ├── iviewer.zoom_in.png
+│   │   │   │       ├── iviewer.zoom_out.png
+│   │   │   │       └── iviewer.zoom_zero.png
+│   │   │   ├── index.html
+│   │   │   ├── js
+│   │   │   │   ├── bootstrap.min.js
+│   │   │   │   ├── html5.js
+│   │   │   │   ├── jquery-1.11.0.min.js
+│   │   │   │   ├── jquery.dotdotdot-1.5.9.js
+│   │   │   │   ├── jquery.dotdotdot-1.5.9.min.js
+│   │   │   │   ├── jquery.iviewer.js
+│   │   │   │   ├── jquery.iviewer.min.js
+│   │   │   │   ├── jquery.mousewheel.js
+│   │   │   │   ├── jquery.smooth-scroll.js
+│   │   │   │   ├── prism.min.js
+│   │   │   │   └── ui
+│   │   │   │       └── 1.10.4
+│   │   │   │           └── jquery-ui.min.js
+│   │   │   ├── namespaces
+│   │   │   │   ├── botbasic.html
+│   │   │   │   └── default.html
+│   │   │   ├── phpdoc-cache-18
+│   │   │   │   └── phpdoc-cache-file_d9e87358aafbba67a306ce8c16596f02.dat
+│   │   │   ├── phpdoc-cache-1d
+│   │   │   │   └── phpdoc-cache-file_018dad37e8600d3e9e816280eb3ddd95.dat
+│   │   │   ├── phpdoc-cache-2e
+│   │   │   │   └── phpdoc-cache-settings.dat
+│   │   │   ├── phpdoc-cache-33
+│   │   │   │   └── phpdoc-cache-file_6e8884fb655d43b28f804f5273aeca46.dat
+│   │   │   ├── phpdoc-cache-37
+│   │   │   │   └── phpdoc-cache-file_097fdc195363b26eb75f40a96148e3c3.dat
+│   │   │   ├── phpdoc-cache-44
+│   │   │   │   └── phpdoc-cache-file_c6acb4785651aa71881e5106bc7d0ef8.dat
+│   │   │   ├── phpdoc-cache-45
+│   │   │   │   └── phpdoc-cache-file_4d6d3c47fb83250b76749911490f122f.dat
+│   │   │   ├── phpdoc-cache-4c
+│   │   │   │   ├── phpdoc-cache-file_3df26ee5c6d511cc8c0b3038b6b0c1ee.dat
+│   │   │   │   └── phpdoc-cache-file_a00c4f1365567f90426121913ec2af80.dat
+│   │   │   ├── phpdoc-cache-4e
+│   │   │   │   └── phpdoc-cache-file_e6e9b4005aff7f6068ec4e2a7309f4b1.dat
+│   │   │   ├── phpdoc-cache-5c
+│   │   │   │   ├── phpdoc-cache-file_9a446f29394b10218c5920a53c6a3c6a.dat
+│   │   │   │   └── phpdoc-cache-file_ae2e9f549edf404ccc365ac5ca319567.dat
+│   │   │   ├── phpdoc-cache-61
+│   │   │   │   └── phpdoc-cache-file_8e03a7ea46a2ca20e6f467ee185c3e12.dat
+│   │   │   ├── phpdoc-cache-7e
+│   │   │   │   └── phpdoc-cache-file_e77aaf522527cc6b24aeff6e8e4ba34c.dat
+│   │   │   ├── phpdoc-cache-89
+│   │   │   │   └── phpdoc-cache-file_54cf4fdb217c17072ba0827dd5d085ca.dat
+│   │   │   ├── phpdoc-cache-91
+│   │   │   │   └── phpdoc-cache-file_e4ddb1cdcdf4b95ab3bf45b1bc6f0ae5.dat
+│   │   │   ├── phpdoc-cache-93
+│   │   │   │   └── phpdoc-cache-file_df0980cb3f789255357c2a31e9a51b20.dat
+│   │   │   ├── phpdoc-cache-94
+│   │   │   │   └── phpdoc-cache-file_fee3d21709fb6a18d5192c90b62213df.dat
+│   │   │   ├── phpdoc-cache-9d
+│   │   │   │   └── phpdoc-cache-file_fce9cad52c7c5ad24bc5d302b7469d37.dat
+│   │   │   ├── phpdoc-cache-a3
+│   │   │   │   └── phpdoc-cache-file_76567c55f664705b194b7f21fc2c73b2.dat
+│   │   │   ├── phpdoc-cache-a4
+│   │   │   │   └── phpdoc-cache-file_e37414cb6417c16539a8f771a10a108a.dat
+│   │   │   ├── phpdoc-cache-a7
+│   │   │   │   └── phpdoc-cache-file_ecb8dba907f594200153f33d3daf4c7e.dat
+│   │   │   ├── phpdoc-cache-ad
+│   │   │   │   └── phpdoc-cache-file_5e395bdf62c0b2312ef69a9180ec6a2d.dat
+│   │   │   ├── phpdoc-cache-b4
+│   │   │   │   └── phpdoc-cache-file_381233be5d479fb13092423e98fce615.dat
+│   │   │   ├── phpdoc-cache-d1
+│   │   │   │   └── phpdoc-cache-file_0f8656fa2ee426dc78e10d6fe90ab954.dat
+│   │   │   ├── phpdoc-cache-d7
+│   │   │   │   └── phpdoc-cache-file_95a424cd997bc2c2d7f1003d51ced56f.dat
+│   │   │   ├── phpdoc-cache-f4
+│   │   │   │   └── phpdoc-cache-file_683b4d829a2a92ec3571773e6b94abda.dat
+│   │   │   ├── phpdoc-cache-ff
+│   │   │   │   └── phpdoc-cache-file_01ba77bf985233209f8051cb45183953.dat
+│   │   │   └── reports
+│   │   │       ├── deprecated.html
+│   │   │       ├── errors.html
+│   │   │       └── markers.html
+│   │   ├── index.html
+│   │   ├── Initializable.php
+│   │   ├── Interaction.php
+│   │   ├── InteractionResource.php
+│   │   ├── LogbotChatMedium.php
+│   │   ├── Log.php
+│   │   ├── phpdoc
+│   │   ├── Splash.php
+│   │   ├── Update.php
+│   │   ├── WebRouterCliStub.php
+│   │   ├── WebRouter.php
+│   │   ├── WebRouterTelegram.php
+│   │   └── WebRouterWebStub.php
+│   ├── index.html
+│   ├── krumo
+│   │   ├── class.krumo.php
+│   │   ├── docs
+│   │   │   ├── blank.html
+│   │   │   ├── classtrees_Krumo.html
+│   │   │   ├── elementindex.html
+│   │   │   ├── elementindex_Krumo.html
+│   │   │   ├── errors.html
+│   │   │   ├── index.html
+│   │   │   ├── Krumo
+│   │   │   │   ├── _class.krumo.php.html
+│   │   │   │   └── krumo.html
+│   │   │   ├── li_Krumo.html
+│   │   │   ├── media
+│   │   │   │   ├── banner.css
+│   │   │   │   ├── images
+│   │   │   │   │   ├── AbstractClass_logo.png
+│   │   │   │   │   ├── AbstractClass.png
+│   │   │   │   │   ├── AbstractMethod.png
+│   │   │   │   │   ├── AbstractPrivateClass_logo.png
+│   │   │   │   │   ├── AbstractPrivateClass.png
+│   │   │   │   │   ├── AbstractPrivateMethod.png
+│   │   │   │   │   ├── blank.png
+│   │   │   │   │   ├── class_folder.png
+│   │   │   │   │   ├── Class_logo.png
+│   │   │   │   │   ├── Class.png
+│   │   │   │   │   ├── Constant.png
+│   │   │   │   │   ├── Constructor.png
+│   │   │   │   │   ├── Destructor.png
+│   │   │   │   │   ├── empty.png
+│   │   │   │   │   ├── file.png
+│   │   │   │   │   ├── folder.png
+│   │   │   │   │   ├── function_folder.png
+│   │   │   │   │   ├── Function.png
+│   │   │   │   │   ├── Global.png
+│   │   │   │   │   ├── Index.png
+│   │   │   │   │   ├── Interface_logo.png
+│   │   │   │   │   ├── Interface.PNG
+│   │   │   │   │   ├── I.png
+│   │   │   │   │   ├── Lminus.png
+│   │   │   │   │   ├── Lplus.png
+│   │   │   │   │   ├── L.png
+│   │   │   │   │   ├── Method.png
+│   │   │   │   │   ├── minus.gif
+│   │   │   │   │   ├── next_button_disabled.png
+│   │   │   │   │   ├── next_button.png
+│   │   │   │   │   ├── package_folder.png
+│   │   │   │   │   ├── package.png
+│   │   │   │   │   ├── Page_logo.png
+│   │   │   │   │   ├── Page.png
+│   │   │   │   │   ├── plus.gif
+│   │   │   │   │   ├── previous_button_disabled.png
+│   │   │   │   │   ├── previous_button.png
+│   │   │   │   │   ├── private_class_logo.png
+│   │   │   │   │   ├── PrivateClass_logo.png
+│   │   │   │   │   ├── PrivateClass.png
+│   │   │   │   │   ├── PrivateMethod.png
+│   │   │   │   │   ├── PrivateVariable.png
+│   │   │   │   │   ├── StaticMethod.png
+│   │   │   │   │   ├── StaticVariable.png
+│   │   │   │   │   ├── Tminus.png
+│   │   │   │   │   ├── Tplus.png
+│   │   │   │   │   ├── T.png
+│   │   │   │   │   ├── tutorial_folder.png
+│   │   │   │   │   ├── tutorial.png
+│   │   │   │   │   ├── up_button.png
+│   │   │   │   │   └── Variable.png
+│   │   │   │   ├── lib
+│   │   │   │   │   └── classTree.js
+│   │   │   │   └── stylesheet.css
+│   │   │   ├── packages.html
+│   │   │   ├── ric_INSTALL.html
+│   │   │   ├── ric_LICENSE.html
+│   │   │   ├── ric_README.html
+│   │   │   ├── ric_TODO.html
+│   │   │   └── ric_VERSION.html
+│   │   ├── index.html
+│   │   ├── INSTALL
+│   │   ├── krumo.ini
+│   │   ├── krumo.js
+│   │   ├── LICENSE
+│   │   ├── README
+│   │   ├── skins
+│   │   │   ├── blue
+│   │   │   │   ├── bg.gif
+│   │   │   │   └── skin.css
+│   │   │   ├── default
+│   │   │   │   ├── bg.gif
+│   │   │   │   └── skin.css
+│   │   │   ├── green
+│   │   │   │   ├── bg.gif
+│   │   │   │   └── skin.css
+│   │   │   ├── orange
+│   │   │   │   ├── bg.gif
+│   │   │   │   └── skin.css
+│   │   │   └── schablon.com
+│   │   │       ├── collapsed.gif
+│   │   │       ├── dotted.gif
+│   │   │       ├── empty.gif
+│   │   │       ├── expanded.gif
+│   │   │       └── skin.css
+│   │   ├── TODO
+│   │   └── VERSION
+│   ├── scripts
+│   │   ├── clistub
+│   │   │   ├── stub_cli.php
+│   │   │   └── stub_cli.sh
+│   │   ├── downloader
+│   │   │   ├── launcher.sh
+│   │   │   └── webscript.php
+│   │   ├── hooksetter
+│   │   │   └── setwebhook.php
+│   │   ├── index.html
+│   │   ├── media
+│   │   │   ├── avi2mp3.sh
+│   │   │   ├── mpeg2mp3.sh
+│   │   │   └── videos
+│   │   │       ├── Funny-English-Teacher-From-Bihar-India.avi
+│   │   │       ├── test-mpeg_512kb.mp4
+│   │   │       ├── test-mpeg.mpg
+│   │   │       └── test-mpeg.ogv
+│   │   ├── parser
+│   │   │   ├── parser_cli.sh
+│   │   │   └── parser_upload_form.html
+│   │   ├── telegramsender
+│   │   │   ├── launcher.sh
+│   │   │   └── webscript.php
+│   │   └── webstub
+│   │       ├── fake_10_00.php
+│   │       ├── fake_12_00.php
+│   │       └── webrouterwebstub_form.html
+│   ├── unirest
+│   │   ├── composer.json
+│   │   ├── index.html
+│   │   ├── LICENSE
+│   │   ├── phpunit.xml
+│   │   ├── README.md
+│   │   ├── src
+│   │   │   ├── Unirest
+│   │   │   │   ├── Exception.php
+│   │   │   │   ├── Method.php
+│   │   │   │   ├── Request
+│   │   │   │   │   └── Body.php
+│   │   │   │   ├── Request.php
+│   │   │   │   └── Response.php
+│   │   │   └── Unirest.php
+│   │   └── tests
+│   │       ├── bootstrap.php
+│   │       ├── fixtures
+│   │       │   └── upload.txt
+│   │       └── Unirest
+│   │           ├── BodyTest.php
+│   │           ├── RequestTest.php
+│   │           └── ResponseTest.php
+│   └── webhooks
+│       ├── index.html
+│       └── telegram
+│           ├── index.html
+│           ├── panama_bot.php
+│           ├── tgrp_10_00_278347235423590890123454.php
+│           ├── tgrp_12_00_934967523854879438679845.php
+│           ├── tgrp_20_00_789349080985234237899046.php
+│           ├── tgrp_210_00_237245486123689752355454.php
+│           ├── tgrp_21_00_412676450978972345784385.php
+│           ├── tgrp_211_00_345457872345454875754468.php
+│           ├── tgrp_212_00_234235634675689867983454.php
+│           ├── tgrp_249_00_235556854754345235356856.php
+│           ├── tgrp_260_00_234346568534655567342367.php
+│           ├── tgrp_261_00_233485854734665898553444.php
+│           ├── tgrp_262_00_236543475679123461478740.php
+│           ├── tgrp_299_00_345868549563486212678545.php
+│           ├── tgrp_30_00_41267890408723648979068236903477.php
+│           ├── tgrp_310_00_345547823345565687545438.php
+│           ├── tgrp_31_00_52358754518112182475568554552353.php
+│           ├── tgrp_311_00_123615312846513613684316.php
+│           ├── tgrp_312_00_225845554721721874898990.php
+│           ├── tgrp_32_00_23545654887545454445198948945755.php
+│           ├── tgrp_33_00_23542344556446873414588854256223.php
+│           ├── tgrp_34_00_86232758263546826577748967444388.php
+│           ├── tgrp_349_00_124897612675636059626267.php
+│           ├── tgrp_35_00_34847741157856854873468634446755.php
+│           ├── tgrp_360_00_908698055113687895334533.php
+│           ├── tgrp_36_00_67983241008404134656454105743468.php
+│           ├── tgrp_361_00_011561095605020755654561.php
+│           ├── tgrp_362_00_346845865156789651348900.php
+│           ├── tgrp_37_00_22453454575734135348788656685333.php
+│           ├── tgrp_39_00_79090954642134137578357745546464.php
+│           ├── tgrp_399_00_670565665480123655668108.php
+│           ├── tgrp_800_00_423457834574335448638710.php
+│           ├── tgrp_801_00_348676165746768411345688.php
+│           ├── tgrp_820_00_235645654656865434181376.php
+│           ├── tgrp_821_00_484068789562371984141339.php
+│           ├── tgrp_822_00_683455683461791812323128.php
+│           ├── tgrp_823_00_065394504654406578055400.php
+│           ├── tgrp_830_00_542354553412303858468016.php
+│           └── tgrp_899_00_235485656856441568687544.php
+├── logs
+│   ├── access.log
+│   ├── access.log.hasta20170510
+│   ├── bizmodels
+│   │   └── t3.log
+│   ├── error.log
+│   ├── hooksetter.log
+│   ├── less-access-log.sh
+│   ├── panama_bot.log
+│   ├── runtime.log
+│   ├── runtime.log.hasta20170510
+│   └── webstub
+│       ├── ALL.log
+│       └── neuropowerbot__gllona
+├── ng-bbparser
+├── ng-bbshell
+├── phpdocumentor -> ../phpdocumentor/
+└── work
+
+115 directories, 763 files

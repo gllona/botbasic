@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "$1" == "daemon" ]
+then
+	ngrok http -auth=botbasic:E8B43tkot69b3ww7w6hQnah2tFsi6F5W -subdomain bbparser -host-header=panama_bot.local -log=stdout 80 >/dev/null 2>&1 &
+else
+	ngrok http -auth=botbasic:E8B43tkot69b3ww7w6hQnah2tFsi6F5W -subdomain bbparser -host-header=panama_bot.local 80
+fi

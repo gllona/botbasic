@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "$1" == "daemon" ]
+then
+	ngrok http -auth=botbasic:E8B43tkot69b3ww7w6hQnah2tFsi6F5W -subdomain bbshell -log=stdout 4200 >/dev/null 2>&1 &
+else
+	ngrok http -auth=botbasic:E8B43tkot69b3ww7w6hQnah2tFsi6F5W -subdomain bbshell 4200
+fi

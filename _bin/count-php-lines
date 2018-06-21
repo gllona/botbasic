@@ -1,0 +1,1 @@
+cd ~/telegram/panama_bot/httpdocs ; ls | while read f ; do  if [ -d $f ] ; then A=`echo -n 0 ; find "$f" | egrep 'php$' | while read i ; do wc -l $i ; done | cut -f1 -d' ' | while read i ; do echo -n "+$i" ; done ; echo `; B=`echo $A | bc`; echo "$f :: $B"; fi; done

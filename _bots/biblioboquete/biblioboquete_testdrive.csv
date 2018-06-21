@@ -1,0 +1,87 @@
+BOTBASIC						
+MAGIC	BotBasic 01.00					
+VERSION	0.0.3	biblioboquete				
+BOTS	main					
+						
+						
+						
+MESSAGES						
+name		es				
+						
+txtBienvenido		Bienvenido al Catálogo Virtual de la Biblioteca de Boquete. Para buscar en el catálogo toca /buscar. Más información en /info. Reinicia en cualquier momento con /start.				
+txtEOT		Reinicia en cualquier momento con /start o accede directamente a /buscar.				
+txtBuscarPor		Selecciona el criterio de búsqueda:				
+txtResultados		Resultados coincidentes:				
+txtR1		*1* Autor: TOOLE, John Kennedy; Título: La conjura de los necios. /libro1				
+txtR2		*2* Autor: ALLENDE, Isabel; Título: La casa de los espíritus. /libro2				
+txtR3		*3* Autor: GALTUNG, Johan; Título: Teoría y métodos de investigación social. /libro3				
+txtR4		*4* Autor: GRAHAM, Steve; Título: Eat What You Want and Die Like a Man. /libro4				
+txtR5		*5* Autor: DIOXADIS, Apóstolos; Título: El tío Petros y la conjetura de Goldbach. /libro5				
+ficha1		Autor: TOOLE, John Kennedy; Título: La conjura de los necios, Año de publicación: 2001, Ciudad: Barcelona. Sello editor: Anagrama, 360 páginas.				
+ficha2		Autor: ALLENDE, Isabel; Título: La casa de los espíritus, Año de publicación: 2001, Ciudad: Barcelona. Sello editor: Plaza & Janes, 528 páginas.				
+ficha3		Autor: GALTUNG, Johan; Título: Teoría y métodos de investigación social, 2da edición, traducción de Edmundo Fuenzalida Faivovich, Año de publicación: 1969, Ciudad: Buenos Aires. Sello editor: Editorial Universitaria, 603 págs.				
+ficha4		Autor: GRAHAM, Steve; Título: Eat What You Want and Die Like a Man, Año de publicación: 2008, Ciudad: New York. Sello editor: Citadel Press Books, 290 páginas.				
+ficha5		Autor: DIOXADIS, Apóstolos; Título: El tío Petros y la conjetura de Goldbach,  traducción de María Eugenia Ciocchini, Año de publicación: 2006, Ciudad: Barcelona. Sello editor: Bolsillo Zeta172, páginas.				
+optBxTitulo		Por título				
+optBxAutor		Por autor				
+txtParteTitulo		Escribe el título o parte de él:				
+txtParteAutor		Escribe el nombre del autor o parte de él:				
+txtInfoBiblio		Biblioteca de Boquete. \nAdemás de una biblioteca, queremos ser un centro cultural innovador y de conocimiento, accesible a todos, en donde se disfruta del arte, la música y la palabra escrita. \nHorario: Lunes a Viernes de 9:30 am a 6:00 pm y Sábado de 9:30 am a 4:00 pm (cerrada los días feriados nacionales). \nTeléfono: +507-720-2879. \nhttp://www.biblioboquete.com.				
+						
+						
+						
+MENUS						
+name		description		in	out	remarks
+						
+						
+						
+MAGICVARS						
+name		description				
+						
+						
+						
+PRIMITIVES						
+name		description		in	out	remarks
+						
+StrReplace				strFrom strTo strSubject	strResult	
+SplitToArray				strSeparator strString	...	
+DiffPipeArrays				strPipedArrayFrom strPipedArrayMinus	strPipedArrayDiff	
+						
+						
+						
+PROGRAM						
+main	main	main				
+						
+						
+						
+/start	start	REM inicio				
+		PRINT txtBienvenido				
+		END				
+						
+/buscar	buscar	REM buscar				
+		OPTION optBxTitulo GOTO bXtitulo				
+		OPTION optBxAutor GOTO bXautor				
+		MENU TITLE txtBuscarPor TO ruta				
+		END				
+						
+	bXtitulo	REM buscar por titulo				
+		INPUT string TITLE txtParteTitulo TO parteTitulo				
+		PRINT txtResultados txtR1 txtR2 txtR3 txtEOT				
+		END				
+						
+	bXautor	REM buscar por autor				
+		INPUT string TITLE txtParteAutor TO parteNombre				
+		PRINT txtResultados txtR1 txtR2 txtR3 txtR4 txtR5 txtEOT				
+		END				
+						
+/libro1		SET ficha ficha1 : GOTO libro				
+/libro2		SET ficha ficha2 : GOTO libro				
+/libro3		SET ficha ficha3 : GOTO libro				
+/libro4		SET ficha ficha4 : GOTO libro				
+/libro5		SET ficha ficha5 : GOTO libro				
+						
+	libro	PRINT ficha txtEOT				
+		END				
+						
+/info	info	PRINT txtInfoBiblio txtEOT				
+		END				

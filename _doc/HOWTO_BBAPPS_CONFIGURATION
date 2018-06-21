@@ -1,0 +1,133 @@
+=======================
+Configuración de BBapps
+Clase BotConfig.php
+=======================
+
+En esta clase va la configuración de las BBapps y los bots de Telegram asociados.
+
+Es la única clase que debe ser modificada cuando se incluyen BBapps en el servidor de BB.
+
+Se encuentra ubicada en el directorio httpdocs/botbasic.
+
+Como todas las clases del core de BB, está autodocumentada.
+
+Notas adicionales a la documentación interna, usando ejemplos:
+
+1. DEFINICION DE BBAPPS
+
+    static private $bbBots = [
+
+        10 => [ 'neuropower', '1', 'bot1',  12  ],
+        12 => [ 'neuropower', '1', 'bot3',      ],
+
+        // ...
+    ];
+
+En $bbBots se definen todos las BBapps. Cada bot de cada BBapp tiene una entrada en este arreglo. El índice es el "bbidx" del bot de la BBapp. La BBapp se identifica por el primer elemento del subarreglo asociado a cada bbidx, usando un ID alfanumérico, que es el "code name" que se debe introducir en el parser. El tercer elemento es el nombre del bot, tal como está expresado dentro del archivo CSV que alimenta al parser. El segundo elemento es el número máximo de versión mayor del código de la BBapp, que el servidor de BB va a habilitar para ser corrida en las máquinas virtuales de la BBapp. El cuarto elemento, que es opcional, indica cuál es el bbidx que actuará como bot de monitoreo de un bot en particular de una BBapp; normalmente es un bot de la misma bbapp.
+
+En el ejemplo, hay una BBapp de nombre (code name) "neuropower", compuesta por dos bots: un bot "bot1" y otro "bot3"; así están definidos dentro del archivo CSV que contiene el programa en BB. Puede observarse que corresponde a una single-bot BBapp en la que bot3 actúa como bot de monitoreo, dado que el 4to elemento del subarreglo de bot1 es 12, un bot de la misma BBapp.
+
+2. DEFINICION DE BOTS DE TELEGRAM
+
+    static private $cmBotsTelegram = [
+
+        10 => [
+            [ 'NeuroPowerBot',  'tgrp_10_00_XXXXXXXXXXXX590890123454.php', '171752376:XXXXXXXXXXXX8KPLCvoQAKHafiQ54w-K6rw' ],
+        ],
+        11 => [
+            [ 'np00bot',        'tgrp_11_00_XXXXXXXX2857.php', '' ],
+            [ 'np01bot',        '' ],
+            [ 'np02bot',        '' ],
+            [ 'np03bot',        '' ],
+            [ 'np04bot',        '' ],
+            [ 'np05bot',        '' ],
+        ],
+        12 => [
+            [ 'neuropower_bot',  'tgrp_12_00_XXXXXXXXXXXX879438679845.php', '227989979:XXXXXXXXXXXXriqdeLUv35jhJsRXn2chMoc' ],
+        ],
+
+        // ...
+
+    ];
+
+En $cmBotsTelegram se incluyen las definiciones de los parámetros de los bots de Telegram (no confundir con bots del programa en BB) asociados a la BBapp. Cada bot del programa BB (bbbot) está asociado a uno o más bots de Telegram. El funcionamiento actual de BB ha sido probado para una correspondiencia 1:1 dado que las instrucciones CHANNEL, TUNNEL, etc., no fueron probadas.
+
+Para cada entrada en $bbBots debe haber una correspondiente en $cmBotsTelegram, con el mismo bbidx. El valor de cada entrada del arreglo es a su vez un arreglo que contiene las definiciones de todos los bots de Telegram asociado a ese bbbot. Para cada subarreglo, el primer elemento es el nombre del bot de Telegram (sin "@"), el tercero es el respectivo token asignado por @BotFather, y el segundo es el nombre del script PHP que actúa como webhook en el servidor BB. El nombre del webhook debe ser difícil de adivinar para un hacker.
+
+En el ejemplo, se puede ver que los bots "bot1" y "bot3" de la bbapp "neuropower" están asociados, cada uno, a un bot de Telegram. Por otra parte, hay una definición tentativa para un bbidx que no está definido aún para la bbapp, que tiene asociados 6 bots de Telegram (bot multi-canal); pero esta definición está incompleta pues faltan 5 webhooks y los 6 tokens.
+
+Puede haber elementos en $cmBotsTelegram que no estén en $bbBots, pero no al revés. Lo ideal es que coincida el número de índices y sus valores.
+
+Todos los webhooks se sitúan en el directorio httpdocs/webhooks/telegram.
+
+3. DEFINICION DE BOTS DE SIMULADORES CLI, WEB
+
+El PHP developer que asuma la continuación del desarrollo de BotBasic tendrá necesidad de usar los simuladores CLI y Web implementados a modo de ChatMedia. Cada uno de ellos tiene en la clase BotConfig un arreglo respectivo. El código lo documenta.
+
+Para depurar BBapps usando bots de monitoreo usando la versión estable de BB, no es necesario modificar estos arreglos.
+
+4. DEFINICION DE USUARIOS DE LOS BOTS DE MONITOREO
+
+    static private $cmLogBotsTelegram = [
+    	// ...
+        249 => [ 'Jorge Guerrero' ],
+        299 => [ 'Nicole'         ],
+        349 => [ 'Luis Alberto'   ],
+        399 => [ 'Carlos'         ],
+        // ...
+    ];
+
+El bot de monitoreo de una BBapp sólo deberá ser usando por un usuario de Telegram. Con esto se evita que usuarios desconocidos se conecten al bot de monitoreo, que es un recurso público, y reciban mensajes de debugging que son producto de la operación de los bots sustantivos de una BBapp.
+
+El arreglo $cmLogBotsTelegram contiene la definición de lo usuarios autorizados de los bots de monitoreo. Para cada bbidx que represente un bot de monitoreo, se define el usuario, indicando la concatenación de su nombre y su apellido (separado por espacio), tal como el usuario ha configurado su app Telegram en su celular.
+
+Usando la cuarta entrada del ejemplo, se entiende que el primer usuario que haya colocado "Carlos" en el campo nombre y dejado vacío el campo apellido de su perfil de la app Telegram, que se conecte al bot de monitoreo identificado por el bbidx 399, será entendido por el servidor BB como el usuario autorizado sobre cuya máquina virtual aparecerán los mensajes de depuración del resto de los bots de la bbapp respectiva. A otros usuarios "Carlos" a los que el servidor BB les cree máquinas virtuales en lo sucesivo, así como otros usuarios de Telegram con distinto nombre+apellido que se conecten a ese bot que funciona como de monitoreo, no verán los mensajes de depuración que el primer "Carlos" sí recibirá.
+
+5. OTROS IDIOMAS
+
+    static private $validLocales = [ 'es', 'en' ];
+
+En caso de querer implementar BBapps en idiomas distintos a español e inglés, el arreglo $validLocales debe ser ampliado y así mismo otro conjunto de miembros de la clase que contienen información y comportamiento de localización. No se recomienda si no lo hace el PHP Senior Developer.
+
+6. OTROS PARAMETROS DE CONFIGURACION DE BOTS
+
+BotBasic tiene características experimentales, que afectan en funcionamiento de las BBapps en el sentido de diferenciarlas entre sí. Estas están documentadas en la clase BotConfig y que deben ser probadas por el PHP Senior Developer antes de ponerlas en producción.
+
+7. PROCESO DE CREACION DE WEBHOOKS Y NOTIFICACION SOBRE ELLOS A TELEGRAM
+
+Esto tiene dos pasos: la creación del script que actuará como webhook y su notificación a la nube de servidores de Telegram.
+
+7a. Creación del webhook
+
+En el directorio httpdocs/webhooks/telegram se acumulan todos los webhooks de los bots de Telegram. Cada bot de Telegram debe tener un webhook único. El contenido del archivo de los webhooks es igual entre sí, diferenciándose sólo en el nombre de archivo.
+
+Los pasos a seguir son:
+
+a. Crear la entrada correspondiente para el bot de Telegram en $cmBotsTelegram, asignando un nombre de archivo único y difícil de adivinar.
+El formato del nombre de los archivos es "tgrp_<bbidx>_00_<textoQueHaceDifícilAdivinarElNombreDelArchivo>.php".
+Para bots de BBapps que tengan asociados múltiples bots de Telegram, el 00 se reemplaza por 01, 02, 03, etc.
+
+b. Crear una copia del archivo webhook y ponerle el nombre que recién se acaba de fijar en $cmBotsTelegram.
+
+Los pasos anteriores se efectúan sobre el servidor de BB.
+
+7b. Notificación a los servidores de Telegram
+
+El URL de cada uno de los webhooks debe ser informado a los servidores de Telegram.
+
+Para ello se efectúan los siguientes pasos pero no sobre el servidor de BB, sino sobre el laptop de desarrollo:
+
+a. Editar el archivo httpdocs/scripts/hooksetter/setwebhook.php:
+
+a1. Reemplazar cl contenido de $cmBots por una copia de la sección de BotConfig::$cmBotsTelegram que contenga las credenciales de los bots de Telegram cuyos webhooks se desea fijar.
+
+a2. Definir las constantes SERVER, PORT y BOT:
+SERVER --> nombre público del servidor de BB según el servicio de DNS dinámico en uso. Por ejemplo: "odroid0" para "odroid0.duckdns.org".
+PORT --> puerto en el que el router wifi escucha las peticiones TCP entrantes (80, 88, 443 u 8443). Normalmente coincide con el puerto activo para el Apache que funciona en el Odroid, a menos que el port forwarding en el router haga cambio de número de puerto (en este caso esto sólo funcionará con la última versión del firmware del Cisco RV110W).
+BOT --> nombre del bot de Telegram, tal como está en el primer componente de los arreglos más anidados de $cmBots (el nombre siempre termina en "bot" o "Bot").
+
+b. Para fijar el webhook: navegar a: https://panama_bot.local/scripts/hooksetter/setwebhook.php
+
+c. Si el webhook ya estaba fijado antes del paso b, y lo que se quiere es cambiar un registro de webhook existente para un bot de Telegram, antes del paso b se debe navegar a: https://panama_bot.local/scripts/hooksetter/setwebhook.php?action=delete_webhook
+
+El resultado de los pasos b y c, a nivel de página web, será un texto indicativo del resultado del acceso a los servidores de Telegram y de la operación solicitada.
