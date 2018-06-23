@@ -2,10 +2,9 @@
 /**
  * Configuración de los bots y futuro proxy para configuración en BD
  *
- * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
- * @license     http://www.venicua.com/botbasic/license     Licencia de BotBasic
- * @see         http://www.venicua.com/botbasic             Referencia de BotBasic
- * @version     1.0 - 01.jan.2017
+ * @author      Gorka Llona <gorka@gmail.com>
+ * @see         tg://@GrokaBot
+ * @version     2.0 - 23.jun.2018
  * @since       0.1 - 01.jul.2016
  */
 
@@ -42,56 +41,15 @@ abstract class BotConfig
      *             a pesar que los programas de todos los bots estén incluidos en el mismo archivo de código fuente */
     static private $bbBots = [
 
-        // NEUROPOWER (TEST DRIVE #1) - FOTOBOT
+        // NEUROPOWER (TEST DRIVE #1)
 
         10 => [ 'neuropower', '1', 'bot1',  12  ],
         12 => [ 'neuropower', '1', 'bot3',      ],
 
-        // VENI - BOT PARA PRUEBAS DE BB
+        // BOT PARA PRUEBAS DE BB
 
-        20 => [ 'bbtests', '1', 'main',     21  ],
-        21 => [ 'bbtests', '1', 'monitor',      ],
-
-        // T3 - TURN TRASH INTO TREASURES
-
-        30 => [ 't3', '0', 'sponsor',       39  ],
-        31 => [ 't3', '0', 'exchanger',     39  ],
-        32 => [ 't3', '0', 'main',          39  ],
-        33 => [ 't3', '0', 'handler',       39  ],
-        34 => [ 't3', '0', 'truck',         39  ],
-        35 => [ 't3', '0', 'converter',     39  ],
-        36 => [ 't3', '0', 'partner',       39  ],
-        37 => [ 't3', '0', 'admin',         39  ],
-      //38 => [ 't3', '0', 'edu',           39  ],
-        39 => [ 't3', '0', 'monitor',           ],
-
-        // BOTS DE JORGE
-
-        210 => [ 'copa',  '0', 'main',      249 ],
-        211 => [ 'jtest', '0', 'botJ1',     249 ],
-        212 => [ 'jtest', '0', 'botJ2',     249 ],
-        249 => [ 'jtest', '0', 'monitor',       ],
-
-        // BOTS DE NICOLE
-
-        260 => [ 'thebotbox', '0', 'main',  299 ],
-        261 => [ 'ntest',     '0', 'botN1', 299 ],
-        262 => [ 'ntest',     '0', 'botN2', 299 ],
-        299 => [ 'ntest',     '0', 'monitor',   ],
-
-        // BOTS DE LUIS
-
-        310 => [ 'groca',  '0', 'main',      349 ],
-        311 => [ 'ltest',  '0', 'botL1',     349 ],
-        312 => [ 'ltest',  '0', 'botL2',     349 ],
-        349 => [ 'ltest',  '0', 'monitor',       ],
-
-        // BOTS DE CARLOS
-
-        360 => [ 'coffeexpress', '0', 'main',  399 ],
-        361 => [ 'ctest',        '0', 'botC1', 399 ],
-        362 => [ 'ctest',        '0', 'botC2', 399 ],
-        399 => [ 'ctest',        '0', 'monitor',   ],
+        20 => [ 'bbtest', '1', 'main',     21  ],
+        21 => [ 'bbtest', '1', 'monitor',      ],
 
         // BOTS DE GORKA
 
@@ -113,83 +71,22 @@ abstract class BotConfig
      *               bbCode-key-as-in-ChatMedium::$bbBots-for-nondefault-bot => [...], ... ] */
     static private $cmBotsCliStub = [
 
-        // NP - Fotobot - main
+        // NP - main
         10 => [
             [ 'NeuroPowerBot',  '1000',                                                                                                              '171752376:AAGgO5P3_W8Q8KPLCvoQAKHafiQ54w-K6rw' ],
         ],
-        // NP - Fotobot - staff (monitor) - used for monitoring
+        // NP - monitor
         12 => [
             [ 'neuropower_bot', '1200',                                                                                                              '227989979:AAG0lpleT4SlriqdeLUv35jhJsRXn2chMoc' ],
         ],
 
-        // VENI - BBtests - main
+        // BBtests - main
         20 => [
-            [ 'venibot',            '2000',                                                                                                              '204321172:AAFr62nK9j5phVwF6nPpe-JEZycC9VfDQLA' ],
+            [ 'bbtestbot',            '2000',                                                                                                              '204321172:AAFr62nK9j5phVwF6nPpe-JEZycC9VfDQLA' ],
         ],
-        // VENI - BBtests - main
+        // BBtests - main
         21 => [
-            [ 'venicuabot',         '2100',                                                                                                              '328154998:AAHXisYfjjr9Z1n58Y37vO4RuUGrLXJ0f3c' ],
-        ],
-
-        // T3 - sponsor (sponsor)
-        30 => [
-            [ 'T3sponsor_bot',      '3000',                                                                                                      '271367661:AAGUoheqgx75qFl1biQ-SmEwugYMD7WVZOI' ],
-        ],
-        // T3 - exchanger (retail)
-        31 => [
-            [ 'T3exchanger_bot',    '3100',                                                                                                      '332067633:AAEdiszdqTaNA5m8A6oGl5akpNyY4chCX2g' ],
-        ],
-        // T3 - main (reciclador + invitado)
-        32 => [
-            [ 'T3_bot',             '3200',                                                                                                      '242945055:AAGNJXNE-FOsL2JdkZrk053C264Ag3i-JqE' ],
-        ],
-        // T3 - handler (colector)
-        33 => [
-            [ 'T3handler_bot',      '3300',                                                                                                      '293419680:AAHA0XjEyPcACXdfs8kjiBnDsD8VhHF6OhY' ],
-        ],
-        // T3 - truck (camion)
-        34 => [
-            [ 'T3truck_bot',        '3400',                                                                                                      '220338994:AAGl4D1EMhafdjTuo0_x-UCnFpBrspdsZuE' ],
-        ],
-        // T3 - converter (acopio)
-        35 => [
-            [ 'T3converter_bot',    '3500',                                                                                                      '349436605:AAGKBZL05drUAQCH8w-C71kBLgAKdUM2cTs' ],
-        ],
-        // T3 - partner (fundacion)
-        36 => [
-            [ 'T3partner_bot',      '3600',                                                                                                      '305539707:AAFaU1pp1iJySqQwyJB0ZCxqGoRg2bJ5hJQ' ],
-        ],
-        // T3 - admin (operador)
-        37 => [
-            [ 'T3admin_bot',        '3700',                                                                                                      '313828017:AAG3v-Aom8NYIAgPezNQIdyv3xQBwqk3ZEU' ],
-        ],
-        // T3 - edu (education) (UNINPLEMENTED)
-      //38 => [
-      //    [ 'T3edu_bot',          '3800',                                                                                                      '295486770:AAF5y4buCZfpIi4EXzenbLROiXMPbVyaGXg' ],
-      //],
-        // T3 - monitor (logs + errors + tracing)
-        39 => [
-            [ 'T3monitor_bot',      '3900',                                                                                                      '327127354:AAEpDgwMeGY2-r5inVWL-TcG_Y9EceVOzwE' ],
-        ],
-
-        210 => [
-            [ 'Copa_bot',           '21000',                                                                                                             '356650537:AAFQ2V4dkWd_u90d3Mpj6goaG4crA1vGyf0' ],
-        ],
-        211 => [
-            [ 'TheHandybot',        '21100',                                                                                                             '317790698:AAFORJf9RbgKzRaIm4po6IYYuHv9FokksXc' ],
-        ],
-        212 => [
-            [ 'SchedyBot',          '21200',                                                                                                             '344270765:AAEVzMA9q_B4fEoO65iohFXnp0gFj0mIYGE' ],
-        ],
-
-        260 => [
-            [ 'TheBotBox_Bot',      '26000',                                                                                                             '349758138:AAEog_6bey4po9VJjpQvMaGH4EPhE-iz5HI' ],
-        ],
-        261 => [
-            [ 'BotlightyearBot',    '26100',                                                                                                             '293002363:AAGu_XbCX9en29BLCEPG6L4AKZS5b5jw9Lg' ],
-        ],
-        262 => [
-            [ 'BotstartupsBot',     '26200',                                                                                                             '345446126:AAFP0ZlGPyXfM2cU9rwfLsEWivHRDajvqoI' ],
+            [ 'bbtestdebugbot',         '2100',                                                                                                              '328154998:AAHXisYfjjr9Z1n58Y37vO4RuUGrLXJ0f3c' ],
         ],
 
         800 => [
@@ -205,11 +102,11 @@ abstract class BotConfig
      *               bbCode-key-as-in-ChatMedium::$bbBots-for-nondefault-bot => [...], ... ] */
     static private $cmBotsWebStub = [
 
-        // NP - Fotobot - main
+        // NP - main
         10 => [
             [ 'NeuroPowerBot',  'tgrp_10_00_278347235423590890123454.php',                                                                                                              '171752376:AAGgO5P3_W8Q8KPLCvoQAKHafiQ54w-K6rw' ],
         ],
-        // NP - Fotobot - staff (monitor) - used for monitoring
+        // NP - monitor
         12 => [
             [ 'neuropower_bot', 'tgrp_12_00_934967523854879438679845.php',                                                                                                              '227989979:AAG0lpleT4SlriqdeLUv35jhJsRXn2chMoc' ],
         ],
@@ -223,11 +120,11 @@ abstract class BotConfig
      *               bbCode-key-as-in-ChatMedium::$bbBots-for-nondefault-bot => [...], ... ] */
     static private $cmBotsTelegram = [
 
-        ///////////////////////////////////////
-        // NEUROPOWER (TEST DRIVE #1) - FOTOBOT
-        ///////////////////////////////////////
+        /////////////////////////////
+        // NEUROPOWER (TEST DRIVE #1)
+        /////////////////////////////
 
-        // NP - Fotobot - main
+        // NP - main
         10 => [
             [ 'NeuroPowerBot',  'tgrp_10_00_278347235423590890123454.php',                                                                                                              '171752376:AAGgO5P3_W8Q8KPLCvoQAKHafiQ54w-K6rw' ],
         ],
@@ -240,135 +137,22 @@ abstract class BotConfig
             [ 'np04bot',        'tgrp_11_04_142857142857.php',                                                                                                                          '' ],
             [ 'np05bot',        'tgrp_11_05_142857142857.php',                                                                                                                          '' ],
         ],
-        // NP - Fotobot - staff (monitor) - used for monitoring
+        // NP - monitor
         12 => [
             [ 'neuropower_bot', 'tgrp_12_00_934967523854879438679845.php',                                                                                                              '227989979:AAG0lpleT4SlriqdeLUv35jhJsRXn2chMoc' ],
         ],
 
-        ////////////////////////////////
-        // VENI - BOT PARA PRUEBAS DE BB
-        ////////////////////////////////
+        /////////////////////////
+        // BOT PARA PRUEBAS DE BB
+        /////////////////////////
 
-        // VENI - BBtests - main
+        // BBtests - main
         20 => [
-            [ 'venibot',            'tgrp_20_00_789349080985234237899046.php',                                                                                                              '204321172:AAFr62nK9j5phVwF6nPpe-JEZycC9VfDQLA' ],
+            [ 'bbtestbot',            'tgrp_20_00_789349080985234237899046.php',                                                                                                              '204321172:AAFr62nK9j5phVwF6nPpe-JEZycC9VfDQLA' ],
         ],
-        // VENI - BBtests - monitor
+        // BBtests - monitor
         21 => [
-            [ 'venicuabot',         'tgrp_21_00_412676450978972345784385.php',                                                                                                              '328154998:AAHXisYfjjr9Z1n58Y37vO4RuUGrLXJ0f3c' ],
-        ],
-
-        /////////////////////////////////
-        // T3 - TURN TRASH INTO TREASURES
-        /////////////////////////////////
-
-        // T3 - sponsor (sponsor)
-        30 => [
-            [ 'T3sponsor_bot',      'tgrp_30_00_41267890408723648979068236903477.php',                                                                                                      '271367661:AAGUoheqgx75qFl1biQ-SmEwugYMD7WVZOI' ],
-        ],
-        // T3 - exchanger (retail)
-        31 => [
-            [ 'T3exchanger_bot',    'tgrp_31_00_52358754518112182475568554552353.php',                                                                                                      '332067633:AAEdiszdqTaNA5m8A6oGl5akpNyY4chCX2g' ],
-        ],
-        // T3 - main (reciclador + invitado)
-        32 => [
-            [ 'T3_bot',             'tgrp_32_00_23545654887545454445198948945755.php',                                                                                                      '242945055:AAGNJXNE-FOsL2JdkZrk053C264Ag3i-JqE' ],
-        ],
-        // T3 - handler (colector)
-        33 => [
-            [ 'T3handler_bot',      'tgrp_33_00_23542344556446873414588854256223.php',                                                                                                      '293419680:AAHA0XjEyPcACXdfs8kjiBnDsD8VhHF6OhY' ],
-        ],
-        // T3 - truck (camion)
-        34 => [
-            [ 'T3truck_bot',        'tgrp_34_00_86232758263546826577748967444388.php',                                                                                                      '220338994:AAGl4D1EMhafdjTuo0_x-UCnFpBrspdsZuE' ],
-        ],
-        // T3 - converter (acopio)
-        35 => [
-            [ 'T3converter_bot',    'tgrp_35_00_34847741157856854873468634446755.php',                                                                                                      '349436605:AAGKBZL05drUAQCH8w-C71kBLgAKdUM2cTs' ],
-        ],
-        // T3 - partner (fundacion)
-        36 => [
-            [ 'T3partner_bot',      'tgrp_36_00_67983241008404134656454105743468.php',                                                                                                      '305539707:AAFaU1pp1iJySqQwyJB0ZCxqGoRg2bJ5hJQ' ],
-        ],
-        // T3 - admin (operador)
-        37 => [
-            [ 'T3admin_bot',        'tgrp_37_00_22453454575734135348788656685333.php',                                                                                                      '313828017:AAG3v-Aom8NYIAgPezNQIdyv3xQBwqk3ZEU' ],
-        ],
-        // T3 - edu (education) (UNINPLEMENTED)
-      //38 => [
-      //    [ 'T3edu_bot',          'tgrp_38_00_88876945664453239857756842336344.php',                                                                                                      '295486770:AAF5y4buCZfpIi4EXzenbLROiXMPbVyaGXg' ],
-      //],
-        // T3 - monitor (logs + errors + tracing)
-        39 => [
-            [ 'T3monitor_bot',      'tgrp_39_00_79090954642134137578357745546464.php',                                                                                                      '327127354:AAEpDgwMeGY2-r5inVWL-TcG_Y9EceVOzwE' ],
-        ],
-
-        ////////////////
-        // BOTS DE JORGE
-        ////////////////
-
-        210 => [
-            [ 'Copa_bot',           'tgrp_210_00_237245486123689752355454.php',                                                                                                             '356650537:AAFQ2V4dkWd_u90d3Mpj6goaG4crA1vGyf0' ],
-        ],
-        211 => [
-            [ 'TheHandybot',        'tgrp_211_00_345457872345454875754468.php',                                                                                                             '317790698:AAFORJf9RbgKzRaIm4po6IYYuHv9FokksXc' ],
-        ],
-        212 => [
-            [ 'SchedyBot',          'tgrp_212_00_234235634675689867983454.php',                                                                                                             '344270765:AAEVzMA9q_B4fEoO65iohFXnp0gFj0mIYGE' ],
-        ],
-        249 => [
-            [ 'HeadEndBot',         'tgrp_249_00_235556854754345235356856.php',                                                                                                             '333814656:AAHnl0CaAjaYyDvw9jkswMqDUpKFtzFBvlI' ],
-        ],
-
-        /////////////////
-        // BOTS DE NICOLE
-        /////////////////
-
-        260 => [
-            [ 'TheBotBox_Bot',      'tgrp_260_00_234346568534655567342367.php',                                                                                                             '349758138:AAEog_6bey4po9VJjpQvMaGH4EPhE-iz5HI' ],
-        ],
-        261 => [
-            [ 'BotlightyearBot',    'tgrp_261_00_233485854734665898553444.php',                                                                                                             '293002363:AAGu_XbCX9en29BLCEPG6L4AKZS5b5jw9Lg' ],
-        ],
-        262 => [
-            [ 'BotstartupsBot',     'tgrp_262_00_236543475679123461478740.php',                                                                                                             '345446126:AAFP0ZlGPyXfM2cU9rwfLsEWivHRDajvqoI' ],
-        ],
-        299 => [
-            [ 'MybotsmonitorBot',   'tgrp_299_00_345868549563486212678545.php',                                                                                                             '353002157:AAFPe_kNxjZ-DGbE4kV_7SQ44KXFc1T_aE8' ],
-        ],
-
-        ///////////////
-        // BOTS DE LUIS
-        ///////////////
-
-        310 => [
-            [ 'grocabot',           'tgrp_310_00_345547823345565687545438.php',                                                                                                             '432198335:AAE39s7b08gHV1grEErZpz7M8DP2IJNkbpI' ],
-        ],
-        311 => [
-            [ 'cheverebot',         'tgrp_311_00_123615312846513613684316.php',                                                                                                             '424233639:AAGDBziaURXzZJvE3bN6bQqbdUriydN7kiM' ],
-        ],
-        312 => [
-            [ 'LuxurySkinBot',      'tgrp_312_00_225845554721721874898990.php',                                                                                                             '357186665:AAElZkcfDA9fmJVAhkbywX5Kk6rMZAxmyWo' ],
-        ],
-        349 => [
-            [ 'ServiWebBot',        'tgrp_349_00_124897612675636059626267.php',                                                                                                             '447345564:AAERyPqRcgwAXAWdsoF_yhDC3BVAO1xk6ek' ],
-        ],
-
-        /////////////////
-        // BOTS DE CARLOS
-        /////////////////
-
-        360 => [
-            [ 'CoffeExpressbot',    'tgrp_360_00_908698055113687895334533.php',                                                                                                             '412241406:AAHiUYGNJVAUJq0_ebcRML3thZi8JLwxiKo' ],
-        ],
-        361 => [
-            [ 'GymMuscleBot',       'tgrp_361_00_011561095605020755654561.php',                                                                                                             '363854619:AAH238L4CAuPypmQm4TQOHN0qlXosiC2EfM' ],
-        ],
-        362 => [
-            [ 'MusicTreebot',       'tgrp_362_00_346845865156789651348900.php',                                                                                                             '438907663:AAHpkci4tlkeoK11N4CwdQQOY4em3N-I7F4' ],
-        ],
-        399 => [
-            [ 'Monitorexbot',       'tgrp_399_00_670565665480123655668108.php',                                                                                                             '392858945:AAHTbOsNjo1SvTfiYgz0yvBmcsh2P4VGGcM' ],
+            [ 'bbtestdebugbot',         'tgrp_21_00_412676450978972345784385.php',                                                                                                              '328154998:AAHXisYfjjr9Z1n58Y37vO4RuUGrLXJ0f3c' ],
         ],
 
         ////////////////
@@ -418,11 +202,6 @@ abstract class BotConfig
     static private $cmLogBotsTelegram = [
         12  => [ 'Gorka G LLona'  ],
         21  => [ 'Gorka G LLona'  ],
-        39  => [ 'Gorka G LLona'  ],
-        249 => [ 'Jorge Guerrero' ],
-        299 => [ 'Nicole'         ],
-        349 => [ 'Luis Alberto'   ],
-        399 => [ 'Carlos'         ],
     ];
 
 
@@ -567,7 +346,7 @@ abstract class BotConfig
             self::MSG_DATATYPE_DATA_POSDECIMAL    => "un número decimal positivo|123,45",
             self::MSG_DATATYPE_DATA_STRING        => "cualquier texto|",
             self::MSG_DATATYPE_DATA_PHONE         => "un número de teléfono|6917-4440",
-            self::MSG_DATATYPE_DATA_EMAIL         => "una dirección de e-mail|yo@venicua.com",
+            self::MSG_DATATYPE_DATA_EMAIL         => "una dirección de e-mail|yo@dominio.com",
             self::MSG_DATATYPE_DATA_INTEGER       => "un número entero|123",
             self::MSG_DATATYPE_DATA_DECIMAL       => "un número decimal|123,45",
             self::MSG_DATATYPE_DATA_ARROBAUSERNAME=> "un nombre de usuario|@usuario",
@@ -590,7 +369,7 @@ abstract class BotConfig
             self::MSG_DATATYPE_DATA_POSDECIMAL    => "a positive decimal number|123.45",
             self::MSG_DATATYPE_DATA_STRING        => "any text|",
             self::MSG_DATATYPE_DATA_PHONE         => "a phone number|6917-4440",
-            self::MSG_DATATYPE_DATA_EMAIL         => "an e-mail address|me@venicua.com",
+            self::MSG_DATATYPE_DATA_EMAIL         => "an e-mail address|me@domain.com",
             self::MSG_DATATYPE_DATA_INTEGER       => "an integer number|123",
             self::MSG_DATATYPE_DATA_DECIMAL       => "an decimal number|123.45",
             self::MSG_DATATYPE_DATA_ARROBAUSERNAME=> "a username|@username",

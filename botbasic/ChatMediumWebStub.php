@@ -2,10 +2,9 @@
 /**
  * Medio de chat basado en el de Telegram donde la entrada viene de un formulario web y la salida va a un archivo en el servidor
  *
- * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
- * @license     http://www.venicua.com/botbasic/license     Licencia de BotBasic
- * @see         http://www.venicua.com/botbasic             Referencia de BotBasic
- * @version     1.0 - 01.jan.2017
+ * @author      Gorka Llona <gorka@gmail.com>
+ * @see         tg://@GrokaBot
+ * @version     2.0 - 23.jun.2018
  * @since       0.1 - 01.jul.2016
  */
 

@@ -2,10 +2,9 @@
 /**
  * defines() de PHP para BotBasic
  *
- * @author      Gorka G LLona                               <gorka@gmail.com> <gorka@venicua.com>
- * @license     http://www.venitech.com/botbasic/license    BotBasic propietary license
- * @see         http://www.venitech.com/botbasic            BotBasic reference
- * @version     1.0 - 01.jan.2017
+ * @author      Gorka Llona <gorka@gmail.com>
+ * @see         tg://@GrokaBot
+ * @version     2.0 - 23.jun.2018
  * @since       0.1 - 01.jul.2016
  */
 
