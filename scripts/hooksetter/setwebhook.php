@@ -2,15 +2,13 @@
 
 
 
-// SERVER :: telegrambots (@hp-envy) | botton (@alt) | odroid0 (@odroid)
-// PORT   :: 443 (hp-envy) | 8443 (alt) | 80 (odroid)
-// BOT    :: nombre (...bot) del bot de telegram cuyo hook se fija o borra; debe ser uno de los de la lista de abajo ($cmBots)
-// Para fijar  el hook: navegar a: https://panama_bot.local/scripts/hooksetter/setwebhook.php
-// Para borrar el hook: navegar a: https://panama_bot.local/scripts/hooksetter/setwebhook.php?action=delete_webhook
+// Para fijar  el hook: wget http://local.beta.bots.logicos.org/scripts/hooksetter/setwebhook.php
+// Para borrar el hook: wget http://local.beta.bots.logicos.org/scripts/hooksetter/setwebhook.php?action=delete_webhook
 
-define('SERVER', 'odroid0');
-define('PORT', '88');
-define('BOT', 'Monitorexbot');
+define('PUBLIC_SERVER', 'dev');
+define('PRIVATE_SERVER', 'beta');
+define('PORT', '443');
+define('BOT', 'gorkathebot');
 
 
 
@@ -31,6 +29,11 @@ $cmBots = [
         [ 'neuropower_bot', 'tgrp_12_00_934967523854879438679845.php',                                                                                                              '227989979:AAG0lpleT4SlriqdeLUv35jhJsRXn2chMoc' ],
     ],
 
+    // Gorka bots
+    899 => [
+        [ 'gorkathebot',                'tgrp_899_00_523454487872115869145558.php',                                                                                                             '508526373:AAEaIuGL03wJE8W7DKIrvMh4iZN8Uc90mzE' ]
+    ],
+
 ];
 
 // END OF COPY-PASTE
@@ -46,17 +49,21 @@ foreach ($cmBots as $bbBotCode => $bots) {
 }
 if ($hook === null) { die("Can't locate bot credentials"); }
 
+// old
 //                                 https://telegrambots.duckdns.org:8443/scripts/telegramhooks/coolbot.php
 //                                'https://telegrambots.duckdns.org:8443/scripts/telegramhooks'
 //define('WEBHOOK_BASE_URL'     , 'https://' . SERVER . '.duckdns.org:' . PORT . '/scripts/telegramhooks');   // old-style (insecure)
-define('WEBHOOK_BASE_URL'       , 'https://' . SERVER . '.duckdns.org:' . PORT . '/telegram');
+//define('WEBHOOK_BASE_URL'     , 'https://' . SERVER . '.duckdns.org:' . PORT . '/telegram');
+//define('CERTIFICATE_FILENAME' , BASEDIR . '/webhook_certificate/public.pem');
+//define('LOGFILE'              , 'php://stdout');
+
+// 2018
+define('WEBHOOK_BASE_URL'       , 'https://' . PUBLIC_SERVER . '.bots.logicos.org:' . PORT . '/telegram');
 define('WEBHOOK_URL'            , WEBHOOK_BASE_URL . '/' . $hook);
 define('API_URL'                , 'https://api.telegram.org/bot' . $token . '/');
-define('LOCAL_SERVER'           , 'panama_bot.local');
+define('LOCAL_SERVER'           , 'local.' . PRIVATE_SERVER . '.bots.logicos.org');
 define('BASEDIR'                , '/home/gorka/telegram/panama_bot');
-define('CERTIFICATE_FILENAME'   , BASEDIR . '/webhook_certificate/public.pem');
 define('LOGFILE'                , BASEDIR . '/logs/hooksetter.log');
-//define('LOGFILE'              , 'php://stdout');
 
 // END OF CONFIG
 

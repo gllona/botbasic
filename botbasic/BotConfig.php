@@ -53,7 +53,6 @@ abstract class BotConfig
 
         // BOTS DE GORKA
 
-        899 => [ 'gorkathebot',     '0', 'main',        ],
         800 => [ 'oraloco',         '0', 'main',        ],
         801 => [ 'biblioboquete',   '0', 'main',        ],
         820 => [ 'nima',            '0', 'main',        ],
@@ -61,6 +60,7 @@ abstract class BotConfig
         822 => [ 'bot14bot',        '0', 'main',        ],
         823 => [ 'nimadonkey',      '0', 'main',        ],
         830 => [ 'constituyente',   '0', 'main',        ],
+        899 => [ 'gorkathebot',     '0', 'main',        ],
 
     ];
 
@@ -89,8 +89,14 @@ abstract class BotConfig
             [ 'bbtestdebugbot',         '2100',                                                                                                              '328154998:AAHXisYfjjr9Z1n58Y37vO4RuUGrLXJ0f3c' ],
         ],
 
+        // Gorka bots - pre-2018
         800 => [
             [ 'OralocoBot',                 '80000',                                                                                                             '292199253:AAGxLSWCZtq5fZ9e2my6Z_ZW3FSujNHman0' ],
+        ],
+
+        // Gorka bots - 2018
+        899 => [
+            [ 'gorkathebot',    '90000',                                                                                                                                                        '508526373:AAEaIuGL03wJE8W7DKIrvMh4iZN8Uc90mzE' ]
         ],
 
     ];
@@ -159,9 +165,6 @@ abstract class BotConfig
         // BOTS DE GORKA
         ////////////////
 
-        899 => [   // webhook aun no registrado
-            [ 'gorkathebot',                'tgrp_899_00_235485656856441568687544.php',                                                                                                             '324536558:AAG1AFVBLhJ11aO-fz54yx6igPcX8A7-y7A' ],
-        ],
         800 => [
             [ 'OralocoBot',                 'tgrp_800_00_423457834574335448638710.php',                                                                                                             '292199253:AAGxLSWCZtq5fZ9e2my6Z_ZW3FSujNHman0' ],
         ],
@@ -182,6 +185,9 @@ abstract class BotConfig
         ],
         830 => [   // webhook aun no registrado
             [ 'ConstituyenteVenezuelaBot',  'tgrp_830_00_542354553412303858468016.php',                                                                                                             '334418130:AAEBFWacQ6ns5a9yvdtRlmaATlqyXZtMI_Q' ],
+        ],
+        899 => [
+            [ 'gorkathebot',                'tgrp_899_00_523454487872115869145558.php',                                                                                                             '508526373:AAEaIuGL03wJE8W7DKIrvMh4iZN8Uc90mzE' ]
         ],
 
     ];
