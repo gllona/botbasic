@@ -607,7 +607,7 @@ END;
             );
 END;
         $rows = self::query($sql);
-        if ($rows === null) {
+        if ($rows === false) {
             $unlock();
             Log::register(Log::TYPE_DATABASE, "DBB520");
             return null;
@@ -770,7 +770,7 @@ END;
              LIMIT 1;
 END;
         $rows = self::query($sql);
-        if ($rows === null) {
+        if ($rows === false) {
             $unlock();
             Log::register(Log::TYPE_DATABASE, "DBB681");
             return null;
@@ -900,7 +900,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         return $rows[0]['id'];
     }
@@ -924,7 +924,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         list ($cmType, $cmUserId, $cmBotName, $cmChatInfo, $dbBBchannelId) = array_values($rows[0]);
         $cmChatInfo = unserialize($cmChatInfo);
@@ -1022,7 +1022,7 @@ END;
         // - justo abajo en el list(...) ignorar la columna fantasma
         //
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         list ($cmType, $cmBotName, $cmUserId, $deleted, $bbcId) = array_values($rows[0]);
         return [ $cmType, $cmBotName, $cmUserId, $deleted !== null, $bbcId ];
@@ -1057,7 +1057,7 @@ END;
               SORT BY updated ASC
 END;
         $rows = self::query($sql);
-        if ($rows === null) { return null;  }
+        if ($rows === false) { return null;  }
         $res = [];
         foreach ($rows as $row) { $res[] = array_values($row); }
         return $res;
@@ -1086,7 +1086,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         return array_values($rows[0]);
     }
@@ -1119,7 +1119,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         list ($callStack, $route, $rtId) = array_values($rows[0]);
         return [ unserialize($callStack), unserialize($route), $rtId ];
@@ -1191,7 +1191,7 @@ END;
                AND cmc.deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         return $rows[0]['id'];
     }
@@ -1222,7 +1222,7 @@ END;
              LIMIT 1;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         return $rows[0]['id'];
     }
@@ -1251,7 +1251,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if ($rows === null) { return null;  }
+        if ($rows === false) { return null; }
         $res = [];
         foreach ($rows as $row) { $res[] = array_values($row); }
         return $res;
@@ -1357,7 +1357,7 @@ END;
              LIMIT 1;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         return $rows[0]['id'];
     }
@@ -1384,7 +1384,7 @@ END;
              LIMIT 1;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         return $rows[0]['id'];
     }
@@ -1408,7 +1408,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         list ($bbcodeCMid, $major, $minor, $subminor, $locale, $word, $trace, $bmUserId) = array_values($rows[0]);
         return [ $bbcodeCMid, $major, $minor, $subminor, $locale, $word, $trace == 1, $bmUserId ];
@@ -1534,7 +1534,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if ($rows === null) { return null; }
+        if ($rows === false) { return null; }
         $res = [];
         foreach ($rows as $row) { $res[] = array_values($row); }
         return $res;
@@ -1580,7 +1580,7 @@ END;
                    AND deleted IS NULL;
 END;
             $rows = self::query($sql);
-            if ($rows === null) { return null; }
+            if ($rows === false) { return null; }
             if ($rows[0]['amount'] != 0) {   // update an entry
                 $value = self::q($value);
                 $sql = <<<END
@@ -1648,7 +1648,7 @@ END;
                    AND deleted IS NULL;
 END;
             $rows = self::query($sql);
-            if ($rows === null) { return null; }
+            if ($rows === false) { return null; }
             foreach ($rows as $row) {
                 $toUpdateByUpdate[] = $row['name'];
             }
@@ -1733,7 +1733,7 @@ END;
                AND name = $key;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         return unserialize($rows[0]['value']);
     }
@@ -1829,7 +1829,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         list ($type, $subType, $cmType, $cmSeqId, $cmChatInfo, $cmUserId, $cmUserName, $cmUserLogin, $cmUserLang, $cmUserPhone, $bbcId, $bmUserId, $text, $menuhook, $options) = array_values($rows[0]);
         switch ($type) {
@@ -1962,7 +1962,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if ($rows === null) { return null; }
+        if ($rows === false) { return null; }
         $max = $rows[0]['maximum'];
         return $max === null ? false : $max;
     }
@@ -2044,7 +2044,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         $menuhookData = unserialize($rows[0]['data']);
         return $menuhookData;
@@ -2068,7 +2068,7 @@ END;
                AND deleted IS NULL;
 END;
         $rows = self::query($sql);
-        if     ($rows === null)    { return null;  }
+        if     ($rows === false)   { return null;  }
         elseif (count($rows) == 0) { return false; }
         list ($type, $cmType, $cmAuthInfo, $fileId, $filename, $metainfo, $downloadState) = array_values($rows[0]);
         $metainfo = unserialize($metainfo);

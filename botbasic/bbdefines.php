@@ -43,8 +43,8 @@ define('BOTBASIC_LOG_ALSO_TO_BOT', true);
 define('BOTBASIC_DB_DRIVER',   'mysql');
 define('BOTBASIC_DB_HOST',     'localhost');
 define('BOTBASIC_DB_NAME',     'botbasic');
-define('BOTBASIC_DB_USER',     'root');
-define('BOTBASIC_DB_PASSWORD', 'huanaco');
+define('BOTBASIC_DB_USER',     'botbasic');
+define('BOTBASIC_DB_PASSWORD', 'candela');
 define('BOTBASIC_DB_CONN_STR', BOTBASIC_DB_DRIVER . ":host=" . BOTBASIC_DB_HOST . ";dbname=" . BOTBASIC_DB_NAME . ";charset=utf8mb4");
 
 // Tuning: memory usage

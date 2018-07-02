@@ -2,7 +2,7 @@
 # run as root
 # before set DNS A entry dev.bots.logicos.org --> this instance external, static IP address
 # example call:
-#   BB_HOST=alpha BB_ENV=dev BB_CODE_BRANCH=master ENABLE_PHPMYADMIN=0 BB_MYSQL_ROOT_PASSWORD=huanaco install.sh
+#   BB_HOST=alpha BB_ENV=dev BB_CODE_BRANCH=master ENABLE_PHPMYADMIN=0 BB_MYSQL_ROOT_PASSWORD=huanaco BB_MYSQL_BOTBASIC_PASSWORD=candela install.sh
 
 # INTERNALS
 
@@ -170,6 +170,12 @@ fi
 
 mysqladmin -u root password $BB_MYSQL_ROOT_PASSWORD
 mysql -u root --password=$BB_MYSQL_ROOT_PASSWORD <$BB_SQL_SCHEMA
+
+mysql -u root --password=$BB_MYSQL_ROOT_PASSWORD <<END
+CREATE USER 'botbasic'@'localhost' IDENTIFIED BY '$BB_MYSQL_BOTBASIC_PASSWORD';
+GRANT ALL PRIVILEGES ON botbasic.* TO 'botbasic'@'localhost';
+FLUSH PRIVILEGES;
+END
 
 # CRONTAB
 
