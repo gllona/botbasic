@@ -14,89 +14,21 @@ define('BOT', 'Monitorexbot');
 
 
 
-// COPY-PASTE FROM CHATMEDIUMTELEGRAM HERE (delete "static..."):
+// COPY-PASTE FROM BOTCONFIG HERE (delete "static..."):
 
 $cmBots = [
 
-    ///////////////////////////////////////
-    // NEUROPOWER (TEST DRIVE #1) - FOTOBOT
-    ///////////////////////////////////////
+    /////////////////////////////
+    // NEUROPOWER (TEST DRIVE #1)
+    /////////////////////////////
 
-    // NP - Fotobot - main
+    // NP - main
     10 => [
         [ 'NeuroPowerBot',  'tgrp_10_00_278347235423590890123454.php',                                                                                                              '171752376:AAGgO5P3_W8Q8KPLCvoQAKHafiQ54w-K6rw' ],
     ],
-    // NP - Fotobot - staff (monitor) - used for monitoring
+    // NP - used for monitoring
     12 => [
         [ 'neuropower_bot', 'tgrp_12_00_934967523854879438679845.php',                                                                                                              '227989979:AAG0lpleT4SlriqdeLUv35jhJsRXn2chMoc' ],
-    ],
-
-    ////////////////
-    // BOTS DE JORGE
-    ////////////////
-
-    210 => [
-        [ 'Copa_bot',           'tgrp_210_00_237245486123689752355454.php',                                                                                                             '356650537:AAFQ2V4dkWd_u90d3Mpj6goaG4crA1vGyf0' ],
-    ],
-    211 => [
-        [ 'TheHandybot',        'tgrp_211_00_345457872345454875754468.php',                                                                                                             '317790698:AAFORJf9RbgKzRaIm4po6IYYuHv9FokksXc' ],
-    ],
-    212 => [
-        [ 'SchedyBot',          'tgrp_212_00_234235634675689867983454.php',                                                                                                             '344270765:AAEVzMA9q_B4fEoO65iohFXnp0gFj0mIYGE' ],
-    ],
-    249 => [
-        [ 'HeadEndBot',         'tgrp_249_00_235556854754345235356856.php',                                                                                                             '333814656:AAHnl0CaAjaYyDvw9jkswMqDUpKFtzFBvlI' ],
-    ],
-
-    /////////////////
-    // BOTS DE NICOLE
-    /////////////////
-
-    260 => [
-        [ 'TheBotBox_Bot',      'tgrp_260_00_234346568534655567342367.php',                                                                                                             '349758138:AAEog_6bey4po9VJjpQvMaGH4EPhE-iz5HI' ],
-    ],
-    261 => [
-        [ 'BotlightyearBot',    'tgrp_261_00_233485854734665898553444.php',                                                                                                             '293002363:AAGu_XbCX9en29BLCEPG6L4AKZS5b5jw9Lg' ],
-    ],
-    262 => [
-        [ 'BotstartupsBot',     'tgrp_262_00_236543475679123461478740.php',                                                                                                             '345446126:AAFP0ZlGPyXfM2cU9rwfLsEWivHRDajvqoI' ],
-    ],
-    299 => [
-        [ 'MybotsmonitorBot',   'tgrp_299_00_345868549563486212678545.php',                                                                                                             '353002157:AAFPe_kNxjZ-DGbE4kV_7SQ44KXFc1T_aE8' ],
-    ],
-
-    ///////////////
-    // BOTS DE LUIS
-    ///////////////
-
-    310 => [
-        [ 'grocabot',           'tgrp_310_00_345547823345565687545438.php',                                                                                                             '432198335:AAE39s7b08gHV1grEErZpz7M8DP2IJNkbpI' ],
-    ],
-    311 => [
-        [ 'cheverebot',         'tgrp_311_00_123615312846513613684316.php',                                                                                                             '424233639:AAGDBziaURXzZJvE3bN6bQqbdUriydN7kiM' ],
-    ],
-    312 => [
-        [ 'LuxurySkinBot',      'tgrp_312_00_225845554721721874898990.php',                                                                                                             '357186665:AAElZkcfDA9fmJVAhkbywX5Kk6rMZAxmyWo' ],
-    ],
-    349 => [
-        [ 'ServiWebBot',        'tgrp_349_00_124897612675636059626267.php',                                                                                                             '447345564:AAERyPqRcgwAXAWdsoF_yhDC3BVAO1xk6ek' ],
-    ],
-
-    /////////////////
-    // BOTS DE CARLOS
-    /////////////////
-
-    360 => [
-        [ 'CoffeExpressbot',    'tgrp_360_00_908698055113687895334533.php',                                                                                                             '412241406:AAHiUYGNJVAUJq0_ebcRML3thZi8JLwxiKo' ],
-    ],
-    361 => [
-        [ 'GymMuscleBot',       'tgrp_361_00_011561095605020755654561.php',                                                                                                             '363854619:AAH238L4CAuPypmQm4TQOHN0qlXosiC2EfM' ],
-    ],
-    362 => [
-        [ 'MusicTreebot',       'tgrp_362_00_346845865156789651348900.php',                                                                                                             '438907663:AAHpkci4tlkeoK11N4CwdQQOY4em3N-I7F4' ],
-    ],
-    399 => [
-        [ 'Monitorexbot',       'tgrp_399_00_670565665480123655668108.php',                                                                                                             '392858945:AAHTbOsNjo1SvTfiYgz0yvBmcsh2P4VGGcM' ],
     ],
 
 ];
