@@ -1,4 +1,4 @@
-# Extra directories at .../httpdocs/.. level:
+# extra directories at .../httpdocs/.. level:
 
 - backup
 - backup/mysql
@@ -6,3 +6,10 @@
 - logs
 - logs/bizmodel
 - logs/webstub
+
+# gcloud
+
+gcloud config configurations activate CONFIGURATION_NAME
+
+gcloud compute instances describe botbasic-alpha --format="yaml(serviceAccounts)"
+

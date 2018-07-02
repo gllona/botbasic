@@ -1,0 +1,4 @@
+[client]
+user = root
+password = YOUR_PLAIN_TEXT_MYSQL_ROOT_PASSWORD
+host = localhost

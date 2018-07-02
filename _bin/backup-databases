@@ -1,0 +1,39 @@
+#!/bin/bash
+
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BMDIR=$SCRIPTDIR/../httpdocs/bizmodel
+BAKDIR=$SCRIPTDIR/mysql
+MYSQLCONFIG=$SCRIPTDIR/mysql.cnf
+LOGFILE=$SCRIPTDIR/database.log
+ZIPPASS=`cat $SCRIPTDIR/zippass.cnf`
+DATE=`date -Idate`
+
+umask 007
+(echo; echo "======="; echo "database backup of $DATE") >>$LOGFILE
+cd $BMDIR
+for DBNAME in botbasic *
+do
+	if [ -d "$DBNAME" ] || [ "$DBNAME" == "botbasic" ]
+	then
+		cd $BAKDIR
+		OUTFILE=${DBNAME}_$DATE.sql
+		TMPFILE=$OUTFILE.$RANDOM
+		echo "Backing up $DBNAME..." >>$LOGFILE
+		mysqldump --defaults-extra-file=$MYSQLCONFIG --skip-opt --no-autocommit --add-drop-database --set-charset --single-transaction --flush-logs --log-error=$LOGFILE --add-drop-table --result-file=$TMPFILE --dump-date --routines --triggers $DBNAME
+		if [ "$?" = "0" ]
+		then
+			#echo 'SET AUTOCOMMIT = 0; SET FOREIGN_KEY_CHECKS=0;' >$OUTFILE
+			echo 'SET FOREIGN_KEY_CHECKS=0;' >$OUTFILE
+			cat $TMPFILE >>$OUTFILE
+			echo 'SET FOREIGN_KEY_CHECKS=1;' >>$OUTFILE
+			#echo 'SET AUTOCOMMIT = 0; SET FOREIGN_KEY_CHECKS=0;' >$OUTFILE
+			rm -f $OUTFILE.zip
+			zip -j -e -P $ZIPPASS $OUTFILE.zip $OUTFILE >/dev/null
+			rm $OUTFILE
+		fi
+		rm -f $TMPFILE
+		cd - >/dev/null
+	fi
+done
+
+exit 0

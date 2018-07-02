@@ -4,7 +4,7 @@
  *
  * @author      Gorka Llona <gorka@gmail.com>
  * @see         tg://@GrokaBot
- * @version     2.0 - 23.jun.2018
+ * @version     0.2 - 01.jul.2018
  * @since       0.1 - 01.jul.2016
  */
 
