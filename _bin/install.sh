@@ -71,15 +71,19 @@ git checkout $BB_CODE_BRANCH
 cd ..
 ln -s $BB_CODE_REPO $(basename $BB_HOME)
 
-# DIRECTORIES
+# FILES AND DIRECTORIES
 
 cd $BB_HOME/..
 mkdir -p backup/mysql
 mkdir -p downloads
 mkdir -p logs/bizmodel
 mkdir -p logs/webstub
-chmod g+w logs logs/bizmodel logs/webstub downloads
-chgrp www-data logs logs/bizmodel logs/webstub downloads
+touch logs/runtime.log
+chmod g+w logs logs/bizmodel logs/webstub logs/runtime.log downloads
+chgrp www-data logs logs/bizmodel logs/webstub logs/runtime.log downloads
+
+#mkdir -p /home/gorka/telegram/panama_bot
+#ln -s /home/botbasic/httpdocs /home/gorka/telegram/panama_bot/httpdocs
 
 # CHECK FOR FILES
 
@@ -180,9 +184,7 @@ LINE='#*/1 * * * * $BB_HOME/scripts/telegramsender/launcher.sh 1000 750 >/dev/nu
 
 # ENABLE SERVICES
 
-if [ "$ENABLE_PHPMYADMIN" != "0" ]; then
-    a2ensite $BB_HOST_PRIVATE.conf
-fi
+a2ensite $BB_HOST_PRIVATE.conf
 a2ensite $BB_HOST_ENV.conf
 service apache2 restart
 

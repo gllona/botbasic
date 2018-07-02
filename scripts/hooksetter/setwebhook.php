@@ -2,8 +2,8 @@
 
 
 
-// Para fijar  el hook: wget http://local.beta.bots.logicos.org/scripts/hooksetter/setwebhook.php
-// Para borrar el hook: wget http://local.beta.bots.logicos.org/scripts/hooksetter/setwebhook.php?action=delete_webhook
+// Para fijar  el hook: wget -O - http://local.beta.bots.logicos.org/scripts/hooksetter/setwebhook.php
+// Para borrar el hook: wget -O - http://local.beta.bots.logicos.org/scripts/hooksetter/setwebhook.php?action=delete_webhook
 
 define('PUBLIC_SERVER', 'dev');
 define('PRIVATE_SERVER', 'beta');

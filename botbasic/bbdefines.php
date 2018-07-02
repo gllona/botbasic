@@ -11,7 +11,7 @@
 
 
 // Main definitions
-define('BOTBASIC_BASEDIR',                      '/home/gorka/telegram/panama_bot');
+define('BOTBASIC_BASEDIR',                      '/home/botbasic');
 define('BOTBASIC_LOGFILE',                      BOTBASIC_BASEDIR . '/logs/runtime.log');
 define("BOTBASIC_LANG_NAME",                    "BotBasic");
 define("BOTBASIC_LANG_VERSION",                 "01.00");
@@ -19,7 +19,7 @@ define("BOTBASIC_DEFAULT_LOCALE",               "es");
 define("BOTBASIC_COMMAND_START",                "/start");
 define("BOTBASIC_MAX_PARSE_TIME_SECONDS",       1.0);
 define("BOTBASIC_MAX_EXEC_TIME_SECONDS",        1.0);
-define('BOTBASIC_TIMEZONE',                     'America/Panama');
+define('BOTBASIC_TIMEZONE',                     'Etc/UTC');   // 'America/Panama');
 define('BOTBASIC_DOWNLOAD_MMCONTENT',           false);
 define('BOTBASIC_BOT_IS_POSSESSED',             false);
 define('BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR', BOTBASIC_BASEDIR . '/downloads');
@@ -34,7 +34,7 @@ define('BOTBASIC_INPUT_HINTS_WITH_EXAMPLES', false);
 // Debugging and profiling
 define('BOTBASIC_PROFILE',         false);
 
-define('BOTBASIC_DEV_MACHINE',     'hp-envy');
+define('BOTBASIC_DEV_MACHINE',     'klock');
 define('BOTBASIC_DEBUG',           gethostname() == BOTBASIC_DEV_MACHINE);
 define('BOTBASIC_LOG_ALSO_TO_DB',  false);
 define('BOTBASIC_LOG_ALSO_TO_BOT', true);
@@ -44,7 +44,7 @@ define('BOTBASIC_DB_DRIVER',   'mysql');
 define('BOTBASIC_DB_HOST',     'localhost');
 define('BOTBASIC_DB_NAME',     'botbasic');
 define('BOTBASIC_DB_USER',     'root');
-define('BOTBASIC_DB_PASSWORD', 'mosopsql');
+define('BOTBASIC_DB_PASSWORD', 'huanaco');
 define('BOTBASIC_DB_CONN_STR', BOTBASIC_DB_DRIVER . ":host=" . BOTBASIC_DB_HOST . ";dbname=" . BOTBASIC_DB_NAME . ";charset=utf8mb4");
 
 // Tuning: memory usage
