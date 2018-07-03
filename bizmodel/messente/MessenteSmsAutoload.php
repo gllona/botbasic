@@ -1,11 +1,18 @@
 <?php
 
+function newMessenteSmsAutoload($filename) {
+    spl_autoload_register(function($filename) {
+        require $filename;
+    });
+}
+
 function MessenteSmsAutoload($classname)
 {
     //Can't use __DIR__ as it's only in PHP 5.3+
     $filename = dirname(__FILE__).DIRECTORY_SEPARATOR.'class.'.strtolower($classname).'.php';
     if (is_readable($filename)) {
-        require $filename;
+        newMessenteSmsAutoload($filename);
+        //require $filename;
     }
 }
 

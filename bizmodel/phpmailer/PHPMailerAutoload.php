@@ -17,6 +17,13 @@
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+function newPHPMailerAutoload($filename)
+{
+    spl_autoload_register(function($filename) {
+        require $filename;
+    });
+}
+
 /**
  * PHPMailer SPL autoloader.
  * @param string $classname The name of the class to load
@@ -26,7 +33,8 @@ function PHPMailerAutoload($classname)
     //Can't use __DIR__ as it's only in PHP 5.3+
     $filename = dirname(__FILE__).DIRECTORY_SEPARATOR.'class.'.strtolower($classname).'.php';
     if (is_readable($filename)) {
-        require $filename;
+        newPHPMailerAutoload($filename);
+        //require $filename;
     }
 }
 

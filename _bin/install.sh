@@ -51,6 +51,7 @@ apt-get update
 apt-get install -y openssh-server curl htop vim zip mplayer lame python
 apt-get install -y apache2 mysql-server
 apt-get install -y php$BB_PHP_VERSION libapache2-mod-php$BB_PHP_VERSION php$BB_PHP_VERSION-mysql php$BB_PHP_VERSION-curl php$BB_PHP_VERSION-json mysql-client
+apt-get install -y php-mbstring
 if [ "$ENABLE_PHPMYADMIN" != "0" ]; then
     apt-get install -y phpmyadmin
 fi
@@ -82,6 +83,8 @@ touch logs/runtime.log
 chmod g+w logs logs/bizmodel logs/webstub logs/runtime.log downloads
 chgrp www-data logs logs/bizmodel logs/webstub logs/runtime.log downloads
 
+cp $BB_HOME/_bin/backup-databases $BB_HOME/../backup
+
 #mkdir -p /home/gorka/telegram/panama_bot
 #ln -s /home/botbasic/httpdocs /home/gorka/telegram/panama_bot/httpdocs
 
@@ -105,7 +108,7 @@ apt-get -y install certbot
 apt-get -y install python-certbot-apache
 certbot --apache --domains $BB_HOST_ENV -n -m gllona@gmail.com --agree-tos certonly
 
-LINE='14 3 * * 1 certbot renew --pre-hook "service apache2 stop" --post-hook "service apache2 start" >/dev/null 2>/dev/null'
+LINE="14 3 * * 1 certbot renew --pre-hook "service apache2 stop" --post-hook "service apache2 start" >/dev/null 2>/dev/null"
 (crontab -l; echo "$LINE") | crontab -
 
 # APACHE2
@@ -179,13 +182,13 @@ END
 
 # CRONTAB
 
-LINE='##0 0 * * * $BB_HOME/../backup/backup-databases >/dev/null 2>&1'
+LINE="##0 0 * * * $BB_HOME/../backup/backup-databases >/dev/null 2>&1"
 (crontab -l; echo "$LINE") | crontab -
 
-LINE='##*/1 * * * * $BB_HOME/scripts/downloader/launcher.sh >/dev/null 2>/dev/null'
+LINE="##*/1 * * * * $BB_HOME/scripts/downloader/launcher.sh >/dev/null 2>/dev/null"
 (crontab -l; echo "$LINE") | crontab -
 
-LINE='#*/1 * * * * $BB_HOME/scripts/telegramsender/launcher.sh 1000 750 >/dev/null 2>/dev/null'
+LINE="#*/1 * * * * $BB_HOME/scripts/telegramsender/launcher.sh 1000 750 >/dev/null 2>/dev/null"
 (crontab -l; echo "$LINE") | crontab -
 
 # ENABLE SERVICES
