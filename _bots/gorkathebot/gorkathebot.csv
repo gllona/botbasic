@@ -1,0 +1,82 @@
+BOTBASIC						
+MAGIC	BotBasic 01.00					
+VERSION	0.1.1	gorkathebot				
+BOTS	main					
+						
+						
+						
+MESSAGES						
+name		es				
+						
+myname		I’m Gorka, your dearest bot				
+pYourName		Type your name:				
+mMain		I can do for you:				
+oAge		Calculate your age				
+oQuote		Make you laugh				
+currentYear		2018				
+pYourByear		Enter your birthyear:				
+myage		I guess you are {myage} years old!				
+mLaugh		How want to to laugh?				
+oPrank		Prank				
+oSilly		Silly thing				
+oAbsurd		Absurd nowhere				
+prank1		A person called {username} is a fool if reading this line				
+silly1		Wood in the stove, hair on the floor				
+absurd1		You have a thousand more important to do than this				
+						
+						
+						
+MENUS						
+name		description		in	out	remarks
+						
+						
+						
+MAGICVARS						
+name		description				
+						
+						
+						
+PRIMITIVES						
+name		description		in	out	remarks
+						
+StrReplace				strFrom strTo strSubject	strResult	
+SplitToArray				strSeparator strString	...	
+DiffPipeArrays				strPipedArrayFrom strPipedArrayMinus	strPipedArrayDiff	
+						
+						
+						
+PROGRAM						
+main	main	main				
+						
+						
+						
+/start	start	PRINT myname				
+		INPUT string TITLE pYourName TO username				
+						
+/menu	menu	MENU TITLE mMain OPTIONS oAge oQuote TO option				
+		IF EQ option oAge THEN GOTO age				
+		IF EQ option oLaugh THEN GOTO laugh				
+		PRINT badOption				
+		END				
+						
+	age	INPUT positiveInteger TITLE pYourByear TO byear				
+		SET age currentYear				
+		DEC age byear				
+		PRINT myage				
+		GOTO menu				
+						
+	laugh	OPTION oPrank GOSUB prank				
+		OPTION oSilly GOSUB silly				
+		OPTION oAbsurd GOSUB absurd				
+		MENU TITLE mLaugh TO option				
+		PRINT tryToLaugh				
+		GOTO menu				
+						
+	prank	SET tryToLaugh prank1				
+		RETURN				
+						
+	silly	SET tryToLaugh silly1				
+		RETURN				
+						
+	absurd	SET tryToLaugh absurd1				
+		RETURN				

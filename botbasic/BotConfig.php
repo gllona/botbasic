@@ -96,7 +96,8 @@ abstract class BotConfig
 
         // Gorka bots - 2018
         899 => [
-            [ 'gorkathebot',    '90000',                                                                                                                                                        '508526373:AAEaIuGL03wJE8W7DKIrvMh4iZN8Uc90mzE' ]
+            [ 'gorkathebot',    '89900',                                                                                                                                                        '508526373:AAEaIuGL03wJE8W7DKIrvMh4iZN8Uc90mzE' ],
+            [ 'grokabot',       '89999',                                                                                                                                                        '508526373:AAEaIuGL03wJE8W7DKIrvMh4iZN8Uc90mzE' ]
         ],
 
     ];
@@ -134,7 +135,7 @@ abstract class BotConfig
         10 => [
             [ 'NeuroPowerBot',  'tgrp_10_00_278347235423590890123454.php',                                                                                                              '171752376:AAGgO5P3_W8Q8KPLCvoQAKHafiQ54w-K6rw' ],
         ],
-        // NP - unused - especialista channel 01 TO nn
+        // NP - unused - channels 01 TO nn
         11 => [
             [ 'np00bot',        'tgrp_11_00_142857142857.php',                                                                                                                          '' ],
             [ 'np01bot',        'tgrp_11_01_142857142857.php',                                                                                                                          '' ],
@@ -186,8 +187,13 @@ abstract class BotConfig
         830 => [   // webhook aun no registrado
             [ 'ConstituyenteVenezuelaBot',  'tgrp_830_00_542354553412303858468016.php',                                                                                                             '334418130:AAEBFWacQ6ns5a9yvdtRlmaATlqyXZtMI_Q' ],
         ],
+        898 => [
+            [ 'AitanaTheBot',               'tgrp_898_00_832569490854734632897368.php',                                                                                                             '601186767:AAEeWKOuRV726V3aUtnF9dq1irFE7Bs1LNI' ],
+            [ 'AitanaLlonaBot',             'tgrp_898_99_85367555436565i535247658.php',                                                                                                             '508088357:AAFRrwZxnfOqQFsG7AdesiM8nOnLYmjK8do' ],
+        ],
         899 => [
-            [ 'gorkathebot',                'tgrp_899_00_523454487872115869145558.php',                                                                                                             '508526373:AAEaIuGL03wJE8W7DKIrvMh4iZN8Uc90mzE' ]
+            [ 'gorkathebot',                'tgrp_899_00_523454487872115869145558.php',                                                                                                             '508526373:AAEaIuGL03wJE8W7DKIrvMh4iZN8Uc90mzE' ],
+            [ 'grokabot',                   'tgrp_899_99_423809869823579639532654.php',                                                                                                             '476497270:AAFNZbJXgsKUrldupreWgY_CMZE6QbwJj7w' ],
         ],
 
     ];

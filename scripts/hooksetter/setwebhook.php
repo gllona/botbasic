@@ -8,7 +8,7 @@
 define('PUBLIC_SERVER', 'dev');
 define('PRIVATE_SERVER', 'beta');
 define('PORT', '443');
-define('BOT', 'gorkathebot');
+define('BOT', 'grokabot');
 
 
 
@@ -30,8 +30,13 @@ $cmBots = [
     ],
 
     // Gorka bots
+    898 => [
+        [ 'AitanaTheBot',               'tgrp_898_00_832569490854734632897368.php',                                                                                                             '601186767:AAEeWKOuRV726V3aUtnF9dq1irFE7Bs1LNI' ],
+        [ 'AitanaLlonaBot',             'tgrp_898_99_85367555436565i535247658.php',                                                                                                             '508088357:AAFRrwZxnfOqQFsG7AdesiM8nOnLYmjK8do' ],
+    ],
     899 => [
-        [ 'gorkathebot',                'tgrp_899_00_523454487872115869145558.php',                                                                                                             '508526373:AAEaIuGL03wJE8W7DKIrvMh4iZN8Uc90mzE' ]
+        [ 'gorkathebot',                'tgrp_899_00_523454487872115869145558.php',                                                                                                             '508526373:AAEaIuGL03wJE8W7DKIrvMh4iZN8Uc90mzE' ],
+        [ 'grokabot',                   'tgrp_899_99_423809869823579639532654.php',                                                                                                             '476497270:AAFNZbJXgsKUrldupreWgY_CMZE6QbwJj7w' ],
     ],
 
 ];
