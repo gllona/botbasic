@@ -1,0 +1,40 @@
+BOTBASIC						
+MAGIC	BotBasic 01.00					
+VERSION	0.0.2	AitanaTheBot				
+BOTS	main					
+						
+						
+						
+MESSAGES						
+name		es				
+						
+myname		Hola soy Aitana!				
+						
+						
+						
+MENUS						
+name		description		in	out	remarks
+						
+						
+						
+MAGICVARS						
+name		description				
+						
+						
+						
+PRIMITIVES						
+name		description		in	out	remarks
+						
+StrReplace				strFrom strTo strSubject	strResult	
+SplitToArray				strSeparator strString	...	
+DiffPipeArrays				strPipedArrayFrom strPipedArrayMinus	strPipedArrayDiff	
+						
+						
+						
+PROGRAM						
+main	main	main				
+						
+						
+						
+/start	start	PRINT myname				
+		END				

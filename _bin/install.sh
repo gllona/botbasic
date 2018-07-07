@@ -48,7 +48,7 @@ assertVarSet BB_MYSQL_ROOT_PASSWORD
 # PACKAGES
 
 apt-get update
-apt-get install -y openssh-server curl htop vim zip mplayer lame python
+apt-get install -y openssh-server curl htop vim zip mplayer lame python lynx jq
 apt-get install -y apache2 mysql-server
 apt-get install -y php$BB_PHP_VERSION libapache2-mod-php$BB_PHP_VERSION php$BB_PHP_VERSION-mysql php$BB_PHP_VERSION-curl php$BB_PHP_VERSION-json mysql-client
 apt-get install -y php-mbstring

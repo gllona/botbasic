@@ -70,10 +70,9 @@ Para depurar BBapps usando bots de monitoreo usando la versión estable de BB, n
 
     static private $cmLogBotsTelegram = [
     	// ...
-        249 => [ 'Jorge Guerrero' ],
-        299 => [ 'Nicole'         ],
-        349 => [ 'Luis Alberto'   ],
-        399 => [ 'Carlos'         ],
+        12  => [ 'Gorka G LLona'  ],
+        879 => [ 'Elina'          ],
+        21  => [ 'Gorka G LLona'  ],
         // ...
     ];
 
@@ -81,7 +80,7 @@ El bot de monitoreo de una BBapp sólo deberá ser usando por un usuario de Tele
 
 El arreglo $cmLogBotsTelegram contiene la definición de lo usuarios autorizados de los bots de monitoreo. Para cada bbidx que represente un bot de monitoreo, se define el usuario, indicando la concatenación de su nombre y su apellido (separado por espacio), tal como el usuario ha configurado su app Telegram en su celular.
 
-Usando la cuarta entrada del ejemplo, se entiende que el primer usuario que haya colocado "Carlos" en el campo nombre y dejado vacío el campo apellido de su perfil de la app Telegram, que se conecte al bot de monitoreo identificado por el bbidx 399, será entendido por el servidor BB como el usuario autorizado sobre cuya máquina virtual aparecerán los mensajes de depuración del resto de los bots de la bbapp respectiva. A otros usuarios "Carlos" a los que el servidor BB les cree máquinas virtuales en lo sucesivo, así como otros usuarios de Telegram con distinto nombre+apellido que se conecten a ese bot que funciona como de monitoreo, no verán los mensajes de depuración que el primer "Carlos" sí recibirá.
+Usando la segunda entrada del ejemplo, se entiende que el primer usuario que haya colocado "Elina" en el campo nombre y dejado vacío el campo apellido de su perfil de la app Telegram, que se conecte al bot de monitoreo identificado por el bbidx 879, será entendido por el servidor BB como el usuario autorizado sobre cuya máquina virtual aparecerán los mensajes de depuración del resto de los bots de la bbapp respectiva. A otros usuarios "Elina" a los que el servidor BB les cree máquinas virtuales en lo sucesivo, así como otros usuarios de Telegram con distinto nombre+apellido que se conecten a ese bot que funciona como de monitoreo, no verán los mensajes de depuración que la primera "Elina" sí recibirá.
 
 5. OTROS IDIOMAS
 

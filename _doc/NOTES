@@ -13,3 +13,7 @@ gcloud config configurations activate CONFIGURATION_NAME
 
 gcloud compute instances describe botbasic-alpha --format="yaml(serviceAccounts)"
 
+# ngrok free for parser
+
+nohup ngrok http -host-header=beta.bots.logicos.org -log=stdout 80 &
+curl http://localhost:4040/api/tunnels | jq '.tunnels[0].public_url'

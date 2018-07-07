@@ -215,6 +215,8 @@ abstract class BotConfig
     static private $cmLogBotsTelegram = [
         12  => [ 'Gorka G LLona'  ],
         21  => [ 'Gorka G LLona'  ],
+        888 => [ 'Aitana Llona'   ],
+        899 => [ 'Gorka G LLona'  ],
     ];
 
 
@@ -252,6 +254,8 @@ abstract class BotConfig
         822 => self::INPUT_HINT_NEVER,
         823 => self::INPUT_HINT_NEVER,
         830 => self::INPUT_HINT_NEVER,
+        880 => self::INPUT_HINT_NOT_FIRST_TIME,
+        890 => self::INPUT_HINT_NOT_FIRST_TIME,
     ];
 
 
