@@ -17,3 +17,8 @@ gcloud compute instances describe botbasic-alpha --format="yaml(serviceAccounts)
 
 nohup ngrok http -host-header=beta.bots.logicos.org -log=stdout 80 &
 curl http://localhost:4040/api/tunnels | jq '.tunnels[0].public_url'
+
+# for dev instances
+
+sudo apt-get install php-xdebug
+ 
