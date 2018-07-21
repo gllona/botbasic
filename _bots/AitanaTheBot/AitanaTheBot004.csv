@@ -1,0 +1,81 @@
+BOTBASIC						
+MAGIC	BotBasic 01.00					
+VERSION	0.0.4	AitanaTheBot				
+BOTS	main					
+						
+						
+						
+MESSAGES						
+name		es				
+						
+myname		Hola soy Aitana!				
+action		ffffffiiiiiiooooollllllll				
+oque		Qué quieres hacer?				
+ojuegos		Juegos				
+ocuentame		Cuéntame una historia				
+oadivina		Adivina el número				
+reglasdejuego		Aqui estan las reglas! Tu me dices un genero de un juego y yo te digo algún juego de ese genero. Si me dices que te rindes yo gano, si yo digo que me rindo tu ganas :).				
+enconstruccion		Todavia estamos programando este juego. Perdon! :(.				
+						
+						
+						
+MENUS						
+name		description		in	out	remarks
+						
+						
+						
+MAGICVARS						
+name		description				
+						
+						
+						
+PRIMITIVES						
+name		description		in	out	remarks
+						
+StrReplace				strFrom strTo strSubject	strResult	
+SplitToArray				strSeparator strString	...	
+DiffPipeArrays				strPipedArrayFrom strPipedArrayMinus	strPipedArrayDiff	
+						
+						
+						
+PROGRAM						
+main	main	main				
+						
+						
+						
+/start	start	PRINT myname				
+						
+		MENU TITLE oque OPTIONS ojuegos ocuentame oadivina TO box				
+		IF EQ box ojuegos THEN GOTO juegos				
+		IF EQ box ocuentame THEN GOTO cuentame				
+		IF EQ box oadivina THEN GOTO adivina				
+		END				
+						
+						
+						
+						
+	juegos	REM aqui emezamos con los juegos				
+		PRINT enconstruccion				
+		END				
+						
+						
+						
+						
+						
+						
+						
+	cuentame	REM Vamos con una historia! Escoje una de las tres				
+		PRINT enconstruccion				
+		END				
+						
+						
+						
+						
+						
+						
+						
+						
+						
+	adivina	REM Adivinare el número en el que estas pensando dime de cuabto es a cuanto es. Adivino hasta en 100.				
+		PRINT enconstruccion				
+		END				

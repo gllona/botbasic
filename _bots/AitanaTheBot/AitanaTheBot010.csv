@@ -1,0 +1,121 @@
+BOTBASIC						
+MAGIC	BotBasic 01.00					
+VERSION	0.1.0	AitanaTheBot				
+BOTS	main					
+						
+						
+						
+MESSAGES						
+name		es				
+						
+myname		Hola soy Aitana!				
+action		ffffffiiiiiiooooollllllll				
+oque		Qué quieres hacer?				
+ojuegos		Juegos				
+ocuentame		Cuéntame una historia				
+oadivina		Adivina el número				
+reglasdejuego		Aqui estan las reglas! Tu me dices un genero de un juego y yo te digo algún juego de ese genero. Si me dices (Me rindo) que te rindes yo gano, si yo digo que me rindo tu ganas :).				
+enconstruccion		Todavia estamos programando este juego. Perdon! :(.				
+escribe		Escribe tu genero y vere si lo puedo adivinar!				
+ococina		cocina				
+rcocina		Aqui esta un juego de cocina super chulo! Se llama Kitchen Chaos tu cocinas para los clientes en grupo o solo! Pero ojo! Que hay tiempo! Ellos no esperaran toda la vida para conseguir una ensalada, pizza o un taco.				
+oterror		terror				
+rterror		A ver…. Uno de terror….. Ah! Claro! Granny un juego donde una abuela malvada te encerro en su casa! Tienes 5 noches para salir, pero todo no sera tan facil.. no no no! Ella te estara persiguiendo con su bate por toda la casa, ruidos en el piso paredes etc… ella los escucha! Y recuerda 5 noches para salir! Buena suerte!				
+oaventura		aventura				
+raventura		Uno de aventura… Que te puedo decir… The guide of the realm te guio hasta aqui!. Este juego sigue en desarrollo, tiene el prologo y 2 capitulos…. Tu eres una persona que va hacer misiones pasar por momentos dificiles, que aprendera nuevos movimientos y mucho más!				
+oroleplay		simulador				
+rroleplay		Hmmm… uno de Simulador… te digo que Bloxburg es tu lugar! Se un niño, una niña, un adolecente, un adulto, un padre amoroso y mucho más! Simula tu vida, construye tu casa…. Wow! Que cool pero…. Obio todo esto por un precio razonable he he….				
+oasesinato		asesinato				
+rasesinato		Hmm.. Un asesino… Aja! Murder Mistery 2 es el juego ideal! El juego escojera a un asesino, un sheriff y el resto seran inocentes! El asesino tiene que matar a todos, los mato a todos? El asesino gano! El sheriff mato al asesino? Los inocentes ganan! El asesino no logro matar a todos? Los inocentes ganan! El sheriff muere pero agarras su pistola y matas al asisino? Eres el heroe y los inocentes ganan! Desbloquea cuchillos, pistolas, efectos etc… y divierte en… Murder Mistery 2!				
+lose1		Ugh…. Me ganastes esta ronda… sigamos! Que ves que te rindes y yo gano!				
+lose2		Argggg….. uno más.. uno menos… sigamos!				
+lose3final		COMO?! Arggggg! Me ganaste! Buena jugada. Me rindo!				
+win1		Ha ha! Te gane esta ronda! Sigamos!				
+win2		Mmmmmmm. La victoria es rica! Sigamos!				
+win3		Te gano mucho? Perdon si asi es…. Pero no lo puedo evitar!				
+winfinal		Ops… parece que te gane! No te preocupes y sigue jugando! Varas que algun dia me derrotas. O………. No! He he!				
+prindo		Me rindo				
+						
+						
+						
+						
+						
+						
+						
+						
+						
+MENUS						
+name		description		in	out	remarks
+						
+						
+						
+MAGICVARS						
+name		description				
+						
+						
+						
+PRIMITIVES						
+name		description		in	out	remarks
+						
+StrReplace				strFrom strTo strSubject	strResult	
+SplitToArray				strSeparator strString	...	
+DiffPipeArrays				strPipedArrayFrom strPipedArrayMinus	strPipedArrayDiff	
+						
+						
+						
+PROGRAM						
+main	main	main				
+						
+						
+						
+/start	start	PRINT myname				
+						
+	menu	MENU TITLE oque OPTIONS ojuegos ocuentame oadivina TO box				
+		IF EQ box ojuegos THEN GOTO juegos				
+		IF EQ box ocuentame THEN GOTO cuentame				
+		IF EQ box oadivina THEN GOTO adivina				
+		END				
+						
+						
+						
+						
+	juegos	REM aqui emezamos con los juegos				
+		PRINT reglasdejuego				
+		INPUT string TITLE escribe TO genero				
+		IF EQ genero ococina THEN PRINT rcocina : GOTO juegos1				
+		IF EQ genero oterror THEN PRINT rterror : GOTO juegos1				
+		IF EQ genero oaventura THEN PRINT raventura : GOTO juegos1				
+		IF EQ genero oroleplay THEN PRINT rroleplay : GOTO juegos1				
+		IF EQ genero oasesinato THEN PRINT rasesinato : GOTO juegos1				
+						
+		PRINT lose1				
+		GOTO menu				
+						
+						
+						
+						
+						
+	juegos1	PRINT win1				
+		GOTO menu				
+						
+						
+						
+						
+						
+						
+						
+	cuentame	REM Vamos con una historia! Escoje una de las tres				
+		PRINT enconstruccion				
+		END				
+						
+						
+						
+						
+						
+						
+						
+						
+						
+	adivina	REM Adivinare el número en el que estas pensando dime de cuabto es a cuanto es. Adivino hasta en 100.				
+		PRINT enconstruccion				
+		END				
