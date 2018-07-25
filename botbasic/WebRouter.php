@@ -81,7 +81,7 @@ abstract class WebRouter
 
         // TODO falla porque no toma en cuenta que Telegram asigna secuencias distintas a cada usuario
         //elseif (! $genericUpdate->hasValidSequence()) {
-        //    T3log::register(T3log::TYPE_RUNTIME, "WR81 El update generico no tiene secuencia valida", $genericUpdate);
+        //    Log::register(Log::TYPE_RUNTIME, "WR81 El update generico no tiene secuencia valida", $genericUpdate);
         //    $genericUpdate->delete();
         //}
 

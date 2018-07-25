@@ -2394,10 +2394,10 @@ END;
 
 
     /**
-     * Registra una entrada de bitácora (usando la clase T3log) pero evita registrar aquellas que sean muy inmediatas a la más recientemente registrada
+     * Registra una entrada de bitácora (usando la clase Log) pero evita registrar aquellas que sean muy inmediatas a la más recientemente registrada
      *
-     * @param  int      $type               Una de las constantes T3log::TYPE_..., como lo recibirá la clase T3log
-     * @param  string   $content            Mensaje de bitácora a registrar, como lo recibirá la clase T3log
+     * @param  int      $type               Una de las constantes Log::TYPE_..., como lo recibirá la clase Log
+     * @param  string   $content            Mensaje de bitácora a registrar, como lo recibirá la clase Log
      * @param  int      $cmType             Una de las constantes ChatMedium::TYPE...; cada cola de envío de Splashes maneja tiempos independientes
      * @param  int      $minSecsToRelog     Número de segundos mínimos necesarios antes de la última entrada que deben transcurrir para poder re-registrar
      */
@@ -2511,7 +2511,7 @@ END;
                 else {
                     $filename = $this->filenameForResource($id, $type);
                     if ($filename === null) {
-                        // T3log this (can't create directory)
+                        // Log this (can't create directory)
                         $res = null;
                     }
                     else {

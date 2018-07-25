@@ -878,7 +878,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
 
 
     /**
-     * Atrapa, si procede, las credenciales del update asociado a la ejecución y las registra para futuros T3log::register()
+     * Atrapa, si procede, las credenciales del update asociado a la ejecución y las registra para futuros Log::register()
      * cuando está activdo el registro en bots
      *
      * @param  Update   $update     Update a partir del cual extraer las credenciales
@@ -984,7 +984,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             else                         { list ($bot, $lineno, $menuName, $menuArgs, $titles, $options, $pager, $bbcId, $toVars, $contextObject) = $routeContent; }
             if ($menuHookLineno != $lineno) {
                 // do nothing (pressed an old menu option)
-                // T3log::register(T3log::TYPE_DEBUG, "RT791 Se ha presionado una opcion de menu correspondiente a un menu antiguo", $this);
+                // Log::register(Log::TYPE_DEBUG, "RT791 Se ha presionado una opcion de menu correspondiente a un menu antiguo", $this);
             }
             else {
                 $hookLineno = $this->getMenuhookStartPoint();
@@ -1230,7 +1230,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
 
         $doForPrints = function () use ($completeOn, $getBBchannel, $completedOnIsForeign)
         {
-            // T3log::profilerStep(0, 'in BBruntime::submitRendering() before prints');
+            // Log::profilerStep(0, 'in BBruntime::submitRendering() before prints');
             $foreigns = false;
             foreach ($this->prints as $print) {
                 list ($value, $on) = $print;
@@ -1256,7 +1256,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         $foreignSplashes |= $doForPrints();
 
         // menus
-        // T3log::profilerStep(0, 'in BBruntime::submitRendering() before menus');
+        // Log::profilerStep(0, 'in BBruntime::submitRendering() before menus');
         foreach ($this->menus as $menu) {
             list ($menuName, $menuArgs, $titles, $options, $pager, $toVars, $lineno, $bot, $on) = $menu;
             if ($toVars !== null) {   // a menu was requested
@@ -1271,19 +1271,19 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                     Log::register(Log::TYPE_DEBUG, "RT1034 lambda getBBchannel arroja null", $this);
                     continue;
                 }
-                // T3log::profilerStep(0, 'in BBruntime::submitRendering() before menu->enqueue...()');
+                // Log::profilerStep(0, 'in BBruntime::submitRendering() before menu->enqueue...()');
                 if ($menuName !== null) {
                     $bbc->enqueueRoutePredefMenu($bot, $lineno, $menuName, $menuArgs, $titles, $options, $pager, $this->getCurrentBBchannel()->getId(), $toVars, true);
                 }
                 else {
                     $bbc->enqueueRouteStdMenu($bot, $lineno, $titles, $options, $pager, $this->getCurrentBBchannel()->getId(), $toVars[0], true);
                 }
-                // T3log::profilerStep(0, 'in BBruntime::submitRendering() after menu->enqueue...()');
+                // Log::profilerStep(0, 'in BBruntime::submitRendering() after menu->enqueue...()');
             }
         }
 
         // inputs (should be exclusive with menu)
-        // T3log::profilerStep(0, 'in BBruntime::submitRendering() before inputs');
+        // Log::profilerStep(0, 'in BBruntime::submitRendering() before inputs');
         foreach ($this->inputs as $input) {
             list ($dataType, $titles, $word, $toVars, $fromVarValue, $lineno, $bot, $on) = $input;
             if ($toVars !== null) {   // an input was requested
@@ -2491,7 +2491,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                 "|chId="      . ($bbChannelId    === null ? "NULL" : $bbChannelId)    .
                 "|thisBmUid=" . ($this->bmUserId === null ? "NULL" : $this->bmUserId) . "]"
                 , $this);
-            // $e = new \Exception; T3log::register(T3log::TYPE_DEBUG, "call stack:\n" . $e->getTraceAsString());
+            // $e = new \Exception; Log::register(Log::TYPE_DEBUG, "call stack:\n" . $e->getTraceAsString());
             return null;
         };
 
@@ -2525,8 +2525,8 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                 //$cmBotNames  = [];
                 //foreach ($cmBotsPairs as $pair) { $cmBotNames[] = $pair[1]; }
                 //$res = DBbroker::readDefaultChannelIdByBizModelUserId($bizModelUserId, $cmBotNames);
-                //if     ($res === null ) { T3log::register(LOG::TYPE_DATABASE, "RT2256 Error de BD");                                                                 }
-                //elseif ($res === false) { T3log::register(LOG::TYPE_RUNTIME,  "RT2257 BizModelUserId $bizModelUserId no esta registrado en BD para ningun usuario"); }
+                //if     ($res === null ) { Log::register(LOG::TYPE_DATABASE, "RT2256 Error de BD");                                                                 }
+                //elseif ($res === false) { Log::register(LOG::TYPE_RUNTIME,  "RT2257 BizModelUserId $bizModelUserId no esta registrado en BD para ningun usuario"); }
                 //if ($res) { $bbChannelId = $res; }
             }
             else {

@@ -1156,7 +1156,7 @@ abstract class BotBasic
 
             // execute a sentence
             Log::profilerStep($profilerMark, "running descender() on line $lineno...");
-            //T3log::register(T3log::TYPE_DEBUG, "]RUN: on $lineno...");
+            //Log::register(Log::TYPE_DEBUG, "]RUN: on $lineno...");
             $jump2lineno = $this->descender($bot, $lineno, $parsedStatement, $inSemanticMode, $processor);
 
             if ($inSemanticMode) {
@@ -1301,7 +1301,7 @@ abstract class BotBasic
     /**
      * Refleja un error de parsing
      *
-     * Usar solamente en el parser; en el runtime usar la clase T3log
+     * Usar solamente en el parser; en el runtime usar la clase Log
      *
      * @param int       $lineno     Número de línea asociado al mensaje
      * @param string    $message    Mensaje

@@ -34,7 +34,7 @@ define('BOTBASIC_INPUT_HINTS_WITH_EXAMPLES', false);
 // Debugging and profiling
 define('BOTBASIC_PROFILE',         false);
 
-define('BOTBASIC_DEV_MACHINE',     'klock');
+define('BOTBASIC_DEV_MACHINE',     'botbasic-beta');
 define('BOTBASIC_DEBUG',           gethostname() == BOTBASIC_DEV_MACHINE);
 define('BOTBASIC_LOG_ALSO_TO_DB',  false);
 define('BOTBASIC_LOG_ALSO_TO_BOT', true);

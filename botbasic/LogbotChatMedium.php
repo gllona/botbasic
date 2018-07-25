@@ -1,6 +1,6 @@
 <?php
 /**
- * Interfaz que aplica a ChatMedia en las cuales hay usuarios que reciben réplicas de algunos T3log::register()
+ * Interfaz que aplica a ChatMedia en las cuales hay usuarios que reciben réplicas de algunos Log::register()
  *
  * Actualmente se requiere que esta interfaz esté implementada en sólo una chatapp, definida por BOTBASIC_LOGBOT_CHATAPP
  *
@@ -19,7 +19,7 @@ namespace botbasic;
 /**
  * Interfaz LogbotChatMedium
  *
- * Contiene los métodos que deben ser implementados por las subclases y objetos de ChatMedium que requieran recibir réplicas de T3log::register()
+ * Contiene los métodos que deben ser implementados por las subclases y objetos de ChatMedium que requieran recibir réplicas de Log::register()
  *
  * @package botbasic
  */
@@ -29,7 +29,7 @@ interface LogbotChatMedium
 
 
     /**
-     * Indica si un usuario de una chatapp está identificado como usuario sobre el cual se replican ciertos T3log::register()
+     * Indica si un usuario de una chatapp está identificado como usuario sobre el cual se replican ciertos Log::register()
      *
      * @param  int      $bbBotIdx           Indice en ChatMedium::$bbBots del bot de la BotBasic app correspondiente
      * @param  string   $cmFullUserName     Nombre completo del usuario: concatenación de nombre, espacio y apellido, según lo reporta la chatapp

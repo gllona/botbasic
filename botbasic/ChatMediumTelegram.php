@@ -344,10 +344,10 @@ namespace botbasic {
 
 
         /**
-         * Registra una entrada de bitácora (usando la clase T3log) pero evita registrar aquellas que sean muy inmediatas a la más recientemente registrada
+         * Registra una entrada de bitácora (usando la clase Log) pero evita registrar aquellas que sean muy inmediatas a la más recientemente registrada
          *
-         * @param  int      $type       Una de las constantes T3log::TYPE_...
-         * @param  string   $content    Mensaje a registrar, como lo recibirá la clase T3log
+         * @param  int      $type       Una de las constantes Log::TYPE_...
+         * @param  string   $content    Mensaje a registrar, como lo recibirá la clase Log
          */
         private function conditionalLog ($type, $content)
         {
@@ -457,7 +457,7 @@ namespace botbasic {
             {
                 $endOfRequestTS = microtime(true);
                 $secsElapsed    = $endOfRequestTS - $startOfTickTS;
-                $toSleepSecs    = $iterationFixedSecs - $secsElapsed;
+                $toSleepSecs    = $iterationFixedSecs - $secsElapsed + (BOTBASIC_DEBUG ? 5 : 0);   //TODO uncaimanize
                 while ($toSleepSecs < 0) { $toSleepSecs += $iterationFixedSecs; }
                 $willEndAtMin = date('i', $endOfRequestTS + $toSleepSecs - BOTBASIC_SENDERDAEMON_CRON_DELAY_SECS);
                 if ($willEndAtMin != $startMin) { return false; }

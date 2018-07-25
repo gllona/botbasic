@@ -303,7 +303,7 @@ abstract class ChatMedium
 
 
     /**
-     * Obtiene el índice en $bbBots del bot que debe ser usado para el logging de ciertas llamadas a T3log::register; o null si no está definido
+     * Obtiene el índice en $bbBots del bot que debe ser usado para el logging de ciertas llamadas a Log::register; o null si no está definido
      * para el bot especificado por el argumento índice de $bbBots (normalmente ambos índices son diferentes)
      *
      * @param  int          $bbBotIdx
@@ -439,7 +439,7 @@ abstract class ChatMedium
      */
     public function render ($splashes, $cmChannel)
     {
-        // T3log::profilerStep(0, 'entering ChatMedium::render() with CMCid=' . $cmChannel->getId());
+        // Log::profilerStep(0, 'entering ChatMedium::render() with CMCid=' . $cmChannel->getId());
         $textsAndResources = [];
         $options           = [];
         // join all sequential enqueued texts for doing for them only one ChatMedium request

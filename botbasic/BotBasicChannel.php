@@ -1027,7 +1027,7 @@ class BotBasicChannel implements Initializable, Closable
     {
         if ($routeIndex === null) { $routeIndex = count($this->routeQueue) - 1; }
         if (! isset($this->routeQueue[$routeIndex])) {
-            //T3log::register(T3log::TYPE_DEBUG, "BBC974 Route de indice inexistente ($routeIndex)", $this);
+            //Log::register(Log::TYPE_DEBUG, "BBC974 Route de indice inexistente ($routeIndex)", $this);
             return null;
         }
         return $this->routeQueue[$routeIndex][ count($this->routeQueue[$routeIndex])-1 ];
@@ -1064,7 +1064,7 @@ class BotBasicChannel implements Initializable, Closable
     {
         if ($routeIndex === null) { $routeIndex = count($this->routeQueue) - 1; }
         if (! isset($this->routeQueue[$routeIndex])) {
-            //T3log::register(T3log::TYPE_DEBUG, "BBC761 routeIndex no valido", $this);
+            //Log::register(Log::TYPE_DEBUG, "BBC761 routeIndex no valido", $this);
             //return null;
             return 'default';
         }
@@ -1087,7 +1087,7 @@ class BotBasicChannel implements Initializable, Closable
     {
         if ($routeIndex === null) { $routeIndex = count($this->routeQueue) - 1; }
         if (! isset($this->routeQueue[$routeIndex])) {
-            //T3log::register(T3log::TYPE_DEBUG, "BBC783 routeIndex no valido", $this);
+            //Log::register(Log::TYPE_DEBUG, "BBC783 routeIndex no valido", $this);
             return null;
         }
         return array_slice($this->routeQueue[$routeIndex], 1);

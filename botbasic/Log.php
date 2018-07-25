@@ -17,7 +17,7 @@ use \DateTime, \DateTimeZone;
 
 
 /**
- * Clase T3log
+ * Clase Log
  *
  * Implementa (como métodos estáticos) las herramientas de registro de errores de mensajes en bitácora.
  *
@@ -60,7 +60,7 @@ class Log
     /** Tipo de una entrada en bitácora: entry del profiler */
     const TYPE_PROFILER   = 108;
 
-    /** Tipo de una entrada originada desde la misma librería de T3log*/
+    /** Tipo de una entrada originada desde la misma librería de Log*/
     const TYPE_LOGLIB     = 109;
 
     /** @var array Etiquetas para los tipos de entradas de bitácora, tal como se reflejarán en ella */
@@ -398,7 +398,7 @@ class Log
         if (self::$botloggingCM === null) {
             $cm = ChatMedium::create(BOTBASIC_LOGBOT_CHATAPP);
             if ($cm === null) {
-                Log::register(self::TYPE_LOGLIB, "L392 No se puede crear la instancia de ChatMedium que sera usada para replicar mensajes de T3log", $runtime);
+                Log::register(self::TYPE_LOGLIB, "L392 No se puede crear la instancia de ChatMedium que sera usada para replicar mensajes de log", $runtime);
                 return;
             }
             self::$botloggingCM = $cm;

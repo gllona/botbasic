@@ -21,4 +21,11 @@ curl http://localhost:4040/api/tunnels | jq '.tunnels[0].public_url'
 # for dev instances
 
 sudo apt-get install php-xdebug
- 
+
+# public IP addresses Panama 2018
+
+21.07.2018 17:04 :: 186.72.16.98
+
+# ssh tunneling for debugging
+
+ssh -R 9000:localhost:9000 gorka@beta.bots.logicos.org -N -f

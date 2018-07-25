@@ -208,8 +208,8 @@ abstract class BotConfig
 
 
     /** @var array Mapa que contiene la lista de nombres de usuario (concatenación de nombre, espacio y apellido) que si son así reportados por
-     *             Telegram, son usados para difundir mensajes manejados por T3log::register (según máscara definida estáticamente, inicialmente
-     *             sólo T3log::TYPE_BBCODE) de forma adicional al logging en el file system; ver 4to componente de cada entrada en
+     *             Telegram, son usados para difundir mensajes manejados por Log::register (según máscara definida estáticamente, inicialmente
+     *             sólo Log::TYPE_BBCODE) de forma adicional al logging en el file system; ver 4to componente de cada entrada en
      *             ChatMedium::$bbBots. El nombre debe ser extraido de Telegram o Telegram web PERO garantizando que el número de teléfono asociado
      *             NO esté en la agenda de Android, pues en este caso el nombre mostrado en esas interfaces será el de Android */
     static private $cmLogBotsTelegram = [

@@ -22,5 +22,5 @@ if (php_sapi_name() === 'cli') { $die("this script can only be invoked from the 
 $wr = new WebRouterTelegram();
 $res = $wr->run();
 if ($res === null) {
-    // TODO T3log this: can't start because couldn't find cmAuthInfo (cmBotName) based on scriptName
+    // TODO log this: can't start because couldn't find cmAuthInfo (cmBotName) based on scriptName
 }
