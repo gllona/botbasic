@@ -147,7 +147,7 @@ namespace botbasic {
 
 
         public function setupIdeDebugging ($dressedUpdate, $botName, $bbCode) {
-            $username = trim($dressedUpdate->from->first_name . ' ' . $dressedUpdate->from->last_name);
+            $username = trim($dressedUpdate->message->from->first_name . ' ' . $dressedUpdate->message->from->last_name);
             $GLOBALS['botbasic_ide_debug'] = isset(BotConfig::$ideDebugBots[$bbCode]) && in_array($username, BotConfig::$ideDebugBots[$bbCode]);
         }
 
