@@ -99,6 +99,12 @@ class ChatMediumWebStub extends ChatMedium
 
 
 
+    public function setupIdeDebugging ($dressedUpdate, $botName, $bbCode) {
+        $GLOBALS['botbasic_debug_by_step'] = true;
+    }
+
+
+
     public function undressUpdate ($dressedUpdate, $botName, $cmAuthInfo, $textToPut = null, $userIdToPut = null)
     {
         $update    = json_decode(json_encode($dressedUpdate));

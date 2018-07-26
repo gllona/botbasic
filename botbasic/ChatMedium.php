@@ -363,6 +363,10 @@ abstract class ChatMedium
 
 
 
+    abstract public function setupIdeDebugging ($dressedUpdate, $botName, $bbCode);   //TODO doc
+
+
+
     // last two arguments are for ChatMedia TYPE_ fake and dummy
     /**
      * Genera un Update genérico a partir de un "update" particularizado para una chatapp específica que provenga de una petición al web

@@ -71,6 +71,8 @@ abstract class WebRouter
         $credentials       = $cm->getCMbotCredentialsByScriptName($this->scriptName);
         if ($credentials   === null) { return null; }
         $botName           = $credentials[1];
+        $bbCode            = $credentials[0];
+        $cm->setupIdeDebugging($update, $botName, $bbCode);
         $genericUpdate     = $cm->undressUpdate($update, $botName, $authInfo);
         if ($genericUpdate === null) {
             Log::register(Log::TYPE_RUNTIME, "WR75 No se pudo desvestir el update con ($botName, $authInfo)");

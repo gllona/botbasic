@@ -272,6 +272,12 @@ abstract class BotConfig
 
 
 
+    static public $ideDebugBots = [   //TODO doc
+        890 => [ 'Gorka G LLona' ],
+    ];
+
+
+
     /** @var string[] locales válidos aceptados por BotBasic; hay textos definidos para estos locales en esta clase y en ChatMedium;
      *                el primer locale es el locale por defecto */
     static private $validLocales = [ 'es', 'en' ];

@@ -146,6 +146,13 @@ namespace botbasic {
 
 
 
+        public function setupIdeDebugging ($dressedUpdate, $botName, $bbCode) {
+            $username = trim($dressedUpdate->from->first_name . ' ' . $dressedUpdate->from->last_name);
+            $GLOBALS['botbasic_ide_debug'] = isset(BotConfig::$ideDebugBots[$bbCode]) && in_array($username, BotConfig::$ideDebugBots[$bbCode]);
+        }
+
+
+
         public function undressUpdate ($dressedUpdate, $botName, $cmAuthInfo, $textToPut = null, $userIdToPut = null)
         {
             $extract = function ($obj, $members) {
