@@ -457,7 +457,7 @@ namespace botbasic {
             {
                 $endOfRequestTS = microtime(true);
                 $secsElapsed    = $endOfRequestTS - $startOfTickTS;
-                $toSleepSecs    = $iterationFixedSecs - $secsElapsed + (BOTBASIC_DEBUG ? 5 : 0);   //TODO uncaimanize
+                $toSleepSecs    = $iterationFixedSecs - $secsElapsed + (BOTBASIC_DEBUG ? BOTBASIC_SENDERDAEMON_TELEGRAM_WAIT_UNTIL_RETRY_SECS: 0);
                 while ($toSleepSecs < 0) { $toSleepSecs += $iterationFixedSecs; }
                 $willEndAtMin = date('i', $endOfRequestTS + $toSleepSecs - BOTBASIC_SENDERDAEMON_CRON_DELAY_SECS);
                 if ($willEndAtMin != $startMin) { return false; }

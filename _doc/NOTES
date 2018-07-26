@@ -26,6 +26,27 @@ sudo apt-get install php-xdebug
 
 21.07.2018 17:04 :: 186.72.16.98
 
-# ssh tunneling for debugging
+# testvpn
 
-ssh -R 9000:localhost:9000 gorka@beta.bots.logicos.org -N -f
+1: https://github.com/hwdsl2/setup-ipsec-vpn
+2: https://bbuckman.github.io/strongswan/2018/05/23/strongswan-ubuntu-18-04.html
+
+# remote debugging with ssh tunneling
+
+https://www.revsys.com/writings/quicktips/ssh-tunnel.html
+https://confluence.jetbrains.com/display/PhpStorm/Remote+debugging+in+PhpStorm+via+SSH+tunnel
+https://stackoverflow.com/questions/49449404/phpstorm-xdebug-through-ssh-tunnel
+https://www.sourcetoad.com/resources/debugging-php-save-time-with-xdebugs-remote-autostart/
+http://www.dieuwe.com/blog/xdebug-ubuntu-1604-php7
+https://gist.github.com/Xeoncross/1100761
+https://gist.github.com/IngmarBoddington/5311858
+
+$ cat /etc/php/7.2/mods-available/xdebug.ini   # in dev server
+zend_extension=xdebug.so
+xdebug.remote_enable=1
+xdebug.remote_host=127.0.0.1
+xdebug.remote_port=9000
+xdebug.remote_autostart=1
+
+ssh -R 9000:localhost:9000 gorka@dev.bots.logicos.org -N   # optional -f for daemon mode   # run in dev machine
+
