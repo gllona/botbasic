@@ -759,7 +759,7 @@ END;
         }
         // read the next resource to download
         $sql = <<<END
-            SELECT id, type, file_id 
+            SELECT id, type, chatmedium_authinfo, file_id 
               FROM resource
              WHERE chatmedium_type = $cmType 
                AND download_state = 'pending'
@@ -779,7 +779,7 @@ END;
             $unlock();
             return false;
         }
-        list ($id, $type, $fileId) = array_values($rows[0]);
+        list ($id, $type, $cmAuthInfo, $fileId) = array_values($rows[0]);
         // mark as downloading
         $sql = <<<END
             UPDATE resource
@@ -794,7 +794,7 @@ END;
         }
         // unlock tables and return
         $unlock();
-        return [ $id, $type, $fileId ];
+        return [ $id, $type, $cmAuthInfo, $fileId ];
     }
 
 
