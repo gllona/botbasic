@@ -761,7 +761,7 @@ END;
         $sql = <<<END
             SELECT id, type, file_id 
               FROM resource
-             WHERE cmType = $cmType 
+             WHERE cm_type = $cmType 
                AND download_state = 'pending'
                AND file_id IS NOT NULL
                AND try_count = $tryCount
