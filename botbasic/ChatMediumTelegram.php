@@ -147,7 +147,10 @@ namespace botbasic {
 
 
         public function setupIdeDebugging ($dressedUpdate, $botName, $bbCode) {
-            $username = trim($dressedUpdate->message->from->first_name . ' ' . $dressedUpdate->message->from->last_name);
+            $message = isset($dressedUpdate->callback_query) ? $dressedUpdate->callback_query :
+                (isset($dressedUpdate->edited_message) ? $dressedUpdate->edited_message :
+                (isset($dressedUpdate->message) ? $dressedUpdate->message : null));
+            $username = $message === null ? null : trim($message->from->first_name . ' ' . $message->from->last_name);
             $GLOBALS['botbasic_ide_debug'] = isset(BotConfig::$ideDebugBots[$bbCode]) && in_array($username, BotConfig::$ideDebugBots[$bbCode]);
         }
 
@@ -267,7 +270,7 @@ namespace botbasic {
             // obtain the bot token
             $cmBotToken = $this->getCMbotToken($cmBotName);
             if ($cmBotToken === null) {
-                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG211 No puede obtener el bot token para $cmBotName");
+                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG211 No se puede obtener el bot token para $cmBotName");
                 return false;
             }
             // assemble the request, post to Telegram and decode the answer

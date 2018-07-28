@@ -2500,30 +2500,32 @@ END;
         while (true) {
             for ($tryCount = 0; $tryCount < $maxDownloadAttempts; $tryCount++) {
                 $record = $this->unqueueStart($cmType, $tryCount, $minSecsToRelog);
-                if ($record === null || $record === false) { return; }
-                list ($id, $type, $cmAuthInfo, $fileId) = $record;
-                $cm  = ChatMedium::create($cmType);
-                $url = $cm->getDownloadUrl($cmAuthInfo, $fileId);
-                if     ($url === null)  {}   // this ChatMedium doesn't allow to download MM content OR error in SQL when getting the cmBotName based on cmType (including no row for the ID)
-                elseif ($url === false) {
-                    $this->conditionalLog(Log::TYPE_DAEMON, "DBB2044 Falla el download", $cmType, $minSecsToRelog);
-                }
-                else {
-                    $filename = $this->filenameForResource($id, $type);
-                    if ($filename === null) {
-                        // Log this (can't create directory)
-                        $res = null;
+                if ($record === null) { return; }
+                if ($record !== false) {
+                    list ($id, $type, $cmAuthInfo, $fileId) = $record;
+                    $cm  = ChatMedium::create($cmType);
+                    $url = $cm->getDownloadUrl($cmAuthInfo, $fileId);
+                    if     ($url === null)  {}   // this ChatMedium doesn't allow to download MM content OR error in SQL when getting the cmBotName based on cmType (including no row for the ID)
+                    elseif ($url === false) {
+                        $this->conditionalLog(Log::TYPE_DAEMON, "DBB2044 Falla el download", $cmType, $minSecsToRelog);
                     }
                     else {
-                        $res = $this->downloadFile($url, $filename);
-                    }
-                    if ($res === null) {
-                        $this->unqueueRollback($id, $cmType, $tryCount, $minSecsToRelog);
-                    }
-                    else {
-                        $newFilename = $this->postProcessDownload($filename, $type);
-                        if ($newFilename === null) { $this->unqueueRollback($id, $cmType, $maxDownloadAttempts, $minSecsToRelog); }
-                        else                       { $this->unqueueCommit($id, $newFilename, $cmType, $minSecsToRelog);           }
+                        $filename = $this->filenameForResource($id, $type);
+                        if ($filename === null) {
+                            // Log this (can't create directory)
+                            $res = null;
+                        }
+                        else {
+                            $res = $this->downloadFile($url, $filename);
+                        }
+                        if ($res === null) {
+                            $this->unqueueRollback($id, $cmType, $tryCount, $minSecsToRelog);
+                        }
+                        else {
+                            $newFilename = $this->postProcessDownload($filename, $type);
+                            if ($newFilename === null) { $this->unqueueRollback($id, $cmType, $maxDownloadAttempts, $minSecsToRelog); }
+                            else                       { $this->unqueueCommit($id, $newFilename, $cmType, $minSecsToRelog);           }
+                        }
                     }
                 }
                 if ($howMany != -1 && ++$count > $howMany) { break 2; }

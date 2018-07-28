@@ -13,12 +13,11 @@
 define('BOTBASIC_LOG_WELCOME_MESSAGE', null);
 include "../../botbasic/bbautoloader.php";
 
-use \botbasic\ChatMedium;
-use \botbasic\DBbroker;
+use botbasic\ChatMedium, botbasic\DBbroker, botbasic\Log;
 
 $die = function ($msg) { fwrite(STDERR, $msg); exit(1); };
 
-if (php_sapi_name() === 'cli') { $die("this script can only be invoked from the web server"); }
+if (php_sapi_name() === 'cli') { die("this script can only be invoked from the web server"); }
 
 $params = [
     ChatMedium::TYPE_TELEGRAM => [
@@ -29,18 +28,15 @@ $params = [
     ],
 ];
 
-if (! isset($_GET['chatmediumid'])) {
-    echo "Invoke with http...?chatmediumid=<numeric-chatchannel-type>";
-}
-else {
-    $type   = $_GET['chatmediumid'];
-    $params = $params[$type];
-    $dbb    = new DBbroker();
-    $dbb->attemptToDownload(
-        $type,
-        $params['howManyToDownload'],
-        $params['interdelayMsecs'],
-        $params['maxDownloadAttempts'],
-        $params['minSecsToRelog']
-    );
-}
+if (! isset($_GET['chatmediumid'])) { die("Invoke with http...?chatmediumid=<numeric-chatchannel-type>"); }
+
+$type   = $_GET['chatmediumid'];
+$params = $params[$type];
+$dbb    = new DBbroker();
+$dbb->attemptToDownload(
+    $type,
+    $params['howManyToDownload'],
+    $params['interdelayMsecs'],
+    $params['maxDownloadAttempts'],
+    $params['minSecsToRelog']
+);
