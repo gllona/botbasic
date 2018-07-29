@@ -1017,12 +1017,12 @@ namespace botbasic {
                 else                                       { return $telegramResponse; }
             }
             else {
-                if (! isset($telegramResponse->ok)) {
+                if (! isset($response->body->ok)) {
                     $this->conditionalLog(Log::TYPE_DAEMON, "CMTG765 Response::body no se encuentra");
                     // see https://core.telegram.org/bots/api#making-requests
                     return false;
                 }
-                if ($telegramResponse->ok !== true) {
+                if ($response->body->ok !== true) {
                     $this->conditionalLog(Log::TYPE_DAEMON, "CMTG770 Algo estuvo mal: " . $telegramResponse->description);
                     return false;
                 }
