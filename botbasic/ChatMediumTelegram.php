@@ -1011,7 +1011,7 @@ namespace botbasic {
                 return false;
             }
             // process telegram response
-            $telegramResponse = $response->body;
+            $telegramResponse = $response->body->result;
             if ($method == "getFile") {
                 if (! isset($telegramResponse->file_path)) { return false;                        }
                 else                                       { return $telegramResponse->file_path; }
