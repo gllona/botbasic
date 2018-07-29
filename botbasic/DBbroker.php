@@ -759,7 +759,7 @@ END;
         }
         // read the next resource to download
         $sql = <<<END
-            SELECT id, type, chatmedium_authinfo, file_id 
+            SELECT id, type, metainfo, chatmedium_authinfo, file_id 
               FROM resource
              WHERE chatmedium_type = $cmType 
                AND download_state = 'pending'
@@ -779,7 +779,7 @@ END;
             $unlock();
             return false;
         }
-        list ($id, $type, $cmAuthInfo, $fileId) = array_values($rows[0]);
+        list ($id, $type, $metainfo, $cmAuthInfo, $fileId) = array_values($rows[0]);
         // mark as downloading
         $sql = <<<END
             UPDATE resource
@@ -794,7 +794,7 @@ END;
         }
         // unlock tables and return
         $unlock();
-        return [ $id, $type, $cmAuthInfo, $fileId ];
+        return [ $id, $type, unserialize($metainfo), $cmAuthInfo, $fileId ];
     }
 
 
@@ -2502,7 +2502,7 @@ END;
                 $record = $this->unqueueStart($cmType, $tryCount, $minSecsToRelog);
                 if ($record === null) { return; }
                 if ($record !== false) {
-                    list ($id, $type, $cmAuthInfo, $fileId) = $record;
+                    list ($id, $type, $metainfo, $cmAuthInfo, $fileId) = $record;
                     $cm  = ChatMedium::create($cmType);
                     $url = $cm->getDownloadUrl($cmAuthInfo, $fileId);
                     if     ($url === null)  {}   // this ChatMedium doesn't allow to download MM content OR error in SQL when getting the cmBotName based on cmType (including no row for the ID)
@@ -2523,7 +2523,7 @@ END;
                             $this->unqueueRollback($id, $cmType, $tryCount, $minSecsToRelog);
                         }
                         else {
-                            $newFilename = $this->postProcessDownload($filename, $type);
+                            $newFilename = $this->postProcessDownload($filename, $type, $metainfo);
                             if ($newFilename === null) { $this->unqueueRollback($id, $cmType, $maxDownloadAttempts, $minSecsToRelog); }
                             else                       { $this->unqueueCommit($id, $newFilename, $cmType, $minSecsToRelog);           }
                         }
@@ -2608,18 +2608,21 @@ END;
      * Puede incluirse aquí cualquier tipo de posprocesamiento para resources de diferentes tipos.
      *
      * @param  string   $filename       Nombre del archivo a procesar
-     * @param  string   $type           Argumento no usado por el momento; el formato del archivo se determina por su tipo MIME
+     * @param  string   $type           Uno de InteractionRecource::TYPE_*; argumento no usado por el momento; el formato del archivo se determina por su tipo MIME
+     * @param  object   $metainfo       Metainformacion sobre el archivo
      * @return string                   Nombre del nuevo archivo; o el nombre del archivo original si la transformación falló
      */
-    private function postProcessDownload ($filename, $type)   // type is not used yet
+    private function postProcessDownload ($filename, $type, $metainfo)   // type is not used yet
     {
+        $shorten = function($name) { return strpos($name, BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) === 0 ? substr($name, strlen(BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) + 1) : $name; };
         $this->doDummy($type);
+        if (strrpos($filename, '.') === false && isset($metainfo->format)) { $filename .= '.' . $metainfo->format; }
         $proc = null;
         switch ($type = mime_content_type($filename)) {
             case 'video/mpeg' : if ($proc !== null) { $proc = [ 'mpeg2mp3 -silent -delete', 'mp3' ]; } break;
             case 'video/avi'  : if ($proc !== null) { $proc = [ 'avi2mp3  -silent -delete', 'mp3' ]; } break;
         }
-        if ($proc === null) { return $filename; }
+        if ($proc === null) { return $shorten($filename); }
         $oldFilename = $filename;
         $pos = strrpos($oldFilename, ".");
         if ($pos !== false) { $filename = substr($oldFilename, 0, $pos) . "." . $proc[1]; }
@@ -2628,8 +2631,7 @@ END;
         $res    = -1;
         exec(BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR . "/" . $proc[0] . " $oldFilename $filename", $output, $res);
         $newFilename = $res === 0 ? $filename : $oldFilename;
-        if (strpos($newFilename, BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) === 0) { $newFilename = substr($newFilename, strlen(BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) + 1); }
-        return $newFilename;
+        return $shorten($newFilename);
     }
 
 
