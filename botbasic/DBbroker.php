@@ -2614,24 +2614,26 @@ END;
      */
     private function postProcessDownload ($filename, $type, $metainfo)   // type is not used yet
     {
-        $shorten = function($name) { return strpos($name, BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) === 0 ? substr($name, strlen(BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) + 1) : $name; };
         $this->doDummy($type);
-        if (strrpos($filename, '.') === false && isset($metainfo['format'])) { $filename .= '.' . $metainfo['format']; }
         $proc = null;
         switch ($type = mime_content_type($filename)) {
             case 'video/mpeg' : if ($proc !== null) { $proc = [ 'mpeg2mp3 -silent -delete', 'mp3' ]; } break;
             case 'video/avi'  : if ($proc !== null) { $proc = [ 'avi2mp3  -silent -delete', 'mp3' ]; } break;
         }
-        if ($proc === null) { return $shorten($filename); }
-        $oldFilename = $filename;
-        $pos = strrpos($oldFilename, ".");
-        if ($pos !== false) { $filename = substr($oldFilename, 0, $pos) . "." . $proc[1]; }
-        else                { $filename = $oldFilename                  . "." . $proc[1]; }
-        $output = [];
-        $res    = -1;
-        exec(BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR . "/" . $proc[0] . " $oldFilename $filename", $output, $res);
-        $newFilename = $res === 0 ? $filename : $oldFilename;
-        return $shorten($newFilename);
+        $newFilename = strrpos($filename, '.') === false && isset($metainfo['format']) ? $filename . '.' . $metainfo['format'] : $filename;
+        if ($proc === null && $filename != $newFilename) { rename($filename, $newFilename); }
+        elseif ($proc !== null) {
+            $oldFilename = $filename;
+            $pos = strrpos($oldFilename, ".");
+            if ($pos !== false) { $filename = substr($oldFilename, 0, $pos) . "." . $proc[1]; }
+            else                { $filename = $oldFilename                  . "." . $proc[1]; }
+            $output = [];
+            $res    = -1;
+            exec(BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR . "/" . $proc[0] . " $oldFilename $filename", $output, $res);
+            if ($res == 0) { $newFilename = $filename; }
+        }
+        $shortenedFilename = strpos($newFilename, BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) === 0 ? substr($newFilename, strlen(BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) + 1) : $newFilename;
+        return $shortenedFilename;
     }
 
 
