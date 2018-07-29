@@ -813,7 +813,7 @@ END;
         self::connect();
         $sql = <<<END
             UPDATE resource
-               SET state = 'sent', try_count = try_count + 1, filename = '$filename'
+               SET download_state = 'done', try_count = try_count + 1, filename = '$filename'
              WHERE id = $id
                AND deleted IS NULL;
 END;
