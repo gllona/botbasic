@@ -2627,7 +2627,9 @@ END;
         $output = [];
         $res    = -1;
         exec(BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR . "/" . $proc[0] . " $oldFilename $filename", $output, $res);
-        return $res === 0 ? $filename : $oldFilename;
+        $newFilename = $res === 0 ? $filename : $oldFilename;
+        if (strpos($newFilename, BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) === 0) { $newFilename = substr($newFilename, strlen(BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) + 1); }
+        return $newFilename;
     }
 
 

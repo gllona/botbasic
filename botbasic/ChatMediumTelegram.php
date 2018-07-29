@@ -161,7 +161,8 @@ namespace botbasic {
             $extract = function ($obj, $members) {
                 $res = [];
                 foreach (explode(',', $members) as $member) {
-                    if (isset($obj->$member)) { $res[$member] = $obj->$member; }
+                    if     (strpos($member, '=') !== false) { list ($member, $value) = explode('=', $member); $res[$member] = $value; }
+                    elseif (isset($obj->$member))           { $res[$member] = $obj->$member;                                          }
                 }
                 return $res;
             };
@@ -221,15 +222,15 @@ namespace botbasic {
                     foreach ($update->message->photo as $photoSize) {
                         if ($chosen === null || $chosenWidth < $photoSize->width) { $chosen = $photoSize; $chosenWidth = $chosen->width; }
                     }
-                    $add2resources(                                       InteractionResource::createFromFileId(InteractionResource::TYPE_IMAGE,      $this->type, $cmAuthInfo, $chosen->file_id,                      $extract($chosen,                      'width,height')         ));
+                    $add2resources(                                       InteractionResource::createFromFileId(InteractionResource::TYPE_IMAGE,      $this->type, $cmAuthInfo, $chosen->file_id,                      $extract($chosen,                      'width,height,format=jpg') ));
                 }
-                if (isset($update->message->audio))      { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_AUDIO,     $this->type, $cmAuthInfo, $update->message->audio->file_id,      $extract($update->message->audio,      'duration')             )); }
-                if (isset($update->message->voice))      { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_VOICE,     $this->type, $cmAuthInfo, $update->message->voice->file_id,      $extract($update->message->voice,      'duration')             )); }
-                if (isset($update->message->video))      { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_VIDEO,     $this->type, $cmAuthInfo, $update->message->video->file_id,      $extract($update->message->video,      'width,height,duration'))); }
-                if (isset($update->message->video_note)) { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_VIDEONOTE, $this->type, $cmAuthInfo, $update->message->video_note->file_id, $extract($update->message->video_note, 'length,duration')      )); }
-                if (isset($update->message->document))   { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_DOCUMENT,  $this->type, $cmAuthInfo, $update->message->document->file_id                                                                   )); }
-                if (isset($update->message->caption))    { $add2resources(InteractionResource::createFromContent(InteractionResource::TYPE_CAPTION,   $update->message->caption ));                                                                                                       }
-                if (isset($update->message->location))   { $add2resources(InteractionResource::createFromContent(InteractionResource::TYPE_LOCATION,  $update->message->location));                                                                                                       }
+                if (isset($update->message->audio))      { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_AUDIO,     $this->type, $cmAuthInfo, $update->message->audio->file_id,      $extract($update->message->audio,      'duration')                )); }
+                if (isset($update->message->voice))      { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_VOICE,     $this->type, $cmAuthInfo, $update->message->voice->file_id,      $extract($update->message->voice,      'duration')                )); }
+                if (isset($update->message->video))      { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_VIDEO,     $this->type, $cmAuthInfo, $update->message->video->file_id,      $extract($update->message->video,      'width,height,duration')   )); }
+                if (isset($update->message->video_note)) { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_VIDEONOTE, $this->type, $cmAuthInfo, $update->message->video_note->file_id, $extract($update->message->video_note, 'length,duration')         )); }
+                if (isset($update->message->document))   { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_DOCUMENT,  $this->type, $cmAuthInfo, $update->message->document->file_id                                                                      )); }
+                if (isset($update->message->caption))    { $add2resources(InteractionResource::createFromContent(InteractionResource::TYPE_CAPTION,   $update->message->caption ));                                                                                                          }
+                if (isset($update->message->location))   { $add2resources(InteractionResource::createFromContent(InteractionResource::TYPE_LOCATION,  $update->message->location));                                                                                                          }
             }
             // invalid updates
             elseif (isset($update->edited_message)) {
@@ -467,7 +468,7 @@ namespace botbasic {
             {
                 $endOfRequestTS = microtime(true);
                 $secsElapsed    = $endOfRequestTS - $startOfTickTS;
-                $toSleepSecs    = $iterationFixedSecs - $secsElapsed + (BOTBASIC_DEBUG ? BOTBASIC_SENDERDAEMON_TELEGRAM_WAIT_UNTIL_RETRY_SECS: 0);
+                $toSleepSecs    = $iterationFixedSecs - $secsElapsed + (BOTBASIC_DEBUG ? BOTBASIC_SENDERDAEMON_TELEGRAM_WAIT_UNTIL_RETRY_SECS : 0);
                 while ($toSleepSecs < 0) { $toSleepSecs += $iterationFixedSecs; }
                 $willEndAtMin = date('i', $endOfRequestTS + $toSleepSecs - BOTBASIC_SENDERDAEMON_CRON_DELAY_SECS);
                 if ($willEndAtMin != $startMin) { return false; }
