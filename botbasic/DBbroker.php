@@ -2609,14 +2609,14 @@ END;
      *
      * @param  string   $filename       Nombre del archivo a procesar
      * @param  string   $type           Uno de InteractionRecource::TYPE_*; argumento no usado por el momento; el formato del archivo se determina por su tipo MIME
-     * @param  object   $metainfo       Metainformacion sobre el archivo
+     * @param  array    $metainfo       Metainformacion sobre el archivo
      * @return string                   Nombre del nuevo archivo; o el nombre del archivo original si la transformación falló
      */
     private function postProcessDownload ($filename, $type, $metainfo)   // type is not used yet
     {
         $shorten = function($name) { return strpos($name, BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) === 0 ? substr($name, strlen(BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) + 1) : $name; };
         $this->doDummy($type);
-        if (strrpos($filename, '.') === false && isset($metainfo->format)) { $filename .= '.' . $metainfo->format; }
+        if (strrpos($filename, '.') === false && isset($metainfo['format'])) { $filename .= '.' . $metainfo['format']; }
         $proc = null;
         switch ($type = mime_content_type($filename)) {
             case 'video/mpeg' : if ($proc !== null) { $proc = [ 'mpeg2mp3 -silent -delete', 'mp3' ]; } break;
