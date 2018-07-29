@@ -65,3 +65,4 @@ xdebug.remote_autostart=1
 
 ssh -R 9000:localhost:9000 gorka@dev.bots.logicos.org -N   # optional -f for daemon mode
 
+

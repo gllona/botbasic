@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.1.1	gorkathebot				
+VERSION	0.2.1	gorkathebot				
 BOTS	main					
 						
 						
@@ -12,17 +12,21 @@ myname		I’m Gorka, your dearest bot
 pYourName		Type your name:				
 mMain		I can do for you:				
 oAge		Calculate your age				
-oQuote		Make you laugh				
+oLaugh		Make you laugh				
 currentYear		2018				
 pYourByear		Enter your birthyear:				
-myage		I guess you are {myage} years old!				
+myage		I guess you are {age} years old!				
 mLaugh		How want to to laugh?				
 oPrank		Prank				
 oSilly		Silly thing				
 oAbsurd		Absurd nowhere				
 prank1		A person called {username} is a fool if reading this line				
+prank2		I get more of your time that you of mine				
 silly1		Wood in the stove, hair on the floor				
 absurd1		You have a thousand more important to do than this				
+commandOptions		Choose /ai /test				
+sendAnImage		Send me photos				
+mediaInfo		Media type is {type} and id is {id}				
 						
 						
 						
@@ -50,10 +54,13 @@ main	main	main
 						
 						
 						
-/start	start	PRINT myname				
+/start	start	PRINT commandOptions				
+		END				
+						
+/ai		PRINT myname				
 		INPUT string TITLE pYourName TO username				
 						
-/menu	menu	MENU TITLE mMain OPTIONS oAge oQuote TO option				
+/menu	menu	MENU TITLE mMain OPTIONS oAge oLaugh TO option				
 		IF EQ option oAge THEN GOTO age				
 		IF EQ option oLaugh THEN GOTO laugh				
 		PRINT badOption				
@@ -72,7 +79,7 @@ main	main	main
 		PRINT tryToLaugh				
 		GOTO menu				
 						
-	prank	SET tryToLaugh prank1				
+	prank	SET tryToLaugh prank2				
 		RETURN				
 						
 	silly	SET tryToLaugh silly1				
@@ -80,3 +87,11 @@ main	main	main
 						
 	absurd	SET tryToLaugh absurd1				
 		RETURN				
+						
+/test		PRINT sendAnImage				
+		END				
+						
+//		SET type ENTRYTYPE				
+		SET id ENTRYID				
+		PRINT mediaInfo				
+		END				
