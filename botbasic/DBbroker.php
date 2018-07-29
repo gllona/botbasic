@@ -861,7 +861,7 @@ END;
         if ($countLimit !== null && $count >= $countLimit) {
             $sql = <<<END
                 UPDATE resource
-                   SET state = 'error'
+                   SET download_state = 'error'
                  WHERE id = $id
                    AND deleted IS NULL;
 END;
@@ -2508,7 +2508,7 @@ END;
                     if     ($url === null)  {}   // this ChatMedium doesn't allow to download MM content OR error in SQL when getting the cmBotName based on cmType (including no row for the ID)
                     elseif ($url === false) {
                         $this->conditionalLog(Log::TYPE_DAEMON, "DBB2044 Falla el download", $cmType, $minSecsToRelog);
-                        $this->unqueueRollback($id, $cmType, $tryCount, $minSecsToRelog);
+                        $this->unqueueRollback($id, $cmType, $maxDownloadAttempts, $minSecsToRelog);
                     }
                     else {
                         $filename = $this->filenameForResource($id, $type);
