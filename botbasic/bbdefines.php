@@ -20,7 +20,7 @@ define("BOTBASIC_COMMAND_START",                "/start");
 define("BOTBASIC_MAX_PARSE_TIME_SECONDS",       1.0);
 define("BOTBASIC_MAX_EXEC_TIME_SECONDS",        1.0);
 define('BOTBASIC_TIMEZONE',                     'Etc/UTC');   // 'America/Panama');
-define('BOTBASIC_DOWNLOAD_MMCONTENT',           false);
+define('BOTBASIC_DOWNLOAD_MMCONTENT',           true);
 define('BOTBASIC_BOT_IS_POSSESSED',             false);
 define('BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR', BOTBASIC_BASEDIR . '/downloads');
 define('BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR',    BOTBASIC_BASEDIR . '/httpdocs/scripts/media');
@@ -33,7 +33,6 @@ define('BOTBASIC_INPUT_HINTS_WITH_EXAMPLES', false);
 
 // Debugging and profiling
 define('BOTBASIC_PROFILE',         false);
-
 define('BOTBASIC_DEV_MACHINE',     'botbasic-beta');
 define('BOTBASIC_DEBUG',           gethostname() == BOTBASIC_DEV_MACHINE);
 define('BOTBASIC_LOG_ALSO_TO_DB',  false);
