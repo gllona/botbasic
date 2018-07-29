@@ -2508,11 +2508,12 @@ END;
                     if     ($url === null)  {}   // this ChatMedium doesn't allow to download MM content OR error in SQL when getting the cmBotName based on cmType (including no row for the ID)
                     elseif ($url === false) {
                         $this->conditionalLog(Log::TYPE_DAEMON, "DBB2044 Falla el download", $cmType, $minSecsToRelog);
+                        $this->unqueueRollback($id, $cmType, $tryCount, $minSecsToRelog);
                     }
                     else {
                         $filename = $this->filenameForResource($id, $type);
                         if ($filename === null) {
-                            // Log this (can't create directory)
+                            $this->conditionalLog(Log::TYPE_DAEMON, "DBB2516 No se puede crear un nombre de archivo local para el Resource", $cmType, $minSecsToRelog);
                             $res = null;
                         }
                         else {
