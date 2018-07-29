@@ -840,7 +840,7 @@ END;
         // mark (reset as pending) and increment try_count
         $sql = <<<END
             UPDATE resource
-               SET state = 'pending', try_count = try_count + 1
+               SET download_state = 'pending', try_count = try_count + 1
              WHERE id = $id
                AND deleted IS NULL;
 END;
