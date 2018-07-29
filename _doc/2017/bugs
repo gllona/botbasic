@@ -1,0 +1,418 @@
+===============================================
+=== BUGS LOG a partir del taller de 04.2017 ===
+===============================================
+
+
+
+--- BUG #0001
+--- DETECCION 22.04.2017
+Se efectuaba una llamada al método terminate() de un BizModelAdapter de valor null.
+--- DIAGNOSTICO 23.04.2017
+No se estaba validando la condición.
+--- SOLUCION 23.04.2017
+Se implementó un guard en BotBasicRuntime::close()
+
+
+
+--- BUG #0002
+--- DETECCION 22.04.2017
+El parser está permitiendo sentencias GOTO vacías (sin indicar el label)
+--- DIAGNOSTICO 23.04.2017
+Parser::parserNary() no estaba verificando los límites en la cantidad de argumentos aplicados a la sentencia
+--- SOLUCION 23.04.2017
+Se implementó el guard en el método.
+Se reparseó el código de T3 y se detectaron errores en GOTO's, que fueron corregidos.
+
+
+
+--- BUG #0003
+--- DETECCION 24.04.2017
+Traza de log equivalente a: No se puede cargar la versión de código ".." (?)
+--- DIAGNOSTICO 24.04.2017
+Se detectó algunos runtimes con información incompleta en algunos campos en BD, en particular los números de versiones del código BB asociado, que estaban vacías
+La razón de esta situación podría ser que el ambiente de pruebas es inestable.
+--- SOLUCION 24.04.2017
+Se implementó un guard temprano en la VM que genera un feedback hacia el usuario (sistema no disponible) además del registro en bitácora.
+
+
+
+--- BUG #0004
+--- DETECCION 24.04.2017
+[24-Apr-2017 15:06:27 America/Panama] PHP Warning:  array_merge(): Argument #1 is not an array in /home/gorka/telegram/panama_bot/httpdocs/botbasic/BotBasicRuntime.php on line 2989
+[24-Apr-2017 15:06:27 America/Panama] PHP Stack trace:
+[24-Apr-2017 15:06:27 America/Panama] PHP   1. {main}() /home/gorka/telegram/panama_bot/httpdocs/scripts/telegramhooks/tgrp_212_00_234235634675689867983454.php:0
+[24-Apr-2017 15:06:27 America/Panama] PHP   2. botbasic\WebRouter->run() /home/gorka/telegram/panama_bot/httpdocs/scripts/telegramhooks/tgrp_212_00_234235634675689867983454.php:24
+[24-Apr-2017 15:06:27 America/Panama] PHP   3. botbasic\ChatMedium->run() /home/gorka/telegram/panama_bot/httpdocs/botbasic/WebRouter.php:90
+[24-Apr-2017 15:06:27 America/Panama] PHP   4. botbasic\ChatMediumChannel->orderExecution() /home/gorka/telegram/panama_bot/httpdocs/botbasic/ChatMedium.php:501
+[24-Apr-2017 15:06:27 America/Panama] PHP   5. botbasic\BotBasicChannel->orderExecution() /home/gorka/telegram/panama_bot/httpdocs/botbasic/ChatMediumChannel.php:475
+[24-Apr-2017 15:06:27 America/Panama] PHP   6. botbasic\BotBasicRuntime->execute() /home/gorka/telegram/panama_bot/httpdocs/botbasic/BotBasicChannel.php:1156
+[24-Apr-2017 15:06:27 America/Panama] PHP   7. botbasic\BotBasicRuntime->route() /home/gorka/telegram/panama_bot/httpdocs/botbasic/BotBasicRuntime.php:780
+[24-Apr-2017 15:06:27 America/Panama] PHP   8. botbasic\BotBasicRuntime->invokeMenuStep2() /home/gorka/telegram/panama_bot/httpdocs/botbasic/BotBasicRuntime.php:961
+[24-Apr-2017 15:06:27 America/Panama] PHP   9. botbasic\BotBasicRuntime->runPart() /home/gorka/telegram/panama_bot/httpdocs/botbasic/BotBasicRuntime.php:2112
+[24-Apr-2017 15:06:27 America/Panama] PHP  10. botbasic\BotBasic->runWith() /home/gorka/telegram/panama_bot/httpdocs/botbasic/BotBasicRuntime.php:1030
+[24-Apr-2017 15:06:27 America/Panama] PHP  11. botbasic\BotBasic->descender() /home/gorka/telegram/panama_bot/httpdocs/botbasic/BotBasic.php:1218
+[24-Apr-2017 15:06:27 America/Panama] PHP  12. botbasic\BotBasicRuntime->runner() /home/gorka/telegram/panama_bot/httpdocs/botbasic/BotBasic.php:1317
+[24-Apr-2017 15:06:27 America/Panama] PHP  13. botbasic\BotBasicRuntime->runner4input() /home/gorka/telegram/panama_bot/httpdocs/botbasic/BotBasicRuntime.php:2271
+[24-Apr-2017 15:06:27 America/Panama] PHP  14. array_merge() /home/gorka/telegram/panama_bot/httpdocs/botbasic/BotBasicRuntime.php:2989
+--- DIAGNOSTICO 25.04.2017
+Faltaba llamar a RT::initRunStructs() desde RT::loadById()
+--- SOLUCION 25.04.2017
+Se implementó la llamada y por lo tanto para evitar redundancia se eliminó la llamada en RT::execute()
+
+
+
+--- BUG #0005
+--- DETECCION 24.04.2017
+Inconsistencias en el flujo de ejecución de ciertos ENRYHOOKs y las salidas de las BBapps asociadas, debido a que
+la instrucción USERID FROM no está ejecutando tácitamente ABORT : END cuando el valor viejo del bmUserId es igual al nuevo.
+--- DIAGNOSTICO 25.04.2017
+Una condición en RT::runner4userid() está evitando la entrada a RT::setBizModelUserId() en caso de esta condición (tiene un "// do nothing")
+--- SOLUCION 25.04.2017
+Se eliminó la condición indicada de RT::runner4userid(), de forma que siempre se bloquea la ejecución independientemente del valor del nuevo bmUserId.
+
+
+
+--- BUG #0006
+--- DETECCION 23.04.2017
+Al ejecutarse un route que ocasiona un step2 de un INPUT o MENU sobre un canal foraneo (debido a una llamada a un INPUT/MENU ON), los splashes posteriores en el hilo de ejecucion 
+del bbc que invoca al INPUT/MENU ON no son mostrados en pantalla (problema presentado en bots de Nicole (ntest luego de INPUT ON) y Jorge (jtest luego de MENU ON).
+--- DIAGNOSTICO 16.05.2017
+El bug está siendo de difícil aislamiento, pues las pruebas que se están haciendo con otras BBapps que usan otros bots de Telegram no fallan a pesar de que usan el mismo patrón
+de interacción descrito para ntest y jtest. El caso sólo está fallando para ntest y jtest.
+Inicialmente se pensó que se requiere crear un marco de trabajo para efectuar el diagnóstico y esto amerita ampliar las capacidades de la clase ChatMediumCliStub, que es la que 
+se usa con el debugger dePHPStorm. Luego se verificó que no era necesario y que bastaría con el simulador de updates CLI a efectos del debugger del IDE.
+Se verificó que los splashes son agregados en RT's que no son aquellos donde serán mostrados, sino los que motivan la generación del splash. Eso causa una condición no capturable
+en el ciclo de rendering de RT::execute(), pues no es posible saber allí cuándo se acumula un splash foráneo que requiera la re-corrida del ciclo foreach() que está dentro del do{}.
+--- SOLUCION 16.05.2017
+Se modificó RT::submitRendering() para que devuelva un booleano que indica si alguno de los splashes que se encontraron y se mandaron a convertir en objetos Splash corresponde a un
+RT foráneo (es decir, cuyo nombre de bot de BBapp sea distinto al de la instancia de RT que ejecuta). En ese caso, se planea la reejecución del foreach() por si uno de esos RT's foráneos
+había sido iterado antes del actual, en cada iteración específica del foreach().
+
+
+
+--- BUG #0007
+--- DETECCION 24.04.2017
+Parece que un ENTRYHOOK se ejecuta cuando se selecciona una opción de menú en un menú foráneo y antes de seguir la ejecución en el bbc que invoca el MENU ON.
+La misma situación podría presentarse para INPUT ON con el INPUTHOOK.
+Esto es una sospecha de bug y no un bug en sí mismo.
+--- DIAGNOSTICO 15.05.2017
+Se detectó un funcionamiento erróneo en RT::route() y un bug colateral (#0023). Una vez corregido, se detectó un condicional erróneo en route() al procesar un route default
+que estaba ejecutando erróneamente el entryhook cuando se proviene de un MENU/INPUT foráneo.
+Se estudió durante el diagnóstico la implementación de un hook especial adicional, EVERHOOK, a ser ejecutado antes de los otros tipos de hooks y en todos los casos, pero
+se descartó por no ser realmente necesario ni pertinente, ni resolver el problema.
+--- SOLUCION 15.05.2017
+La solución del bug #0023 aportó los elementos base para la resolución de este bug. Además, se corrigió el condicional erróneo. La prueba de la solución se ha diferido para
+hacerla en conjunto con la del bug #0006.
+
+
+
+--- BUG #0008
+--- DETECCION 24.04.2017
+[2017-04-24@14:00:49.178@DEBUG] TRACE @ botN2:122 :: CALL
+[2017-04-24@14:00:49.178@BOTBASIC] [runtimeId: 38] [bizmodelUser: 1000] RT1487 No se puede hallar el metodo 'pr_Email' en el objeto BizModelAdapter [bbBot: botN2] [bbLineno: 122]
+--- DIAGNOSTICO 26.04.2017, 16.05.2017
+Aparentemente se trata de que no se definió correctamente el nombre del método pr_Email en BizModelAdapter (BMA); sin embargo esto fue revisado y sí estaba bien definido.
+Posteriormente se detectó que se está llamando a la primitiva Email pero se está haciendo desde un RT foráneo, producto de un INPUT foráneo que continua la ejecución del programa
+que invoca en INPUT y ejecuta el CALL a la primitiva.
+La solución es cargar un objeto BizModelAdapter para cada RT y no sólo para el RT de la iniciativa de interacción; no se puede implementar a forma de BMA singleton compartido por
+todos los RT porque las primitivas y magicvars reciben metadata tal como el bizModelUserId y éste es distinto para cada instancia de RT en el caso descrito.
+Posteriormente se observó que este bug y el #0016 son el mismo.
+--- SOLUCION 16.05.2017
+Se cierra como solucionado, al estar solucionado el #0016.
+
+
+
+--- BUG #0009
+--- DETECCION 24.04.2017
+[2017-04-24@10:04:13.532@BOTBASIC] [runtimeId: 47] [bizmodelUser: 234567890] RT2543 El BizModelUserId 234567890 no se corresponde al bot botJ2 [bbBot: botJ1] [bbLineno: 106]
+--- DIAGNOSTICO 26.04.2017
+Al analizar se concluye que no se trata de un bug sino de una característica de BotBasic, debido a que previamnente al mensaje de log, el bmUserId indicado había sido asignado a
+otro BotBasicRuntime. Se trata entonces de un guard de BotBasic en funcionamiento.
+--- SOLUCION 26.04.2017
+No se requiere solución pues no es un bug.
+
+
+
+--- BUG #0010
+--- DETECCION 25.04.2017
+[2017-04-24@13:48:03.240@DATABASE] Error de BD: [SQLSTATE=42000|You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3]; con...
+            SELECT id 
+              FROM runtime
+             WHERE bizmodel_user_id = ;
+[2017-04-24@13:48:03.240@DATABASE] RT512 Error de BD y se cancela la creación del runtime
+--- DIAGNOSTICO 26.04.2017
+Se está llamando a DBbroker::readBBruntimeIdByBizModelUserId() con un argumento null o vacío.
+--- SOLUCION 26.04.2017
+Se implementó un guard en BotBasicRuntime::loadByBizModelUserId() para evitar la llamada al método mencionado en el caso indicado.
+
+
+
+--- BUG #0011
+--- DETECCION 24.04.2017
+[2017-04-24@11:26:06.179@DEBUG] CMTG425 Intentando un post a Telegram con un chatId nulo
+[2017-04-24@11:26:06.179@GENERIC] CMTG287 No se paso ni texto ni resource
+[2017-04-24@11:26:06.179@RUNTIME] WR75 No se pudo desvestir el update con (venibot, venibot)
+[24-Apr-2017 11:27:28 America/Panama] Starting BotBasic...
+[2017-04-24@11:27:28.423@DEBUG] CMTG425 Intentando un post a Telegram con un chatId nulo
+[2017-04-24@11:27:28.424@GENERIC] CMTG287 No se paso ni texto ni resource
+[2017-04-24@11:27:28.424@RUNTIME] WR75 No se pudo desvestir el update con (venibot, venibot)
+[24-Apr-2017 11:28:59 America/Panama] Starting BotBasic...
+...
+[2017-04-25@01:43:33.465@DEBUG] CMTG425 Intentando un post a Telegram con un chatId nulo
+[2017-04-25@01:43:33.466@GENERIC] CMTG287 No se paso ni texto ni resource
+[2017-04-25@01:43:33.466@RUNTIME] WR75 No se pudo desvestir el update con (venibot, venibot)
+[25-Apr-2017 01:44:42 America/Panama] Starting BotBasic...
+[2017-04-25@01:44:42.214@DEBUG] CMTG425 Intentando un post a Telegram con un chatId nulo
+[2017-04-25@01:44:42.215@GENERIC] CMTG287 No se paso ni texto ni resource
+[2017-04-25@01:44:42.215@RUNTIME] WR75 No se pudo desvestir el update con (venibot, venibot)
+[25-Apr-2017 01:45:08 America/Panama] Starting BotBasic...
+[2017-04-25@01:45:08.554@DEBUG] CMTG425 Intentando un post a Telegram con un chatId nulo
+[2017-04-25@01:45:08.554@GENERIC] CMTG287 No se paso ni texto ni resource
+[2017-04-25@01:45:08.554@RUNTIME] WR75 No se pudo desvestir el update con (venibot, venibot)
+[25-Apr-2017 01:45:30 America/Panama] Starting BotBasic...
+[2017-04-25@01:45:30.877@DEBUG] CMTG425 Intentando un post a Telegram con un chatId nulo
+[2017-04-25@01:45:30.878@GENERIC] CMTG287 No se paso ni texto ni resource
+[2017-04-25@01:45:30.878@RUNTIME] WR75 No se pudo desvestir el update con (venibot, venibot)
+--- DIAGNOSTICO 15.05.2017
+Con posterioridad a la fecha indicada en el log no se ha vuelto a manifestar la traza hasta el 26.04.2017
+--- SOLUCION 15.05.2017
+Al no haberse manifestado el bug y al haber ocurrido el borrado accidental de la BD de BB el 11.05.2017, no se puede replicar el bug.
+Se cierra sin resolverse y se abrirá con otro serial si vuelve a aparecer.
+
+
+
+--- BUG #0012
+--- DETECCION 17.04.2017
+El PAGER de MENU no funciona correctamente (caso Países/T3) cuando las opciones vienen un CALL TO ... OPTIONS con [ [ key, val ], ... ] y quizá en el caso general (probar).
+--- DIAGNOSTICO 09.05.2017
+El caso general no funciona; el funcionamiento de los PAGER está desactivado incluso para MENU's creados con opciones tipo 11 12 13...
+No se genera ningún mensaje de error a nivel de runtime cuando se presiona sobre un botón del pager.
+Se trata de una regresión que se introdujo al optimizar RT::submitRendering() cuando se arregló el orden de splashes tipo print[] a finales de 2016 (inputs con prompts, etc).
+En aquella oportunidad se hizo el cambio de que la iteración de final del método ocurriera sobre $bbcPool y no sobre RT::getBBchannels(), lo cual ha ocasionado que cuando
+se presiona un botón de pager en un menú, al llegar a esta iteración no iba a estar cargado ningún BBC en $bbcPool.
+--- SOLUCION 09.05.2017
+Se devolvió la optimización y ahora la iteración es sobre todos los BBC cargados por la VM.
+
+
+
+--- BUG #0013
+--- DETECCION 03.05.2017
+Cuando se accede con /start a un bot registrado tanto en Telegram como en BB pero que no tiene al menos una versión de programa en BB parseado y en BD, se crea una
+estructura corrompida de RT en BD y subsecuentes llamadas, aún con programa BB parseado, originarán error de estructura de datos de RT corrompida.
+Esto sucede cuando hay una versión 00.000.001 parseada y la máxima autorizada en ChatMedium es "0":
+	[2017-05-03@15:04:11.142@RUNTIME] RT337 No se puede leer la version del codigo BB para el codename oraloco y se cancela la creación del runtime
+	[2017-05-03@15:04:11.195@RUNTIME] [runtimeId: 2] [bizmodelUser: null] RT654 No se puede leer la version de codigo BB [bbBot: main]
+	[2017-05-03@15:04:11.303@RUNTIME] [runtimeId: 2] [bizmodelUser: null] RT713 Se esta intentando execute() sobre una version de runtime que no finalizo su construccion [updateId: 3] [updateText: /start] [bbBot: main]
+Posteriores llamadas arrojan:
+	[2017-05-03@15:06:56.311@DATABASE] RT492 Estructura de datos corrompida en DB para rtId 2
+	[2017-05-03@15:06:56.311@RUNTIME] BBC300 No se puede cargar el runtime 2
+	[2017-05-03@15:06:56.312@RUNTIME] CMC300 No se puede cargar BBC 2
+	[2017-05-03@15:06:56.312@RUNTIME] [chatmediumName: 111] CM414 No se puede crear CMC from CM (111, 148851282, OralocoBot)
+Y la salida por Telegram: "Lo sentimos, no es posible acceder al sistema en este momento."
+--- DIAGNOSTICO 08.05.2017, 15.05.2017
+A veces (A) el problema sucede cuando sí hay un código BB parseado y en BD, pero cuando la versión mayor tiene leading-zeroes (ej. 00.000.001; al convertir a 0.000.001 el problema 
+no sucede cuando sí está presente el código de la BBapp en BD).
+Otras veces (B) el problema se genera cuando hay un problema en el proceso de creación de un nuevo RT (cuando se trata de un nuevo CMC en una BBapp específica y no se puede cargar
+el código de la BBapp, por ejemplo cuando no está parseada ninguna versión del código); en este caso se instancia el RT, se crea en BD para poder asignarle un ID, y luego 
+al fallar el proceso de creación de la BD no se "limpia" la instancia de la BD; sucesivos updates cargarán el RT de la BD (pues ya está creado allí) y fallará la carga debido
+a que hay campos incompletos en la fila de la tabla.
+--- SOLUCION 08.05.2017, 15.05.2017
+Para (A), se implementó que las versiones de los programas BB tengan sus 3 componentes enteros y sin leading zeroes, y a la vez se cambio el tipo en BD de los componentes a INT.
+Con esto se resuelve el caso mencionado en el diagnóstico de versión mayor 00 y el caso frecuentemente presentados en el taller donde los programadores BB tenían problemas al
+llevar la secuencia de comparación con base en texto con los leading zeroes.
+Para (B), se implementaron 3 guards en BotBasicRuntime::create() y loadById(); una de ellas implementa una llamada a close(), la cual se ha ampliado con una llamada a
+DBbroker::nullifyRuntimeEtAl() en caso de tratarse de un RT con construcción inconclusa; esta es un nuevo método que ha sido implementado para eliminar la "basura temporal" de la BD
+que estaba siendo creada por la necesidad de disponer de ID's de RT, BBC y RT durante el proceso de construcción de esas instancias.
+Con esta solución, se elimina el problema del taller en el cual el bot de Jorge generaba repetidamente el mensaje "Lo sentimos, no es posible acceder al sistema en este momento."
+
+
+
+--- BUG #0014
+--- DETECCION 08.05.2017
+Error en argumento en la llamada a DBbroker::readLastBBCodeVersionForCodename() en Dbbroker::readBBcode().
+--- DIAGNOSTICO 08.05.2017
+Es una llamada que no se ejecuta en el flujo de BB actual, por lo que no se había detectado (ni se detectó) en caliente.
+--- SOLUCION 08.05.2017
+Argumento corregido.
+
+
+
+--- BUG #0015
+--- DETECCION 08.05.2017
+El parser está permitiendo incorrectamente la declaración de matchers repetidos (ej. /menu dos veces)
+--- DIAGNOSTICO 08.05.2017
+Faltaba un guard en BotBasicParser::parseProgram().
+--- SOLUCION 08.05.2017
+Se implementó el guard.
+
+
+
+--- BUG #0016
+--- DETECCION 09.05.2017
+[2017-05-05@08:08:19.237@BOTBASIC] [runtimeId: 11] [bizmodelUser: 11] RT1487 No se puede hallar el metodo 'pr_TestOptionsBasicas' en el objeto BizModelAdapter [bbBot: main] [bbLineno: 202]
+Sucede a pesar de que el método existe en BizModelAdapter (justo despueś de parsear - el parser verificó su existencia).
+--- DIAGNOSTICO 09.05.2017
+El BizModelAdapter es nulo en ese caso. Se detectó que no se estaba creando el BMA en RT::initRunStructs() porque las llamadas desde create() y loadById() no lo estaban requiriendo.
+Este bug fue introducido colateralmente al extraer la llamada a initRunStructs() desde execute() a sus ubicaciones actuales.
+--- SOLUCION 09.05.2017
+Se implementaron las llamadas correctas. Debido a que la creación del BMA implica acceso a los BBC's asociados al RT, se tuvo que cambiar el punto de llamada a initRunStructs() dentro
+de create() y loadById() para garantizar que ya estuviesen creados los BBC's. Se eliminó el parámetro $deepInit de initRunStructs() y ahora no se crea el BMA/BMP en esa llamada;
+para solventar la carencia se sustituyó toda lectura de RT::bmAdapter por RT::bma() la cual devuelve el bmAdapter y ni no está creado, lo crea on-the-fly (late building).
+
+
+
+--- BUG #0017
+--- DETECCION 10.05.2017
+Al importar archivos CSV de BBapps, los MESSAGES que contienen comillas dobles son mostrados con un par de comillas dobles.
+--- DIAGNOSTICO 10.05.2017
+EL formato CSV especifica que las comillas dobles son exportadas en forma de dobles comillas dobles.
+--- SOLUCION 10.05.2017
+Se agregó la conversión en BotBasicParser::splitLine().
+
+
+
+--- BUG #0018
+--- DETECCION 22.04.2017
+La primitiva de envío de correo no codifica correctamente los caracteres especiales/extendidos de los mensajes enviados.
+Sólo al recibir los correos con Gmail se ven bien; al leer con otros clientes de correo se ven transformados.
+--- DIAGNOSTICO 16.05.2017
+La codificación estándar de la librería PhpMailer es iso-8859-1 y no utf-8.
+--- SOLUCION 16.05.2017
+Se incluyó la fijación del atributo respectivo de la instancia de PhpMailer en la rutina del BMA googleMail().
+
+
+
+--- BUG #0019
+--- DETECCION 17.04.2017
+El envío de SMS (usado en T3) con la empresa Messente tiene problemas cuando el mensaje incluye '@'.
+--- DIAGNOSTICO 17.04.2017, 16.05.2017
+Si no se puede resolver, intentar enviar un link a telegram (sin @) en vez de un nombre de bot.
+--- SOLUCION 16.05.2017
+En vista de que Messente no logró resolver el problema con sus carriers, se ha incluido una transformación de texto de "@" a "(a)".
+
+
+
+--- BUG #0020
+--- DETECCION 15.05.2017
+Si dos BBapps distintas con tienen cada una un runtime con bmUserId "x", entonces en una de ellas fallará un USERID FROM <x>.
+--- DIAGNOSTICO 15.05.2017
+El USERID FROM no está filtrando por BBapp (o nombre, o código de BBapp) cuando se lee de BD el RT que coincide con el bmUserId especificado.
+--- SOLUCION 15.05.2017
+Se agregó un filtro por BBapp (índice de bbbots/cmbots) a BotBasicRuntime::loadByBizModelUserId() y a DBbroker::readBBruntimeIdByBizModelUserId().
+
+
+
+--- BUG #0021
+--- DETECCION 08-12.05.2017
+El datahelper (código en PHP de BB que implementa las instrucciones DATA GET / DATA SET) no está funcionando correctamente cuando hay
+múltiples BBapps y dos de ellas tienen runtimes con el mismo bmUserId.
+--- DIAGNOSTICO 08-12.05.2017
+La tabla en BD datahelper_data carece de una columna que indique de qué BBapp se trata el registro.
+--- SOLUCION 08-12.05.2017
+Se agregó la columna a BD, modificando índices, se modificaron los métodos del datahelper que leen y escriben en la tabla, tanto en BotBasicRuntime como en DBbroker, 
+y se modificaron las llamadas a esos métodos para pasar el bbcode_cmid (ahora índice de la BBapp en BotConfig). 
+
+
+
+--- BUG #0022
+--- DETECCION 15.05.2017
+Durante el diagnóstico del bug #0007, se detectó que ENTRYTEXT iba a fallar cuando se estuviese ejecutando código de una BBapp como producto de una interacción aceptada
+en un INPUT o MENU foráneo que no fijara el Runtime::$update.
+--- DIAGNOSTICO 15.05.2017
+En runner4entrytext() se estaba leyendo $this->update->getText() en vez de $this->getEntryText().
+--- SOLUCION 15.05.2017
+Se corrigió como indica el diagnóstico.
+
+
+
+--- BUG #0023
+--- DETECCION 15.05.2017
+Durante el diagnóstico del bug #0007, se detectó que en RT::route() el texto del update se estaba convirtiendo a NOTHING cuando el update de entrada no estaba fijado, lo cual
+generaría problemas en las comparaciones que incluye el método, en las que se el texto se comparaba con null.
+--- DIAGNOSTICO 15.05.2017
+Implícito.
+--- SOLUCION 15.05.2017
+Se incluyó un parámetro en la firma de RT::getEntryText() que indica si se puede retornar null cuando no está fijado el update de entrada; en todos los casos excepto dentro de la
+llamada en route() se retornará NOTHING.
+Se modificó el orden de algunas condiciones dentro de route() para acomodarlas al hecho de que la variable $text puede ser ahora null en ciertos casos.
+
+
+
+--- BUG #0024
+--- DETECCION 16.05.2017
+Los siguientes mensajes aparecen aún cuando no existe un runtime creado en BD:
+[2017-05-16@17:13:23.381@RUNTIME] RT454 No se puede cargar el runtime por ID (8) y se cancela la creación del runtime
+[2017-05-16@17:13:23.382@DATABASE] [runtimeId: 10] [bizmodelUser: null] RT1164 Error de BD [bbBot: monitor] [bbLineno: 100] [bbSymbol: monitor]
+Esto surgió al preparar el ambiente de pruebas para el diagnóstico de los bugs #0006 y #0008.
+--- DIAGNOSTICO 16.05.2017
+Existía un runtime creado, pero estaba soft-deleted.
+Se detectó que DBbroker::readBBruntimeIdByBizModelUserId() carecía de la condición de filtro "AND deleted IS NULL".
+--- SOLUCION 16.05.2017
+Se agregó la condición en el SQL.
+
+
+
+--- BUG #0025
+--- DETECCION 16.05.2017
+[2017-05-16@17:25:54.384@RUNTIME] [runtimeId: 12] [bizmodelUser: 11] RT2282 Falla BotBasicRuntime::loadByBizModelUserId(): [bot=monitor|bmUid=12|chId=NULL|thisBmUid=11] [bbBot: main]
+--- DIAGNOSTICO 16.05.2017
+El error es producto del cambio introducido al solucionar el bug #0020. En RT::completeOn() la llamada a loadByBizModelUserId() falla porque se se utiliza un bbBotIdx erroneo al cargar
+el RT foráneo (se pasa el bbBotIdx del RT invocante).
+--- SOLUCION 16.05.2017
+Se implementó ChatMedium::getBBbotIndexByOtherBBbotSameBBapp() que permite recuperar el bbBotIdx foráneo, el cual se usa ahora en la llamada descrita en el diagnóstico.
+
+
+
+--- BUG #0026
+--- DETECCION 05.06.2017
+Se detectó mal funcionamiento en una instrucción IF LT x 3 THEN GOTO a ELSE GOTO b (cuando se debía ejecutar el GOTO b, no se estaba ejecutando).
+--- DIAGNOSTICO 05.06.2017
+En el método descender() del parser en la clase BotBasic, en la sección correspondiente a modo parsing (no semántico), el procesamiento de casos de instrucciones IF
+procesaba los tokens de la línea como si no incluyera las particulas THEN y ELSE; es decir, las posiciones del arreglo 3 y 5 aparecían reflejadas como 2 y 3.
+--- SOLUCION 05.06.2017
+Se corrigió el indexamiento del arreglo $parsedContent.
+
+
+
+--- BUG #0027
+--- DETECCION 19.06.2017
+El almacenamiento de textos provenientes de Telegram con caracteres Unicode extendidos de 4 bytes en UTF-8 generaba error de BD.
+--- DIAGNOSTICO 19.06.2017
+El encoding utf8 de MySQL sólo acepta caracteres de hasta 3 bytes.
+Ver https://mathiasbynens.be/notes/mysql-utf8mb4.
+--- SOLUCION 22.06.2017
+Se reformuló la estructura de la BD pata usar el encoding utf8mb4. Se migraron las BD existentes de botbasic y bizmodels al nuevo encoding.
+Se actualizó el string de conexión a BD en bbdefines.php. Se actualizaron las fórmulas de generación de SQL en BB.xslx.
+
+
+
+--- BUG #0028
+--- DETECCION 27.06.2017
+[2017-06-27@18:58:51.359@DATABASE] Error de BD: [SQLSTATE=42000|You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ' NULL, NULL, NULL, 's:11:\"ووف ?\";', 'avoided' )' at line 2]; con...
+                    INSERT INTO resource (rand, type, chatmedium_type, chatmedium_authinfo, file_id, filename, metainfo, download_state )
+                    VALUES ('18fb36b2', 109, , NULL, NULL, NULL, 's:11:\"ووف 👅\";', 'avoided' );
+--- DIAGNOSTICO
+Tiene que ver con Unicode vs ut8mb4 @MySQL (#0027).
+--- SOLUCION
+
+
+
+--- BUG #0029
+--- DETECCION 29.06.2017
+[2017-06-29@02:46:13.492@RUNTIME] [runtimeId: 53] [bizmodelUser: -53] RT824 routetype incorrecto u otro route con combinacion invalida [text=NULL|hook=1015|26d583aa3fc0ca86a3c216d036ccc526|1260103265631029665|event=NULL|routetype=input|routecontent=["main",167,"string",["\u00bfSi fueras yo, qu\u00e9 respondieras a esa pregunta?"],null,"53","respuesta",null,true]] [bbBot: main]
+--- DIAGNOSTICO
+No se considera que necesariamente sea un bug, pero hay que analizar el caso.
+--- SOLUCION
+
+
+
+--- BUG
+--- DETECCION
+--- DIAGNOSTICO
+--- SOLUCION
+
+
+
+--- TODO (pasted 2018.06.20)
+* LOCK the runtime/bbc instance when read so other apache2 BB processes wait until UNLOCKED so be FIFO when reading/writing bbvars on these objects
+  don't forget to make a safe unlock
