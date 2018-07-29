@@ -56,7 +56,7 @@ define('BOTBASIC_SENDERDAEMON_CRON_DELAY_SECS',              1.5);   // conserva
 define('BOTBASIC_SENDERDAEMON_TELEGRAM_POST_TIMEOUT_SECS',    10);
 define('BOTBASIC_SENDERDAEMON_TELEGRAM_MIN_SECS_TO_RELOG',     5);
 define('BOTBASIC_SENDERDAEMON_TELEGRAM_MAX_SEND_ATTEMPTS',     3);
-define('BOTBASIC_SENDERDAEMON_TELEGRAM_WAIT_UNTIL_RETRY_SECS', 5);   // only applied when in debug mode
+define('BOTBASIC_SENDERDAEMON_TELEGRAM_WAIT_UNTIL_RETRY_SECS', 0);   // only applied when in debug mode
 
 // Tuning: splashs display on chatapps
 // see https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating
