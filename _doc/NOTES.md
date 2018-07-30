@@ -70,3 +70,4 @@ ssh -R 9000:localhost:9000 gorka@dev.bots.logicos.org -N   # optional -f for dae
 # PhpStorm breakpoint condition
 
 $GLOBALS['botbasic_ide_debug'] === true
+
