@@ -119,8 +119,8 @@ cat >/etc/apache2/sites-available/$BB_HOST_PRIVATE.conf <<END
 Include /etc/apache2/mods-available/php$BB_PHP_VERSION.conf
 <VirtualHost *:80>
     ServerName $BB_HOST_PRIVATE
-    DocumentRoot $BB_HOME
-    <Directory $BB_HOME>
+    DocumentRoot $BB_HOME/scripts/parser
+    <Directory $BB_HOME/scripts/parser>
 #       Order allow,deny
 #       Allow from all
         Require all granted
