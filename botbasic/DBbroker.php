@@ -2507,8 +2507,10 @@ END;
         while (true) {
             for ($tryCount = 0; $tryCount < $maxDownloadAttempts; $tryCount++) {
                 $record = $this->unqueueStart($cmType, $tryCount, $minSecsToRelog);
-                if ($record === null) { return; }
-                if ($record !== false) {
+                if ($record === null)  { return; }
+                if ($record === false) { $nextInterDelayMsecs = max($interDelayMsecs, BOTBASIC_DOWNLOADDAEMON_TELEGRAM_INTERDELAY_MSECS); }
+                else {
+                    $nextInterDelayMsecs = $interDelayMsecs;
                     list ($id, $type, $metainfo, $cmAuthInfo, $fileId) = $record;
                     $cm  = ChatMedium::create($cmType);
                     $url = $cm->getDownloadUrl($cmAuthInfo, $fileId);
@@ -2538,7 +2540,7 @@ END;
                 }
                 if ($howMany != -1 && $count >= $howMany) { break 2; }
                 if (date('i') != $startMin)               { break 2; }
-                usleep(1000 * $interDelayMsecs);
+                usleep(1000 * $nextInterDelayMsecs);
                 if (date('i') != $startMin)               { break 2; }
             }
         }

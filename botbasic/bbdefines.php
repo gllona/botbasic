@@ -17,8 +17,8 @@ define("BOTBASIC_LANG_NAME",                    "BotBasic");
 define("BOTBASIC_LANG_VERSION",                 "01.00");
 define("BOTBASIC_DEFAULT_LOCALE",               "es");
 define("BOTBASIC_COMMAND_START",                "/start");
-define("BOTBASIC_MAX_PARSE_TIME_SECONDS",       1.0);
-define("BOTBASIC_MAX_EXEC_TIME_SECONDS",        1.0);
+define("BOTBASIC_MAX_PARSE_TIME_SECONDS",       3.0);
+define("BOTBASIC_MAX_EXEC_TIME_SECONDS",        5.0);
 define('BOTBASIC_TIMEZONE',                     'Etc/UTC');   // 'America/Panama');
 define('BOTBASIC_DOWNLOAD_MMCONTENT',           true);
 define('BOTBASIC_BOT_IS_POSSESSED',             false);
@@ -73,5 +73,5 @@ define('BOTBASIC_TELEGRAM_CAPTION_MAXLENGTH',      200);
 // Tuning: downloading updated content
 define('BOTBASIC_DOWNLOADDAEMON_TELEGRAM_MIN_SECS_TO_RELOG',        5);
 define('BOTBASIC_DOWNLOADDAEMON_TELEGRAM_MAX_DOWNLOAD_ATTEMPTS',    3);
-define('BOTBASIC_DOWNLOADDAEMON_TELEGRAM_INTERDELAY_MSECS',      1050);   // tune this if the next one != 1
-define('BOTBASIC_DOWNLOADDAEMON_TELEGRAM_HOW_MANY_TO_DOWNLOAD',    15);   // don't touch at this time
+define('BOTBASIC_DOWNLOADDAEMON_TELEGRAM_INTERDELAY_MSECS',      1050);
+define('BOTBASIC_DOWNLOADDAEMON_TELEGRAM_HOW_MANY_TO_DOWNLOAD',    -1);
