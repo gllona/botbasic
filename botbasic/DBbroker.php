@@ -2536,10 +2536,10 @@ END;
                         }
                     }
                 }
-                if ($howMany != -1 && $count > $howMany) { break 2; }
-                if (date('i') != $startMin)              { break 2; }
+                if ($howMany != -1 && $count >= $howMany) { break 2; }
+                if (date('i') != $startMin)               { break 2; }
                 usleep(1000 * $interDelayMsecs);
-                if (date('i') != $startMin)              { break 2; }
+                if (date('i') != $startMin)               { break 2; }
             }
         }
 

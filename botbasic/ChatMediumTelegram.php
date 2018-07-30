@@ -520,7 +520,7 @@ namespace botbasic {
                     if ($res === null) { $this->unqueueRollback($id);           }
                     else               { $this->unqueueCommit(  $id); $count++; }
                 }
-                if ($howMany != -1 && $count > $howMany)                                               { break; }
+                if ($howMany != -1 && $count >= $howMany)                                              { break; }
                 if ($sleepUntilNextTick($startOfRequestTS, $startMin, $requestMsecs / 1000) === false) { break; }
             }
 
