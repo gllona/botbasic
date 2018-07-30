@@ -2651,7 +2651,7 @@ if (php_sapi_name() === 'cli') {   // command-line invocation
 
 
     header('Content-Type:text/html; charset=UTF-8');
-    include('../krumo/class.krumo.php');
+    include(BOTBASIC_BASEDIR . 'httpdocs/krumo/class.krumo.php');
     $die = function ($msg) { echo "<p>$msg</p>\n<p><a href=\"/scripts/parser/parser_upload_form.html\">Try again...</a></p>"; exit(); };
     // validate input
     if (! isset($_POST["codename"]) || $_POST["codename"] == '' || $_POST["user_id"] == '' || $_POST["password"] == '' ||
