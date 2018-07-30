@@ -2489,13 +2489,20 @@ END;
      * los resources con menos intentos previos de haber sido descargados.
      *
      * @param  int      $cmType                 Una de las constantes ChatMedium::TYPE_...
+     * @param  int      $thread                 Número de de thread, de un total de...
+     * @param  int      $threads                Número total de threads (procesos web) invocados en paralelo
      * @param  int      $howMany                Cuántos resources serán descargados; si es -1 la ejecución será de ciclo infinito
      * @param  int      $interDelayMsecs        Tiempo para el usleep() que permite evitar el CPU flooding
      * @param  int      $maxDownloadAttempts    Número máximo de intentos de descarga para cada resource
      * @param  int      $minSecsToRelog         Cantidad mínima de segundos entre dos entradas consecutivas de bitácora
      */
-    public function attemptToDownload ($cmType, $howMany, $interDelayMsecs, $maxDownloadAttempts, $minSecsToRelog)
+    public function attemptToDownload ($cmType, $thread, $threads, $howMany, $interDelayMsecs, $maxDownloadAttempts, $minSecsToRelog)
     {
+        $logTimestamps = false;   // set to true for tuning
+
+        $now = function ($secsPrecision = 6) { return date('H:i:s.'.substr(microtime(), 2, $secsPrecision)); };
+
+        $startMin = date('i');
         $count = 0;
         while (true) {
             for ($tryCount = 0; $tryCount < $maxDownloadAttempts; $tryCount++) {
@@ -2525,14 +2532,18 @@ END;
                         else {
                             $newFilename = $this->postProcessDownload($filename, $type, $metainfo);
                             if ($newFilename === null) { $this->unqueueRollback($id, $cmType, $maxDownloadAttempts, $minSecsToRelog); }
-                            else                       { $this->unqueueCommit($id, $newFilename, $cmType, $minSecsToRelog);           }
+                            else                       { $this->unqueueCommit($id, $newFilename, $cmType, $minSecsToRelog); $count++; }
                         }
                     }
                 }
-                if ($howMany != -1 && ++$count > $howMany) { break 2; }
+                if ($howMany != -1 && $count > $howMany) { break 2; }
+                if (date('i') != $startMin)              { break 2; }
                 usleep(1000 * $interDelayMsecs);
+                if (date('i') != $startMin)              { break 2; }
             }
         }
+
+        if ($logTimestamps) { Log::register(Log::TYPE_DAEMON, "DBB Finaliza thread $thread/$threads en " . $now(6) . ' // elapsed = ' . (microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"])); }
     }
 
 

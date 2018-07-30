@@ -2,14 +2,17 @@
 #
 # cron-invoked BotBasic Telegram Splashes Sender paralell invoker
 
-if [ $# -ne 3 ]; then
-    echo "Usage: $0 <local-server-name:local-server-port> <desired-throughput-splashes-per-minute> <telegram-webservice-request-time-rounded-up-msecs>"
+if [ $# -lt 3 -o $# -gt 4 ]; then
+    echo "Usage: $0 <local-server-name:local-server-port> <desired-throughput-splashes-per-minute> <telegram-webservice-request-time-rounded-up-msecs> [<max-splashes-to-send>]"
     exit 1
 fi
 
 HP=$1   # host:port
 TP=$2   # desired throughput (splashes/min)
 RT=$3   # request time rounded up (msecs)
+HM=$4   # how many splashes to send (optional)
+
+if [ "$HM" != "" ]; then HHM=maxtosend=$HM; else HHM=""; fi
 
 NT=$(( (RT * TP) / (60 * 1000) ))   # number of threads (rounded down)
 if [ $NT -gt 999 ]; then NT=999; fi

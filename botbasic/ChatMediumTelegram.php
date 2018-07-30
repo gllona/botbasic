@@ -451,13 +451,14 @@ namespace botbasic {
          *
          * @param  int      $thread         Número de de thread, de un total de...
          * @param  int      $threads        Número total de threads (procesos web) invocados en paralelo
+         * @param  int      $howMany        Número máximo de Splashes a enviar; si es -1 no se usará este límite
          * @param  int      $requestMsecs   Duración de un "tick"; puede ser especificado como la duración máxima de un request hacia Telegram sumando
          *                                  una holgura que permita garantizar un tick fijo y adicionalmente un tiempo muerto para hacer confiar a los
          *                                  servidores de Telegram de que no se trata de un flood (~350 msecs es el tiempo real desde El Cangrejo)
          */
-        public function attemptToSend ($thread, $threads, $requestMsecs)
+        public function attemptToSend ($thread, $threads, $howMany, $requestMsecs)
         {
-            $logTimestamps = false;   // set as true for tuning BOTBASIC_SENDERDAEMON_CRON_DELAY_SECS
+            $logTimestamps = false;   // set to true for tuning
 
             $now = function ($secsPrecision = 6)
             {
@@ -486,6 +487,7 @@ namespace botbasic {
 
             // start send cycle
             $startMin = date('i');
+            $count = 0;
             while (true) {
                 $startOfRequestTS = microtime(true);
                 $record           = false;
@@ -515,14 +517,14 @@ namespace botbasic {
                     else {
                         $res = $this->orderToTelegram($cmBotName, $cmChatId, $specialOrder, $specialOrderArg);
                     }
-                    if ($res === null) { $this->unqueueRollback($id); }
-                    else               { $this->unqueueCommit(  $id); }
+                    if ($res === null) { $this->unqueueRollback($id);           }
+                    else               { $this->unqueueCommit(  $id); $count++; }
                 }
+                if ($howMany != -1 && $count > $howMany)                                               { break; }
                 if ($sleepUntilNextTick($startOfRequestTS, $startMin, $requestMsecs / 1000) === false) { break; }
             }
 
             if ($logTimestamps) { Log::register(Log::TYPE_DAEMON, "CMTG461 Finaliza thread $thread/$threads en " . $now(6) . ' // elapsed = ' . (microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"])); }
-            // TODO actualizar la cola de downloads de attachments a esta logica
         }
 
 

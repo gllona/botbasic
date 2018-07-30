@@ -15,20 +15,18 @@ include "../../botbasic/bbautoloader.php";
 
 use botbasic\ChatMedium, botbasic\ChatMediumTelegram, botbasic\Log;
 
-if (php_sapi_name() === 'cli') {
-    fwrite(STDERR, "this script can only be invoked from the web server");
-    exit(1);
-}
+$die = function ($msg) { Log::register(Log::TYPE_DAEMON, $msg); exit(1); };
 
-if (! isset($_GET['thread'])       || ! is_numeric($_GET['thread'])      ||
-    ! isset($_GET['threads'])      || ! is_numeric($_GET['threads'])     ||
-    ! isset($_GET['requestmsecs']) || ! is_numeric($_GET['requestmsecs'] )) {
-    Log::register(Log::TYPE_DAEMON, "TGSNDR25 No se especifico en _GET ni 'thread' ni 'threads' ni 'requestmsecs' en la invocacion web del script");
-}
+if (php_sapi_name() === 'cli') { $die("this script can only be invoked from the web server"); }
+
+if (! isset($_GET['thread']) || ! isset($_GET['threads']))               { $die("TGSNDR25 Invoke with http...?thread=<thread-number>&threads=<number-of-threads>");             }
+if (isset($_GET['requestmsecs']) && ! is_numeric($_GET['requestmsecs'])) { $die("TGSNDR26 Numeric value expected with http...?requestmsecs=<time-to-spent-per-request-msecs>"); }
+if (isset($_GET['maxtosend'])    && ! is_numeric($_GET['maxtosend']))    { $die("TGSNDR27 Numeric value expected with http...?maxtosend=<max-splashes-to-send>");               }
 
 $cm = ChatMedium::create(ChatMedium::TYPE_TELEGRAM);   /** @var ChatMediumTelegram $cm */
 $cm->attemptToSend(
     $_GET['thread'],
     $_GET['threads'],
+    isset($_GET['maxtosend']) ? $_GET['maxtosend'] : -1,
     $_GET['requestmsecs']
 );

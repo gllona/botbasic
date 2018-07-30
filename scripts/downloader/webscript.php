@@ -15,26 +15,31 @@ include "../../botbasic/bbautoloader.php";
 
 use botbasic\ChatMedium, botbasic\DBbroker, botbasic\Log;
 
-$die = function ($msg) { fwrite(STDERR, $msg); exit(1); };
+$die = function ($msg) { Log::register(Log::TYPE_DAEMON, $msg); exit(1); };   // { fwrite(STDERR, $msg); exit(1); };
 
-if (php_sapi_name() === 'cli') { die("this script can only be invoked from the web server"); }
+if (php_sapi_name() === 'cli') { $die("this script can only be invoked from the web server"); }
+
+if (! isset($_GET['chatmediumid']))                                        { $die("DWNLDR22 Invoke with http...?chatmediumid=<numeric-chatchannel-type>");                   }
+if (! isset($_GET['thread']) || ! isset($_GET['threads']))                 { $die("DWNLDR23 Invoke with http...?thread=<thread-number>&threads=<number-of-threads>");        }
+if (isset($_GET['waitmsecs']) && ! is_numeric($_GET['waitmsecs']))         { $die("DWNLDR24 Numeric value expected with http...?waitmsecs=<inter-downloads-msecs>");         }
+if (isset($_GET['maxtodownload']) && ! is_numeric($_GET['maxtodownload'])) { $die("DWNLDR25 Numeric value expected with http...?maxtodownload=<max-resources-to-download>"); }
 
 $params = [
     ChatMedium::TYPE_TELEGRAM => [
         'minSecsToRelog'      => BOTBASIC_DOWNLOADDAEMON_TELEGRAM_MIN_SECS_TO_RELOG,
         'maxDownloadAttempts' => BOTBASIC_DOWNLOADDAEMON_TELEGRAM_MAX_DOWNLOAD_ATTEMPTS,
-        'interdelayMsecs'     => BOTBASIC_DOWNLOADDAEMON_TELEGRAM_INTERDELAY_MSECS,
-        'howManyToDownload'   => BOTBASIC_DOWNLOADDAEMON_TELEGRAM_HOW_MANY_TO_DOWNLOAD,
+        'interdelayMsecs'     => isset($_GET['waitmsecs'])     ? $_GET['waitmsecs']     : BOTBASIC_DOWNLOADDAEMON_TELEGRAM_INTERDELAY_MSECS,
+        'howManyToDownload'   => isset($_GET['maxtodownload']) ? $_GET['maxtodownload'] : BOTBASIC_DOWNLOADDAEMON_TELEGRAM_HOW_MANY_TO_DOWNLOAD,
     ],
 ];
-
-if (! isset($_GET['chatmediumid'])) { die("Invoke with http...?chatmediumid=<numeric-chatchannel-type>"); }
 
 $type   = $_GET['chatmediumid'];
 $params = $params[$type];
 $dbb    = new DBbroker();
 $dbb->attemptToDownload(
     $type,
+    $_GET['thread'],
+    $_GET['threads'],
     $params['howManyToDownload'],
     $params['interdelayMsecs'],
     $params['maxDownloadAttempts'],
