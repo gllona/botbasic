@@ -21,7 +21,7 @@ NTP=$NT; if [ $NT -lt 10 ]; then NTP="0$NTP"; fi; if [ $NT -lt 100 ]; then NTP="
 
 TT=0; while (true); do
     TTP=$TT; if [ $TT -lt 10 ]; then TTP="0$TTP"; fi; if [ $TT -lt 100 ]; then TTP="0$TTP"; fi
-	/usr/bin/curl -k http://$HP/scripts/telegramsender/webscript.php?thread=$TTP\&threads=$NTP\&requestmsecs=$RT &
+	/usr/bin/curl -k http://$HP/scripts/telegramsender/webscript.php?thread=$TTP\&threads=$NTP\&requestmsecs=$RT\&$HHM &
     TT=$(( TT+1 ))
     if [ $TT -eq $NT ]; then break; fi
 done
