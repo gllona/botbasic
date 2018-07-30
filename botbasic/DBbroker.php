@@ -2501,12 +2501,12 @@ END;
         $logTimestamps = false;   // set to true for tuning
 
         $now = function ($secsPrecision = 6) { return date('H:i:s.'.substr(microtime(), 2, $secsPrecision)); };   // usage: list (, , $secs) = explode(':', $now());   // $secs comes with microsecs
-        $sleepUntilNextIteration = function ($startMin, $interDelayMsecs)
+        $sleepUntilNextIteration = function ($startMin, $interDelaySecs)
         {
             $endOfCheckTS = microtime(true);
-            $willEndAtMin = date('i', $endOfCheckTS + $interDelayMsecs);
+            $willEndAtMin = date('i', $endOfCheckTS + $interDelaySecs);
             if ($willEndAtMin != $startMin) { return false; }
-            usleep(1e3 * $interDelayMsecs);
+            usleep(1e6 * $interDelaySecs);
             return true;
         };
 
@@ -2546,8 +2546,8 @@ END;
                         }
                     }
                 }
-                if ($howMany != -1 && $count >= $howMany)                                { break 2; }
-                if ($sleepUntilNextIteration($startMin, $nextInterDelayMsecs) === false) { break 2; }
+                if ($howMany != -1 && $count >= $howMany)                                       { break 2; }
+                if ($sleepUntilNextIteration($startMin, $nextInterDelayMsecs / 1000) === false) { break 2; }
             }
         }
 
