@@ -2099,7 +2099,7 @@ END;
         $fileId        = self::q($resource->fileId);
         $filename      = self::q($resource->filename);
         $metainfo      = self::q(serialize($resource->metainfo));
-        $downloadState = $doDownload ? 'pending' : ($resource->downloadState === null ? 'avoided' : $resource->downloadState);
+        $downloadState = $doDownload ? 'pending' : ($resource->downloadState === null || $resource->downloadState === 'avoided' ? 'avoided' : $resource->downloadState);
         // new resource; insert
         if ($id === null || $id === -1) {
             $additionalColum = $interactionId === null ? '' : ", interaction_id";
