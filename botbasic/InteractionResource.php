@@ -144,12 +144,14 @@ class InteractionResource
      * Factory method: crea un resource a partir de un content pasado como parámetro
      *
      * @param  int                          $type           Una de las constantes TYPE_...
+     * @param  int                          $cmType         Una de las constantes ChatMedium::TYPE_...
      * @param  mixed                        $content        contenido del resource a ser guardado, según su tipo
      * @return InteractionResource|null                     null en caso de no haber podido generar la entrada en BD; el resource en caso de éxito
      */
-    static public function createFromContent ($type, $content)
+    static public function createFromContent ($type, $cmType, $content)
     {
         $r = new InteractionResource($type);
+        $r->cmType   = $cmType;
         $r->metainfo = $content;
         $res = $r->save(null, false);
         if ($res === null) {

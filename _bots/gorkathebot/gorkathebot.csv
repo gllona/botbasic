@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.1	gorkathebot				
+VERSION	0.2.2	gorkathebot				
 BOTS	main					
 						
 						
@@ -25,8 +25,16 @@ prank2		I get more of your time that you of mine
 silly1		Wood in the stove, hair on the floor				
 absurd1		You have a thousand more important to do than this				
 commandOptions		Choose /ai /test				
-sendAnImage		Send me photos				
+sendAnImage		Send me photos or /letmeask1 /letmeask2 /letmeask3				
 mediaInfo		Media type is {type} and id is {id}				
+sendOnlyPhoto		Attach now a photo				
+mediaId1		Media id is {id}				
+mediaId2		Media id is {id}, type is {type}				
+mediaId3		Media id is {id}, type is {type} and caption is {caption}				
+						
+						
+						
+						
 						
 						
 						
@@ -88,10 +96,25 @@ main	main	main
 	absurd	SET tryToLaugh absurd1				
 		RETURN				
 						
-/test		PRINT sendAnImage				
+/test	test	PRINT sendAnImage				
 		END				
 						
 //		SET type ENTRYTYPE				
 		SET id ENTRYID				
 		PRINT mediaInfo				
 		END				
+						
+/letmeask1		CLEAR id				
+		INPUT image TITLE sendOnlyPhoto TO id				
+		PRINT mediaId1				
+		GOTO test				
+						
+/letmeask2		CLEAR id type				
+		INPUT image TITLE sendOnlyPhoto TO id type				
+		PRINT mediaId2				
+		GOTO test				
+						
+/letmeask3		CLEAR id type caption				
+		INPUT image TITLE sendOnlyPhoto TO id type caption				
+		PRINT mediaId3				
+		GOTO test				

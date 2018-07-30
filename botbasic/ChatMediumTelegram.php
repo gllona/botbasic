@@ -229,8 +229,8 @@ namespace botbasic {
                 if (isset($update->message->video))      { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_VIDEO,     $this->type, $cmAuthInfo, $update->message->video->file_id,      $extract($update->message->video,      'width,height,duration')   )); }
                 if (isset($update->message->video_note)) { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_VIDEONOTE, $this->type, $cmAuthInfo, $update->message->video_note->file_id, $extract($update->message->video_note, 'length,duration')         )); }
                 if (isset($update->message->document))   { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_DOCUMENT,  $this->type, $cmAuthInfo, $update->message->document->file_id                                                                      )); }
-                if (isset($update->message->caption))    { $add2resources(InteractionResource::createFromContent(InteractionResource::TYPE_CAPTION,   $update->message->caption ));                                                                                                          }
-                if (isset($update->message->location))   { $add2resources(InteractionResource::createFromContent(InteractionResource::TYPE_LOCATION,  $update->message->location));                                                                                                          }
+                if (isset($update->message->caption))    { $add2resources(InteractionResource::createFromContent(InteractionResource::TYPE_CAPTION,   $this->type, $update->message->caption ));                                                                                             }
+                if (isset($update->message->location))   { $add2resources(InteractionResource::createFromContent(InteractionResource::TYPE_LOCATION,  $this->type, $update->message->location));                                                                                             }
             }
             // invalid updates
             elseif (isset($update->edited_message)) {

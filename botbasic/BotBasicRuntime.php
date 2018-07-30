@@ -957,6 +957,9 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                         if ($r->type == InteractionResource::TYPE_CAPTION) { $caption = $r->metainfo; }
                         else                                               { $resource = $r;          }
                     }
+                    if ($resource !== null && $caption === null && isset($resource->metainfo['caption'])) {
+                        $caption = $resource->metainfo['caption'];
+                    }
                     if ($caption !== null && $text !== null) {
                         Log::register(Log::TYPE_RUNTIME, "RT960 Se recibio un update con texto y a la vez un resource caption", $this);
                     }
@@ -1972,7 +1975,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
      * @param string|null               $word       Palabra opcional que al ser introducida indica que se debe usar el valor por defecto
      * @param int                       $bbcId      ID del BotBasicChannel sobre el que debe afectarse el valor de la variable destino y ejecutarse
      *                                              la continuidad de la corrida del código del programa BotBasic luego de aceptar la entrada
-     * @param string                    $toVars     Nombres de la variables del programa BotBasic que deben ser afectadas con el valor de la entrada
+     * @param array                     $toVars     Nombres de la variables del programa BotBasic que deben ser afectadas con el valor de la entrada
      *                                              y sus atributos
      * @param string|null               $fromValue  Valor por defecto, opcional
      * @param string                    $text       Texto introducido por el usuario en la chatapp, o caption del resource que se recibió
