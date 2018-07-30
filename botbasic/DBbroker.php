@@ -2500,7 +2500,15 @@ END;
     {
         $logTimestamps = false;   // set to true for tuning
 
-        $now = function ($secsPrecision = 6) { return date('H:i:s.'.substr(microtime(), 2, $secsPrecision)); };
+        $now = function ($secsPrecision = 6) { return date('H:i:s.'.substr(microtime(), 2, $secsPrecision)); };   // usage: list (, , $secs) = explode(':', $now());   // $secs comes with microsecs
+        $sleepUntilNextIteration = function ($startMin, $interDelayMsecs)
+        {
+            $endOfCheckTS = microtime(true);
+            $willEndAtMin = date('i', $endOfCheckTS + $interDelayMsecs);
+            if ($willEndAtMin != $startMin) { return false; }
+            usleep(1e3 * $interDelayMsecs);
+            return true;
+        };
 
         $startMin = date('i');
         $count = 0;
@@ -2538,10 +2546,8 @@ END;
                         }
                     }
                 }
-                if ($howMany != -1 && $count >= $howMany) { break 2; }
-                if (date('i') != $startMin)               { break 2; }
-                usleep(1000 * $nextInterDelayMsecs);
-                if (date('i') != $startMin)               { break 2; }
+                if ($howMany != -1 && $count >= $howMany)                                { break 2; }
+                if ($sleepUntilNextIteration($startMin, $nextInterDelayMsecs) === false) { break 2; }
             }
         }
 

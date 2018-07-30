@@ -460,11 +460,7 @@ namespace botbasic {
         {
             $logTimestamps = false;   // set to true for tuning
 
-            $now = function ($secsPrecision = 6)
-            {
-                // usage: list (, , $secs) = explode(':', $now());   // $secs comes with microsecs
-                return date('H:i:s.'.substr(microtime(), 2, $secsPrecision));
-            };
+            $now = function ($secsPrecision = 6) { return date('H:i:s.'.substr(microtime(), 2, $secsPrecision)); };   // usage: list (, , $secs) = explode(':', $now());   // $secs comes with microsecs
             $sleepUntilNextTick = function ($startOfTickTS, $startMin, $iterationFixedSecs)
             {
                 $endOfRequestTS = microtime(true);
