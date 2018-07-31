@@ -733,7 +733,7 @@ namespace botbasic {
             if ($caption !== null) {
                 $parameters['caption'] = $caption;
             }
-            return [ $parameters ];
+            return $parameters;
         }
 
 
@@ -931,10 +931,10 @@ namespace botbasic {
         /**
          * Realiza un POST a los servidores de Telegram con el objetivo de enviar una orden especial especifica, diferente a un Splash
          *
-         * @param  string       $cmBotName  Nombre del bot de la chatapp
-         * @param  string       $cmChatId   Información de autenticación (no usada)
-         * @param  int          $order      Orden; uno de los valores ORDER_...
-         * @param  mixed|null   $orderArg   Argumento de la orden
+         * @param  string     $cmBotName Nombre del bot de la chatapp
+         * @param  string     $cmChatId  Información de autenticación (no usada)
+         * @param  int        $order     Orden; uno de los valores ORDER_...
+         * @param  mixed|null $orderArg  Argumento de la orden
          * @return bool
          */
         private function orderToTelegram ($cmBotName, $cmChatId, $order, $orderArg = null)
