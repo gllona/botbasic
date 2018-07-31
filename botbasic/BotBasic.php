@@ -223,6 +223,10 @@ abstract class BotBasic
         [ 'extractSpec', 'sound' ],
         [ 'extractSpec', 'latitude' ],
         [ 'extractSpec', 'longitude' ],
+        [ 'extractSpec', 'width' ],
+        [ 'extractSpec', 'height' ],
+        [ 'extractSpec', 'format' ],
+        [ 'extractSpec', 'length' ],
     ];
 
 
@@ -328,10 +332,14 @@ abstract class BotBasic
         197 => [ 'EXTRACT', 'extract' ],
         198 => [ 'latitude', '' ],
         199 => [ 'longitude', '' ],
-        200 => [ 'CHATAPP', 'chatapp' ],
-        201 => [ 'USERNAME', 'username' ],
-        202 => [ 'USERLOGIN', 'userlogin' ],
-        203 => [ 'USERLANG', 'userlang' ],
+        200 => [ 'width', '' ],
+        201 => [ 'height', '' ],
+        202 => [ 'format', '' ],
+        203 => [ 'length', '' ],
+        204 => [ 'CHATAPP', 'chatapp' ],
+        205 => [ 'USERNAME', 'username' ],
+        206 => [ 'USERLOGIN', 'userlogin' ],
+        207 => [ 'USERLANG', 'userlang' ],
     ];
 
 

@@ -11,6 +11,7 @@
 
 
 // Main definitions
+define('BOTBASIC_PUBLIC_SERVER_URL',            'https://dev.bots.logicos.org');
 define('BOTBASIC_BASEDIR',                      '/home/botbasic');
 define('BOTBASIC_LOGFILE',                      BOTBASIC_BASEDIR . '/logs/runtime.log');
 define("BOTBASIC_LANG_NAME",                    "BotBasic");
@@ -22,6 +23,8 @@ define("BOTBASIC_MAX_EXEC_TIME_SECONDS",        5.0);
 define('BOTBASIC_TIMEZONE',                     'Etc/UTC');   // 'America/Panama');
 define('BOTBASIC_DOWNLOAD_MMCONTENT',           true);
 define('BOTBASIC_BOT_IS_POSSESSED',             false);
+define('BOTBASIC_PUBLIC_MEDIA_URL',             BOTBASIC_PUBLIC_SERVER_URL . '/media');
+define('BOTBASIC_PUBLIC_MEDIA_DIR',             BOTBASIC_BASEDIR . '/media');
 define('BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR', BOTBASIC_BASEDIR . '/downloads');
 define('BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR',    BOTBASIC_BASEDIR . '/httpdocs/scripts/media');
 define('BOTBASIC_WEBSTUB_OUTPUT_DIR',           BOTBASIC_BASEDIR . '/logs/webstub');

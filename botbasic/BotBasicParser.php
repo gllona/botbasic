@@ -1693,7 +1693,7 @@ class BotBasicParser extends BotBasic
                 // $res   = false;   // uncommenting this line prints a "malformed statement" error
             }
             // caso TO OPTIONS
-            $pos = array_search('TO', $ttokens);
+            $pos = array_search($this->TOK('TO'), $ttokens);
             if ($pos !== false && $ttokens[$pos+1][0] == $this->TOK('OPTIONS')) {
                 if (count($ttokens[$pos+1]) != 1) {
                     $this->addError($lineno, "$bot: TO OPTIONS doesn't admit additional arguments");
@@ -1757,7 +1757,38 @@ class BotBasicParser extends BotBasic
             ],
             [ 'ON' ]
         );
-        $pos = array_search('ON', $ttokens);
+        $pos = array_search($this->TOK('ON'), $ttokens);
+        if ($pos !== false && $ttokens[$pos+1][0] == $this->TOK('CHANNELS')) {
+            if (count($ttokens[$pos+1]) != 1) {
+                $this->addError($lineno, "$bot: ON CHANNELS doesn't admit additional arguments");
+                $ttokens[$pos+1] = false;
+            }
+            $ttokens[$pos+1] = $this->TOK('CHANNELS');
+        }
+        return $res;
+    }
+
+
+
+    /**
+     * Parser4... para DISPLAY
+     *
+     * @param  string       $symbol         Símbolo de la gramática por el cual se procesa (directiva objetivo del parser4...)
+     * @param  string[]     $ttokens        Tokens de la línea de código
+     * @param  int          $lineno         Número de línea del programa BotBasic
+     * @param  string       $bot            Bot del programa BotBasic
+     * @return bool                         Indica si el procesamiento tuvo éxito
+     */
+    private function parser4display ($symbol, &$ttokens, $lineno, $bot)
+    {
+        $res = $this->parserCheckAllPoss(
+            $symbol, $ttokens, $lineno, $bot, [
+                'DISPLAY' => 'split::1..|type::0:text expression:isLvalue+inf:text expression:isLvalue',
+                'TITLE'   => 'type::0:caption:isRvalue',
+                'ON'      => 'split::1..3|type::0:bot name:isBotOrChannelsRW+1:variable:isLvalue+2:variable:isLvalue',
+            ]
+        );
+        $pos = array_search($this->TOK('ON'), $ttokens);
         if ($pos !== false && $ttokens[$pos+1][0] == $this->TOK('CHANNELS')) {
             if (count($ttokens[$pos+1]) != 1) {
                 $this->addError($lineno, "$bot: ON CHANNELS doesn't admit additional arguments");
@@ -1976,28 +2007,6 @@ class BotBasicParser extends BotBasic
             $this->addError($lineno, "$bot: invalid data type $dataType");
         }
         return $res;
-    }
-
-
-
-    /**
-     * Parser4... para DISPLAY
-     *
-     * @param  string       $symbol         Símbolo de la gramática por el cual se procesa (directiva objetivo del parser4...)
-     * @param  string[]     $ttokens        Tokens de la línea de código
-     * @param  int          $lineno         Número de línea del programa BotBasic
-     * @param  string       $bot            Bot del programa BotBasic
-     * @return bool                         Indica si el procesamiento tuvo éxito
-     */
-    private function parser4display ($symbol, &$ttokens, $lineno, $bot)
-    {
-        return $this->parserCheckAllPoss(
-            $symbol, $ttokens, $lineno, $bot, [
-                'DISPLAY' => 'type::0:resource id:isLvalue',
-                'ON'      => 'split::1..3|type::0:bot name:isBot+1:bmUserId:isLvalue+2:bbChannelId:isLvalue',
-            ],
-            [ 'ON' ]
-        );
     }
 
 

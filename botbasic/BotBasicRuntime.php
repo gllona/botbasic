@@ -1237,6 +1237,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             $foreigns = false;
             foreach ($this->prints as $print) {
                 list ($value, $on) = $print;
+                // ONs y BBCs
                 $completeOn($on);
                 $foreigns |= $completedOnIsForeign($on);
                 if ($on === null) {
@@ -1248,7 +1249,23 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                     Log::register(Log::TYPE_DEBUG, "RT1016 lambda getBBchannel arroja null", $this);
                     continue;
                 }
-                $splash = Splash::createWithText($value);
+                // build splash
+                if (is_string($value)) {
+                    $splash = Splash::createWithText($value);
+                }
+                elseif (is_array($value) && $value['type'] == 'resource') {
+                    $cmType      = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
+                    $srcResource = InteractionResource::load($value['id']);
+                    if ($srcResource === null) { continue; }
+                    $resource = $srcResource->createByCloning($cmType);
+                    $caption  = isset($value['caption']) ? InteractionResource::createFromContent(InteractionResource::TYPE_CAPTION, $cmType, $value['caption']) : null;
+                    $splash   = Splash::createWithResource($resource, $caption);
+                }
+                else {
+                    Log::register(Log::TYPE_DEBUG, "RT1016 lambda getBBchannel arroja null", $this);
+                    continue;
+                }
+                // enqueue
                 $bbc->orderEnqueueing($splash);
             }
             $this->prints = [];
@@ -2584,6 +2601,24 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
 
 
     /**
+     * Permite el preencolamiento hacia la chatapp de un DISPLAY; este método es para ser usado por runner4...()
+     *
+     * @param string        $id                 ID del Resource, el cual debe tener asociado un archivo o un Telegram file_id
+     * @param string        $caption            Caption del contenido multimedia
+     * @param null|string   $botName            Nombre del bot sobre el cual aplicar el Splash; o null para derivarlo
+     * @param null|int      $bizModelUserId     ID del BizModel user sobre el cual aplicar el Splash; o null para derivarlo
+     * @param null|int      $bbChannelId        ID del BotBasicChannel sobre el cual aplicar el Splash; o null para derivarlo
+     */
+    public function splashHelperDisplay ($id, $caption, $botName = null, $bizModelUserId = null, $bbChannelId = null)
+    {
+        $on = $this->completeOn($botName, $bizModelUserId, $bbChannelId);
+        if ($on === null) { return; }
+        $this->prints[] = [ [ 'type' => 'resource', 'id' => $id, 'caption' => $caption ], $on ];
+    }
+
+
+
+    /**
      * Permite el preencolamiento hacia la chatapp de un MENU; este método es para ser usado por runner4...() y por el BizModelAdapter
      *
      * @param string|null       $predefMenuName     Nombre del menu predefinido; o null si se trata de un menú estándar
@@ -3107,6 +3142,42 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             }
         }
         // $this->resetAfterSplash();   // PRINT's no deben resetear el contexto de los Splashes
+        return -1;
+    }
+
+
+
+    /**
+     * Runner4... para DISPLAY
+     *
+     * @param  array        $parsedContent  Tokens de la línea de código ya transformados por el parser (no serán modificados)
+     * @param  int          $lineno         Número de línea del programa BotBasic
+     * @param  string       $bot            Bot del programa BotBasic
+     * @return bool                         Nuevo número de línea (salto de ejecución); o -1 si se debe seguir la secuencia lineal
+     */
+    private function runner4display (&$parsedContent, $lineno, $bot)
+    {
+        $rvals           =& $parsedContent[1];
+        $hasTitle        =  $parsedContent[2] == 'TITLE';
+        $title           =  $hasTitle ? $parsedContent[3] : null;
+        $isOnAllChannels =  isset($parsedContent[$hasTitle ? 5 : 3]) && $parsedContent[$hasTitle ? 5 : 3] == 'CHANNELS';
+        if ($isOnAllChannels) {
+            $ons = [];
+            foreach ($this->getBBchannels() as $bbc) { $ons[] = [ $this->getBBbotName(), $this->getBizModelUserId(), $bbc->getId() ]; }
+        }
+        else {
+            $ons = [ isset($parsedContent[$hasTitle ? 5 : 3]) ? $parsedContent[$hasTitle ? 5 : 3] : $this->on ];
+        }
+        foreach ($ons as $on) {
+            for ($pos = 0; $pos < count($rvals); $pos++) {
+                $onBotName        = isset($on[0]) ? $on[0] : null;
+                $onBizModelUserId = isset($on[1]) ? $on[1] : null;
+                $onBBchannelId    = isset($on[2]) ? $on[2] : null;
+                if ($onBizModelUserId !== null && ! $this->isNumber($onBizModelUserId)) { $onBizModelUserId = $this->getRvalValue($onBizModelUserId, $lineno, $bot); }
+                if ($onBBchannelId    !== null && ! $this->isNumber($onBBchannelId   )) { $onBBchannelId    = $this->getRvalValue($onBBchannelId,    $lineno, $bot); }
+                $this->splashHelperDisplay($this->getRvalValue($rvals[$pos], $lineno, $bot), $this->getRvalValue($title, $lineno, $bot), $onBotName, $onBizModelUserId, $onBBchannelId);
+            }
+        }
         return -1;
     }
 
@@ -3917,6 +3988,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         $this->runner4goto          ($a, $b, $c);
         $this->runner4on            ($a, $b, $c);
         $this->runner4print         ($a, $b, $c);
+        $this->runner4display       ($a, $b, $c);
         $this->runner4end           ($a, $b, $c);
         $this->runner4rem           ($a, $b, $c);
         $this->runner4gosub         ($a, $b, $c);

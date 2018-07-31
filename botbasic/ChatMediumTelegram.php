@@ -222,7 +222,7 @@ namespace botbasic {
                     foreach ($update->message->photo as $photoSize) {
                         if ($chosen === null || $chosenWidth < $photoSize->width) { $chosen = $photoSize; $chosenWidth = $chosen->width; }
                     }
-                    $add2resources(                                       InteractionResource::createFromFileId(InteractionResource::TYPE_IMAGE,      $this->type, $cmAuthInfo, $chosen->file_id,                      $extract($chosen,                      'width,height,format=jpg') ));
+                    $add2resources(                                       InteractionResource::createFromFileId( InteractionResource::TYPE_IMAGE,     $this->type, $cmAuthInfo, $chosen->file_id,                      $extract($chosen,                      'width,height,format=jpg') ));
                 }
                 if (isset($update->message->audio))      { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_AUDIO,     $this->type, $cmAuthInfo, $update->message->audio->file_id,      $extract($update->message->audio,      'duration')                )); }
                 if (isset($update->message->voice))      { $add2resources(InteractionResource::createFromFileId( InteractionResource::TYPE_VOICE,     $this->type, $cmAuthInfo, $update->message->voice->file_id,      $extract($update->message->voice,      'duration')                )); }
@@ -728,7 +728,7 @@ namespace botbasic {
         private function makePhotoContentBase ($resource, $caption = null)
         {
             $parameters = [
-                'photo' => $resource->fileId,
+                'photo' => isset($resource->fileId) ? $resource->fileId : $this->makeMediaUrl($resource),
             ];
             if ($caption !== null) {
                 $parameters['caption'] = $caption;
@@ -756,9 +756,6 @@ namespace botbasic {
             }
             return $parameters;
         }
-
-
-
         /**
          * Genera la estructura de datos (que será transferida como JSON en el raw content de la petición al web service) que representa el
          * contenido esperado por los servidores de Telegram cuando se envía un clip de voz
@@ -857,6 +854,37 @@ namespace botbasic {
                 'latitude'  => $resource->metainfo->latitude,
             ];
             return $parameters;
+        }
+
+
+
+        /**
+         * Genera un URL publico para un contenido multimedia, para ser recuperado por los servidores de Telegram; colateralmente linkea
+         * el archivo del contenido desde el directorio correspondiente al URL
+         *
+         * @param  InteractionResource  $resource   Resource que representa el contenido
+         * @return string|null                      URL; o null en caso de falla de creación de directorio o de linkeo
+         */
+        private function makeMediaUrl ($resource)
+        {
+            // make target directory if not exists
+            $basedir   = BOTBASIC_PUBLIC_MEDIA_DIR;
+            $typedir   = InteractionResource::typeString($resource->type);
+            $datedir   = date("Ym");
+            $commonDir = "$typedir/$datedir";
+            $dir       = "$basedir/$commonDir";
+            if (! is_dir($dir)) {
+                $res = mkdir($dir, 0775, true);
+                if ($res === false) { return null; }
+            }
+            // link file in target directory
+            $target       = BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR . '/' . $resource->filename;
+            $filename     = basename($resource->filename);
+            $fullFilename = "$dir/$filename";
+            if (symlink($target, $fullFilename) === false) { return null; }
+            // make and return URL
+            $url = BOTBASIC_PUBLIC_MEDIA_URL . "/$commonDir/$filename";
+            return $url;
         }
 
 

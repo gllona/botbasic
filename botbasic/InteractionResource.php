@@ -225,12 +225,17 @@ class InteractionResource
      *
      * La clonación permite evitar la descarga o replicación en filesystem de archivos con el mismo contenido.
      *
-     * @return InteractionResource|null     null en caso de no haber podido generar la entrada en BD; el resource en caso de éxito
+     * @param  int|null                 $newCmType  Si es distinto de null se asignará este cmType al nuevo Resource
+     * @return InteractionResource|null             null en caso de no haber podido generar la entrada en BD; el resource en caso de éxito
      */
-    public function createByCloning ()
+    public function createByCloning ($newCmType = null)
     {
         $clone     = clone $this;
         $clone->id = null;
+        if ($newCmType !== null && $clone->cmType != $newCmType) {
+            $clone->cmType = $newCmType;
+            $clone->fileId = null;
+        }
         $clone->clonedFrom = $this;
         $res = $clone->save(null, false);
         if ($res === null) {

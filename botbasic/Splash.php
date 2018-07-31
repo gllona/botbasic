@@ -123,10 +123,11 @@ class Splash extends Interaction
     /**
      * Factory method; crea un Splash con subtipo recurso y el contenido especificado
      *
-     * @param  InteractionResource  $resource       Recurso
-     * @return Splash|null                          null es retornado si el argumento no es una instancia de InteractionResource
+     * @param  InteractionResource  $resource           Recurso
+     * @param  InteractionResource  $captionResource    Otro Resource opcional que contiene el caption de $resource
+     * @return Splash|null                              null es retornado si el argumento no es una instancia de InteractionResource
      */
-    static public function createWithResource ($resource)
+    static public function createWithResource ($resource, $captionResource = null)
     {
         if (! $resource instanceof InteractionResource) {
             Log::register(Log::TYPE_RUNTIME, "S133 Argumento no es InteractionResource");
@@ -135,6 +136,7 @@ class Splash extends Interaction
         $s            = new Splash();
         $s->subType   = self::SUBTYPE_RESOURCE;
         $s->resources = [ $resource ];
+        if ($captionResource !== null) { $s->resources[] = $captionResource; }
         $s->save();
         return $s;
     }
