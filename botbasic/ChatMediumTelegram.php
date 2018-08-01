@@ -544,7 +544,7 @@ namespace botbasic {
                 return null;
             }
             if ($resource !== null) {
-                switch ($resource) {
+                switch ($resource->type) {
                     case InteractionResource::TYPE_IMAGE     : $method = "sendPhoto";     $content = $this->makePhotoContentBase(    $resource, $this->limitCaption($textOrCaption)); break;
                     case InteractionResource::TYPE_AUDIO     : $method = "sendAudio";     $content = $this->makeAudioContentBase(    $resource, $this->limitCaption($textOrCaption)); break;
                     case InteractionResource::TYPE_VOICE     : $method = "sendVoice";     $content = $this->makeVoiceContentBase(    $resource, $this->limitCaption($textOrCaption)); break;
@@ -552,7 +552,10 @@ namespace botbasic {
                     case InteractionResource::TYPE_VIDEO     : $method = "sendVideo";     $content = $this->makeVideoContentBase(    $resource, $this->limitCaption($textOrCaption)); break;
                     case InteractionResource::TYPE_VIDEONOTE : $method = "sendVideoNote"; $content = $this->makeVideoNoteContentBase($resource, $this->limitCaption($textOrCaption)); break;
                     case InteractionResource::TYPE_LOCATION  : $method = "sendLocation";  $content = $this->makeLocationContentBase($resource);                                       break;
-                    default                                  : $method = "sendMessage";   $content = $this->makeTextContentBase("CMTG433 invalid resource type in ChatMediumTelegram::makeJsonForPost()" . ($textOrCaption === null ? "" : " / $textOrCaption"));
+                    default                                  : $method = "sendMessage";
+                                                               $content = $this->makeTextContentBase("[INVALID RESOURCE TYPE]" . ($textOrCaption === null ? "" : " / $textOrCaption"));
+                                                               $this->conditionalLog(Log::TYPE_DAEMON, "CMTG433 invalid resource type in ChatMediumTelegram::makeJsonForPost()");
+
                 }
             }
             elseif ($textOrCaption === null && ($menuOptions === null || count($menuOptions) == 0)) {
