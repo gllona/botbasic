@@ -11,7 +11,7 @@
 
 
 // Main definitions
-define('BOTBASIC_PUBLIC_SERVER_URL',            'http://dev.bots.logicos.org');
+define('BOTBASIC_PUBLIC_SERVER_URL',            'http://dev.bots.logicos.org');   //TODO put https and delete ..../parser/media symlink
 define('BOTBASIC_BASEDIR',                      '/home/botbasic');
 define('BOTBASIC_LOGFILE',                      BOTBASIC_BASEDIR . '/logs/runtime.log');
 define("BOTBASIC_LANG_NAME",                    "BotBasic");
