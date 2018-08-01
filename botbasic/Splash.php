@@ -138,6 +138,8 @@ class Splash extends Interaction
         $s->resources = [ $resource ];
         if ($captionResource !== null) { $s->resources[] = $captionResource; }
         $s->save();
+        $resource->save($s);
+        if ($captionResource !== null) { $captionResource->save($s); }
         return $s;
     }
 

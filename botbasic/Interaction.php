@@ -181,7 +181,7 @@ abstract class Interaction implements Initializable
      * Guarda en BD una Interaction, creando el registro si no existe previamente
      *
      * @param  BotBasicRuntime|null     $runtime    El runtime de la VM que invoca, que es usado (si se pasa) para saber si el bot es anónimo
-     * @return bool|null                true en caso de éxito; null en caso de error de BD
+     * @return bool|null                            true en caso de éxito; null en caso de error de BD
      */
     public function save ($runtime = null)
     {

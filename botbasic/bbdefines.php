@@ -55,8 +55,8 @@ define('BOTBASIC_ROUTEQUEUE_LIMIT',         100);
 define('BOTBASIC_MAX_HTTP_REQUEST_SIZE_MB',  20);
 
 // Tuning: sending splashes to chatapp servers
-define('BOTBASIC_SENDERDAEMON_CRON_DELAY_SECS',              1.5);   // conservative lag from cron job start to start of webrouter script
-define('BOTBASIC_SENDERDAEMON_TELEGRAM_POST_TIMEOUT_SECS',    10);
+define('BOTBASIC_SENDERDAEMON_CRON_DELAY_SECS',              1.0);   // conservative lag from cron job start to start of webrouter script
+define('BOTBASIC_SENDERDAEMON_TELEGRAM_POST_TIMEOUT_SECS',    30);
 define('BOTBASIC_SENDERDAEMON_TELEGRAM_MIN_SECS_TO_RELOG',     5);
 define('BOTBASIC_SENDERDAEMON_TELEGRAM_MAX_SEND_ATTEMPTS',     3);
 define('BOTBASIC_SENDERDAEMON_TELEGRAM_WAIT_UNTIL_RETRY_SECS', 0);   // only applied when in debug mode
