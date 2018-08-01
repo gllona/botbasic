@@ -2604,7 +2604,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
      * Permite el preencolamiento hacia la chatapp de un DISPLAY; este método es para ser usado por runner4...()
      *
      * @param string        $id                 ID del Resource, el cual debe tener asociado un archivo o un Telegram file_id
-     * @param string        $caption            Caption del contenido multimedia
+     * @param null|string   $caption            Caption del contenido multimedia
      * @param null|string   $botName            Nombre del bot sobre el cual aplicar el Splash; o null para derivarlo
      * @param null|int      $bizModelUserId     ID del BizModel user sobre el cual aplicar el Splash; o null para derivarlo
      * @param null|int      $bbChannelId        ID del BotBasicChannel sobre el cual aplicar el Splash; o null para derivarlo
@@ -2614,7 +2614,9 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         if (! is_integer($id)) { return; }
         $on = $this->completeOn($botName, $bizModelUserId, $bbChannelId);
         if ($on === null) { return; }
-        $this->prints[] = [ [ 'type' => 'resource', 'id' => $id, 'caption' => $caption ], $on ];
+        $entry = [ 'type' => 'resource', 'id' => $id ];
+        if ($caption !== null) { $entry['caption'] = $caption; }
+        $this->prints[] = [ $entry, $on ];
     }
 
 
@@ -3159,7 +3161,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
     private function runner4display (&$parsedContent, $lineno, $bot)
     {
         $rvals           =& $parsedContent[1];
-        $hasTitle        =  $parsedContent[2] == 'TITLE';
+        $hasTitle        =  isset($parsedContent[2]) && $parsedContent[2] == 'TITLE';
         $title           =  $hasTitle ? $parsedContent[3] : null;
         $isOnAllChannels =  isset($parsedContent[$hasTitle ? 5 : 3]) && $parsedContent[$hasTitle ? 5 : 3] == 'CHANNELS';
         if ($isOnAllChannels) {

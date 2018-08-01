@@ -65,7 +65,8 @@ xdebug.remote_autostart=1
 
 >in dev machine
 
-ssh -R 9000:localhost:9000 gorka@dev.bots.logicos.org -N   # optional -f for daemon mode
+ssh -R 9000:localhost:9000 gorka@beta.bots.logicos.org -N   # optional -f for daemon mode
+ssh -L 33060:dev.bots.logicos.org:3306 gorka@beta.bots.logicos.org -N
 
 
 
