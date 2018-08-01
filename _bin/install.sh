@@ -227,10 +227,10 @@ END
 LINE="#0 0 * * * $BB_HOME/../backup/backup-databases >/dev/null 2>&1"
 (crontab -l; echo "$LINE") | crontab -
 
-LINE="#*/1 * * * * $BB_HOME/scripts/downloader/launcher.sh $BB_HOST_PRIVATE:8080 8 0 >/dev/null 2>/dev/null"
+LINE="#*/1 * * * * $BB_HOME/scripts/downloader/launcher.sh $BB_HOST_PRIVATE:8088 8 0 >/dev/null 2>/dev/null"
 (crontab -l; echo "$LINE") | crontab -
 
-LINE="#*/1 * * * * $BB_HOME/scripts/telegramsender/launcher.sh $BB_HOST_PRIVATE:8080 250 750 >/dev/null 2>/dev/null"
+LINE="#*/1 * * * * $BB_HOME/scripts/telegramsender/launcher.sh $BB_HOST_PRIVATE:8088 250 750 >/dev/null 2>/dev/null"
 (crontab -l; echo "$LINE") | crontab -
 
 

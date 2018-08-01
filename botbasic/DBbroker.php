@@ -636,6 +636,9 @@ END;
         }
         // unlock tables and return
         $unlock();
+
+        Log::register(Log::TYPE_DATABASE, "To send to Telegram: $id");
+
         return $data;
     }
 
