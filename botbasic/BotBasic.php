@@ -752,7 +752,7 @@ abstract class BotBasic
      */
     protected function isCommand ($text)
     {
-        return 1 === preg_match('/^\/[a-z0-9-]*$/', $text);
+        return 1 === preg_match('/^\/[a-z0-9_-]*$/', $text);
     }
 
 

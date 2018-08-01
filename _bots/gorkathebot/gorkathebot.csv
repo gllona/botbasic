@@ -25,7 +25,7 @@ prank2		I get more of your time that you of mine
 silly1		Wood in the stove, hair on the floor				
 absurd1		You have a thousand more important to do than this				
 commandOptions		Choose /ai /test				
-sendAnImage		Send me photos or /letmeask1 /letmeask2 /letmeask3 or /sendEli				
+sendAnImage		Send me photos or /letmeask1 /letmeask2 /letmeask3 or /send_eli				
 mediaInfo		Media type is {type} and id is {id}				
 sendOnlyPhoto		Attach now a photo				
 mediaId1		Media id is {id}				
@@ -125,7 +125,7 @@ main	main	main
 		GOSUB showStatus ok				
 		GOTO test				
 						
-/sendEli		CLEAR id				
+/send_eli		CLEAR id				
 		BLOAD photoEliDubai AS image TO id				
 		PRINT mediaId1				
 		DISPLAY id TITLE captionEliDubai				
