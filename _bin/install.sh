@@ -38,6 +38,7 @@ assertVarSet BB_HOST
 assertVarSet BB_ENV
 BB_HOST_ENV=$BB_ENV.$BB_FQD
 BB_HOST_PUBLIC=$BB_HOST.$BB_FQD
+BB_HOST_PARSER=parser.$BB_HOST.$BB_FQD
 BB_HOST_PRIVATE=local.$BB_HOST.$BB_FQD
 BB_CODE_REPO=botbasic-core
 assertVarSet BB_CODE_BRANCH
@@ -101,6 +102,7 @@ cat >>/etc/hosts <<END
 
 127.0.0.1   $BB_HOST_ENV
 127.0.0.1   $BB_HOST_PUBLIC
+127.0.0.1   $BB_HOST_PARSER
 127.0.0.1   $BB_HOST_PRIVATE
 END
 
@@ -119,10 +121,25 @@ a2dissite 000-default.conf
 
 cat >/etc/apache2/sites-available/$BB_HOST_PRIVATE.conf <<END
 Include /etc/apache2/mods-available/php$BB_PHP_VERSION.conf
+<VirtualHost *:81>
+    ServerName   $BB_HOST_PRIVATE
+    DocumentRoot $BB_HOME
+    <Directory   $BB_HOME>
+#       Order allow,deny
+#       Allow from all
+        Require all granted
+    </Directory>
+    ErrorLog  $BB_HOME/../logs/error.log
+    CustomLog $BB_HOME/../logs/access.log combined
+</VirtualHost>
+END
+
+cat >/etc/apache2/sites-available/$BB_HOST_PARSER.conf <<END
+Include /etc/apache2/mods-available/php$BB_PHP_VERSION.conf
 <VirtualHost *:80>
-    ServerName $BB_HOST_PRIVATE
+    ServerName   $BB_HOST_PARSER
     DocumentRoot $BB_HOME/scripts/parser
-    <Directory $BB_HOME/scripts/parser>
+    <Directory   $BB_HOME/scripts/parser>
 #       Order allow,deny
 #       Allow from all
         Require all granted
@@ -152,6 +169,11 @@ Include /etc/apache2/mods-available/php$BB_PHP_VERSION.conf
     SSLCertificateFile    /etc/letsencrypt/live/$BB_HOST_ENV/fullchain.pem
     SSLCertificateKeyFile /etc/letsencrypt/live/$BB_HOST_ENV/privkey.pem
 </VirtualHost>
+END
+
+cat >>/etc/apache2/ports.conf <<END
+
+Listen 81
 END
 
 a2enmod ssl
@@ -184,18 +206,21 @@ END
 
 # CRONTAB
 
-LINE="##0 0 * * * $BB_HOME/../backup/backup-databases >/dev/null 2>&1"
+LINE="#0 0 * * * $BB_HOME/../backup/backup-databases >/dev/null 2>&1"
 (crontab -l; echo "$LINE") | crontab -
 
-LINE="##*/1 * * * * $BB_HOME/scripts/downloader/launcher.sh >/dev/null 2>/dev/null"
+LINE="#*/1 * * * * $BB_HOME/scripts/downloader/launcher.sh $BB_HOST_PRIVATE:81 8 >/dev/null 2>/dev/null"
 (crontab -l; echo "$LINE") | crontab -
 
-LINE="#*/1 * * * * $BB_HOME/scripts/telegramsender/launcher.sh 1000 750 >/dev/null 2>/dev/null"
+LINE="#*/1 * * * * $BB_HOME/scripts/telegramsender/launcher.sh $BB_HOST_PRIVATE:81 250 750 >/dev/null 2>/dev/null"
 (crontab -l; echo "$LINE") | crontab -
+
+
 
 # ENABLE SERVICES
 
 a2ensite $BB_HOST_PRIVATE.conf
+a2ensite $BB_HOST_PARSER.conf
 a2ensite $BB_HOST_ENV.conf
 service apache2 restart
 
