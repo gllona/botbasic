@@ -3453,23 +3453,27 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             $dir       = "$basedir/$subdir";
             return $dir;
         };
+        $return = function ($ok) use (&$parsedContent, $lineno, $bot) {
+            $this->setVar($parsedContent[5], $ok, $lineno, $bot);
+            return -1;
+        };
         // load the resource
         $resourceId = $this->getVar($parsedContent[1], $lineno, $bot);
         $resource   = InteractionResource::load($resourceId);
         if ($resource === null) {
             Log::register(Log::TYPE_BBCODE, "RT3454 No se puede cargar el resource con ID $resourceId", $this, $lineno);
-            return -1;
+            return $return(self::NOTHING);
         }
         // get and complete filenames
         if ($resource->filename === null) {
             Log::register(Log::TYPE_BBCODE, "RT3459 El resource con ID $resourceId no tiene un archivo asociado", $this, $lineno);
-            return -1;
+            return $return(self::NOTHING);
         }
         $srcFilename = BOTBASIC_BASEDIR . '/' . $resource->filename;
         $tgtFilename = $this->getVar($parsedContent[3], $lineno, $bot);
         if ($tgtFilename === self::NOTHING) {
             Log::register(Log::TYPE_BBCODE, "RT3466 Se intenta guardar un resource en un nombre de archivo vacio", $this, $lineno);
-            return -1;
+            return $return(self::NOTHING);
         }
         if (substr($tgtFilename, 0, 1) == '/') { $tgtFilename = substr($tgtFilename, 1); }
         // build target directory
@@ -3477,13 +3481,14 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         $tgtFilename = $dir . '/' . $tgtFilename;
         if (! $mkdir(dirname($tgtFilename))) {
             Log::register(Log::TYPE_RUNTIME, "RT3479 No se puede crear el directorio $dir", $this, $lineno);
-            return -1;
+            return $return(self::NOTHING);
         }
         // copy to target directory and return
         if (! copy($srcFilename, $tgtFilename)) {
             Log::register(Log::TYPE_BBCODE, "RT3467 No se puede copiar desde $srcFilename hacia $tgtFilename", $this, $lineno);
+            return $return(self::NOTHING);
         }
-        return -1;
+        return $return("1");
     }
 
 

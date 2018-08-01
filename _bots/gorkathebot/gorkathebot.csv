@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.4	gorkathebot				
+VERSION	0.2.5	gorkathebot				
 BOTS	main					
 						
 						
@@ -25,7 +25,7 @@ prank2		I get more of your time that you of mine
 silly1		Wood in the stove, hair on the floor				
 absurd1		You have a thousand more important to do than this				
 commandOptions		Choose /ai /test				
-sendAnImage		Send me photos or /letmeask1 /letmeask2 /letmeask3 or /send-eli				
+sendAnImage		Send me photos or /letmeask1 /letmeask2 /letmeask3 or /sendEli				
 mediaInfo		Media type is {type} and id is {id}				
 sendOnlyPhoto		Attach now a photo				
 mediaId1		Media id is {id}				
@@ -34,7 +34,9 @@ mediaId3		Media id is {id}, type is {type} and caption is {caption}
 photoEliDubai		eli-dubai.jpg				
 captionEliDubai		I couldn’t have asked for anything more perfect than this				
 filenameUploaded		uploaded-photo.{format}				
-						
+waitAndContinue		Wait a little and continue				
+ook		Ok				
+lastStatusWas		Result of last operation was [{lastStatus}]				
 						
 						
 						
@@ -117,12 +119,21 @@ main	main	main
 /letmeask3		CLEAR id type caption				
 		INPUT image TITLE sendOnlyPhoto TO id type caption				
 		PRINT mediaId3				
+		GOSUB wait				
 		EXTRACT format FROM id TO format				
-		BSAVE id AS filenameUploaded				
+		BSAVE id AS filenameUploaded TO ok				
+		GOSUB showStatus ok				
 		GOTO test				
 						
-/send-eli		CLEAR id				
+/sendEli		CLEAR id				
 		BLOAD photoEliDubai AS image TO id				
 		PRINT mediaId1				
 		DISPLAY id TITLE captionEliDubai				
 		GOTO test				
+						
+	wait	MENU TITLE waitAndContinue OPTIONS ook TO res				
+		RETURN				
+						
+	showStatus	ARGS lastStatus				
+		PRINT lastStatusWas				
+		RETURN				

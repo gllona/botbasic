@@ -2050,8 +2050,9 @@ class BotBasicParser extends BotBasic
             $symbol, $ttokens, $lineno, $bot, [
                 'BSAVE' => 'type::0:resource id:isLvalue',
                 'AS'    => 'type::0:filename:isLvalue',
+                'TO'    => 'type::0:result status:isLvalue',
             ],
-            [ 'AS' ]
+            [ 'AS', 'TO' ]
         );
     }
 

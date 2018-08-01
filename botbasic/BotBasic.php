@@ -222,7 +222,7 @@ abstract class BotBasic
         [ 'sentence', 'DISPLAY <variable1> … ON <BotName> <variable2opt> <variable3opt>' ],
         [ 'sentence', 'DISPLAY <variable1> …' ],
         [ 'sentence', 'BLOAD <variable1> AS <mediaType> TO <variable2>' ],
-        [ 'sentence', 'BSAVE <variable1> AS <variable2>' ],
+        [ 'sentence', 'BSAVE <variable1> AS <variable2> TO <variable3>' ],
         [ 'sentence', 'EXTRACT <extractSpec> FROM <variable1> TO <variable2>' ],
         [ 'mediaType', 'image' ],
         [ 'mediaType', 'audio' ],
