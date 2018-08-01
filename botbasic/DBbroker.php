@@ -2127,7 +2127,7 @@ END;
             $additionalSet = $interactionId === null ? '' : ", interaction_id = $interactionId";
             if ($resource->clonedFrom !== null) {
                 $type       = InteractionResource::TYPE_CLONED;
-                $clonedFrom = $resource->clonedFrom;
+                $clonedFrom = $resource->clonedFrom === null ? -1 : $resource->clonedFrom->id;
                 $sql = <<<END
                     UPDATE resource
                        SET type = $type, cloned_from_id = $clonedFrom, download_state = '$downloadState' $additionalSet
