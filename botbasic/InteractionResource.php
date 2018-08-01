@@ -253,6 +253,7 @@ class InteractionResource
         if ($newCmType !== null && $clone->cmType != $newCmType) {
             $clone->cmType = $newCmType;
             $clone->fileId = null;
+            //TODO esta logica tambien se debe aplicar para cuando el fileId pertenece a otro bot de Telegram, ya que en Telegram los file_id no son compartibles entre bots
         }
         $clone->clonedFrom = $this;
         $res = $clone->save(null, false);
