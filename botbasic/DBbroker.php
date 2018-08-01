@@ -2106,7 +2106,7 @@ END;
             $additionalValue = $interactionId === null ? '' : ", $interactionId";
             if ($resource->clonedFrom !== null) {
                 $type       = InteractionResource::TYPE_CLONED;
-                $clonedFrom = $resource->clonedFrom;
+                $clonedFrom = $resource->clonedFrom === null ? -1 : $resource->clonedFrom->id;
                 $sql = <<<END
                     INSERT INTO resource (type, cloned_from_id, download_state $additionalColum)
                     VALUES ($type, $clonedFrom, 'nonapplicable' $additionalValue);

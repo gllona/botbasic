@@ -65,7 +65,7 @@ class InteractionResource
     /** @var int Tipo del recurso (TYPE_...) */
     public $type          = null;
 
-    /** @var null InteractionResource original; aplica sólo a generados por clonación */
+    /** @var null|InteractionResource Resource original; aplica sólo a generados por clonación */
     public $clonedFrom    = null;
 
     /** @var int Tipo ($type) del ChatMedium del que proviene el recurso; se refleja en BD a efectos de business intelligence */
