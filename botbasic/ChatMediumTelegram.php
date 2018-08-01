@@ -881,7 +881,7 @@ namespace botbasic {
                 if ($res === false) { return null; }
             }
             // link file in target directory
-            $target       = BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR . '/' . $resource->filename;
+            $target       = BOTBASIC_BASEDIR . '/' . $resource->filename;
             $filename     = basename($resource->filename);
             $fullFilename = "$dir/$filename";
             if (symlink($target, $fullFilename) === false) { return null; }
