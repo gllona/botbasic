@@ -409,18 +409,18 @@ abstract class BotConfig
             self::MSG_DATATYPE_DATA_INTEGER       => "un número entero|123",
             self::MSG_DATATYPE_DATA_DECIMAL       => "un número decimal|123,45",
             self::MSG_DATATYPE_DATA_ARROBAUSERNAME=> "un nombre de usuario|@usuario",
-            self::MSG_DATATYPE_DATA_IMAGE         => "una foto",
-            self::MSG_DATATYPE_DATA_AUDIO         => "una grabación de audio",
-            self::MSG_DATATYPE_DATA_VOICE         => "una nota de voz",
-            self::MSG_DATATYPE_DATA_VIDEO         => "un video",
-            self::MSG_DATATYPE_DATA_VIDEONOTE     => "una nota de video",
-            self::MSG_DATATYPE_DATA_DOCUMENT      => "un documento",
-            self::MSG_DATATYPE_DATA_LOCATION      => "una ubicacion de GPS",
-            self::MSG_DATATYPE_DATA_ANY           => "cualquier tipo de contenido",
-            self::MSG_DATATYPE_DATA_SOUND         => "una grabación de audio o nota de voz",
-            self::MSG_DATATYPE_DATA_CLIP          => "una grabación o nota de audio o video",
-            self::MSG_DATATYPE_DATA_VISUAL        => "una foto o video",
-            self::MSG_DATATYPE_DATA_MEDIA         => "una foto o grabación de voz o video",
+            self::MSG_DATATYPE_DATA_IMAGE         => "una foto|",
+            self::MSG_DATATYPE_DATA_AUDIO         => "una grabación de audio|",
+            self::MSG_DATATYPE_DATA_VOICE         => "una nota de voz|",
+            self::MSG_DATATYPE_DATA_VIDEO         => "un video|",
+            self::MSG_DATATYPE_DATA_VIDEONOTE     => "una nota de video|",
+            self::MSG_DATATYPE_DATA_DOCUMENT      => "un documento|",
+            self::MSG_DATATYPE_DATA_LOCATION      => "una ubicacion de GPS|",
+            self::MSG_DATATYPE_DATA_ANY           => "cualquier tipo de contenido|",
+            self::MSG_DATATYPE_DATA_SOUND         => "una grabación de audio o nota de voz|",
+            self::MSG_DATATYPE_DATA_CLIP          => "una grabación o nota de audio o video|",
+            self::MSG_DATATYPE_DATA_VISUAL        => "una foto o video|",
+            self::MSG_DATATYPE_DATA_MEDIA         => "una foto o grabación de voz o video|",
         ],
         "en" => [
             self::MSG_EXCEPTION_CANT_CREATE_CMC   => "Sorry, can't access system at this time.",
@@ -444,18 +444,18 @@ abstract class BotConfig
             self::MSG_DATATYPE_DATA_INTEGER       => "an integer number|123",
             self::MSG_DATATYPE_DATA_DECIMAL       => "an decimal number|123.45",
             self::MSG_DATATYPE_DATA_ARROBAUSERNAME=> "a username|@username",
-            self::MSG_DATATYPE_DATA_IMAGE         => "a picture",
-            self::MSG_DATATYPE_DATA_AUDIO         => "an audio recording",
-            self::MSG_DATATYPE_DATA_VOICE         => "a voice note",
-            self::MSG_DATATYPE_DATA_VIDEO         => "a video",
-            self::MSG_DATATYPE_DATA_VIDEONOTE     => "a video note",
-            self::MSG_DATATYPE_DATA_DOCUMENT      => "a document",
-            self::MSG_DATATYPE_DATA_LOCATION      => "a GPS location",
-            self::MSG_DATATYPE_DATA_ANY           => "any content type",
-            self::MSG_DATATYPE_DATA_SOUND         => "an audio recording of voice note",
-            self::MSG_DATATYPE_DATA_CLIP          => "an audio or video recording or note",
-            self::MSG_DATATYPE_DATA_VISUAL        => "a picture or video",
-            self::MSG_DATATYPE_DATA_MEDIA         => "any media content",
+            self::MSG_DATATYPE_DATA_IMAGE         => "a picture|",
+            self::MSG_DATATYPE_DATA_AUDIO         => "an audio recording|",
+            self::MSG_DATATYPE_DATA_VOICE         => "a voice note|",
+            self::MSG_DATATYPE_DATA_VIDEO         => "a video|",
+            self::MSG_DATATYPE_DATA_VIDEONOTE     => "a video note|",
+            self::MSG_DATATYPE_DATA_DOCUMENT      => "a document|",
+            self::MSG_DATATYPE_DATA_LOCATION      => "a GPS location|",
+            self::MSG_DATATYPE_DATA_ANY           => "any content type|",
+            self::MSG_DATATYPE_DATA_SOUND         => "an audio recording of voice note|",
+            self::MSG_DATATYPE_DATA_CLIP          => "an audio or video recording or note|",
+            self::MSG_DATATYPE_DATA_VISUAL        => "a picture or video|",
+            self::MSG_DATATYPE_DATA_MEDIA         => "any media content|",
         ],
     ];
 
@@ -485,6 +485,18 @@ abstract class BotConfig
             self::MSG_DATATYPE_DATA_POSINTEGER    => "un número sin decimales|99",
             self::MSG_DATATYPE_DATA_POSDECIMAL    => "un número con o sin decimales|99,12",
             self::MSG_DATATYPE_DATA_ARROBAUSERNAME=> "un usuario|@joe",
+            self::MSG_DATATYPE_DATA_IMAGE         => "una foto|",
+            self::MSG_DATATYPE_DATA_AUDIO         => "una grabación de audio|",
+            self::MSG_DATATYPE_DATA_VOICE         => "una nota de voz|",
+            self::MSG_DATATYPE_DATA_VIDEO         => "un video|",
+            self::MSG_DATATYPE_DATA_VIDEONOTE     => "una nota de video|",
+            self::MSG_DATATYPE_DATA_DOCUMENT      => "un documento|",
+            self::MSG_DATATYPE_DATA_LOCATION      => "una ubicacion de GPS|",
+            self::MSG_DATATYPE_DATA_ANY           => "cualquier tipo de contenido|",
+            self::MSG_DATATYPE_DATA_SOUND         => "una grabación de audio o nota de voz|",
+            self::MSG_DATATYPE_DATA_CLIP          => "una grabación o nota de audio o video|",
+            self::MSG_DATATYPE_DATA_VISUAL        => "una foto o video|",
+            self::MSG_DATATYPE_DATA_MEDIA         => "una foto o grabación de voz o video|",
         ],
         "en" => [
             self::MSG_EXCEPTION_CANT_CREATE_CMC   => "The system is currently in manteinance mode.",
@@ -508,6 +520,18 @@ abstract class BotConfig
             self::MSG_DATATYPE_DATA_POSINTEGER    => "a number without decimals|99",
             self::MSG_DATATYPE_DATA_POSDECIMAL    => "a number with or without decimals|99.12",
             self::MSG_DATATYPE_DATA_ARROBAUSERNAME=> "a username|@joe",
+            self::MSG_DATATYPE_DATA_IMAGE         => "a picture|",
+            self::MSG_DATATYPE_DATA_AUDIO         => "an audio recording|",
+            self::MSG_DATATYPE_DATA_VOICE         => "a voice note|",
+            self::MSG_DATATYPE_DATA_VIDEO         => "a video|",
+            self::MSG_DATATYPE_DATA_VIDEONOTE     => "a video note|",
+            self::MSG_DATATYPE_DATA_DOCUMENT      => "a document|",
+            self::MSG_DATATYPE_DATA_LOCATION      => "a GPS location|",
+            self::MSG_DATATYPE_DATA_ANY           => "any content type|",
+            self::MSG_DATATYPE_DATA_SOUND         => "an audio recording of voice note|",
+            self::MSG_DATATYPE_DATA_CLIP          => "an audio or video recording or note|",
+            self::MSG_DATATYPE_DATA_VISUAL        => "a picture or video|",
+            self::MSG_DATATYPE_DATA_MEDIA         => "any media content|",
         ],
     ];
 
@@ -671,10 +695,10 @@ abstract class BotConfig
             return null;
         }
         if (! in_array($locale, self::$validLocales)) { $locale = self::$validLocales[0]; }
-        $templateMsgIdx = BOTBASIC_INPUT_HINTS_WITH_EXAMPLES ? self::MSG_HINT_TEMPLATE1_FOR_DATATYPE : self::MSG_HINT_TEMPLATE2_FOR_DATATYPE;
-        $res            = self::botMessage($bbCode, $locale, $templateMsgIdx);
         $pair           = self::botMessage($bbCode, $locale, $map[$dataType]);
         list ($datatype, $example) = explode('|', $pair);
+        $templateMsgIdx = BOTBASIC_INPUT_HINTS_WITH_EXAMPLES && $example != '' ? self::MSG_HINT_TEMPLATE1_FOR_DATATYPE : self::MSG_HINT_TEMPLATE2_FOR_DATATYPE;
+        $res            = self::botMessage($bbCode, $locale, $templateMsgIdx);
         $res = str_replace('{datatype}', $datatype, $res);
         $res = str_replace('{example}',  $example,  $res);
         return $res;
