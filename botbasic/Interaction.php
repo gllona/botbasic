@@ -458,8 +458,8 @@ abstract class Interaction implements Initializable
      */
     public function getResources ($exceptTypes = null, $onlyTypes = null)
     {
-        if (! is_array($exceptTypes)) { $exceptTypes = $exceptTypes === null ? [] : [ $exceptTypes ]; }
-        if (! is_array($onlyTypes))   { $onlyTypes   = $onlyTypes   === null ? [] : [ $onlyTypes   ]; }
+        if (! is_array($exceptTypes)) { $exceptTypes = $exceptTypes === null ? []   : [ $exceptTypes ]; }
+        if (! is_array($onlyTypes))   { $onlyTypes   = $onlyTypes   === null ? null : [ $onlyTypes   ]; }
         $res = [];
         foreach ($this->resources as $r) {
             if (! in_array($r->type, $exceptTypes) && ($onlyTypes === null || in_array($r->type, $onlyTypes))) { $res[] = $r; }
