@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.5	gorkathebot				
+VERSION	0.2.6	gorkathebot				
 BOTS	main					
 						
 						
@@ -31,7 +31,7 @@ sendOnlyPhoto		Attach now a photo
 mediaId1		Media id is {id}				
 mediaId2		Media id is {id}, type is {type}				
 mediaId3		Media id is {id}, type is {type} and caption is {caption}				
-photoEliDubai		eli-dubai.jpg				
+photoEliDubai		eli-dubai-2.jpg				
 captionEliDubai		I couldn’t have asked for anything more perfect than this				
 filenameUploaded		uploaded-photo.{format}				
 waitAndContinue		Wait a little and continue				

@@ -222,12 +222,13 @@ class InteractionResource
      */
     static public function createFromFile ($type, $filename, $cmType)
     {
-        $r = new InteractionResource($type);
+        if (! file_exists($filename)) { return null; }
         $dbFilename = DBbroker::storeFile($filename);
         if ($dbFilename === null) {
             Log::register(Log::TYPE_DATABASE, "R199 Error de BD");
             return null;
         }
+        $r = new InteractionResource($type);
         $r->filename = $dbFilename;
         $r->cmType   = $cmType;
         $res = $r->save(null, false);
