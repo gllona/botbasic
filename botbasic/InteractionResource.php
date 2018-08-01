@@ -277,6 +277,7 @@ class InteractionResource
      */
     static public function load ($id)
     {
+        if (! is_integer($id)) { return null; }
         $data = DBbroker::readResource($id);
         if ($data === null)  {
             Log::register(Log::TYPE_DATABASE, "R245 Error de BD");

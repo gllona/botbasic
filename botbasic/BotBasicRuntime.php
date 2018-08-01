@@ -2611,6 +2611,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
      */
     public function splashHelperDisplay ($id, $caption, $botName = null, $bizModelUserId = null, $bbChannelId = null)
     {
+        if (is_integer($id)) { return; }
         $on = $this->completeOn($botName, $bizModelUserId, $bbChannelId);
         if ($on === null) { return; }
         $this->prints[] = [ [ 'type' => 'resource', 'id' => $id, 'caption' => $caption ], $on ];
