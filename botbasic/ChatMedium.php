@@ -458,7 +458,7 @@ abstract class ChatMedium
                     $captionResources = $splash->getResources(null, InteractionResource::TYPE_CAPTION);
                     $caption          = isset($captionResources[0]) ? $captionResources[0]->metainfo : null;
                     $resource         = $splash->getTheResource();
-                    if ($caption !== null)  { $resource->metainfo = $caption; $resource->save($splash); }
+                    if ($caption !== null)  { $resource->metainfo = $caption; }   //$resource->save($splash); }
                     if ($currentText != '') { $textsAndResources[] = $currentText; $currentText = '';   }
                     $textsAndResources[] = $resource;
                     break;
