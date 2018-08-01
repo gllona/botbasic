@@ -3449,6 +3449,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         {
             $basedir   = BOTBASIC_PRIVATE_MEDIA_DIR;
             $datedir   = date("Ym");
+            $mediaType = InteractionResource::typeString($mediaType);
             $subdir    = "$mediaType/$datedir";
             $dir       = "$basedir/$subdir";
             return $dir;
