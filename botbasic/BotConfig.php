@@ -347,6 +347,42 @@ abstract class BotConfig
     /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
     const MSG_DATATYPE_DATA_ARROBAUSERNAME= 121;
 
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_IMAGE         = 122;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_AUDIO         = 123;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_VOICE         = 124;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_VIDEO         = 125;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_VIDEONOTE     = 126;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_DOCUMENT      = 127;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_LOCATION      = 128;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_ANY           = 129;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_SOUND         = 130;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_CLIP          = 131;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_VISUAL        = 132;
+
+    /** @const Indice de mensaje autónomo (dual): descripción de un tipo de dato para INPUT's y ejemplo a mostrarse */
+    const MSG_DATATYPE_DATA_MEDIA         = 133;
+
 
 
     /** @var array Mapa Base que contiene los textos de los mensajes MSG_..., según locale */
@@ -373,6 +409,18 @@ abstract class BotConfig
             self::MSG_DATATYPE_DATA_INTEGER       => "un número entero|123",
             self::MSG_DATATYPE_DATA_DECIMAL       => "un número decimal|123,45",
             self::MSG_DATATYPE_DATA_ARROBAUSERNAME=> "un nombre de usuario|@usuario",
+            self::MSG_DATATYPE_DATA_IMAGE         => "una foto",
+            self::MSG_DATATYPE_DATA_AUDIO         => "una grabación de audio",
+            self::MSG_DATATYPE_DATA_VOICE         => "una nota de voz",
+            self::MSG_DATATYPE_DATA_VIDEO         => "un video",
+            self::MSG_DATATYPE_DATA_VIDEONOTE     => "una nota de video",
+            self::MSG_DATATYPE_DATA_DOCUMENT      => "un documento",
+            self::MSG_DATATYPE_DATA_LOCATION      => "una ubicacion de GPS",
+            self::MSG_DATATYPE_DATA_ANY           => "cualquier tipo de contenido",
+            self::MSG_DATATYPE_DATA_SOUND         => "una grabación de audio o nota de voz",
+            self::MSG_DATATYPE_DATA_CLIP          => "una grabación o nota de audio o video",
+            self::MSG_DATATYPE_DATA_VISUAL        => "una foto o video",
+            self::MSG_DATATYPE_DATA_MEDIA         => "una foto o grabación de voz o video",
         ],
         "en" => [
             self::MSG_EXCEPTION_CANT_CREATE_CMC   => "Sorry, can't access system at this time.",
@@ -396,6 +444,18 @@ abstract class BotConfig
             self::MSG_DATATYPE_DATA_INTEGER       => "an integer number|123",
             self::MSG_DATATYPE_DATA_DECIMAL       => "an decimal number|123.45",
             self::MSG_DATATYPE_DATA_ARROBAUSERNAME=> "a username|@username",
+            self::MSG_DATATYPE_DATA_IMAGE         => "a picture",
+            self::MSG_DATATYPE_DATA_AUDIO         => "an audio recording",
+            self::MSG_DATATYPE_DATA_VOICE         => "a voice note",
+            self::MSG_DATATYPE_DATA_VIDEO         => "a video",
+            self::MSG_DATATYPE_DATA_VIDEONOTE     => "a video note",
+            self::MSG_DATATYPE_DATA_DOCUMENT      => "a document",
+            self::MSG_DATATYPE_DATA_LOCATION      => "a GPS location",
+            self::MSG_DATATYPE_DATA_ANY           => "any content type",
+            self::MSG_DATATYPE_DATA_SOUND         => "an audio recording of voice note",
+            self::MSG_DATATYPE_DATA_CLIP          => "an audio or video recording or note",
+            self::MSG_DATATYPE_DATA_VISUAL        => "a picture or video",
+            self::MSG_DATATYPE_DATA_MEDIA         => "any media content",
         ],
     ];
 
@@ -580,15 +640,27 @@ abstract class BotConfig
     static public function buildInputHelperForDatatype ($locale, $dataType, $bbCode, $aNewInput = true)
     {
         $map = [
-            'date'            => self::MSG_DATATYPE_DATA_DATE,
-            'positiveInteger' => self::MSG_DATATYPE_DATA_POSINTEGER,
-            'positiveDecimal' => self::MSG_DATATYPE_DATA_POSDECIMAL,
-            'string'          => self::MSG_DATATYPE_DATA_STRING,
-            'phone'           => self::MSG_DATATYPE_DATA_PHONE,
-            'email'           => self::MSG_DATATYPE_DATA_EMAIL,
-            'integer'         => self::MSG_DATATYPE_DATA_INTEGER,
-            'decimal'         => self::MSG_DATATYPE_DATA_DECIMAL,
-            'arrobaUsername'  => self::MSG_DATATYPE_DATA_ARROBAUSERNAME,
+            'date'              => self::MSG_DATATYPE_DATA_DATE,
+            'positiveInteger'   => self::MSG_DATATYPE_DATA_POSINTEGER,
+            'positiveDecimal'   => self::MSG_DATATYPE_DATA_POSDECIMAL,
+            'string'            => self::MSG_DATATYPE_DATA_STRING,
+            'phone'             => self::MSG_DATATYPE_DATA_PHONE,
+            'email'             => self::MSG_DATATYPE_DATA_EMAIL,
+            'integer'           => self::MSG_DATATYPE_DATA_INTEGER,
+            'decimal'           => self::MSG_DATATYPE_DATA_DECIMAL,
+            'arrobaUsername'    => self::MSG_DATATYPE_DATA_ARROBAUSERNAME,
+            'image'             => self::MSG_DATATYPE_DATA_IMAGE,
+            'audio'             => self::MSG_DATATYPE_DATA_AUDIO,
+            'voice'             => self::MSG_DATATYPE_DATA_VOICE,
+            'video'             => self::MSG_DATATYPE_DATA_VIDEO,
+            'videonote'         => self::MSG_DATATYPE_DATA_VIDEONOTE,
+            'document'          => self::MSG_DATATYPE_DATA_DOCUMENT,
+            'location'          => self::MSG_DATATYPE_DATA_LOCATION,
+            'any'               => self::MSG_DATATYPE_DATA_ANY,
+            'sound'             => self::MSG_DATATYPE_DATA_SOUND,
+            'clip'              => self::MSG_DATATYPE_DATA_CLIP,
+            'visual'            => self::MSG_DATATYPE_DATA_VISUAL,
+            'media'             => self::MSG_DATATYPE_DATA_MEDIA,
         ];
         if (! isset($map[$dataType])) {
             Log::register(Log::TYPE_RUNTIME, "BC560 Datatype $dataType no soportado");
