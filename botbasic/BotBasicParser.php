@@ -1786,7 +1786,8 @@ class BotBasicParser extends BotBasic
                 'DISPLAY' => 'split::1..|type::0:text expression:isLvalue+inf:text expression:isLvalue',
                 'TITLE'   => 'type::0:caption:isRvalue',
                 'ON'      => 'split::1..3|type::0:bot name:isBotOrChannelsRW+1:variable:isLvalue+2:variable:isLvalue',
-            ]
+            ],
+            [ 'ON' ]
         );
         $pos = array_search($this->TOK('ON'), $ttokens);
         if ($pos !== false && $ttokens[$pos+1][0] == $this->TOK('CHANNELS')) {
@@ -2025,6 +2026,7 @@ class BotBasicParser extends BotBasic
         return $this->parserCheckAllPoss(
             $symbol, $ttokens, $lineno, $bot, [
                 'BLOAD' => 'type::0:filename:isLvalue',
+                'AS'    => 'symbol::0:mediaType',
                 'TO'    => 'type::0:resource id:isLvalue',
             ],
             [ 'TO' ]
@@ -2069,9 +2071,9 @@ class BotBasicParser extends BotBasic
         $component = $ttokens[1];
         $res = $this->parserCheckAllPoss(
             $symbol, $ttokens, $lineno, $bot, [
-                'INPUT' => 'symbol::0:extractSpec',
-                'FROM'  => 'type::0:source:isLvalue',
-                'TO'    => 'type::0:target:isLvalue',
+                'EXTRACT' => 'symbol::0:extractSpec',
+                'FROM'    => 'type::0:source:isLvalue',
+                'TO'      => 'type::0:target:isLvalue',
             ],
             [ 'FROM', 'TO' ]
         );

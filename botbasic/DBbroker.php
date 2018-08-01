@@ -2165,8 +2165,8 @@ END;
      */
     static public function storeFile ($filename)
     {
-        // FIXME a possible policy (NOTE: works as is here): copy file from $filename to a new, generic store for files for all chatmedia; then return the new filename (ver utilidad de la migración en el comentario arriba)
-        return $filename;
+        $shortenedFilename = strpos($filename, BOTBASIC_BASEDIR) === 0 ? substr($filename, strlen(BOTBASIC_BASEDIR) + 1) : $filename;
+        return $shortenedFilename;
     }
 
 
@@ -2651,7 +2651,7 @@ END;
             exec(BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR . "/" . $proc[0] . " $oldFilename $filename", $output, $res);
             if ($res == 0) { $newFilename = $filename; }
         }
-        $shortenedFilename = strpos($newFilename, BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) === 0 ? substr($newFilename, strlen(BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR) + 1) : $newFilename;
+        $shortenedFilename = strpos($newFilename, BOTBASIC_BASEDIR) === 0 ? substr($newFilename, strlen(BOTBASIC_BASEDIR) + 1) : $newFilename;
         return $shortenedFilename;
     }
 

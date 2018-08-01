@@ -871,8 +871,8 @@ namespace botbasic {
             $basedir   = BOTBASIC_PUBLIC_MEDIA_DIR;
             $typedir   = InteractionResource::typeString($resource->type);
             $datedir   = date("Ym");
-            $commonDir = "$typedir/$datedir";
-            $dir       = "$basedir/$commonDir";
+            $commondir = "$typedir/$datedir";
+            $dir       = "$basedir/$commondir";
             if (! is_dir($dir)) {
                 $res = mkdir($dir, 0775, true);
                 if ($res === false) { return null; }
@@ -883,7 +883,7 @@ namespace botbasic {
             $fullFilename = "$dir/$filename";
             if (symlink($target, $fullFilename) === false) { return null; }
             // make and return URL
-            $url = BOTBASIC_PUBLIC_MEDIA_URL . "/$commonDir/$filename";
+            $url = BOTBASIC_PUBLIC_MEDIA_URL . "/$commondir/$filename";
             return $url;
         }
 

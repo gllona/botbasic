@@ -3392,6 +3392,130 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
 
 
     /**
+     * Runner4... para BLOAD
+     *
+     * @param  array        $parsedContent  Tokens de la línea de código ya transformados por el parser (no serán modificados)
+     * @param  int          $lineno         Número de línea del programa BotBasic
+     * @param  string       $bot            Bot del programa BotBasic
+     * @return bool                         Nuevo número de línea (salto de ejecución); o -1 si se debe seguir la secuencia lineal
+     */
+    private function runner4bload (&$parsedContent, $lineno, $bot)
+    {
+        $loadFile = function ($filename, $mediaType)
+        {
+            if ($filename === null || $filename == '') { return null; }
+            if (substr($filename, 0, 1) != '/') { $filename = BOTBASIC_PRIVATE_MEDIA_DIR . '/' . $filename; }
+            if (! file_exists($filename)) { return null; }
+            $resource = InteractionResource::createFromFile(InteractionResource::getType($mediaType), $filename);
+            return $resource;
+        };
+        // try to load locally
+        $filename = $this->getVar($parsedContent[1], $lineno, $bot);
+        $resource = $loadFile($filename, $parsedContent[3]);
+        // if not, try to download from cloud and then load locally
+        if ($resource === null) {
+            $filename = '';   //TODO download from the cloud to $filename
+            $resource = $loadFile($filename, $parsedContent[3]);
+        }
+        if ($resource === null) {
+            Log::register(Log::TYPE_BBCODE, "RT3420 No se puede cargar el resource desde $filename", $this, $lineno);
+        }
+        // set the var
+        $resourceId = $resource === null ? self::NOTHING : $resource->id;
+        $this->setVar($parsedContent[5], $resourceId, $lineno, $bot, false);
+        return -1;
+    }
+
+
+
+    /**
+     * Runner4... para BSAVE
+     *
+     * @param  array        $parsedContent  Tokens de la línea de código ya transformados por el parser (no serán modificados)
+     * @param  int          $lineno         Número de línea del programa BotBasic
+     * @param  string       $bot            Bot del programa BotBasic
+     * @return bool                         Nuevo número de línea (salto de ejecución); o -1 si se debe seguir la secuencia lineal
+     */
+    private function runner4bsave (&$parsedContent, $lineno, $bot)
+    {
+        $mkdir = function ($dir)
+        {
+            if (! is_dir($dir)) {
+                return mkdir($dir, 0775, true);
+            }
+            return true;
+        };
+        $makeTargetDir = function ($mediaType) use ($mkdir)
+        {
+            $basedir   = BOTBASIC_PRIVATE_MEDIA_DIR;
+            $datedir   = date("Ym");
+            $subdir    = "$mediaType/$datedir";
+            $dir       = "$basedir/$subdir";
+            return $dir;
+        };
+        // load the resource
+        $resourceId = $this->getVar($parsedContent[1], $lineno, $bot);
+        $resource   = InteractionResource::load($resourceId);
+        if ($resource === null) {
+            Log::register(Log::TYPE_BBCODE, "RT3454 No se puede cargar el resource con ID $resourceId", $this, $lineno);
+            return -1;
+        }
+        // get and complete filenames
+        if ($resource->filename === null) {
+            Log::register(Log::TYPE_BBCODE, "RT3459 El resource con ID $resourceId no tiene un archivo asociado", $this, $lineno);
+            return -1;
+        }
+        $srcFilename = BOTBASIC_BASEDIR . '/' . $resource->filename;
+        $tgtFilename = $this->getVar($parsedContent[3], $lineno, $bot);
+        if ($tgtFilename === self::NOTHING) {
+            Log::register(Log::TYPE_BBCODE, "RT3466 Se intenta guardar un resource en un nombre de archivo vacio", $this, $lineno);
+            return -1;
+        }
+        if (substr($tgtFilename, 0, 1) == '/') { $tgtFilename = substr($tgtFilename, 1); }
+        // build target directory
+        $dir         = $makeTargetDir($resource->type);
+        $tgtFilename = $dir . '/' . $tgtFilename;
+        if (! $mkdir(dirname($tgtFilename))) {
+            Log::register(Log::TYPE_RUNTIME, "RT3479 No se puede crear el directorio $dir", $this, $lineno);
+            return -1;
+        }
+        // copy to target directory and return
+        if (! copy($srcFilename, $tgtFilename)) {
+            Log::register(Log::TYPE_BBCODE, "RT3467 No se puede copiar desde $srcFilename hacia $tgtFilename", $this, $lineno);
+        }
+        return -1;
+    }
+
+
+
+    /**
+     * Runner4... para EXTRACT
+     *
+     * @param  array        $parsedContent  Tokens de la línea de código ya transformados por el parser (no serán modificados)
+     * @param  int          $lineno         Número de línea del programa BotBasic
+     * @param  string       $bot            Bot del programa BotBasic
+     * @return bool                         Nuevo número de línea (salto de ejecución); o -1 si se debe seguir la secuencia lineal
+     */
+    private function runner4extract (&$parsedContent, $lineno, $bot)
+    {
+        // load the resource
+        $resourceId = $this->getVar($parsedContent[3], $lineno, $bot);
+        $resource   = InteractionResource::load($resourceId);
+        if ($resource === null) {
+            Log::register(Log::TYPE_BBCODE, "RT3505 No se puede cargar el resource con ID $resourceId", $this, $lineno);
+            return -1;
+        }
+        // get the value
+        $attribute = $parsedContent[1];
+        $value     = isset($resource->metainfo[$attribute]) ? $resource->metainfo[$attribute] : self::NOTHING;
+        // set the value and return
+        $this->setVar($parsedContent[5], $value, $lineno, $bot, false);
+        return -1;
+    }
+
+
+
+    /**
      * Runner4... para SET
      *
      * @param  array        $parsedContent  Tokens de la línea de código ya transformados por el parser (no serán modificados)
@@ -4021,6 +4145,9 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         $this->runner4userid        ($a, $b, $c);
         $this->runner4trace         ($a, $b, $c);
         $this->runner4notrace       ($a, $b, $c);
+        $this->runner4bload         ($a, $b, $c);
+        $this->runner4bsave         ($a, $b, $c);
+        $this->runner4extract       ($a, $b, $c);
     }
 
 

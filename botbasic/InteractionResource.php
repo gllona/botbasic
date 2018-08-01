@@ -129,6 +129,24 @@ class InteractionResource
 
 
     /**
+     * Retorna el tipo asociado a un typeString
+     *
+     * @param  string   $typeString     Uno de los posibles typeStrings
+     * @return int|null                 Constante TYPE_... asociada al typeString suministrado
+     */
+    static public function getType ($typeString)
+    {
+        foreach (self::$typeStrings as $type => $value) {
+            if ($value == $typeString) {
+                return $type;
+            }
+        }
+        return null;
+    }
+
+
+
+    /**
      * Constructor
      *
      * @param  int  $type       Una de las constantes TYPE_...
