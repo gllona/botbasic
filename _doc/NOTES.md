@@ -29,7 +29,9 @@ rm -rf /root/.gsutil/
 
 # ngrok free for parser
 
-nohup ngrok http -host-header=beta.bots.logicos.org -log=stdout 80 &
+cd /home/botbasic/users/ngrok
+nohup ./ngrok http -host-header=beta.bots.logicos.org -log=stdout 8080 &
+sleep 1
 curl http://localhost:4040/api/tunnels | jq '.tunnels[0].public_url'
 
 
