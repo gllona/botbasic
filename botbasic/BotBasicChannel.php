@@ -1100,7 +1100,7 @@ class BotBasicChannel implements Initializable, Closable
      *
      * @param  BotBasicChannel  $bbc            Si no se pasa la ruta, se extraerá de la instancia de esta clase pasada
      * @param  null|int         $routeIndex     Indice de la ruta en el rango de getRouteQueueIndexes(); o null para la ruta más recientemente encolada
-     * @param  null|array       $fullRoute      T3ruta, en su representación completa: array_merge( [ getRouteType() ], getRouteContent() );
+     * @param  null|array       $fullRoute      Ruta, en su representación completa: array_merge( [ getRouteType() ], getRouteContent() );
      *                                          si se pasa null se tomará la ruta más recientemente encolada
      * @return bool|null                        null si los primeros dos argumentos son null; indicador de si la ruta es foránea si no
      */
@@ -1128,7 +1128,7 @@ class BotBasicChannel implements Initializable, Closable
     /**
      * Obtiene el lineno de una ruta de contexto de ejecución
      *
-     * @param  array    $fullRoute      T3ruta, en su representación indicada en isForeignRoute()
+     * @param  array    $fullRoute      Ruta, en su representación indicada en isForeignRoute()
      * @return null                     Lineno asociado a la ejecución del encolado
      */
     static public function getRouteLineno ($fullRoute)

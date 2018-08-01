@@ -2457,7 +2457,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
 
 
     /**
-     * T3procesador del runtime para runWith()
+     * Procesador del runtime para runWith()
      *
      * @param  string   $bot                Nombre del bot
      * @param  int      $lineno             Número de línea en ejecución
@@ -3406,7 +3406,8 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             if ($filename === null || $filename == '') { return null; }
             if (substr($filename, 0, 1) != '/') { $filename = BOTBASIC_PRIVATE_MEDIA_DIR . '/' . $filename; }
             if (! file_exists($filename)) { return null; }
-            $resource = InteractionResource::createFromFile(InteractionResource::getType($mediaType), $filename);
+            $cmType   = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
+            $resource = InteractionResource::createFromFile(InteractionResource::getType($mediaType), $filename, $cmType);
             return $resource;
         };
         // try to load locally
@@ -3614,7 +3615,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
      * @param  array        $parsedContent  Tokens de la línea de código ya transformados por el parser (no serán modificados)
      * @param  int          $lineno         Número de línea del programa BotBasic
      * @param  string       $bot            Bot del programa BotBasic
-     * @param  string       $oper           T3operador que define la operación aritmética
+     * @param  string       $oper           Operador que define la operación aritmética
      * @return bool                         Nuevo número de línea (salto de ejecución); o -1 si se debe seguir la secuencia lineal
      */
     private function runner4incdecmuldivmodHelper (&$parsedContent, $lineno, $bot, $oper)

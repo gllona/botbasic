@@ -215,11 +215,12 @@ class InteractionResource
      * El contenido del archivo será movido o copiado a una ubicación propia del storage area de BotBasic.
      *
      * @param  int                          $type       Una de las constantes TYPE_...
-     * @param  string                       $filename   T3ruta al archivo fuente
+     * @param  string                       $filename   ruta al archivo fuente
+     * @param  int                          $cmType     Una de las constantes ChatMedium::TYPE_...
      * @return InteractionResource|null                 null en caso de no haber podido crear la entrada en BD o no haber podido copiar/mover el archivo;
      *                                                  la instancia del resource en caso de éxito
      */
-    static public function createFromFile ($type, $filename)
+    static public function createFromFile ($type, $filename, $cmType)
     {
         $r = new InteractionResource($type);
         $dbFilename = DBbroker::storeFile($filename);
@@ -228,6 +229,7 @@ class InteractionResource
             return null;
         }
         $r->filename = $dbFilename;
+        $r->cmType   = $cmType;
         $res = $r->save(null, false);
         if ($res === null) {
             Log::register(Log::TYPE_RUNTIME, "R205 No se puede guardar instancia");
