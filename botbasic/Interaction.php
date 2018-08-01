@@ -462,7 +462,7 @@ abstract class Interaction implements Initializable
         if (! is_array($onlyTypes))   { $onlyTypes   = $onlyTypes   === null ? [] : [ $onlyTypes   ]; }
         $res = [];
         foreach ($this->resources as $r) {
-            if (! in_array($r->type, $exceptTypes) || (in_array($r->type, $onlyTypes))) { $res[] = $r; }
+            if (! in_array($r->type, $exceptTypes) && ($onlyTypes === null || in_array($r->type, $onlyTypes))) { $res[] = $r; }
         }
         return $res;
     }
