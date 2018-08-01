@@ -529,7 +529,7 @@ namespace botbasic {
          * Construye una estructura de datos que contiene la información final necesaria a enviar a los servidores de Telegram, a partir del
          * contenido de un Splash y su tipo
          *
-         * @param  string               $textOrCaption      Texto del Splash o caption de imagen/video, o null si no los hay; en este último caso debe especificarse un resource
+         * @param  string|null          $textOrCaption      Texto del Splash o caption de imagen/video, o null si no los hay; en este último caso debe especificarse un resource
          * @param  array                $menuOptions        Arreglo de opciones de menú que serán renderizadas en forma de un custom keyboard
          * @param  InteractionResource  $resource           Resource del Splash, o null si no lo hay; en este último caso debe especificarse un texto
          * @param  string               $chatId             ID del chat de Telegram al cual será enviado el contenido
@@ -544,6 +544,7 @@ namespace botbasic {
                 return null;
             }
             if ($resource !== null) {
+                if ($textOrCaption === null && is_string($resource->metainfo)) { $textOrCaption = $resource->metainfo; }
                 switch ($resource->type) {
                     case InteractionResource::TYPE_IMAGE     : $method = "sendPhoto";     $content = $this->makePhotoContentBase(    $resource, $this->limitCaption($textOrCaption)); break;
                     case InteractionResource::TYPE_AUDIO     : $method = "sendAudio";     $content = $this->makeAudioContentBase(    $resource, $this->limitCaption($textOrCaption)); break;

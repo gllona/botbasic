@@ -455,8 +455,12 @@ abstract class ChatMedium
                     $currentText .= ($currentText == '' ? '' : "\n") . $splash->getText();
                     break;
                 case Splash::SUBTYPE_RESOURCE :
-                    if ($currentText != '') { $textsAndResources[] = $currentText; $currentText = ''; }
-                    $textsAndResources[] = $splash->getTheResource();
+                    $captionResources = $splash->getResources(null, InteractionResource::TYPE_CAPTION);
+                    $caption          = isset($captionResources[0]) ? $captionResources[0] : null;
+                    $resource         = $splash->getTheResource();
+                    if ($caption !== null)  { $resource->metainfo = $caption; $resource->save($splash); }
+                    if ($currentText != '') { $textsAndResources[] = $currentText; $currentText = '';   }
+                    $textsAndResources[] = $resource;
                     break;
                 case Splash::SUBTYPE_MENU :
                     if ($splash->getText() !== null) { $currentText .= ($currentText == '' ? '' : "\n") . $splash->getText(); }

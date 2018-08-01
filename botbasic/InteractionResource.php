@@ -246,17 +246,21 @@ class InteractionResource
      *
      * La clonación permite evitar la descarga o replicación en filesystem de archivos con el mismo contenido.
      *
-     * @param  int|null                 $newCmType  Si es distinto de null se asignará este cmType al nuevo Resource
-     * @return InteractionResource|null             null en caso de no haber podido generar la entrada en BD; el resource en caso de éxito
+     * @param  int|null                 $newCmType      Si es distinto de null se asignará este cmType al nuevo Resource
+     * @param  string|null              $newCmAuthInfo  Para Telegram equivale al botname de Telegram del Runtime que invoca al método (pasar si se pasa $newCmType)
+     * @return InteractionResource|null                 null en caso de no haber podido generar la entrada en BD; el resource en caso de éxito
      */
-    public function createByCloning ($newCmType = null)
+    public function createByCloning ($newCmType = null, $newCmAuthInfo = null)
     {
+        if ($newCmType !== null && $newCmAuthInfo === null) {
+            Log::register(Log::TYPE_RUNTIME, "R256 Argumentos invalidos");
+            return null;
+        }
         $clone     = clone $this;
         $clone->id = null;
-        if ($newCmType !== null && $clone->cmType != $newCmType) {
+        if ($newCmType !== null && ($clone->cmType != $newCmType || $clone->cmcAuthInfo != $newCmAuthInfo)) {
             $clone->cmType = $newCmType;
             $clone->fileId = null;
-            //TODO esta logica tambien se debe aplicar para cuando el fileId pertenece a otro bot de Telegram, ya que en Telegram los file_id no son compartibles entre bots
         }
         $clone->clonedFrom = $this;
         $res = $clone->save(null, false);

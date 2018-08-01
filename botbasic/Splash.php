@@ -74,7 +74,8 @@ class Splash extends Interaction
      */
     public function getTheResource ()
     {
-        return $this->resources === null || count($this->resources) == 0 ? null : $this->resources[0];
+        $resources = $this->getResources(InteractionResource::TYPE_CAPTION);
+        return count($resources) == 0 ? null : $resources[0];
     }
 
 
@@ -174,15 +175,17 @@ class Splash extends Interaction
      * La clonación clona a su vez los InteractionResources agregados, y cada uno de ellos quedará como un clon para el cual el contenido/archivo
      * multimedia correspondiente no será descargado más de una vez en el sistema, a fin de evitar ineficiencias en storage.
      *
-     * @return Splash   Nueva instancia clonada
+     * @param  int|null         $cmType         Si es distinto de null se asignará este cmType a los Resources asociados
+     * @param  string|null      $cmAuthInfo     Para Telegram equivale al botname de Telegram del Runtime que invoca al método (pasar si se pasa $cmType)
+     * @return Splash                           Nueva instancia clonada
      */
-    public function createByCloning ()
+    public function createByCloning ($cmType = null, $cmAuthInfo = null)
     {
         $clone     = clone $this;
         $clone->id = null;
         $clone->resources = [];
         foreach ($this->resources as $resource) {
-            $clone->resources[] = $resource->createByCloning();
+            $clone->resources[] = $resource->createByCloning($cmType, $cmAuthInfo);
         }
         $clone->save();
         return $clone;
@@ -193,16 +196,18 @@ class Splash extends Interaction
     /**
      * Factory method; crea un Splash como un espejo de la información contenida en un Update
      *
-     * @param  Update|null      $update     Update que sirve de espejo isomorfo para el nuevo Splash
-     * @return Splash                       Nueva instancia
+     * @param  Update|null      $update         Update que sirve de espejo isomorfo para el nuevo Splash
+     * @param  int|null         $cmType         Si es distinto de null se asignará este cmType a los Resources asociados
+     * @param  string|null      $cmAuthInfo     Para Telegram equivale al botname de Telegram del Runtime que invoca al método (pasar si se pasa $cmType)
+     * @return Splash                           Nueva instancia
      */
-    static public function createFromUpdate ($update)
+    static public function createFromUpdate ($update, $cmType = null, $cmAuthInfo = null)
     {
         $built = true;
         $s     = new Splash();
         if ($s->hasResources()) {
             $caption = $update->getResource(InteractionResource::TYPE_CAPTION)->metainfo;   // FIXME el undressing de captions no esta implementado
-            $r       = $update->getResources(InteractionResource::TYPE_CAPTION)[0]->createByCloning();
+            $r       = $update->getResources(InteractionResource::TYPE_CAPTION)[0]->createByCloning($cmType, $cmAuthInfo);
             if ($r !== null) {
                 $s->fillFields([ null, self::SUBTYPE_RESOURCE, null, null, $caption, null ]);   // ($id, $subType, $bbcId, $bmUserId, $text, $options)
                 // FIXME si viene una imagen con un caption, entonces no se mostrara como caption sino como texto

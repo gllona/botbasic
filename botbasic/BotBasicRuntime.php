@@ -1257,7 +1257,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                     $cmType      = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
                     $srcResource = InteractionResource::load($value['id']);
                     if ($srcResource === null) { continue; }
-                    $resource = $srcResource->createByCloning($cmType);
+                    $resource = $srcResource->createByCloning($cmType, $bbc->getCMchannel()->getCMbotName());
                     $caption  = isset($value['caption']) ? InteractionResource::createFromContent(InteractionResource::TYPE_CAPTION, $cmType, $value['caption']) : null;
                     $splash   = Splash::createWithResource($resource, $caption);
                 }

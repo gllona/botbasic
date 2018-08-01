@@ -1188,8 +1188,10 @@ class BotBasicChannel implements Initializable, Closable
             $firstTime = true;
             $splash    = null;                 /** @var Splash $splash          */   // IDE spoof
             foreach ($tgtBbbcs as $tgtBbc) {   /** @var BotBasicChannel $tgtBbc */
-                if ($firstTime) { $theSplash = $splash = $update->convertToSplash(); $firstTime = false; }
-                else            { $theSplash = $splash->createByCloning();                               }
+                $cmType     = $tgtBbc->getCMchannel()->getCMtype();
+                $cmAuthInfo = $tgtBbc->getCMchannel()->getCMbotName();
+                if ($firstTime) { $theSplash = $splash = $update->convertToSplash($cmType, $cmAuthInfo); $firstTime = false; }
+                else            { $theSplash = $splash->createByCloning($cmType, $cmAuthInfo);                               }
                 $tgtBbc->orderEnqueueing($theSplash);
             }
         }

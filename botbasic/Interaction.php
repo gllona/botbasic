@@ -453,14 +453,16 @@ abstract class Interaction implements Initializable
      * Cuando el Interaction tiene texto, se debe recuperar con getText().
      *
      * @param  int[]|int|null   $exceptTypes    Una o más constantes InteractionResource::TYPE_... que se omitirán del resultado; o null para no exceptuar
+     * @param  int[]|int|null   $onlyTypes      Una o más constantes InteractionResource::TYPE_... que serán las únicas que se incluirán en el resultado; o null para ignorar este funcionamiento
      * @return                                  InteractionResource[]
      */
-    public function getResources ($exceptTypes = null)
+    public function getResources ($exceptTypes = null, $onlyTypes = null)
     {
         if (! is_array($exceptTypes)) { $exceptTypes = $exceptTypes === null ? [] : [ $exceptTypes ]; }
+        if (! is_array($onlyTypes))   { $onlyTypes   = $onlyTypes   === null ? [] : [ $onlyTypes   ]; }
         $res = [];
         foreach ($this->resources as $r) {
-            if (! in_array($r->type, $exceptTypes)) { $res[] = $r; }
+            if (! in_array($r->type, $exceptTypes) || (in_array($r->type, $onlyTypes))) { $res[] = $r; }
         }
         return $res;
     }

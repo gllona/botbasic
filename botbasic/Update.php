@@ -139,10 +139,14 @@ class Update extends Interaction
 
     /**
      * Crea un Splash con el mismo contenido de este Update
+     *
+     * @param  int|null         $cmType         Si es distinto de null se asignará este cmType a los Resources asociados
+     * @param  string|null      $cmAuthInfo     Para Telegram equivale al botname de Telegram del Runtime que invoca al método (pasar si se pasa $cmType)
+     * @return Splash
      */
-    public function convertToSplash ()
+    public function convertToSplash ($cmType = null, $cmAuthInfo = null)
     {
-        return Splash::createFromUpdate($this);
+        return Splash::createFromUpdate($this, $cmType, $cmAuthInfo);
     }
 
 
