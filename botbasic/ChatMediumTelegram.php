@@ -884,6 +884,7 @@ namespace botbasic {
             $target       = BOTBASIC_BASEDIR . '/' . $resource->filename;
             $filename     = basename($resource->filename);
             $fullFilename = "$dir/$filename";
+            unlink($fullFilename);   //TODO @ this and next
             if (symlink($target, $fullFilename) === false) { return null; }
             // make and return URL
             $url = BOTBASIC_PUBLIC_MEDIA_URL . "/$commondir/$filename";
