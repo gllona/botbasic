@@ -591,6 +591,12 @@ END;
                        AND tq2.deleted IS NULL
                      ORDER BY tq2.id ASC
                      LIMIT 1 )
+               AND 0 = (
+                    SELECT COUNT(tq4.id)
+                      FROM telegram_queue AS tq4
+                     WHERE tq4.state = 'sending'
+                       AND tq4.cmchannel_id = tq1.cmchannel_id
+                     LIMIT 1 )
                AND tq1.deleted IS NULL
              ORDER BY tq1.id ASC
              LIMIT 1
