@@ -539,6 +539,7 @@ namespace botbasic {
          */
         private function makeContentForPost ($textOrCaption, $menuOptions, $resource, $chatId, $cmBotName)
         {
+            $files = null;
             if ($chatId === null) {
                 Log::register(Log::TYPE_DEBUG, "CMTG425 Intentando un post a Telegram con un chatId nulo");
                 return null;
@@ -558,6 +559,7 @@ namespace botbasic {
                                                                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG433 invalid resource type in ChatMediumTelegram::makeJsonForPost()");
 
                 }
+                if (is_array($content[0])) { list($content, $files) = $content; }
             }
             elseif ($textOrCaption === null && ($menuOptions === null || count($menuOptions) == 0)) {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG444 Tratando de enviar un splash vacio");
@@ -575,7 +577,9 @@ namespace botbasic {
                 $content = $this->makeTextContentBase($textOrCaption, $menuOptions);
             }
             $content['chat_id'] = $chatId;
-            return [ $cmBotName, $content, $method ];
+            $res = [ $cmBotName, $content, $method ];
+            if ($files !== null) { $res[] = $files; }
+            return $res;
         }
 
 
@@ -731,11 +735,22 @@ namespace botbasic {
          */
         private function makePhotoContentBase ($resource, $caption = null)
         {
-            $parameters = [
-                'photo' => isset($resource->fileId) ? $resource->fileId : $this->makeMediaUrl($resource),
-            ];
-            if ($caption !== null) {
-                $parameters['caption'] = $caption;
+            // URL style submit
+            //$parameters = [
+            //    'photo' => isset($resource->fileId) ? $resource->fileId : $this->makeMediaUrl($resource),
+            //];
+            //if ($caption !== null) { $parameters['caption'] = $caption; }
+            // POST multipart style submit
+            if (isset($resource->fileId)) {
+                $parameters = [
+                    'photo' => $resource->fileId,
+                ];
+            }
+            else {
+                $fields = [];
+                if ($caption !== null) { $fields['caption'] = $caption; }
+                $files = [ 'photo' => $this->makeMediaLocalPath($resource) ];
+                $parameters = [ $fields, $files ];
             }
             return $parameters;
         }
@@ -895,6 +910,19 @@ namespace botbasic {
 
 
         /**
+         * Genera un path completo para un contenido multimedia
+         *
+         * @param  InteractionResource  $resource   Resource que representa el contenido
+         * @return string|null                      Path; o null en caso de falla de creación de directorio o de linkeo
+         */
+        private function makeMediaLocalPath ($resource)
+        {
+            return BOTBASIC_BASEDIR . '/' . $resource->filename;
+        }
+
+
+
+        /**
          * Dada una lista de opciones de menú, este método genera un arreglo bidimensional con la estructura óptima de distribución de las opciones
          * (botones de custom keyboard) en la pantalla de la chatapp Telegram (con optimización para pantallas de teléfonos de 4")
          *
@@ -1000,6 +1028,7 @@ namespace botbasic {
         private function postToTelegram ($request)
         {
             list ($cmBotname, $content, $method) = $request;
+            $files = isset($request[3]) ? $request[3] : null;
             // obtain the bot token
             $token = $this->getCMbotToken($cmBotname);
             if ($token === null) {
@@ -1014,9 +1043,17 @@ namespace botbasic {
                 $accept  = "application/json";
                 $content = Body::json($content);
             }
-            else {
+            //else {
+            //    $accept  = "application/json";
+            //    $content = Body::multipart($content);
+            //}
+            elseif ($files !== null) {
                 $accept  = "application/json";
-                $content = Body::multipart($content);
+                $content = Body::multipart($content, $files);
+            }
+            else {
+                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG1052 Request no es para sendMessage ni tiene files definidos");
+                return false;
             }
             $headers['Accept'] = $accept;
             // prepare and send
