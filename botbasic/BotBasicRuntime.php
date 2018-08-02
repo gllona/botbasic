@@ -2370,7 +2370,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         elseif ($this->isMessageName($rval))         { $val = $this->getLvalValue($rval, $lineno, $bot);                                                                             }
         else {
             $val = self::NOTHING;
-            Log::register(Log::TYPE_RUNTIME, "RT1779 Error evaluando rvalue ['$rval'/TYPE:" . gettype($rval) . "]", $this, $lineno);
+            Log::register(Log::TYPE_BBCODE, "RT1779 Error evaluando rvalue ['$rval'/TYPE:" . gettype($rval) . "]", $this, $lineno);
         }
         return $val;
     }
@@ -3178,7 +3178,8 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                 $onBBchannelId    = isset($on[2]) ? $on[2] : null;
                 if ($onBizModelUserId !== null && ! $this->isNumber($onBizModelUserId)) { $onBizModelUserId = $this->getRvalValue($onBizModelUserId, $lineno, $bot); }
                 if ($onBBchannelId    !== null && ! $this->isNumber($onBBchannelId   )) { $onBBchannelId    = $this->getRvalValue($onBBchannelId,    $lineno, $bot); }
-                $this->splashHelperDisplay($this->getRvalValue($rvals[$pos], $lineno, $bot), $this->getRvalValue($title, $lineno, $bot), $onBotName, $onBizModelUserId, $onBBchannelId);
+                $titleValue = $title === null ? null : $this->getRvalValue($title, $lineno, $bot);
+                $this->splashHelperDisplay($this->getRvalValue($rvals[$pos], $lineno, $bot), $titleValue, $onBotName, $onBizModelUserId, $onBBchannelId);
             }
         }
         return -1;
