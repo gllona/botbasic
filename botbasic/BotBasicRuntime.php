@@ -3432,7 +3432,12 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             $res           = -1;
             exec($command, $output, $res);
             if ($res != 0) {
-                Log::register(Log::TYPE_RUNTIME, "RT3436 No se puede descargar el resource: [$command] arroja [$res] [" . json_encode($output) . "]", $this, $lineno);
+                if (strpos(implode(' ', $output), 'No URLs matched') !== false) {
+                    Log::register(Log::TYPE_BBCODE, "RT3437 No se puede descargar el resource $cloudFilename", $this, $lineno);
+                }
+                else {
+                    Log::register(Log::TYPE_RUNTIME, "RT3436 No se puede descargar el resource: [$command] arroja [$res] [" . json_encode($output) . "]", $this, $lineno);
+                }
             }
             return $res == 0;
         };
