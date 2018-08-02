@@ -602,7 +602,7 @@ abstract class BotBasic
      */
     static public function getMajorCodeVersionFor ($codeVersion)
     {
-        return explode('.', $codeVersion)[0];
+        return 0 + explode('.', $codeVersion)[0];
     }
 
 
@@ -616,7 +616,7 @@ abstract class BotBasic
     static public function getMinorCodeVersionFor ($codeVersion)
     {
         $parts = explode('.', $codeVersion);
-        return count($parts) == 1 ? null : $parts[1];
+        return count($parts) == 1 ? null : 0 + $parts[1];
     }
 
 
@@ -630,7 +630,7 @@ abstract class BotBasic
     static public function getSubminorCodeVersionFor ($codeVersion)
     {
         $parts = explode('.', $codeVersion, 3);
-        return count($parts) <= 2 ? null : $parts[2];
+        return count($parts) <= 2 ? null : 0 + $parts[2];
     }
 
 

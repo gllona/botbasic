@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.9	gorkathebot				
+VERSION	0.2.11	gorkathebot				
 BOTS	main					
 						
 						
@@ -39,6 +39,7 @@ waitAndContinue		Wait a little and continue
 ook		Ok				
 lastStatusWas		Result of last operation was [{lastStatus}]				
 imageNumber		Enter image number:				
+imageFormatIs		Image format is {format}				
 						
 						
 						
@@ -123,29 +124,30 @@ main	main	main
 		PRINT mediaId3				
 		GOSUB wait				
 		EXTRACT format FROM id TO format				
+		PRINT imageFormatIs				
 		BSAVE id AS filenameUploaded TO ok				
 		GOSUB showStatus ok				
 		GOTO test				
-						
-/send_eli		CLEAR id				
+/send_eli						
+		CLEAR id				
 		IF EMPTY number THEN SET number 2				
 		IF NEQ number 2 THEN GOTO sendEli2				
 		BLOAD photoEliDubai AS image TO id				
 		PRINT mediaId1				
 		DISPLAY id TITLE captionEliDubai				
 		GOTO test				
-						
-	wait	MENU TITLE waitAndContinue OPTIONS ook TO res				
+	wait					
+		MENU TITLE waitAndContinue OPTIONS ook TO res				
 		RETURN				
-						
-	showStatus	ARGS lastStatus				
+	showStatus					
+		ARGS lastStatus				
 		PRINT lastStatusWas				
 		RETURN				
-						
-/imagenumber		INPUT integer TITLE imageNumber TO number				
+/imagenumber						
+		INPUT integer TITLE imageNumber TO number				
 		GOTO test				
-						
-	sendEli2	BLOAD photoEli AS image TO id				
+	sendEli2					
+		BLOAD photoEli AS image TO id				
 		PRINT mediaId1				
 		DISPLAY id				
 		GOTO test				

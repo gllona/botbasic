@@ -282,7 +282,7 @@ abstract class ChatMedium
     static public function getBBlastestAllowedCodeMajorVersion ($bbBotIdx)
     {
         $bbBots = BotConfig::bbBots();
-        return $bbBots[$bbBotIdx][1];
+        return 0 + $bbBots[$bbBotIdx][1];
     }
 
 

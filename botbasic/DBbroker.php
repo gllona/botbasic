@@ -332,7 +332,8 @@ END;
         $rows = self::query($sql);
         if ($rows === false)    { return null;  }
         if (count($rows) === 0) { return false; }
-        return array_values($rows[0]);
+        $versions = array_values($rows[0]);
+        return [ 0 + $versions[0], 0 + $versions[1], 0 + $versions[2] ];
     }
 
 
