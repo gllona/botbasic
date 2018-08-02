@@ -19,8 +19,8 @@ fi
 RF=$1
 LF=$2
 
-mkdir -p $(dirname $LF)
-sudo gsutil cp gs://$BUCKET/$RF $LF
-sudo chown www-data.www-data $LF
+mkdir -p $(dirname $LF) 2>&1
+sudo gsutil cp gs://$BUCKET/$RF $LF 2>&1
+sudo chown www-data.www-data $LF 2>&1
 
 exit $?
