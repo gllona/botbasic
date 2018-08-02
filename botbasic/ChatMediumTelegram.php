@@ -1027,7 +1027,7 @@ namespace botbasic {
          */
         private function postToTelegram ($request)
         {
-            list ($cmBotname, $content, $method) = $request;
+            list ($cmBotname, $fields, $method) = $request;
             $files = isset($request[3]) ? $request[3] : null;
             // obtain the bot token
             $token = $this->getCMbotToken($cmBotname);
@@ -1041,15 +1041,23 @@ namespace botbasic {
             if ($method == "sendMessage" || $method == "getFile" || $method = "answerCallbackQuery") {
                 $headers['Content-Type'] = "application/json";
                 $accept  = "application/json";
-                $content = Body::json($content);
+                try {
+                    $content = Body::json($fields);
+                }
+                catch (Exception $e) {
+                    $msg = "Exception arrojada por Unirest // " . $e->getMessage();
+                    $this->conditionalLog(Log::TYPE_DAEMON, "CMTG1049 $msg // METHOD=$method");
+                    return false;
+                }
             }
             //else {
             //    $accept  = "application/json";
-            //    $content = Body::multipart($content);
+            //    $content = Body::multipart($fields);
             //}
             elseif ($files !== null) {
                 $accept  = "application/json";
-                $content = Body::multipart($content, $files);
+                $this->conditionalLog(Log::TYPE_DAEMON, "GGG // " . json_encode($fields) . " // " . json_encode($files));
+                $content = Body::multipart($fields, $files);
             }
             else {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG1052 Request no es para sendMessage ni tiene files definidos");
