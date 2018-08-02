@@ -3446,8 +3446,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         $mediaType = $parsedContent[3];
         $resource  = $loadFile($filename, $mediaType, false);
         // if not, try to download from cloud and then load locally
-        if ($resource === null) {
-            $download($filename);
+        if ($resource === null && $download($filename)) {
             $resource = $loadFile($filename, $mediaType, true);
         }
         if ($resource === null) {
