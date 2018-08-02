@@ -326,7 +326,7 @@ END;
              WHERE code_name = '$bbCodeName'
                    $andClause
                AND deleted IS NULL
-             ORDER BY code_major_version DESC, code_minor_version DESC, code_subminor_version DESC
+             ORDER BY CAST(code_major_version AS UNSIGNED) DESC, CAST(code_minor_version AS UNSIGNED)  DESC, CAST(code_subminor_version AS UNSIGNED)  DESC
              LIMIT 1;
 END;
         $rows = self::query($sql);
