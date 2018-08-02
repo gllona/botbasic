@@ -3405,22 +3405,42 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
      */
     private function runner4bload (&$parsedContent, $lineno, $bot)
     {
-        $loadFile = function ($filename, $mediaType)
+        $buildLocalFilename = function ($filename, $fromCloud = false)
+        {
+            if (substr($filename, 0, 1) != '/') { $filename = BOTBASIC_PRIVATE_MEDIA_DIR . '/' . ($fromCloud ? 'cloud/' : '') . $filename; }
+            return $filename;
+        };
+        $buildCloudFilename = function ($filename)
+        {
+            return $filename;
+        };
+        $loadFile = function ($filename, $mediaType) use ($buildLocalFilename)
         {
             if ($filename === null || $filename == '') { return null; }
-            if (substr($filename, 0, 1) != '/') { $filename = BOTBASIC_PRIVATE_MEDIA_DIR . '/' . $filename; }
+            $filename = $buildLocalFilename($filename);
             if (! file_exists($filename)) { return null; }
             $cmType   = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
             $resource = InteractionResource::createFromFile(InteractionResource::getType($mediaType), $filename, $cmType);
             return $resource;
         };
+        $download = function ($filename) use ($buildLocalFilename, $buildCloudFilename)
+        {
+            $localFilename = $buildLocalFilename($filename, true);
+            $cloudFilename = $buildCloudFilename($filename);
+            $command       = BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR . "/downloadfromcloud.sh \"$cloudFilename\" \"$localFilename\"";
+            $output        = [];
+            $res           = -1;
+            exec($command, $output, $res);
+            return $res == 0;
+        };
         // try to load locally
-        $filename = $this->getVar($parsedContent[1], $lineno, $bot);
-        $resource = $loadFile($filename, $parsedContent[3]);
+        $filename  = $this->getVar($parsedContent[1], $lineno, $bot);
+        $mediaType = $parsedContent[3];
+        $resource  = $loadFile($filename, $mediaType);
         // if not, try to download from cloud and then load locally
         if ($resource === null) {
-            $filename = '';   //TODO download from the cloud to $filename
-            $resource = $loadFile($filename, $parsedContent[3]);
+            $download($filename);
+            $resource = $loadFile($filename, $mediaType);
         }
         if ($resource === null) {
             Log::register(Log::TYPE_BBCODE, "RT3420 No se puede cargar el resource desde $filename", $this, $lineno);
