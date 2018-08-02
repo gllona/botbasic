@@ -578,7 +578,7 @@ namespace botbasic {
             }
             $content['chat_id'] = $chatId;
             $res = [ $cmBotName, $content, $method ];
-            if ($files !== null) { $res = $files; }
+            if ($files !== null) { $res[] = $files; }
             return $res;
         }
 
