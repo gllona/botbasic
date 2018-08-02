@@ -715,7 +715,20 @@ abstract class BotBasic
 
 
     /**
-     * Determina si el argumento es un número positivo entero o decimal (usa "." como separador decimal)
+     * Determina si el argumento es un número positivo entero
+     *
+     * @param  string   $text
+     * @return bool
+     */
+    static public function isPositiveInteger ($text)
+    {
+        return 1 === preg_match('/^(0|[1-9][0-9]*)$/', $text);
+    }
+
+
+
+    /**
+     * Determina si el argumento es un número entero o decimal (usa "." como separador decimal)
      *
      * @param  string   $text
      * @return bool
@@ -1184,7 +1197,7 @@ abstract class BotBasic
                     $content     = null;
                     Log::register(Log::TYPE_RUNTIME, "BB1164 BB statement retorna bool en vez de lineno", $this, $lineno, $parsedStatement[0]);
                 }
-                elseif (! is_integer($jump2lineno)) {
+                elseif (! is_int($jump2lineno)) {
                     $jump2lineno = -1;
                     $content     = null;
                     Log::register(Log::TYPE_RUNTIME, "BB1170 BB statement retorna string o valor distinto de entero en vez de lineno", $this, $lineno, $parsedStatement[0]);
