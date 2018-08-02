@@ -20,6 +20,7 @@ RF=$1
 LF=$2
 
 mkdir -p $(dirname $LF)
-gsutil cp gs://$BUCKET/$RF $LF
+sudo gsutil cp gs://$BUCKET/$RF $LF
+sudo chown www-data.www-data $LF
 
 exit $?
