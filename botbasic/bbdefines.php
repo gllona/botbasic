@@ -25,7 +25,7 @@ define('BOTBASIC_DOWNLOAD_MMCONTENT',           true);
 define('BOTBASIC_BOT_IS_POSSESSED',             false);
 define('BOTBASIC_PUBLIC_MEDIA_DIR',             BOTBASIC_BASEDIR . '/media/public');
 define('BOTBASIC_PRIVATE_MEDIA_DIR',            BOTBASIC_BASEDIR . '/media/private');
-define('BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR', BOTBASIC_BASEDIR . '/downloads');
+define('BOTBASIC_DOWNLOADDAEMON_DOWNLOADS_DIR', BOTBASIC_BASEDIR . '/media/downloads');
 define('BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR',    BOTBASIC_BASEDIR . '/httpdocs/scripts/media');
 define('BOTBASIC_WEBSTUB_OUTPUT_DIR',           BOTBASIC_BASEDIR . '/logs/webstub');
 define('BOTBASIC_WEBSTUB_OUTPUT_COMMON_FILE',   'ALL.log');

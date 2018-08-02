@@ -78,14 +78,14 @@ ln -s $BB_CODE_REPO $(basename $BB_HOME)
 
 cd $BB_HOME/..
 mkdir -p backup/mysql
-mkdir -p downloads
+mkdir -p media/downloads
 mkdir -p media/public
 mkdir -p media/private
 mkdir -p logs/bizmodel
 mkdir -p logs/webstub
 touch logs/runtime.log
-chmod g+w logs logs/bizmodel logs/webstub logs/runtime.log downloads media/public media/private
-chgrp www-data logs logs/bizmodel logs/webstub logs/runtime.log downloads media/public media/private
+chmod g+w logs logs/bizmodel logs/webstub logs/runtime.log media/downloads media/public media/private
+chgrp www-data logs logs/bizmodel logs/webstub logs/runtime.log media/downloads media/public media/private
 
 cp $BB_HOME/_bin/backup-databases $BB_HOME/../backup
 
