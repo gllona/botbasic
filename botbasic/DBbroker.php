@@ -596,6 +596,8 @@ END;
                       FROM telegram_queue AS tq4
                      WHERE tq4.state = 'sending'
                        AND tq4.cmchannel_id = tq1.cmchannel_id
+                       AND ABS(TIME_TO_SEC(TIMEDIFF(tq1.updated, tq4.updated))) < 5
+                       AND tq4.deleted IS NULL
                      LIMIT 1 )
                AND tq1.deleted IS NULL
              ORDER BY tq1.id ASC
