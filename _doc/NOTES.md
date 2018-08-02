@@ -73,4 +73,3 @@ ssh -L 33060:dev.bots.logicos.org:3306 gorka@beta.bots.logicos.org -N
 # PhpStorm breakpoint condition
 
 $GLOBALS['botbasic_ide_debug'] === true
-
