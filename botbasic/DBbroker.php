@@ -563,7 +563,7 @@ END;
         };
         // lock the table
         $sql = <<<END
-            LOCK TABLES telegram_queue AS tq1 WRITE, telegram_queue AS tq2 WRITE, telegram_queue AS tq3 WRITE, cmchannel AS cmc READ;
+            LOCK TABLES telegram_queue AS tq1 WRITE, telegram_queue AS tq2 WRITE, telegram_queue AS tq3 WRITE, telegram_queue AS tq4 WRITE, cmchannel AS cmc READ;
 END;
         $res = self::exec($sql);
         if ($res === false) {
