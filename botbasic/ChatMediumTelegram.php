@@ -1056,7 +1056,6 @@ namespace botbasic {
             //}
             elseif ($files !== null) {
                 $accept  = "application/json";
-                Log::register(Log::TYPE_DAEMON, "GGG // " . json_encode($fields) . " // " . json_encode($files));
                 $content = Body::multipart($fields, $files);
             }
             else {
