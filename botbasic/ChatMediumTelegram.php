@@ -578,7 +578,7 @@ namespace botbasic {
             }
             $content['chat_id'] = $chatId;
             $res = [ $cmBotName, $content, $method ];
-            if ($files !== null) { $res[] = $files; }
+            if ($files !== null) { $res = $files; }
             return $res;
         }
 
@@ -1038,7 +1038,7 @@ namespace botbasic {
             // assemble the url and determine the http header for the POST
             $url     = "https://api.telegram.org/bot$token/$method";
             $headers = [];
-            if ($method == "sendMessage" || $method == "getFile" || $method = "answerCallbackQuery") {
+            if ($method == "sendMessage" || $method == "getFile" || $method == "answerCallbackQuery") {
                 $headers['Content-Type'] = "application/json";
                 $accept  = "application/json";
                 try {
