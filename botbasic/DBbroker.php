@@ -280,7 +280,7 @@ END;
                    AND code_major_version = '$majorCodeVersion'
                    AND code_minor_version = '$minorCodeVersion'
                    AND deleted IS NULL
-                 ORDER BY code_subminor_version DESC
+                 ORDER BY CAST(code_subminor_version AS UNSIGNED) DESC
                  LIMIT 1;
 END;
         }
@@ -291,7 +291,7 @@ END;
                  WHERE code_name = '$codename'
                    AND code_major_version = '$majorCodeVersion'
                    AND deleted IS NULL
-                 ORDER BY code_minor_version DESC, code_subminor_version DESC
+                 ORDER BY CAST(code_minor_version AS UNSIGNED) DESC, CAST(code_subminor_version AS UNSIGNED) DESC
                  LIMIT 1;
 END;
         }
