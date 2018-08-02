@@ -3423,7 +3423,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             $resource = InteractionResource::createFromFile(InteractionResource::getType($mediaType), $filename, $cmType);
             return $resource;
         };
-        $download = function ($filename) use ($buildLocalFilename, $buildCloudFilename)
+        $download = function ($filename) use ($buildLocalFilename, $buildCloudFilename, $lineno)
         {
             $localFilename = $buildLocalFilename($filename, true);
             $cloudFilename = $buildCloudFilename($filename);
@@ -3432,6 +3432,9 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             $res           = -1;
             Log::register(Log::TYPE_BBCODE, $command, $this, -1);
             exec($command, $output, $res);
+            if ($res != 0) {
+                Log::register(Log::TYPE_RUNTIME, "RT3436 No se puede descargar el resource: [$command] arroja [$res] [" . json_encode($output) . "]", $this, $lineno);
+            }
             return $res == 0;
         };
         // try to load locally
