@@ -233,7 +233,12 @@ LINE="#*/1 * * * * $BB_HOME/scripts/downloader/launcher.sh $BB_HOST_PRIVATE:8088
 LINE="#*/1 * * * * $BB_HOME/scripts/telegramsender/launcher.sh $BB_HOST_PRIVATE:8088 375 750 >/dev/null 2>/dev/null"
 (crontab -l; echo "$LINE") | crontab -
 
+# SUDOERS
 
+cat >>/etc/sudoers <<END
+
+www-data        ALL=(ALL) NOPASSWD: /snap/bin/gsutil, /bin/chown
+END
 
 # ENABLE SERVICES
 

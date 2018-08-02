@@ -3405,7 +3405,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
      */
     private function runner4bload (&$parsedContent, $lineno, $bot)
     {
-        $buildLocalFilename = function ($filename, $fromCloud = false)
+        $buildLocalFilename = function ($filename, $fromCloud)
         {
             if (substr($filename, 0, 1) != '/') { $filename = BOTBASIC_PRIVATE_MEDIA_DIR . '/' . ($fromCloud ? 'cloud/' : '') . $filename; }
             return $filename;
@@ -3414,10 +3414,10 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         {
             return $filename;
         };
-        $loadFile = function ($filename, $mediaType) use ($buildLocalFilename)
+        $loadFile = function ($filename, $mediaType, $fromCloud) use ($buildLocalFilename)
         {
             if ($filename === null || $filename == '') { return null; }
-            $filename = $buildLocalFilename($filename);
+            $filename = $buildLocalFilename($filename, $fromCloud);
             if (! file_exists($filename)) { return null; }
             $cmType   = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
             $resource = InteractionResource::createFromFile(InteractionResource::getType($mediaType), $filename, $cmType);
@@ -3430,7 +3430,6 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             $command       = BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR . "/downloadfromcloud.sh \"$cloudFilename\" \"$localFilename\"";
             $output        = [];
             $res           = -1;
-            Log::register(Log::TYPE_BBCODE, $command, $this, -1);
             exec($command, $output, $res);
             if ($res != 0) {
                 Log::register(Log::TYPE_RUNTIME, "RT3436 No se puede descargar el resource: [$command] arroja [$res] [" . json_encode($output) . "]", $this, $lineno);
@@ -3440,11 +3439,11 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         // try to load locally
         $filename  = $this->getVar($parsedContent[1], $lineno, $bot);
         $mediaType = $parsedContent[3];
-        $resource  = $loadFile($filename, $mediaType);
+        $resource  = $loadFile($filename, $mediaType, false);
         // if not, try to download from cloud and then load locally
         if ($resource === null) {
             $download($filename);
-            $resource = $loadFile($filename, $mediaType);
+            $resource = $loadFile($filename, $mediaType, true);
         }
         if ($resource === null) {
             Log::register(Log::TYPE_BBCODE, "RT3420 No se puede cargar el resource desde $filename", $this, $lineno);
