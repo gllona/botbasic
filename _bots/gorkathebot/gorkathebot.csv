@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.12	gorkathebot				
+VERSION	0.2.13	gorkathebot				
 BOTS	main					
 						
 						
@@ -33,7 +33,7 @@ mediaId2		Media id is {id}, type is {type}
 mediaId3		Media id is {id}, type is {type} and caption is {caption}				
 photoEliDubai		eli_dubai_2.jpg				
 captionEliDubai		I couldn’t have asked for anything more perfect than this				
-photoEli		eli_{number}.jpg				
+photoEli		firsts/eli_{number}.jpg				
 filenameUploaded		uploaded-photo.{format}				
 waitAndContinue		Wait a little and continue				
 ook		Ok				

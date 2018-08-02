@@ -3430,6 +3430,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             $command       = BOTBASIC_DOWNLOADDAEMON_SCRIPTSDIR . "/downloadfromcloud.sh \"$cloudFilename\" \"$localFilename\"";
             $output        = [];
             $res           = -1;
+            Log::register(Log::TYPE_BBCODE, $command, $this, -1);
             exec($command, $output, $res);
             return $res == 0;
         };
