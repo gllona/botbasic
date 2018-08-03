@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.14	gorkathebot				
+VERSION	0.2.16	gorkathebot				
 BOTS	main					
 						
 						
@@ -24,7 +24,7 @@ prank1		A person called {username} is a fool if reading this line
 prank2		I get more of your time that you of mine				
 silly1		Wood in the stove, hair on the floor				
 absurd1		You have a thousand more important to do than this				
-commandOptions		Choose /ai /test				
+commandOptions		Choose /ai /pixels /test				
 sendAnImage		Send me photos or /letmeask1 /letmeask2 /letmeask3 or /send_eli /imagenumber				
 mediaInfo		Media type is {type} and id is {id}				
 sendOnlyPhoto		Attach now a photo				
@@ -40,6 +40,12 @@ ook		Ok
 lastStatusWas		Result of last operation was [{lastStatus}]				
 imageNumber		Enter image number:				
 imageFormatIs		Image format is {format}				
+whatWasThis		What was this?				
+wasAI		Artificial Inteligence				
+wasAS		Artificial Stupidity				
+wasBoth		Both				
+thanks		Thanks				
+totalPixels		Image is {width} pixels wide and {height} pixels tall and has {pixels} pixels				
 						
 						
 						
@@ -83,6 +89,8 @@ main	main	main
 		SET age currentYear				
 		DEC age byear				
 		PRINT myage				
+		MENU TITLE whatWasThis OPTIONS wasAI wasAS wasBoth TO wasThis				
+		PRINT thanks				
 		GOTO menu				
 						
 	laugh	OPTION oPrank GOSUB prank				
@@ -100,6 +108,14 @@ main	main	main
 						
 	absurd	SET tryToLaugh absurd1				
 		RETURN				
+						
+/pixels		INPUT image TITLE sendOnlyPhoto TO id				
+		EXTRACT width FROM id TO width				
+		EXTRACT height FROM id TO height				
+		SET pixels width				
+		MUL pixels height				
+		PRINT totalPixels				
+		GOTO start				
 						
 /test	test	PRINT sendAnImage				
 		END				
@@ -128,26 +144,26 @@ main	main	main
 		BSAVE id AS filenameUploaded TO ok				
 		GOSUB showStatus ok				
 		GOTO test				
-/send_eli						
-		CLEAR id				
+						
+/send_eli		CLEAR id				
 		IF EMPTY number THEN SET number 2				
 		IF NEQ number 2 THEN GOTO sendEli2				
 		BLOAD photoEliDubai AS image TO id				
 		PRINT mediaId1				
 		DISPLAY id TITLE captionEliDubai				
 		GOTO test				
-	wait					
-		MENU TITLE waitAndContinue OPTIONS ook TO res				
+						
+	wait	MENU TITLE waitAndContinue OPTIONS ook TO res				
 		RETURN				
-	showStatus					
-		ARGS lastStatus				
+						
+	showStatus	ARGS lastStatus				
 		PRINT lastStatusWas				
 		RETURN				
-/imagenumber						
-		INPUT integer TITLE imageNumber TO number				
+						
+/imagenumber		MENU TITLE imageNumber OPTIONS 1 2 3 4 5 6 7 8 9 10 TO number				
 		GOTO test				
-	sendEli2					
-		BLOAD photoEli AS image TO id				
+						
+	sendEli2	BLOAD photoEli AS image TO id				
 		PRINT mediaId1				
 		DISPLAY id				
 		GOTO test				

@@ -727,6 +727,24 @@ namespace botbasic {
 
         /**
          * Genera la estructura de datos (que será transferida como JSON en el raw content de la petición al web service) que representa el
+         * contenido esperado por los servidores de Telegram cuando se envía un par de coordenadas de geolocalización
+         *
+         * @param  InteractionResource  $resource   Resource que representa las coordenadas
+         * @return array                            Arreglo con los parámetros de contenido que debe recibir Telegram, en su formato final
+         */
+        private function makeLocationContentBase ($resource)
+        {
+            $parameters = [
+                'longitude' => $resource->metainfo->longitude,
+                'latitude'  => $resource->metainfo->latitude,
+            ];
+            return $parameters;
+        }
+
+
+
+        /**
+         * Genera la estructura de datos (que será transferida como JSON en el raw content de la petición al web service) que representa el
          * contenido esperado por los servidores de Telegram cuando se envía una imagen
          *
          * @param  InteractionResource  $resource   Resource que representa la imagen
@@ -735,24 +753,7 @@ namespace botbasic {
          */
         private function makePhotoContentBase ($resource, $caption = null)
         {
-            // URL style submit
-            //$parameters = [
-            //    'photo' => isset($resource->fileId) ? $resource->fileId : $this->makeMediaUrl($resource),
-            //];
-            //if ($caption !== null) { $parameters['caption'] = $caption; }
-            // POST multipart style submit
-            if (isset($resource->fileId)) {
-                $parameters = [
-                    'photo' => $resource->fileId,
-                ];
-            }
-            else {
-                $fields = [];
-                if ($caption !== null) { $fields['caption'] = $caption; }
-                $files = [ 'photo' => $this->makeMediaLocalPath($resource) ];
-                $parameters = [ $fields, $files ];
-            }
-            return $parameters;
+            return $this->makeMediaContentBase('photo', $resource, $caption);
         }
 
 
@@ -767,13 +768,7 @@ namespace botbasic {
          */
         private function makeAudioContentBase ($resource, $caption = null)
         {
-            $parameters = [
-                'audio'  => $resource->fileId,
-            ];
-            if ($caption !== null) {
-                $parameters['caption'] = $caption;
-            }
-            return $parameters;
+            return $this->makeMediaContentBase('audio', $resource, $caption);
         }
         /**
          * Genera la estructura de datos (que será transferida como JSON en el raw content de la petición al web service) que representa el
@@ -785,13 +780,7 @@ namespace botbasic {
          */
         private function makeVoiceContentBase ($resource, $caption = null)
         {
-            $parameters = [
-                'voice'  => $resource->fileId,
-            ];
-            if ($caption !== null) {
-                $parameters['caption'] = $caption;
-            }
-            return $parameters;
+            return $this->makeMediaContentBase('voice', $resource, $caption);
         }
 
 
@@ -806,13 +795,7 @@ namespace botbasic {
          */
         private function makeDocumentContentBase ($resource, $caption = null)
         {
-            $parameters = [
-                'document' => $resource->fileId,
-            ];
-            if ($caption !== null) {
-                $parameters['caption'] = $caption;
-            }
-            return $parameters;
+            return $this->makeMediaContentBase('document', $resource, $caption);
         }
 
 
@@ -827,13 +810,7 @@ namespace botbasic {
          */
         private function makeVideoContentBase ($resource, $caption = null)
         {
-            $parameters = [
-                'video' => $resource->fileId,
-            ];
-            if ($caption !== null) {
-                $parameters['caption'] = $caption;
-            }
-            return $parameters;
+            return $this->makeMediaContentBase('video', $resource, $caption);
         }
 
 
@@ -848,30 +825,39 @@ namespace botbasic {
          */
         private function makeVideoNoteContentBase ($resource, $caption = null)
         {
-            $parameters = [
-                'video_note' => $resource->fileId,
-            ];
-            if ($caption !== null) {
-                $parameters['caption'] = $caption;
-            }
-            return $parameters;
+            return $this->makeMediaContentBase('video_note', $resource, $caption);
         }
 
 
 
         /**
          * Genera la estructura de datos (que será transferida como JSON en el raw content de la petición al web service) que representa el
-         * contenido esperado por los servidores de Telegram cuando se envía un par de coordenadas de geolocalización
+         * contenido esperado por los servidores de Telegram cuando se envía una imagen
          *
-         * @param  InteractionResource  $resource   Resource que representa las coordenadas
+         * @param  string               $type       Tipo del Resource
+         * @param  InteractionResource  $resource   Resource que representa la imagen
+         * @param  string|null          $caption    Caption descriptiva de la imagen, o null si no la hay
          * @return array                            Arreglo con los parámetros de contenido que debe recibir Telegram, en su formato final
          */
-        private function makeLocationContentBase ($resource)
+        private function makeMediaContentBase ($type, $resource, $caption = null)
         {
-            $parameters = [
-                'longitude' => $resource->metainfo->longitude,
-                'latitude'  => $resource->metainfo->latitude,
-            ];
+            // URL style submit
+            //$parameters = [
+            //    $type => isset($resource->fileId) ? $resource->fileId : $this->makeMediaUrl($resource),
+            //];
+            //if ($caption !== null) { $parameters['caption'] = $caption; }
+            // POST multipart style submit
+            if (isset($resource->fileId)) {
+                $parameters = [
+                    $type => $resource->fileId,
+                ];
+            }
+            else {
+                $fields = [];
+                if ($caption !== null) { $fields['caption'] = $caption; }
+                $files = [ $type => $this->makeMediaLocalPath($resource) ];
+                $parameters = [ $fields, $files ];
+            }
             return $parameters;
         }
 
