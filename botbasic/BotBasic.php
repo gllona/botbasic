@@ -236,7 +236,7 @@ abstract class BotBasic
         [ 'extractSpec', 'width' ],
         [ 'extractSpec', 'height' ],
         [ 'extractSpec', 'format' ],
-        [ 'extractSpec', 'length' ],
+        [ 'extractSpec', 'duration' ],
     ];
 
 
@@ -345,7 +345,7 @@ abstract class BotBasic
         200 => [ 'width', '' ],
         201 => [ 'height', '' ],
         202 => [ 'format', '' ],
-        203 => [ 'length', '' ],
+        203 => [ 'duration', '' ],
         204 => [ 'CHATAPP', 'chatapp' ],
         205 => [ 'USERNAME', 'username' ],
         206 => [ 'USERLOGIN', 'userlogin' ],
