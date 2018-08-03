@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.18	gorkathebot				
+VERSION	0.2.19	gorkathebot				
 BOTS	main					
 						
 						
@@ -184,13 +184,12 @@ main	main	main
 						
 /sendmedia		OPTIONS oAUdio oDocument oImage oVideo oVideonote oVoice				
 		MENU TITLE selectMediaType TO option				
-		IF EQ option oAudio THEN SET filename mediaAudio1				
-		IF EQ option oDocument THEN SET filename mediaDocument1				
-		IF EQ option oImage THEN SET filename mediaImage1				
-		IF EQ option oVideo THEN SET filename mediaVideo1				
-		IF EQ option oVideonote THEN SET filename mediaVideonote1				
-		IF EQ option oVoice THEN SET filename mediaVoice1				
-		BLOAD filename AS image TO id				
+		IF EQ option oAudio THEN BLOAD mediaAudio1 AS audio TO id				
+		IF EQ option oDocument THEN BLOAD mediaDocument1 AS document TO id				
+		IF EQ option oImage THEN BLOAD mediaImage1 AS image TO id				
+		IF EQ option oVideo THEN BLOAD mediaVideo1 AS video TO id				
+		IF EQ option oVideonote THEN BLOAD mediaVideonote1 AS videonote TO id				
+		IF EQ option oVoice THEN BLOAD mediaVoice1 AS voice TO id				
 		IF EMPTY id THEN PRINT error : GOTO sm1				
 		DISPLAY id				
 	sm1	GOTO test				
