@@ -2644,9 +2644,11 @@ END;
     {
         $this->doDummy($type);
         $proc = null;
-        switch ($type = mime_content_type($filename)) {
-            case 'video/mpeg' : if ($proc !== null) { $proc = [ 'mpeg2mp3 -silent -delete', 'mp3' ]; } break;
-            case 'video/avi'  : if ($proc !== null) { $proc = [ 'avi2mp3  -silent -delete', 'mp3' ]; } break;
+        if (false) {   // currently conversion from video to audio is disabled
+            switch ($type = mime_content_type($filename)) {
+                case 'video/mpeg' : $proc = [ 'mpeg2mp3 -silent -delete', 'mp3' ]; break;
+                case 'video/avi'  : $proc = [ 'avi2mp3  -silent -delete', 'mp3' ]; break;
+            }
         }
         $newFilename = strrpos($filename, '.') === false && isset($metainfo['format']) ? $filename . '.' . $metainfo['format'] : $filename;
         if ($proc === null && $filename != $newFilename) { rename($filename, $newFilename); }
