@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.19	gorkathebot				
+VERSION	0.2.20	gorkathebot				
 BOTS	main					
 						
 						
@@ -182,7 +182,7 @@ main	main	main
 		DISPLAY id				
 		GOTO test				
 						
-/sendmedia		OPTIONS oAUdio oDocument oImage oVideo oVideonote oVoice				
+/sendmedia		OPTIONS oAudio oDocument oImage oVideo oVideonote oVoice				
 		MENU TITLE selectMediaType TO option				
 		IF EQ option oAudio THEN BLOAD mediaAudio1 AS audio TO id				
 		IF EQ option oDocument THEN BLOAD mediaDocument1 AS document TO id				
