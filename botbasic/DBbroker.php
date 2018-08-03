@@ -2642,15 +2642,97 @@ END;
      */
     private function postProcessDownload ($filename, $type, $metainfo)   // type is not used yet
     {
+        $getExtension = function($mimeType) {
+            switch ($mimeType) {
+                case 'audio/m4a' : return 'm4a';   // audio, as sent by Telegram
+                case 'video/mp4' : return 'mp4';   // video, as sent by Telegram
+                //case 'audio/ogg' : return 'oga';   // voice - see below
+                // the following are from https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+                case 'audio/aac' : return 'aac';   // AAC audio
+                case 'application/x-abiword' : return 'abw';   // AbiWord document
+                //case 'application/octet-stream' : return 'arc';   // Archive document (multiple files embedded)
+                case 'video/x-msvideo' : return 'avi';   // AVI: Audio Video Interleave
+                case 'application/vnd.amazon.ebook' : return 'azw';   // Amazon Kindle eBook format
+                case 'application/octet-stream' : return 'bin';   // Any kind of binary data
+                case 'image/bmp' : return 'bmp';   // Windows OS/2 Bitmap Graphics
+                case 'application/x-bzip' : return 'bz';   // BZip archive
+                case 'application/x-bzip2' : return 'bz2';   // BZip2 archive
+                case 'application/x-csh' : return 'csh';   // C-Shell script
+                case 'text/css' : return 'css';   // Cascading Style Sheets (CSS)
+                case 'text/csv' : return 'csv';   // Comma-separated values (CSV)
+                case 'application/msword' : return 'doc';   // Microsoft Word
+                case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : return 'docx';   // Microsoft Word (OpenXML)
+                case 'application/vnd.ms-fontobject' : return 'eot';   // MS Embedded OpenType fonts
+                case 'application/epub+zip' : return 'epub';   // Electronic publication (EPUB)
+                case 'application/ecmascript' : return 'es';   // ECMAScript (IANA Specification) (RFC 4329 Section 8.2)
+                case 'image/gif' : return 'gif';   // Graphics Interchange Format (GIF)
+                case 'text/html' : return 'html';   // HyperText Markup Language (HTML)
+                case 'image/x-icon' : return 'ico';   // Icon format
+                case 'text/calendar' : return 'ics';   // iCalendar format
+                case 'application/java-archive' : return 'jar';   // Java Archive (JAR)
+                case 'image/jpeg' : return 'jpg';   // JPEG images
+                case 'application/javascript' : return 'js';   // JavaScript (IANA Specification) (RFC 4329 Section 8.2)
+                case 'application/json' : return 'json';   // JSON format
+                case 'audio/midi audio/x-midi' : return 'midi';   // Musical Instrument Digital Interface (MIDI)
+                case 'video/mpeg' : return 'mpeg';   // MPEG Video
+                case 'application/vnd.apple.installer+xml' : return 'mpkg';   // Apple Installer Package
+                case 'application/vnd.oasis.opendocument.presentation' : return 'odp';   // OpenDocument presentation document
+                case 'application/vnd.oasis.opendocument.spreadsheet' : return 'ods';   // OpenDocument spreadsheet document
+                case 'application/vnd.oasis.opendocument.text' : return 'odt';   // OpenDocument text document
+                case 'audio/ogg' : return 'oga';   // OGG audio
+                case 'video/ogg' : return 'ogv';   // OGG video
+                case 'application/ogg' : return 'ogx';   // OGG
+                case 'font/otf' : return 'otf';   // OpenType font
+                case 'image/png' : return 'png';   // Portable Network Graphics
+                case 'application/pdf' : return 'pdf';   // Adobe Portable Document Format (PDF)
+                case 'application/vnd.ms-powerpoint' : return 'ppt';   // Microsoft PowerPoint
+                case 'application/vnd.openxmlformats-officedocument.presentationml.presentation' : return 'pptx';   // Microsoft PowerPoint (OpenXML)
+                case 'application/x-rar-compressed' : return 'rar';   // RAR archive
+                case 'application/rtf' : return 'rtf';   // Rich Text Format (RTF)
+                case 'application/x-sh' : return 'sh';   // Bourne shell script
+                case 'image/svg+xml' : return 'svg';   // Scalable Vector Graphics (SVG)
+                case 'application/x-shockwave-flash' : return 'swf';   // Small web format (SWF) or Adobe Flash document
+                case 'application/x-tar' : return 'tar';   // Tape Archive (TAR)
+                case 'image/tiff' : return 'tiff';   // Tagged Image File Format (TIFF)
+                case 'application/typescript' : return 'ts';   // Typescript file
+                case 'font/ttf' : return 'ttf';   // TrueType Font
+                case 'text/plain' : return 'txt';   // Text, (generally ASCII or ISO 8859-n)
+                case 'application/vnd.visio' : return 'vsd';   // Microsoft Visio
+                case 'audio/wav' : return 'wav';   // Waveform Audio Format
+                case 'audio/webm' : return 'weba';   // WEBM audio
+                case 'video/webm' : return 'webm';   // WEBM video
+                case 'image/webp' : return 'webp';   // WEBP image
+                case 'font/woff' : return 'woff';   // Web Open Font Format (WOFF)
+                case 'font/woff2' : return 'woff2';   // Web Open Font Format (WOFF)
+                case 'application/xhtml+xml' : return 'xhtml';   // XHTML
+                case 'application/vnd.ms-excel' : return 'xls';   // Microsoft Excel
+                case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : return 'xlsx';   // Microsoft Excel (OpenXML)
+                case 'application/xml' : return 'xml';   // XML
+                case 'application/vnd.mozilla.xul+xml' : return 'xul';   // XUL
+                case 'application/zip' : return 'zip';   // ZIP archive
+                case 'video/3gpp' : return '3gp';   // 3GPP audio/video container
+                case 'audio/3gpp' : return '3gp';   // 3GPP audio container
+                case 'video/3gpp2' : return '3g2';   // 3GPP2 audio/video container
+                case 'audio/3gpp2' : return '3g2';   // 3GPP2 audio container
+                case 'application/x-7z-compressed' : return '7z';   // 7-zip archive
+            }
+            return null;
+        };
         $this->doDummy($type);
         $proc = null;
-        if (false) {   // currently conversion from video to audio is disabled
+        if (false) {   // currently conversion from video to audio is disabled and not tested
             switch ($type = mime_content_type($filename)) {
                 case 'video/mpeg' : $proc = [ 'mpeg2mp3 -silent -delete', 'mp3' ]; break;
                 case 'video/avi'  : $proc = [ 'avi2mp3  -silent -delete', 'mp3' ]; break;
             }
         }
-        $newFilename = strrpos($filename, '.') === false && isset($metainfo['format']) ? $filename . '.' . $metainfo['format'] : $filename;
+        $newFilename = $filename;
+        if (strrpos($filename, '.') === false) {
+            $extension = null;
+            if     (isset($metainfo['mime_type']) && ($extension = $getExtension($metainfo['mime_type'])) !== null) {}
+            elseif (isset($metainfo['format']))                                                                     { $extension = $metainfo['format']; }
+            if ($extension !== null) { $newFilename = $filename . '.' . $extension; }
+        }
         if ($proc === null && $filename != $newFilename) { rename($filename, $newFilename); }
         elseif ($proc !== null) {
             $oldFilename = $filename;
