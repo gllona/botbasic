@@ -1063,7 +1063,7 @@ namespace botbasic {
                         $msg .= isset($response->body->error_code)  ? " error_code=[" . $response->body->error_code . "]" : "";
                         $msg .= isset($response->body->description) ? " description=[" . $response->body->description . "]" : "";
                     }
-                    $this->conditionalLog(Log::TYPE_DAEMON, "CMTG926 $msg // METHOD=$method // JSON=$content");
+                    $this->conditionalLog(Log::TYPE_DAEMON, "CMTG926 $msg // METHOD=$method // JSON=" . json_encode($content));
                     return false;
                 }
             }

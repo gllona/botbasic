@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.16	gorkathebot				
+VERSION	0.2.18	gorkathebot				
 BOTS	main					
 						
 						
@@ -25,7 +25,7 @@ prank2		I get more of your time that you of mine
 silly1		Wood in the stove, hair on the floor				
 absurd1		You have a thousand more important to do than this				
 commandOptions		Choose /ai /pixels /test				
-sendAnImage		Send me photos or /letmeask1 /letmeask2 /letmeask3 or /send_eli /imagenumber				
+sendMedia		Send me media or /letmeask1 /letmeask2 /letmeask3 or /send_eli /imagenumber or /sendmedia				
 mediaInfo		Media type is {type} and id is {id}				
 sendOnlyPhoto		Attach now a photo				
 mediaId1		Media id is {id}				
@@ -46,6 +46,20 @@ wasAS		Artificial Stupidity
 wasBoth		Both				
 thanks		Thanks				
 totalPixels		Image is {width} pixels wide and {height} pixels tall and has {pixels} pixels				
+mediaAudio1		seconds/audio-1.m4a				
+mediaDocument1		seconds/document-1.txt				
+mediaImage1		seconds/image-1.jpg				
+mediaVideo1		seconds/video-1.mp4				
+mediaVideonote1		seconds/videonote-1.mp4				
+mediaVoice1		seconds/voice-1.oga				
+oAudio		Audio				
+oDocument		Document				
+oImage		Image				
+oVideo		Video				
+oVideonote		Videonote				
+oVoice		Voice				
+selectMediaType		Select media type:				
+error		An error occurred!				
 						
 						
 						
@@ -117,7 +131,7 @@ main	main	main
 		PRINT totalPixels				
 		GOTO start				
 						
-/test	test	PRINT sendAnImage				
+/test	test	PRINT sendMedia				
 		END				
 						
 //		SET type ENTRYTYPE				
@@ -167,3 +181,16 @@ main	main	main
 		PRINT mediaId1				
 		DISPLAY id				
 		GOTO test				
+						
+/sendmedia		OPTIONS oAUdio oDocument oImage oVideo oVideonote oVoice				
+		MENU TITLE selectMediaType TO option				
+		IF EQ option oAudio THEN SET filename mediaAudio1				
+		IF EQ option oDocument THEN SET filename mediaDocument1				
+		IF EQ option oImage THEN SET filename mediaImage1				
+		IF EQ option oVideo THEN SET filename mediaVideo1				
+		IF EQ option oVideonote THEN SET filename mediaVideonote1				
+		IF EQ option oVoice THEN SET filename mediaVoice1				
+		BLOAD filename AS image TO id				
+		IF EMPTY id THEN PRINT error : GOTO sm1				
+		DISPLAY id				
+	sm1	GOTO test				
