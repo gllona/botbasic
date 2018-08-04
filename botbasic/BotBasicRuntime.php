@@ -2135,11 +2135,11 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                 if (count($parts) != 2) { return false; }
                 $resource = [ 'latitude' => (float)$parts[0], 'longitude' => (float)$parts[1] ];
             }
-            /** @var InteractionResource $resource */
-            $ok = isset($resource->metainfo['latitude']) && isset($resource->metainfo['longitude']) &&
-                  is_float($resource->metainfo['latitude']) && is_float($resource->metainfo['longitude']);
+            $lat = $resource instanceof InteractionResource ? $resource->getMetainfoAttribute('latitude')  : $resource['latitude'];
+            $lon = $resource instanceof InteractionResource ? $resource->getMetainfoAttribute('longitude') : $resource['longitude'];
+            $ok = $lat !== null && $lon !== null && is_float($lat) && is_float($lon);
             if (! $ok) { return false; }
-            $resource = $resource->metainfo['latitude'] . ',' . $resource->metainfo['longitude'];
+            $resource = "$lat,$lon";
             return true;
         };
 
@@ -3545,7 +3545,8 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         }
         // get the value
         $attribute = $parsedContent[1];
-        $value     = isset($resource->metainfo[$attribute]) ? $resource->metainfo[$attribute] : self::NOTHING;
+        $value     = $resource->getMetainfoAttribute($attribute);
+        if ($value === null) { $value = self::NOTHING; }
         // set the value and return
         $this->setVar($parsedContent[5], $value, $lineno, $bot, false);
         return -1;

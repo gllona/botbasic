@@ -356,9 +356,9 @@ class InteractionResource
      */
     public function getMetainfoAttribute ($field = null)
     {
-        if ($this->metainfo === null)                                                       { return null;                                                                   }
-        if ($field === null || ! (is_array($this->metainfo) || is_object($this->metainfo))) { return is_object($this->metainfo) ? (array) $this->metainfo : $this->metainfo; }
-        if (is_array($this->metainfo))                                                      { return isset($this->metainfo[$field]) ? $this->metainfo[$field] : null;        }
+        if ($this->metainfo === null)                                                       { return null;                                                                  }
+        if ($field === null || ! (is_array($this->metainfo) || is_object($this->metainfo))) { return is_object($this->metainfo) ? (array)$this->metainfo : $this->metainfo; }
+        if (is_array($this->metainfo))                                                      { return isset($this->metainfo[$field]) ? $this->metainfo[$field] : null;       }
         return isset($this->metainfo->$field) ? $this->metainfo->$field : null;
     }
 

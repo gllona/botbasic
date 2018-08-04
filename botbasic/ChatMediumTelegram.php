@@ -674,15 +674,15 @@ namespace botbasic {
          */
         private function buildMediaAttributes ($resource, $members)
         {
-            $notFoundMembers = $setMembers = [];
-            foreach (explode(',', $members) as $member) {
-                if (! isset($resource->metainfo[$member])) { $notFoundMembers[]   = $member;                      }
-                else                                       { $setMembers[$member] = $resource->metainfo[$member]; }
+            $notFoundAttributes = $setAttributes = [];
+            foreach (explode(',', $members) as $attribute) {
+                if ($resource->getMetainfoAttribute($attribute) === null) { $notFoundAttributes[]      = $attribute;                                  }
+                else                                                      { $setAttributes[$attribute] = $resource->getMetainfoAttribute($attribute); }
             }
-            if (count($notFoundMembers) > 0) {
-                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG656 Resource " . $resource->id . " tipo " . $resource->type . " carece de miembros (" . implode(',', $notFoundMembers) . ")");
+            if (count($notFoundAttributes) > 0) {
+                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG656 Resource " . $resource->id . " tipo " . $resource->type . " carece de atributos (" . implode(',', $notFoundAttributes) . ")");
             }
-            return $setMembers;
+            return $setAttributes;
         }
 
 
