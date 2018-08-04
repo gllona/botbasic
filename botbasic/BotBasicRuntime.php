@@ -2127,20 +2127,21 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
 
         $validateLocation = function (&$resource) use ($validateResourceType)
         {
-            if (! $validateResourceType($resource, InteractionResource::TYPE_LOCATION)) {
-                return false;
-            }
-            if (is_string($resource)) {   // this method can re-enter
-                $parts = explode(',', $resource);
-                if (count($parts) != 2) { return false; }
-                $resource = [ 'latitude' => (float)$parts[0], 'longitude' => (float)$parts[1] ];
-            }
-            $lat = $resource instanceof InteractionResource ? $resource->getMetainfoAttribute('latitude')  : $resource['latitude'];
-            $lon = $resource instanceof InteractionResource ? $resource->getMetainfoAttribute('longitude') : $resource['longitude'];
-            $ok = $lat !== null && $lon !== null && is_float($lat) && is_float($lon);
-            if (! $ok) { return false; }
-            $resource = "$lat,$lon";
-            return true;
+            return $validateResourceType($resource, InteractionResource::TYPE_LOCATION);
+            //if (! $validateResourceType($resource, InteractionResource::TYPE_LOCATION)) {
+            //    return false;
+            //}
+            //if (is_string($resource)) {   // this method can re-enter
+            //    $parts = explode(',', $resource);
+            //    if (count($parts) != 2) { return false; }
+            //    $resource = [ 'latitude' => (float)$parts[0], 'longitude' => (float)$parts[1] ];
+            //}
+            //$lat = $resource instanceof InteractionResource ? $resource->getMetainfoAttribute('latitude')  : $resource['latitude'];
+            //$lon = $resource instanceof InteractionResource ? $resource->getMetainfoAttribute('longitude') : $resource['longitude'];
+            //$ok = $lat !== null && $lon !== null && is_float($lat) && is_float($lon);
+            //if (! $ok) { return false; }
+            //$resource = "$lat,$lon";
+            //return true;
         };
 
         // check if input is correct, normalize input data and determine input datatype
