@@ -553,13 +553,13 @@ namespace botbasic {
                     case InteractionResource::TYPE_DOCUMENT  : $method = "sendDocument";  $content = $this->makeDocumentContentBase( $resource, $this->limitCaption($textOrCaption)); break;
                     case InteractionResource::TYPE_VIDEO     : $method = "sendVideo";     $content = $this->makeVideoContentBase(    $resource, $this->limitCaption($textOrCaption)); break;
                     case InteractionResource::TYPE_VIDEONOTE : $method = "sendVideoNote"; $content = $this->makeVideoNoteContentBase($resource, $this->limitCaption($textOrCaption)); break;
-                    case InteractionResource::TYPE_LOCATION  : $method = "sendLocation";  $content = $this->makeLocationContentBase($resource);                                       break;
+                    case InteractionResource::TYPE_LOCATION  : $method = "sendLocation";  $content = $this->makeLocationContentBase( $resource);                                      break;
                     default                                  : $method = "sendMessage";
                                                                $content = $this->makeTextContentBase("[INVALID RESOURCE TYPE]" . ($textOrCaption === null ? "" : " / $textOrCaption"));
                                                                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG433 invalid resource type in ChatMediumTelegram::makeJsonForPost()");
 
                 }
-                if (is_array($content[0])) { list($content, $files) = $content; }
+                if (isset($content[0])) { list($content, $files) = $content; }
             }
             elseif ($textOrCaption === null && ($menuOptions === null || count($menuOptions) == 0)) {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG444 Tratando de enviar un splash vacio");

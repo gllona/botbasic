@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.23	gorkathebot				
+VERSION	0.2.24	gorkathebot				
 BOTS	main					
 						
 						
@@ -62,6 +62,7 @@ selectMediaType		Select media type:
 error		An error occurred!				
 enterLocation		Send your current location				
 yourLocationIs		You are at {lat}° latitude and {lon}° longitude				
+oppositeLocation		This is the opposite location:				
 						
 						
 						
@@ -200,4 +201,9 @@ main	main	main
 		EXTRACT latitude FROM id TO lat				
 		EXTRACT longitude FROM id TO lon				
 		PRINT yourLocationIs				
+		PRINT oppositeLocation				
+		MUL lat -1				
+		MUL lon -1				
+		BUILD location SET longitude lon latitude lat TO id				
+		DISPLAY id				
 		GOTO test				

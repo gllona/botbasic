@@ -4103,6 +4103,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
      */
     private function runner4build (&$parsedContent, $lineno, $bot)
     {
+        $normalize = function ($v, $l) { return $v % $l + (abs($v) > $l && abs($v) - $l < 1 ? -$l * ($v <=> 0) : 0) + (abs($v) - floor(abs($v))) * ($v <=> 0); };
         if ($parsedContent[1] != $this->TOK('location')) {
             Log::register(Log::TYPE_RUNTIME, "RT4107 buildable {$parsedContent[1]} no soportado actualmente", $this, $lineno);
             return -1;
@@ -4120,8 +4121,8 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             Log::register(Log::TYPE_RUNTIME, "RT4120 las coordenadas deben ser valores numericos", $this, $lineno);
             return -1;
         }
-        $lon = $lon % 180;
-        $lat = $lat %  90;
+        $lon = (float)$normalize($lon, 180);
+        $lat = (float)$normalize($lat,  90);
         $location = (object)[ 'longitude' => $lon, 'latitude' => $lat ];
         $cmType   = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
         $r        = InteractionResource::createFromContent(InteractionResource::TYPE_LOCATION, $cmType, $location);
