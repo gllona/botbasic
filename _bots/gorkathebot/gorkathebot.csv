@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.21	gorkathebot				
+VERSION	0.2.23	gorkathebot				
 BOTS	main					
 						
 						
@@ -61,7 +61,7 @@ oVoice		Voice
 selectMediaType		Select media type:				
 error		An error occurred!				
 enterLocation		Send your current location				
-yourLocation		You are at {lat}° latitude and {lon}° longitude				
+yourLocationIs		You are at {lat}° latitude and {lon}° longitude				
 						
 						
 						
@@ -198,6 +198,6 @@ main	main	main
 						
 /latlon		INPUT location TITLE enterLocation TO id				
 		EXTRACT latitude FROM id TO lat				
-		EXTRACT longitude FROM id TO lat				
+		EXTRACT longitude FROM id TO lon				
 		PRINT yourLocationIs				
 		GOTO test				

@@ -2412,6 +2412,29 @@ class BotBasicParser extends BotBasic
 
 
     /**
+     * Parser4... para BUILD
+     *
+     * @param  string       $symbol         Símbolo de la gramática por el cual se procesa (directiva objetivo del parser4...)
+     * @param  string[]     $ttokens        Tokens de la línea de código
+     * @param  int          $lineno         Número de línea del programa BotBasic
+     * @param  string       $bot            Bot del programa BotBasic
+     * @return bool                         Indica si el procesamiento tuvo éxito
+     */
+    private function parser4build ($symbol, &$ttokens, $lineno, $bot)
+    {
+        return $this->parserCheckAllPoss(
+            $symbol, $ttokens, $lineno, $bot, [
+                'BUILD' => 'symbol::0:buildableType',
+                'SET'   => 'split::4..4|symbol::0:buildableAttrib+2:buildableAttrib|type::1:attribute name:isLvalue:3:attribute name:isLvalue',
+                'TO'    => 'type::0:target variable:isLvalue',
+            ],
+            [ 'SET', 'TO' ]
+        );
+    }
+
+
+
+    /**
      * Parser4... para TRACE
      *
      * @param  string       $symbol         Símbolo de la gramática por el cual se procesa (directiva objetivo del parser4...)

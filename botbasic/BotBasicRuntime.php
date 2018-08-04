@@ -2163,7 +2163,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             case 'voice'           : $ok = $validateVoice($resource);                               break;
             case 'document'        : $ok = $validateDocument($resource);                            break;
             case 'video'           : $ok = $validateVideo($resource);                               break;
-            case 'location'        : if ($ok = $validateLocation($resource)) { $text = $resource; } break;
+            case 'location'        : if ($ok = $validateLocation($resource)) { $text = $resource; } break;   // { $text = $resource; $resource = null; }   // use if uncomment code from $validateLocation
             default                :
                 if ($dataType == 'any' && $resource === null) {   // $text !== null
                     $ok   = true;
@@ -4088,6 +4088,36 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                 $this->setBizModelUserId($userId, $lineno, $bot);
             }
         }
+        return -1;
+    }
+
+
+
+    /**
+     * Runner4... para BUILD
+     *
+     * @param  array        $parsedContent  Tokens de la línea de código ya transformados por el parser (no serán modificados)
+     * @param  int          $lineno         Número de línea del programa BotBasic
+     * @param  string       $bot            Bot del programa BotBasic
+     * @return bool                         Nuevo número de línea (salto de ejecución); o -1 si se debe seguir la secuencia lineal
+     */
+    private function runner4build (&$parsedContent, $lineno, $bot)
+    {
+        if ($parsedContent[1] != $this->TOK('location')) {
+            Log::register(Log::TYPE_RUNTIME, "RT4107 buildable {$parsedContent[1]} no soportado actualmente", $this, $lineno);
+            return -1;
+        }
+        $attrs = $parsedContent[3];
+        if (! ($attrs[0] == $this->TOK('longitude') && $attrs[2] == $this->TOK('latitude') || $attrs[2] == $this->TOK('longitude') && $attrs[0] == $this->TOK('latitude'))) {
+            Log::register(Log::TYPE_RUNTIME, "RT4112 no fueron especificados latitude y longitude", $this, $lineno);
+            return -1;
+        }
+        $lon = $attrs[0] == $this->TOK('longitude') ? $attrs[1] : $attrs[3];
+        $lat = $attrs[0] == $this->TOK('latitude')  ? $attrs[1] : $attrs[3];
+        $location = (object)[ 'longitude' => $lon, 'latitude' => $lat ];
+        $cmType = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
+        $r = InteractionResource::createFromContent(InteractionResource::TYPE_LOCATION, $cmType, $location);
+        $this->setVar($parsedContent[5], $r->id, $lineno, $bot);
         return -1;
     }
 

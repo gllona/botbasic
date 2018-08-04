@@ -237,6 +237,10 @@ abstract class BotBasic
         [ 'extractSpec', 'height' ],
         [ 'extractSpec', 'format' ],
         [ 'extractSpec', 'duration' ],
+        [ 'sentence', 'BUILD <buildableType> SET <buildableAttrib> <variable1> <buildableAttrib> <variable2> TO <variable3>' ],
+        [ 'buildableType', 'location' ],
+        [ 'buildableAttrib', 'latitude' ],
+        [ 'buildableAttrib', 'longitude' ],
     ];
 
 
@@ -351,6 +355,7 @@ abstract class BotBasic
         206 => [ 'USERNAME', 'username' ],
         207 => [ 'USERLOGIN', 'userlogin' ],
         208 => [ 'USERLANG', 'userlang' ],
+        209 => [ 'BUILD', 'build' ],
     ];
 
 
