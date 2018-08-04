@@ -2029,7 +2029,7 @@ class BotBasicParser extends BotBasic
                 'AS'    => 'symbol::0:mediaType',
                 'TO'    => 'type::0:resource id:isLvalue',
             ],
-            [ 'WITH', 'AS', 'TO' ]
+            [ 'AS', 'TO' ]
         );
     }
 

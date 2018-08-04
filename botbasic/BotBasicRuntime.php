@@ -3435,7 +3435,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             exec($command, $output, $res);
             if ($res != 0) {
                 if (strpos(implode(' ', $output), 'No URLs matched') !== false) {
-                    Log::register(Log::TYPE_BBCODE, "RT3437 No se puede descargar el resource $cloudFilename", $this, $lineno);
+                    Log::register(Log::TYPE_BBCODE, "RT3437 Cant download the resource from $cloudFilename", $this, $lineno);
                 }
                 else {
                     Log::register(Log::TYPE_RUNTIME, "RT3436 No se puede descargar el resource: [$command] arroja [$res] [" . json_encode($output) . "]", $this, $lineno);
@@ -3453,7 +3453,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             $resource = $loadFile($filename, $mediaType, true);
         }
         if ($resource === null) {
-            Log::register(Log::TYPE_BBCODE, "RT3420 No se puede cargar el resource desde $filename", $this, $lineno);
+            Log::register(Log::TYPE_BBCODE, "RT3420 Cant load resource from $filename", $this, $lineno);
         }
         // set the var
         $resourceId = $resource === null ? self::NOTHING : $resource->id;
