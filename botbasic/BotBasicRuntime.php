@@ -4112,11 +4112,19 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
             Log::register(Log::TYPE_RUNTIME, "RT4112 no fueron especificados latitude y longitude", $this, $lineno);
             return -1;
         }
-        $lon = $attrs[0] == $this->TOK('longitude') ? $attrs[1] : $attrs[3];
-        $lat = $attrs[0] == $this->TOK('latitude')  ? $attrs[1] : $attrs[3];
+        $lonVar = $attrs[0] == $this->TOK('longitude') ? $attrs[1] : $attrs[3];
+        $latVar = $attrs[0] == $this->TOK('latitude')  ? $attrs[1] : $attrs[3];
+        $lon    = $this->getVar($lonVar, $lineno, $bot);
+        $lat    = $this->getVar($latVar, $lineno, $bot);
+        if (! $this->isNumber($lon) || ! $this->isNumber($lat)) {
+            Log::register(Log::TYPE_RUNTIME, "RT4120 las coordenadas deben ser valores numericos", $this, $lineno);
+            return -1;
+        }
+        $lon = $lon % 180;
+        $lat = $lat %  90;
         $location = (object)[ 'longitude' => $lon, 'latitude' => $lat ];
-        $cmType = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
-        $r = InteractionResource::createFromContent(InteractionResource::TYPE_LOCATION, $cmType, $location);
+        $cmType   = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
+        $r        = InteractionResource::createFromContent(InteractionResource::TYPE_LOCATION, $cmType, $location);
         $this->setVar($parsedContent[5], $r->id, $lineno, $bot);
         return -1;
     }
