@@ -1024,7 +1024,7 @@ namespace botbasic {
             // assemble the url and determine the http header for the POST
             $url     = "https://api.telegram.org/bot$token/$method";
             $headers = [];
-            if ($method == "sendMessage" || $method == "getFile" || $method == "answerCallbackQuery") {
+            if ($method == "sendMessage" || $method == "getFile" || $method == "answerCallbackQuery" || $files === null) {
                 $headers['Content-Type'] = "application/json";
                 $accept  = "application/json";
                 try {
