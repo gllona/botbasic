@@ -346,4 +346,22 @@ class InteractionResource
 
 
 
+    /**
+     * Retorna la metainformacion asociada al resource, o bien toda, o bien un elemento especificado
+     *
+     * Si la metainformacion es un escalar, se retornara su valor independientemente del argumento.
+     *
+     * @param  null|string      $field  Clave del elemento de metainformacion a retornar, o null para retornarla toda
+     * @return array|mixed|null         null si no existe el elemento, el elemento, o un arreglo asociativo con toda la metainformacion
+     */
+    public function getMetainfoAttribute ($field = null)
+    {
+        if ($this->metainfo === null)                                                       { return null;                                                                   }
+        if ($field === null || ! (is_array($this->metainfo) || is_object($this->metainfo))) { return is_object($this->metainfo) ? (array) $this->metainfo : $this->metainfo; }
+        if (is_array($this->metainfo))                                                      { return isset($this->metainfo[$field]) ? $this->metainfo[$field] : null;        }
+        return isset($this->metainfo->$field) ? $this->metainfo->$field : null;
+    }
+
+
+
 }

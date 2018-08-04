@@ -957,8 +957,8 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                         if ($r->type == InteractionResource::TYPE_CAPTION) { $caption = $r->metainfo; }
                         else                                               { $resource = $r;          }
                     }
-                    if ($resource !== null && $caption === null && isset($resource->metainfo['caption'])) {
-                        $caption = $resource->metainfo['caption'];
+                    if ($resource !== null && $caption === null && $resource->getMetainfoAttribute('caption') !== null) {
+                        $caption = $resource->getMetainfoAttribute('caption');
                     }
                     if ($caption !== null && $text !== null) {
                         Log::register(Log::TYPE_RUNTIME, "RT960 Se recibio un update con texto y a la vez un resource caption", $this);
