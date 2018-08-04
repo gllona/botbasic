@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.2.24	gorkathebot				
+VERSION	0.2.27	gorkathebot				
 BOTS	main					
 						
 						
@@ -25,7 +25,7 @@ prank2		I get more of your time that you of mine
 silly1		Wood in the stove, hair on the floor				
 absurd1		You have a thousand more important to do than this				
 commandOptions		Choose /ai /pixels /test				
-sendMedia		Send me media or /letmeask1 /letmeask2 /letmeask3 or /send_eli /imagenumber or /sendmedia /latlon				
+sendMedia		Send me media or /letmeask1 /letmeask2 /letmeask3 or /send_eli /imagenumber or /sendmedia /latlon /antipodeans				
 mediaInfo		Media type is {type} and id is {id}				
 sendOnlyPhoto		Attach now a photo				
 mediaId1		Media id is {id}				
@@ -62,7 +62,7 @@ selectMediaType		Select media type:
 error		An error occurred!				
 enterLocation		Send your current location				
 yourLocationIs		You are at {lat}° latitude and {lon}° longitude				
-oppositeLocation		This is the opposite location:				
+oppositeLocation		This is the antipodeans:				
 						
 						
 						
@@ -180,7 +180,7 @@ main	main	main
 /imagenumber		MENU TITLE imageNumber OPTIONS 1 2 3 4 5 6 7 8 9 10 TO number				
 		GOTO test				
 						
-	sendEli2	BLOAD photoEli AS image TO id				
+	sendEli2	BLOAD photoEli AS image WITH reload TO id				
 		PRINT mediaId1				
 		DISPLAY id				
 		GOTO test				
@@ -197,13 +197,13 @@ main	main	main
 		DISPLAY id				
 	sm1	GOTO test				
 						
-/latlon		INPUT location TITLE enterLocation TO id				
+/latlon /antipodeans		INPUT location TITLE enterLocation TO id				
 		EXTRACT latitude FROM id TO lat				
 		EXTRACT longitude FROM id TO lon				
 		PRINT yourLocationIs				
 		PRINT oppositeLocation				
 		MUL lat -1				
-		MUL lon -1				
+		INC lon 180				
 		BUILD location SET longitude lon latitude lat TO id				
 		DISPLAY id				
 		GOTO test				

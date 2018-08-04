@@ -2029,7 +2029,7 @@ class BotBasicParser extends BotBasic
                 'AS'    => 'symbol::0:mediaType',
                 'TO'    => 'type::0:resource id:isLvalue',
             ],
-            [ 'TO' ]
+            [ 'WITH', 'AS', 'TO' ]
         );
     }
 
@@ -2534,6 +2534,7 @@ class BotBasicParser extends BotBasic
         $this->parser4bload             ($a, $b, $c, $d);
         $this->parser4bsave             ($a, $b, $c, $d);
         $this->parser4extract           ($a, $b, $c, $d);
+        $this->parser4build             ($a, $b, $c, $d);
     }
 
 

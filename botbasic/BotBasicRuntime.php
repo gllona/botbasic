@@ -3415,11 +3415,12 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         {
             return $filename;
         };
-        $loadFile = function ($filename, $mediaType, $fromCloud) use ($buildLocalFilename)
+        $loadFile = function ($filename, $mediaType, $fromCloud, $deleteFirst = false) use ($buildLocalFilename)
         {
             if ($filename === null || $filename == '') { return null; }
             $filename = $buildLocalFilename($filename, $fromCloud);
-            if (! file_exists($filename)) { return null; }
+            if ($deleteFirst)             { @unlink($filename); }
+            if (! file_exists($filename)) { return null;        }
             $cmType   = $this->getCurrentBBchannel()->getCMchannel()->getCMtype();
             $resource = InteractionResource::createFromFile(InteractionResource::getType($mediaType), $filename, $cmType);
             return $resource;
@@ -3444,8 +3445,9 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         };
         // try to load locally
         $filename  = $this->getVar($parsedContent[1], $lineno, $bot);
+        $reload    = $parsedContent[4] == $this->TOK('WITH') && $parsedContent[5] == $this->TOK('reload');
         $mediaType = $parsedContent[3];
-        $resource  = $loadFile($filename, $mediaType, false);
+        $resource  = $loadFile($filename, $mediaType, false, $reload);
         // if not, try to download from cloud and then load locally
         if ($resource === null && $download($filename)) {
             $resource = $loadFile($filename, $mediaType, true);
@@ -3455,7 +3457,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
         }
         // set the var
         $resourceId = $resource === null ? self::NOTHING : $resource->id;
-        $this->setVar($parsedContent[5], $resourceId, $lineno, $bot, false);
+        $this->setVar($parsedContent[$reload ? 7 : 5], $resourceId, $lineno, $bot, false);
         return -1;
     }
 
