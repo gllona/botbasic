@@ -15,6 +15,8 @@ gcloud config configurations activate CONFIGURATION_NAME
 
 gcloud compute instances describe botbasic-alpha --format="yaml(serviceAccounts)"
 
+gcloud compute --project "botbasic-enter" ssh --zone "us-west1-b" "botbasic-beta"
+
 >metaserver
 
 curl -H 'Metadata-Flavor: Google' "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/scopes"

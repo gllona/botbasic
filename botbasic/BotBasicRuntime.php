@@ -4105,7 +4105,14 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
      */
     private function runner4build (&$parsedContent, $lineno, $bot)
     {
-        $normalize = function ($v, $l) { return $v % $l + (abs($v) > $l && abs($v) - $l < 1 ? -$l * ($v <=> 0) : 0) + (abs($v) - floor(abs($v))) * ($v <=> 0); };
+        $normalize = function ($v, $l) {
+            $sign    = function ($v) { return $v <=> 0; };
+            $floor   = function ($v) use ($sign) { return $sign($v) * floor($sign($v) * $v); };
+            $frac    = function ($v) use ($floor) { return $v - $floor($v); };
+            $modulo  = function ($v, $l) use ($sign) { return $sign($v) * ((abs($v) + $l) % (2 * $l) - $l); };
+            $inrange = function ($v, $l) use ($floor, $frac, $modulo) { return $modulo($floor($v), $l) + $frac($v); };
+            return $inrange($v, $l);
+        };
         if ($parsedContent[1] != $this->TOK('location')) {
             Log::register(Log::TYPE_RUNTIME, "RT4107 buildable {$parsedContent[1]} no soportado actualmente", $this, $lineno);
             return -1;
