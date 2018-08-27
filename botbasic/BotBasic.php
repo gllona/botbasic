@@ -692,7 +692,7 @@ abstract class BotBasic
      */
     protected function isLowercase ($text)
     {
-        return 1 === preg_match('/^[a-z][a-zA-Z0-9]*$/', $text);
+        return 1 === preg_match('/^[a-z][a-zA-Z0-9_]*$/', $text);
     }
 
 
@@ -718,7 +718,7 @@ abstract class BotBasic
      */
     protected function isCapitalized  ($text)
     {
-        return 1 === preg_match('/^[A-Z][a-zA-Z0-9]*[a-z][a-zA-Z0-9]*$/', $text);
+        return 1 === preg_match('/^[A-Z][a-zA-Z0-9_]*[a-z_][a-zA-Z0-9_]*$/', $text);
     }
 
 
@@ -767,14 +767,14 @@ abstract class BotBasic
 
 
     /**
-     * Determina si el argumento tiene formato de comando de Telegram: comienzo con "/" y después minúsculas, dígitos y guiones
+     * Determina si el argumento tiene formato de comando de Telegram: comienzo con "/" y después minúsculas, dígitos y guiones bajos
      *
      * @param  string   $text
      * @return bool
      */
     protected function isCommand ($text)
     {
-        return 1 === preg_match('/^\/[a-z0-9_-]*$/', $text);
+        return 1 === preg_match('/^\/[a-z0-9_]*$/', $text);
     }
 
 
