@@ -1,0 +1,446 @@
+BOTBASIC						
+MAGIC	BotBasic 01.00					
+VERSION	0.3.1	gorkathebot				
+BOTS	main					
+						
+						
+						
+MESSAGES						
+name		en				
+						
+myname		I’m Gorka, your dearest bot				
+pYourName		Type your name:				
+mMain		I can do for you:				
+oAge		Calculate your age				
+oLaugh		Make you laugh				
+currentYear		2018				
+pYourByear		Enter your birthyear:				
+myage		I guess you are {age} years old!				
+mLaugh		How want to to laugh?				
+oPrank		Prank				
+oSilly		Silly thing				
+oAbsurd		Absurd nowhere				
+prank1		A person called {username} is a fool if reading this line				
+prank2		I get more of your time that you of mine				
+silly1		Wood in the stove, hair on the floor				
+absurd1		You have a thousand more important to do than this				
+commandOptions		Choose /ai /pixels /test /svitolina				
+sendMedia		Send me media or /letmeask1 /letmeask2 /letmeask3 or /send_eli /imagenumber or /sendmedia /latlon /antipodeans				
+mediaInfo		Media type is {type} and id is {id}				
+sendOnlyPhoto		Attach now a photo				
+mediaId1		Media id is {id}				
+mediaId2		Media id is {id}, type is {type}				
+mediaId3		Media id is {id}, type is {type} and caption is {caption}				
+photoEliDubai		eli_dubai_2.jpg				
+captionEliDubai		I couldn’t have asked for anything more perfect than this				
+photoEli		firsts/eli_{number}.jpg				
+filenameUploaded		uploaded-photo.{format}				
+waitAndContinue		Wait a little and continue				
+ook		Ok				
+lastStatusWas		Result of last operation was [{lastStatus}]				
+imageNumber		Enter image number:				
+imageFormatIs		Image format is {format}				
+whatWasThis		What was this?				
+wasAI		Artificial Inteligence				
+wasAS		Artificial Stupidity				
+wasBoth		Both				
+thanks		Thanks				
+totalPixels		Image is {width} pixels wide and {height} pixels tall and has {pixels} pixels				
+mediaAudio1		seconds/audio-1.m4a				
+mediaDocument1		seconds/document-1.txt				
+mediaImage1		seconds/image-1.jpg				
+mediaVideo1		seconds/video-1.mp4				
+mediaVideonote1		seconds/videonote-1.mp4				
+mediaVoice1		seconds/voice-1.oga				
+oAudio		Audio				
+oDocument		Document				
+oImage		Image				
+oVideo		Video				
+oVideonote		Videonote				
+oVoice		Voice				
+selectMediaType		Select media type:				
+error		An error occurred!				
+enterLocation		Send your current location				
+yourLocationIs		You are at {lat}° latitude and {lon}° longitude				
+oppositeLocation		This is the antipodeans:				
+						
+rem_svb_section		svitolinabot vars				
+rem_svb_videos						
+img_18brisbane_d2_hl		20180101_day2_hl_elina_vs_carla-suarez-navarro_480p.m4v				
+img_18brisbane_d2_sotd		20180101_day2_sotd_elina_vs_carla-suarez-navarro_480p.m4v				
+img_18brisbane_d3_hl		20180103_day3_hl_elina_vs_ana-konjuh_480p.m4v				
+img_18brisbane_d4qf_hl		20180104_day4qf_hl_elina_vs_johanna-konta_480p.m4v				
+img_18brisbane_d5sf_hl		20180105_day5sf_hl_elina_vs_karolina-pliskova_480p.m4v				
+img_18brisbane_d5sf_sotd		20180105_day5sf_sotd_elina_vs_karolina-pliskova_480p.m4v				
+img_18brisbane_d6f_hl		20180106_day6f_hl_elina_vs_aliaksandra-sasnovic_480p.m4v				
+rem_svb_images						
+rem_svb_images_1						
+rem svb_genericstrings						
+prmMediatype		Want to see…				
+optVideos		Videos				
+optImages		Images				
+optSotd		Shots of the day				
+optQuotes		Quotes				
+optDay		Day				
+prmDay		Day…				
+optDay1		Day 1				
+optDay2		Day 2				
+optDay3		Day 3				
+optDay4		Day 4				
+optDay5		Day 5				
+optDay6		Day 6				
+optDay7		Day 7				
+optChooseOne		Choose one…				
+optHighlighs		Highlights				
+optQuote		Elina’s words				
+txtElina		Elina				
+txtEli		Eli				
+txtElinaS		Elina Svitolina				
+txtSvitolina		Svitolina				
+txtThanks		Thanks!!!				
+prmAgain		Want to see again?				
+optYes		Yes				
+optNo		No				
+txtByeByEli						
+txtWaitForVideo		Wait while video downloads…				
+txtQuote		___{quote}___				
+txtFromLink		Source: {link}				
+rem_svb_prompts						
+prmHi		Hi, I’m Eli, and this is my bot ;-)				
+prmTournament		Choose a tournament				
+opt18brisbane		Brisbane 2018				
+txtWasAbye		{eliname} didn’t play this day because of a bye				
+rem_svb_quotes						
+qte_18brisbane_d2		"""I always like to come here. I like the audience, I like the performance on this court, for me it's always a special feeling, because before I had heavy matches in Brisbane, every time I go out on the court, it's always loaded on the game."""				
+qte_18brisbane_d2_lnk		https://vk.com/@svitolina-elina-svitolina-s-kontoi-nam-predstoit-esche-odna-bitva				
+qte_18brisbane_d4		"""It's always unpleasant to get injured, especially when it happens during the match and I hope that Johanna will be able to recover quickly and we'll see her on the court soon. She's a very good player and played a great match today. After the first set I lost, I told myself that you need to fight for every ball to the end and wait for your chances."""				
+qte_18brisbane_d4_lnk		http://svitolina.com/ru/news/456-news-04-01.html				
+qte_18brisbane_d5		"""In such matches it's important to be very focused and wait for your small chances. So, I knew that in the second set I needed to be as collected as possible, good to serve and be ready for these moments. I had a good tiebreak, played it at 100%."""				
+qte_18brisbane_d5_lnk		https://vk.com/@svitolina-elina-svitolina-taibreik-vo-vtorom-sete-ya-otygrala-na-vse-1				
+qte_18brisbane_d6		"""Good evening to everyone! It's very nice to see the whole stadium. It's incredible to start the new year with the title. I had a difficult offseason, like everyone else, so opening the season with a victory in the tournament is always something very, very special."""				
+qte_18brisbane_d6_lnk		https://vk.com/@svitolina-elina-svitolina-otkryvat-sezon-pobedoi-na-turnire-eto-vseg				
+qte_18brisbane_d7		"""I did not have so much time to recover from the semifinals, I slept very, very badly, I hope you did not notice it, because I tried ... I hope, I'm a good actress. I tried to be really focused on what I should do on the court, and it was very important for me to focus on my game plan, and everything worked very well, of course, you can see it on the scoreboard."""				
+qte_18brisbane_d7_lnk		https://vk.com/@svitolina-elina-svitolina-nadeus-ya-horoshaya-aktrisa-i-vy-ne-zametili				
+						
+MENUS						
+name		description		in	out	remarks
+						
+						
+						
+MAGICVARS						
+name		description				
+						
+						
+						
+PRIMITIVES						
+name		description		in	out	remarks
+						
+StrReplace				strFrom strTo strSubject	strResult	
+SplitToArray				strSeparator strString	...	
+DiffPipeArrays				strPipedArrayFrom strPipedArrayMinus	strPipedArrayDiff	
+						
+						
+						
+PROGRAM						
+main	main	main				
+						
+						
+						
+/start	start	PRINT commandOptions				
+		END				
+						
+/ai		PRINT myname				
+		INPUT string TITLE pYourName TO username				
+						
+/menu	menu	MENU TITLE mMain OPTIONS oAge oLaugh TO option				
+		IF EQ option oAge THEN GOTO age				
+		IF EQ option oLaugh THEN GOTO laugh				
+		PRINT badOption				
+		END				
+						
+	age	INPUT positiveInteger TITLE pYourByear TO byear				
+		SET age currentYear				
+		DEC age byear				
+		PRINT myage				
+		MENU TITLE whatWasThis OPTIONS wasAI wasAS wasBoth TO wasThis				
+		PRINT thanks				
+		GOTO menu				
+						
+	laugh	OPTION oPrank GOSUB prank				
+		OPTION oSilly GOSUB silly				
+		OPTION oAbsurd GOSUB absurd				
+		MENU TITLE mLaugh TO option				
+		PRINT tryToLaugh				
+		GOTO menu				
+						
+	prank	SET tryToLaugh prank2				
+		RETURN				
+						
+	silly	SET tryToLaugh silly1				
+		RETURN				
+						
+	absurd	SET tryToLaugh absurd1				
+		RETURN				
+						
+/pixels		INPUT image TITLE sendOnlyPhoto TO id				
+		EXTRACT width FROM id TO width				
+		EXTRACT height FROM id TO height				
+		SET pixels width				
+		MUL pixels height				
+		PRINT totalPixels				
+		GOTO start				
+						
+/test	test	PRINT sendMedia				
+		END				
+						
+//		SET type ENTRYTYPE				
+		SET id ENTRYID				
+		PRINT mediaInfo				
+		END				
+						
+/letmeask1		CLEAR id				
+		INPUT image TITLE sendOnlyPhoto TO id				
+		PRINT mediaId1				
+		GOTO test				
+						
+/letmeask2		CLEAR id type				
+		INPUT image TITLE sendOnlyPhoto TO id type				
+		PRINT mediaId2				
+		GOTO test				
+						
+/letmeask3		CLEAR id type caption				
+		INPUT image TITLE sendOnlyPhoto TO id type caption				
+		PRINT mediaId3				
+		GOSUB wait				
+		EXTRACT format FROM id TO format				
+		PRINT imageFormatIs				
+		BSAVE id AS filenameUploaded TO ok				
+		GOSUB showStatus ok				
+		GOTO test				
+						
+/send_eli		CLEAR id				
+		IF EMPTY number THEN SET number 2				
+		IF NEQ number 2 THEN GOTO sendEli2				
+		BLOAD photoEliDubai AS image TO id				
+		PRINT mediaId1				
+		DISPLAY id TITLE captionEliDubai				
+		GOTO test				
+						
+	wait	MENU TITLE waitAndContinue OPTIONS ook TO res				
+		RETURN				
+						
+	showStatus	ARGS lastStatus				
+		PRINT lastStatusWas				
+		RETURN				
+						
+/imagenumber		MENU TITLE imageNumber OPTIONS 1 2 3 4 5 6 7 8 9 10 TO number				
+		GOTO test				
+						
+	sendEli2	BLOAD photoEli AS image WITH reload TO id				
+		PRINT mediaId1				
+		DISPLAY id				
+		GOTO test				
+						
+/sendmedia		OPTIONS oAudio oDocument oImage oVideo oVideonote oVoice				
+		MENU TITLE selectMediaType TO option				
+		IF EQ option oAudio THEN BLOAD mediaAudio1 AS audio TO id				
+		IF EQ option oDocument THEN BLOAD mediaDocument1 AS document TO id				
+		IF EQ option oImage THEN BLOAD mediaImage1 AS image TO id				
+		IF EQ option oVideo THEN BLOAD mediaVideo1 AS video TO id				
+		IF EQ option oVideonote THEN BLOAD mediaVideonote1 AS videonote TO id				
+		IF EQ option oVoice THEN BLOAD mediaVoice1 AS voice TO id				
+		IF EMPTY id THEN PRINT error : GOTO sm1				
+		DISPLAY id				
+	sm1	GOTO test				
+						
+/latlon /antipodeans		INPUT location TITLE enterLocation TO id				
+		EXTRACT latitude FROM id TO lat				
+		EXTRACT longitude FROM id TO lon				
+		PRINT yourLocationIs				
+		PRINT oppositeLocation				
+		MUL lat -1				
+		INC lon 180				
+		BUILD location SET longitude lon latitude lat TO id				
+		DISPLAY id				
+		GOTO test				
+						
+						
+						
+		REM svitolinabot				
+						
+ENTRYHOOK		LOCALE en				
+		END				
+						
+/svitolinabot	svitolinabot	PRINT prmHi				
+	eli_menu	OPTION opt18brisbane GOSUB tt18brisbane				
+		MENU TITLE prmTournament TO tournament				
+		PRINT txtThanks				
+		MENU TITLE prmAgain OPTIONS optYes optNo TO way				
+		IF EQ way txtYes THEN GOTO eli_menu				
+		GOTO menu				
+						
+	tt18brisbane	OPTION optVideos GOSUB tt18brisVideos				
+		REM OPTION optImages GOSUB tt18brisImages : REM TODO				
+		OPTION optSotd GOSUB tt18brisSotd				
+		REM OPTION optQuotes GOSUB tt18brisQuotes : REM TODO				
+		OPTION optDay GOSUB tt18brisDay				
+		MENU TITLE prmMediaType TO way				
+		RETURN				
+						
+	tt18brisVideos	OPTION optDay1 GOSUB tt18brisVD1				
+		OPTION optDay2 GOSUB tt18brisVD2				
+		OPTION optDay3 GOSUB tt18brisVD3				
+		OPTION optDay4 GOSUB tt18brisVD4				
+		OPTION optDay5 GOSUB tt18brisVD5				
+		OPTION optDay6 GOSUB tt18brisVD6				
+		MENU TITLE prmDay TO way				
+		RETURN				
+						
+	tt18brisDbye	GOSUB rotateName TO eliname				
+		PRINT txtWasAbye				
+		RETURN				
+						
+	tt18brisVD1	GOTO tt18brisDbye				
+						
+	tt18brisVD0	ARGS day				
+		IF EQ day 2 THEN SET fn img_18brisbane_d2_hl				
+		IF EQ day 3 THEN SET fn img_18brisbane_d3_hl				
+		IF EQ day 4 THEN SET fn img_18brisbane_d4qf_hl				
+		IF EQ day 5 THEN SET fn img_18brisbane_d5sf_hl				
+		IF EQ day 6 THEN SET fn img_18brisbane_d6f_hl				
+		IF EQ day -2 THEN SET fn img_18brisbane_d2_sotd				
+		IF EQ day -5 THEN SET fn img_18brisbane_d5sf_sotd				
+		GOSUB tt18brisVD fn				
+		RETURN				
+						
+	tt18brisVD	ARGS fn_filename				
+		SET ffn fn_fullfilename18				
+		BLOAD ffn AS video TO id				
+		PRINT txtWaitForVideo				
+		DISPLAY id				
+		RETURN				
+						
+	tt18brisVD2	GOSUB tt18brisVD0 2				
+		RETURN				
+						
+	tt18brisVD3	GOSUB tt18brisVD0 3				
+		RETURN				
+						
+	tt18brisVD4	GOSUB tt18brisVD0 4				
+		RETURN				
+						
+	tt18brisVD5	GOSUB tt18brisVD0 5				
+		RETURN				
+						
+	tt18brisVD6	GOSUB tt18brisVD0 6				
+		RETURN				
+						
+	tt18brisSotd	OPTION optDay2 GOSUB tt18brisSD2				
+		OPTION optDay5 GOSUB tt18brisSD5				
+		MENU TITLE prmDay TO way				
+		RETURN				
+						
+	tt18brisSD2	GOSUB tt18brisVD0 -2				
+		RETURN				
+						
+	tt18brisSD5	GOSUB tt18brisVD0 -5				
+		RETURN				
+						
+	tt18brisDay	OPTION optDay1 GOSUB tt18brisD1				
+		OPTION optDay2 GOSUB tt18brisD2				
+		OPTION optDay3 GOSUB tt18brisD3				
+		OPTION optDay4 GOSUB tt18brisD4				
+		OPTION optDay5 GOSUB tt18brisD5				
+		OPTION optDay6 GOSUB tt18brisD6				
+		MENU TITLE prmDay TO day				
+		RETURN				
+						
+	tt18brisD1	GOSUB tt18brisDbye				
+		RETURN				
+						
+	tt18brisD	ARGS day				
+		GOSUB isThereContent day TO hl sotd quote				
+		REM MENU OPTIONS optVideos optSotd optQuotes TITLE prmMediaType TO way				
+		MENU TITLE prmMediaType OPTIONS optHl optSotd TO way				
+		IF EQ way optHl THEN GOSUB tt18brisDHl day				
+		IF EQ way optSotd THEN GOSUB tt18brisDSotd day				
+		IF EQ way optQuotes THEN GOSUB tt18brisDQuotes day : REM to_do				
+		RETURN				
+						
+	tt18brisD2	GOSUB tt18brisD 2				
+		RETURN				
+						
+	tt18brisD3	GOSUB tt18brisD 3				
+		RETURN				
+						
+	tt18brisD4	GOSUB tt18brisD 4				
+		RETURN				
+						
+	tt18brisD5	GOSUB tt18brisD 5				
+		RETURN				
+						
+	tt18brisD6	GOSUB tt18brisD 6				
+		RETURN				
+						
+	tt18brisDHl	ARGS day				
+		GOSUB tt18brisVD0 day				
+		RETURN				
+						
+	tt18brisDSotd	ARGS day				
+		MUL day -1				
+		GOSUB tt18brisVD0 day				
+		RETURN				
+						
+	tt18brisQuotes	OPTION optDay2 GOSUB tt18brisQ2				
+		OPTION optDay4 GOSUB tt18brisQ4				
+		OPTION optDay5 GOSUB tt18brisQ5				
+		OPTION optDay6 GOSUB tt18brisQ6				
+		OPTION optDay7 GOSUB tt18brisQ7				
+		MENU TITLE prmDay TO way				
+		RETURN				
+						
+	tt18brisQD0	ARGS day				
+		IF EQ day 2 THEN SET qt qte_18brisbane_d2 : SET lnk qte_18brisbane_d2_lnk				
+		IF EQ day 4 THEN SET qt qte_18brisbane_d4 : SET lnk qte_18brisbane_d4_lnk				
+		IF EQ day 5 THEN SET qt qte_18brisbane_d5 : SET lnk qte_18brisbane_d5_lnk				
+		IF EQ day 6 THEN SET qt qte_18brisbane_d6 : SET lnk qte_18brisbane_d6_lnk				
+		IF EQ day 7 THEN SET qt qte_18brisbane_d2 : SET lnk qte_18brisbane_d7_lnk				
+		GOSUB tt18brisQD qt lnk				
+		RETURN				
+						
+	tt18brisQD	ARGS quote link				
+		PRINT txtQuote				
+		PRINT txtFromLink				
+		RETURN				
+						
+	tt18brisQ2	GOSUB tt18brisQD0 2				
+		RETURN				
+						
+	tt18brisQ4	GOSUB tt18brisQD0 4				
+		RETURN				
+						
+	tt18brisQ5	GOSUB tt18brisQD0 5				
+		RETURN				
+						
+	tt18brisQ6	GOSUB tt18brisQD0 6				
+		RETURN				
+						
+	tt18brisQ7	GOSUB tt18brisQD0 7				
+		RETURN				
+						
+	isThereContent	ARGS day				
+		IF EQ day 2 THEN SET hl 1 : SET sotd 0 : SET quote 1				
+		IF EQ day 3 THEN SET hl 1 : SET sotd 1 : SET quote 0				
+		IF EQ day 4 THEN SET hl 1 : SET sotd 0 : SET quote 1				
+		IF EQ day 5 THEN SET hl 1 : SET sotd 1 : SET quote 1				
+		IF EQ day 6 THEN SET hl 1 : SET sotd 0 : SET quote 1				
+		RETURN hl sotd quote				
+						
+	rotateName	IF EMPTY nameCounter THEN SET nameCounter 0				
+		INC nameCounter				
+		IF GT nameCounter 4 THEN SET nameCounter 1				
+		IF EQ nameCounter 1 THEN SET name txtElina				
+		IF EQ nameCounter 2 THEN SET name txtEli				
+		IF EQ nameCounter 3 THEN SET name txtSvitolina				
+		IF EQ nameCounter 4 THEN SET name txtElinaS				
+		RETURN name				
