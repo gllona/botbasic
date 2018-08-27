@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.3.1	gorkathebot				
+VERSION	0.3.5	gorkathebot				
 BOTS	main					
 						
 						
@@ -24,7 +24,7 @@ prank1		A person called {username} is a fool if reading this line
 prank2		I get more of your time that you of mine				
 silly1		Wood in the stove, hair on the floor				
 absurd1		You have a thousand more important to do than this				
-commandOptions		Choose /ai /pixels /test /svitolina				
+commandOptions		Choose /ai /pixels /test /svitolinabot				
 sendMedia		Send me media or /letmeask1 /letmeask2 /letmeask3 or /send_eli /imagenumber or /sendmedia /latlon /antipodeans				
 mediaInfo		Media type is {type} and id is {id}				
 sendOnlyPhoto		Attach now a photo				
@@ -64,7 +64,10 @@ enterLocation		Send your current location
 yourLocationIs		You are at {lat}° latitude and {lon}° longitude				
 oppositeLocation		This is the antipodeans:				
 						
+						
+						
 rem_svb_section		svitolinabot vars				
+						
 rem_svb_videos						
 img_18brisbane_d2_hl		20180101_day2_hl_elina_vs_carla-suarez-navarro_480p.m4v				
 img_18brisbane_d2_sotd		20180101_day2_sotd_elina_vs_carla-suarez-navarro_480p.m4v				
@@ -75,7 +78,8 @@ img_18brisbane_d5sf_sotd		20180105_day5sf_sotd_elina_vs_karolina-pliskova_480p.m
 img_18brisbane_d6f_hl		20180106_day6f_hl_elina_vs_aliaksandra-sasnovic_480p.m4v				
 rem_svb_images						
 rem_svb_images_1						
-rem svb_genericstrings						
+rem_svb_genericstrings						
+fn_ffn18brisbane		svitolinabot/tennis/2018/brisbane/{fn_filename}				
 prmMediatype		Want to see…				
 optVideos		Videos				
 optImages		Images				
@@ -121,6 +125,10 @@ qte_18brisbane_d6		"""Good evening to everyone! It's very nice to see the whole 
 qte_18brisbane_d6_lnk		https://vk.com/@svitolina-elina-svitolina-otkryvat-sezon-pobedoi-na-turnire-eto-vseg				
 qte_18brisbane_d7		"""I did not have so much time to recover from the semifinals, I slept very, very badly, I hope you did not notice it, because I tried ... I hope, I'm a good actress. I tried to be really focused on what I should do on the court, and it was very important for me to focus on my game plan, and everything worked very well, of course, you can see it on the scoreboard."""				
 qte_18brisbane_d7_lnk		https://vk.com/@svitolina-elina-svitolina-nadeus-ya-horoshaya-aktrisa-i-vy-ne-zametili				
+						
+rem_svb_section_end		svitolinabot vars end				
+						
+						
 						
 MENUS						
 name		description		in	out	remarks
@@ -276,15 +284,15 @@ ENTRYHOOK		LOCALE en
 		MENU TITLE prmTournament TO tournament				
 		PRINT txtThanks				
 		MENU TITLE prmAgain OPTIONS optYes optNo TO way				
-		IF EQ way txtYes THEN GOTO eli_menu				
-		GOTO menu				
+		IF EQ way optYes THEN GOTO eli_menu				
+		GOTO start				
 						
 	tt18brisbane	OPTION optVideos GOSUB tt18brisVideos				
 		REM OPTION optImages GOSUB tt18brisImages : REM TODO				
 		OPTION optSotd GOSUB tt18brisSotd				
 		REM OPTION optQuotes GOSUB tt18brisQuotes : REM TODO				
 		OPTION optDay GOSUB tt18brisDay				
-		MENU TITLE prmMediaType TO way				
+		MENU TITLE prmMediatype TO way				
 		RETURN				
 						
 	tt18brisVideos	OPTION optDay1 GOSUB tt18brisVD1				
@@ -314,7 +322,7 @@ ENTRYHOOK		LOCALE en
 		RETURN				
 						
 	tt18brisVD	ARGS fn_filename				
-		SET ffn fn_fullfilename18				
+		SET ffn fn_ffn18brisbane				
 		BLOAD ffn AS video TO id				
 		PRINT txtWaitForVideo				
 		DISPLAY id				
@@ -360,11 +368,14 @@ ENTRYHOOK		LOCALE en
 						
 	tt18brisD	ARGS day				
 		GOSUB isThereContent day TO hl sotd quote				
-		REM MENU OPTIONS optVideos optSotd optQuotes TITLE prmMediaType TO way				
-		MENU TITLE prmMediaType OPTIONS optHl optSotd TO way				
+		IF EQ hl 1 THEN OPTIONS optHighlights				
+		IF EQ sotd 1 THEN OPTIONS optSotd				
+		REM images				
+		REM IF EQ quote 1 THEN OPTION optQuote				
+		MENU TITLE prmMediatype TO way				
 		IF EQ way optHl THEN GOSUB tt18brisDHl day				
 		IF EQ way optSotd THEN GOSUB tt18brisDSotd day				
-		IF EQ way optQuotes THEN GOSUB tt18brisDQuotes day : REM to_do				
+		REM IF EQ way optQuotes THEN GOSUB tt18brisDQuotes day : REM to_do				
 		RETURN				
 						
 	tt18brisD2	GOSUB tt18brisD 2				
