@@ -684,8 +684,13 @@ class BizModelAdapter extends BizModelAdapterTemplate
     {
         list ($q) = $args;
         $this->doDummy($metadata);
-        $a = "No connection to my brain now for a cue for $q";
-        return $a;
+
+        $tmpfile = tempnam('/tmp', 'howdoi_');
+        system("howdoi $q >$tmpfile");
+        $a = @file_get_contents($tmpfile);
+        @unlink($tmpfile);
+
+        return $a === false ? '' : $a;
     }
 
 

@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.4.0	gorkathebot				
+VERSION	0.4.1	gorkathebot				
 BOTS	main					
 						
 						
@@ -184,7 +184,7 @@ main	main	main
 						
 /start	start	MENU TITLE titChooseMode OPTIONS optInitialBot optHowdoiBot TO botMode				
 		IF EQ botMode optInitialBot THEN GOTO oldstart				
-		IF EQ botMode optHowdoi THEN GOTO howdoi				
+		IF EQ botMode optHowdoiBot THEN GOTO howdoi				
 		END				
 						
 /oldstart	oldstart	PRINT commandOptions				
