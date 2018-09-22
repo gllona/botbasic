@@ -633,6 +633,63 @@ class BizModelAdapter extends BizModelAdapterTemplate
 
 
 
+    public function pr_StrPosOf ($args, $metadata)
+    {
+        list ($haystack, $needle) = $args;
+        $this->doDummy($metadata);
+        $pos = strpos($haystack, "$needle");
+        return $pos === false ? -1 : $pos;
+    }
+
+
+
+    public function pr_SubStr ($args, $metadata)
+    {
+        list ($string, $start, $length) = $args;
+        $this->doDummy($metadata);
+        $substr = substr($string, $start, $length);
+        return $substr === false ? '' : $substr;
+    }
+
+
+
+    public function pr_StrToLower ($args, $metadata)
+    {
+        list ($string) = $args;
+        $this->doDummy($metadata);
+        return strtolower($string);
+    }
+
+
+
+    public function pr_StrToUpper ($args, $metadata)
+    {
+        list ($string) = $args;
+        $this->doDummy($metadata);
+        return strtoupper($string);
+    }
+
+
+
+    public function pr_UrlEncode ($args, $metadata)
+    {
+        list ($string) = $args;
+        $this->doDummy($metadata);
+        return urlencode($string);
+    }
+
+
+
+    public function pr_Howdoi ($args, $metadata)
+    {
+        list ($q) = $args;
+        $this->doDummy($metadata);
+        $a = "No connection to my brain now for a cue for $q";
+        return $a;
+    }
+
+
+
     ///////////
     // -- T3 --
     ///////////
