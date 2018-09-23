@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.4.4	gorkathebot				
+VERSION	0.4.5	gorkathebot				
 BOTS	main					
 						
 						
@@ -145,8 +145,8 @@ txt_hdi_filter_start		howdoi start
 txt_hdi_filter_die		howdoi die				
 txt_hdi_dont_die		Bots are not designed to help you die				
 txt_hdi_thisishow		{a}				
-lnk_hdi_wikipedia		https://en.wikipedia.org/w/index.php?search={q}				
-lnk_hdi_google		https://www.google.com/search?hl=en&q={q}				
+lnk_hdi_wikipedia		https:Wikipedia://en.wikipedia.org/w/index.php?search={q}				
+lnk_hdi_google		https:Google://www.google.com/search?hl=en&q={q}				
 txt_hdi_links		Take a look at {lnk_hdi_google} and {lnk_hdi_wikipedia}				
 						
 rem_hdi_section_end						

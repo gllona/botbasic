@@ -627,7 +627,7 @@ namespace botbasic {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG475 Error de regexp");
             }
             // http:my-display-label://my.url/dot/com
-            $text = preg_replace('/(https?):([^ \t\n:]+):\/\/([^ ,.;\t\n]+)/', '<a href="$1://$3">$2</a>', $text);
+            $text = preg_replace('/(https?):([^ \t\n:]+):\/\/([^ ,;\)\]\}\t\n]+)/', '<a href="$1://$3">$2</a>', $text);
             if ($text === null) {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG480 Error de regexp");
             }
