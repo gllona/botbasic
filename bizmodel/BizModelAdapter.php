@@ -633,6 +633,80 @@ class BizModelAdapter extends BizModelAdapterTemplate
 
 
 
+    public function pr_StrPosOf ($args, $metadata)
+    {
+        list ($haystack, $needle) = $args;
+        $this->doDummy($metadata);
+        $pos = strpos($haystack, "$needle");
+        return $pos === false ? -1 : $pos;
+    }
+
+
+
+    public function pr_SubStr ($args, $metadata)
+    {
+        list ($string, $start, $length) = $args;
+        $this->doDummy($metadata);
+        $substr = substr($string, $start, $length);
+        return $substr === false ? '' : $substr;
+    }
+
+
+
+    public function pr_StrToLower ($args, $metadata)
+    {
+        list ($string) = $args;
+        $this->doDummy($metadata);
+        return strtolower($string);
+    }
+
+
+
+    public function pr_StrToUpper ($args, $metadata)
+    {
+        list ($string) = $args;
+        $this->doDummy($metadata);
+        return strtoupper($string);
+    }
+
+
+
+    public function pr_UrlEncode ($args, $metadata)
+    {
+        list ($string) = $args;
+        $this->doDummy($metadata);
+        return urlencode($string);
+    }
+
+
+
+    public function pr_Howdoi ($args, $metadata)
+    {
+        list ($q) = $args;
+        $this->doDummy($metadata);
+
+        if (substr($q, 0, 7) != "howdoi ") {
+            return '';
+        }
+
+        unset($ec, $stdout);
+        $cmd = "sudo $q";   // requires to add howdoi in allowed commands in /etc/sudoers
+        exec($cmd, $stdout, $ec);
+
+        $a = '';
+        $base = implode("\n", $stdout);
+        if ($ec === 0) {
+            $notFound = "Sorry, couldn't find any help with that topic";
+            if (substr($base, 0, strlen($notFound)) != $notFound) {
+                $a = '[[[' . html_entity_decode(preg_replace("/\n\n\n+/", "\n\n", trim($base))) . ']]]';
+            }
+        }
+
+        return $a;
+    }
+
+
+
     ///////////
     // -- T3 --
     ///////////

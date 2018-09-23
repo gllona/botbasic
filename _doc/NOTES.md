@@ -33,7 +33,7 @@ rm -rf /root/.gsutil/
 
 cd /home/botbasic/users/ngrok
 nohup ./ngrok http -host-header=beta.bots.logicos.org -log=stdout 8080 &
-sleep 1
+sleep 3
 curl http://localhost:4040/api/tunnels | jq '.tunnels[0].public_url'
 
 

@@ -618,16 +618,19 @@ namespace botbasic {
         {
             // fake an empty string so telegram doesn't complain (this doesn't work)
             //   if ($text === null || 1 === preg_match('/^[ \t\n]*$/', $text)) { return '<pre></pre>'; }
+            //
             // <>&
-            $replacements = [ "<" => "&lt;", ">" => "&gt;", "&" => "&amp;" ];
-            foreach ($replacements as $what => $for) { $text = str_replace($what, $for, $text); }
+            // works better with links when commented out
+            //$replacements = [ "<" => "&lt;", ">" => "&gt;", "&" => "&amp;", "\"" => "&quot;" ];
+            //foreach ($replacements as $what => $for) { $text = str_replace($what, $for, $text); }
+            //
             // http://my.url/dot/com
-            $text = preg_replace('/(https?):\/\/([^ ,.;\t\n]+)/', '<a href="$1://$2">$2</a>', $text);
+            $text = preg_replace('/(https?):\/\/([^ ,;\)\]\}\>\t\n]+)/', '<a href="$1://$2">$2</a>', $text);
             if ($text === null) {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG475 Error de regexp");
             }
             // http:my-display-label://my.url/dot/com
-            $text = preg_replace('/(https?):([^ \t\n:]+):\/\/([^ ,.;\t\n]+)/', '<a href="$1://$3">$2</a>', $text);
+            $text = preg_replace('/(https?):([^ \t\n:]+):\/\/([^ ,;\)\]\}\t\n]+)/', '<a href="$1://$3">$2</a>', $text);
             if ($text === null) {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG480 Error de regexp");
             }
@@ -645,13 +648,13 @@ namespace botbasic {
             $magicMarker = '!#"$#%$&%___!#"$#%$&%';
             $count = null;
             while ($count !== 0) {
-                $text = preg_replace('/\[\[\[(.*)\n(.*)\]\]\]/', '[[[$1' . $magicMarker . '$2]]]', $text, 1, $count);
+                $text = preg_replace('/\[\[\[(.*)\n((.|\n)*)\]\]\]/', '[[[$1' . $magicMarker . '$2]]]', $text, 1, $count);
                 if ($text === null) {
                     $this->conditionalLog(Log::TYPE_DAEMON, "CMTG498 Error de regexp");
                     break;
                 }
             }
-            $text = preg_replace('/\[\[\[(.+)\]\]\]/', '<pre>$1</pre>', $text);
+            $text = preg_replace('/\[\[\[(.*)\]\]\]/', '<pre>$1</pre>', $text);
             if ($text === null) {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG504 Error de regexp");
             }
