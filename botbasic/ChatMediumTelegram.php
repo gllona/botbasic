@@ -618,9 +618,12 @@ namespace botbasic {
         {
             // fake an empty string so telegram doesn't complain (this doesn't work)
             //   if ($text === null || 1 === preg_match('/^[ \t\n]*$/', $text)) { return '<pre></pre>'; }
+            //
             // <>&
-            $replacements = [ "<" => "&lt;", ">" => "&gt;", "&" => "&amp;", "\"" => "&quot;" ];
-            foreach ($replacements as $what => $for) { $text = str_replace($what, $for, $text); }
+            // works better with links when commented out
+            //$replacements = [ "<" => "&lt;", ">" => "&gt;", "&" => "&amp;", "\"" => "&quot;" ];
+            //foreach ($replacements as $what => $for) { $text = str_replace($what, $for, $text); }
+            //
             // http://my.url/dot/com
             $text = preg_replace('/(https?):\/\/([^ ,;\)\]\}\>\t\n]+)/', '<a href="$1://$2">$2</a>', $text);
             if ($text === null) {
