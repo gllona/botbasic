@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.4.3	gorkathebot				
+VERSION	0.4.4	gorkathebot				
 BOTS	main					
 						
 						
@@ -147,7 +147,7 @@ txt_hdi_dont_die		Bots are not designed to help you die
 txt_hdi_thisishow		{a}				
 lnk_hdi_wikipedia		https://en.wikipedia.org/w/index.php?search={q}				
 lnk_hdi_google		https://www.google.com/search?hl=en&q={q}				
-txt_hdi_wikipedia		Take a look at {lnk_hdi_wikipedia} and {lnk_hdi_google}				
+txt_hdi_links		Take a look at {lnk_hdi_google} and {lnk_hdi_wikipedia}				
 						
 rem_hdi_section_end						
 						
@@ -537,5 +537,5 @@ ENTRYHOOK		LOCALE en
 		CLEAR empty				
 		CALL StrReplace txt_hdi_prefix empty q TO q				
 		CALL UrlEncode q TO q				
-		PRINT txt_hdi_wikipedia				
+		PRINT txt_hdi_links				
 		RETURN				

@@ -1855,7 +1855,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                 return null;
             }
             if ($this->isPrimitive($name)) { $res = $this->callPrimitive($name, [], $lineno, $bot); $res = ! is_array($res) || $res[0] === null ? self::NOTHING : $res[0]; }
-            else                           { $res = $this->getVar($name, $lineno, $bot, false);                                                                            }
+            else                           { $res = $this->getVar($name, $lineno, $bot, true);                                                                            }
             $toReplace[] = [ $pos1, $pos2 - $pos1 + 1, $res ];
             $spec = substr_replace($spec, '<', $pos1, 1);   // this and next line: avoid matching of {} in the next iteration
             $spec = substr_replace($spec, '>', $pos2, 1);
