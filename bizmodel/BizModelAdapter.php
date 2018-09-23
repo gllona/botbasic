@@ -698,7 +698,7 @@ class BizModelAdapter extends BizModelAdapterTemplate
         if ($ec === 0) {
             $notFound = "Sorry, couldn't find any help with that topic";
             if (substr($base, 0, strlen($notFound)) != $notFound) {
-                $a = '[[[' . html_entity_decode(preg_replace("/\n\n\n+/", "\n\n", trim($base))) . ']]]';
+                $a = html_entity_decode(preg_replace("/\n\n\n+/", "\n\n", trim($base)));
             }
         }
 
