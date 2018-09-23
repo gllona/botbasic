@@ -622,7 +622,7 @@ namespace botbasic {
             $replacements = [ "<" => "&lt;", ">" => "&gt;", "&" => "&amp;" ];
             foreach ($replacements as $what => $for) { $text = str_replace($what, $for, $text); }
             // http://my.url/dot/com
-            $text = preg_replace('/(https?):\/\/([^ ,.;\t\n]+)/', '<a href="$1://$2">$2</a>', $text);
+            $text = preg_replace('/(https?):\/\/([^ ,;\)\]\}\>\t\n]+)/', '<a href="$1://$2">$2</a>', $text);
             if ($text === null) {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG475 Error de regexp");
             }

@@ -693,7 +693,7 @@ class BizModelAdapter extends BizModelAdapterTemplate
         $cmd = "sudo $q";   // requires to add howdoi in allowed commands in /etc/sudoers
         exec($cmd, $stdout, $ec);
 
-        $a = $ec === 0 ? '[[[' . html_entity_decode(preg_replace("/\n\n\n+/", "\n\n", implode("\n", $stdout))) . ']]]' : '';
+        $a = $ec === 0 ? '[[[' . html_entity_decode(preg_replace("/\n\n\n+/", "\n\n", trim(implode("\n", $stdout)))) . ']]]' : '';
 
         $notFound = "Sorry, couldn't find any help with that topic";
         if (substr($a, 0, strlen($notFound)) == $notFound) {
