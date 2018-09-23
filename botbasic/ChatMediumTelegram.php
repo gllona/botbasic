@@ -622,17 +622,6 @@ namespace botbasic {
             // <>&
             $replacements = [ "<" => "&lt;", ">" => "&gt;" ];   // [ "<" => "&lt;", ">" => "&gt;", "&" => "&amp;", "\"" => "&quot;" ];
             foreach ($replacements as $what => $for) { $text = str_replace($what, $for, $text); }
-            // http://my.url/dot/com
-            $text = preg_replace('/(https?):\/\/([^ ,;\)\]\}\>\t\n]+)/', '<a href="$1://$2">$2</a>', $text);
-            if ($text === null) {
-                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG475 Error de regexp");
-            }
-            // http:my-display-label://my.url/dot/com
-            $text = preg_replace('/(https?):([^ \t\n:]+):\/\/([^ ,;\)\]\}\t\n]+)/', '<a href="$1://$3">$2</a>', $text);
-            if ($text === null) {
-                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG480 Error de regexp");
-            }
-            // ***bold-text***
             $text = preg_replace('/\*\*\*([^*\t\n])([^\t\n]*)\*\*\*/', '<bold>$1$2</bold>', $text);
             if ($text === null) {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG485 Error de regexp");
@@ -658,8 +647,77 @@ namespace botbasic {
             }
             $text = str_replace("\n", "<pre>\n</pre>", $text);
             $text = str_replace($magicMarker, "\n", $text);
+            // http links inside or outside preformatted text
+            $text = $this->encodeHttpLinks($text);
             // ready
             return $text;
+        }
+
+
+
+        /**
+         * Codifica links http en textos de forma que no se generen anchor anidados dentro de pre tags
+         *
+         * @param  string   $text   Html que puede contener links
+         * @return string           Html con links codificados (enlazables) sin anidamiento de tags
+         */
+        private function encodeHttpLinks ($text)
+        {
+            $matchPre = function ($toMatch) {
+                unset($matches);
+                $res = preg_match_all('/\<pre\>[^\<]+\<\/pre\>/', $toMatch, $matches, PREG_OFFSET_CAPTURE | PREG_PATTERN_ORDER);
+                if ($res === false) {
+                    $this->conditionalLog(Log::TYPE_DAEMON, "CMTG675 Error de regexp");
+                }
+                return $res === false || $res === 0 ? false : $matches[0];
+            };
+            $encodeWithPre = function ($text, $insidePre, &$addTo = null) {
+                if (strlen($text) < 11) { return $text; }
+                $before = $insidePre ? '</pre>' : '';
+                $after  = $insidePre ? '<pre>'  : '';
+                // http://my.url/dot/com
+                $text = preg_replace('/(https?):\/\/([^ ,;\)\]\}\>\<\t\n]+)/',              $before . '<a href="$1://$2">$2</a>' . $after, $text);
+                if ($text === null) {
+                    $this->conditionalLog(Log::TYPE_DAEMON, "CMTG475 Error de regexp");
+                }
+                // http:my-display-label://my.url/dot/com
+                $text = preg_replace('/(https?):([^ \t\n:]+):\/\/([^ ,;\)\]\}\>\<\t\n]+)/', $before . '<a href="$1://$3">$2</a>' . $after, $text);
+                if ($text === null) {
+                    $this->conditionalLog(Log::TYPE_DAEMON, "CMTG480 Error de regexp");
+                }
+                // ready
+                if ($addTo !== null) { $addTo .= $text; }
+                return $text;
+            };
+            $encodeOutsidePre = function ($text, &$addTo = null) use ($encodeWithPre) {
+                return $encodeWithPre($text, false, $addTo);
+            };
+            $encodeInsidePre = function ($text, &$addTo = null) use ($encodeWithPre) {
+                return $encodeWithPre($text, true, $addTo);
+            };
+            // if now pre matches then perform a simple link encode
+            $matches = $matchPre($text);
+            if ($matches === false) {
+                return $encodeOutsidePre($text);
+            }
+            // if not, run on matches and replace, first the text before first pre
+            $newText = '';
+            if ($matches[0][1] > 0) {   /** @var mixed[][] $matches */
+                $encodeOutsidePre(substr($text, 0, $matches[0][1]), $newText);
+            }
+            // then each pre block followed by its optional out of pre block text
+            for ($i = 0; $i < count($matches); $i++) {
+                $encodeInsidePre($matches[$i][0], $newText);
+                $nextOutsidePos = $matches[$i][1] + strlen($matches[$i][0]);
+                if ($nextOutsidePos < strlen($text)) {
+                    $nextPart = $i + 1 == count($matches) ?
+                        substr($text, $nextOutsidePos) :
+                        substr($text, $nextOutsidePos, $matches[$i + 1][1] - $nextOutsidePos);
+                    $encodeOutsidePre($nextPart, $newText);
+                }
+            }
+            // ready
+            return $newText;
         }
 
 
