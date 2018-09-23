@@ -651,7 +651,7 @@ namespace botbasic {
                     break;
                 }
             }
-            $text = preg_replace('/\[\[\[(.+)\]\]\]/', '<pre>$1</pre>', $text);
+            $text = preg_replace('/\[\[\[((.|\n)+)\]\]\]/', '<pre>$1</pre>', $text);
             if ($text === null) {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG504 Error de regexp");
             }
