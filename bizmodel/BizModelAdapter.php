@@ -685,12 +685,21 @@ class BizModelAdapter extends BizModelAdapterTemplate
         list ($q) = $args;
         $this->doDummy($metadata);
 
-        $tmpfile = tempnam('/tmp', 'howdoi_');
-        system("howdoi $q >$tmpfile");
-        $a = @file_get_contents($tmpfile);
-        @unlink($tmpfile);
+        if (substr($q, 0, 7) != "howdoi ") {
+            return '';
+        }
 
-        return $a === false ? '' : $a;
+        unset($ec, $stdout);
+        $cmd = "sudo $q";   // requires to add howdoi in allowed commands in /etc/sudoers
+        exec($cmd, $stdout, $ec);
+        $a = $ec === 0 ? implode("\n", $stdout) : '';
+
+        $notFound = "Sorry, couldn't find any help with that topic";
+        if (substr($a, 0, strlen($notFound)) == $notFound) {
+            $a = '';
+        }
+
+        return $a;
     }
 
 
