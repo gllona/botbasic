@@ -645,13 +645,13 @@ namespace botbasic {
             $magicMarker = '!#"$#%$&%___!#"$#%$&%';
             $count = null;
             while ($count !== 0) {
-                $text = preg_replace('/\[\[\[(.*)\n(.*)\]\]\]/', '[[[$1' . $magicMarker . '$2]]]', $text, 1, $count);
+                $text = preg_replace('/\[\[\[(.*)\n((.|\n)*)\]\]\]/', '[[[$1' . $magicMarker . '$2]]]', $text, 1, $count);
                 if ($text === null) {
                     $this->conditionalLog(Log::TYPE_DAEMON, "CMTG498 Error de regexp");
                     break;
                 }
             }
-            $text = preg_replace('/\[\[\[((.|\n)+)\]\]\]/', '<pre>$1</pre>', $text);
+            $text = preg_replace('/\[\[\[(.*)\]\]\]/', '<pre>$1</pre>', $text);
             if ($text === null) {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG504 Error de regexp");
             }
