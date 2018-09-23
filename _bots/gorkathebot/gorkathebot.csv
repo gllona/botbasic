@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.4.5	gorkathebot				
+VERSION	0.4.8	gorkathebot				
 BOTS	main					
 						
 						
@@ -184,6 +184,25 @@ main	main	main
 						
 						
 						
+/echo	echo	SET oldBotMode botMode				
+		SET botMode 99				
+		PRINT ENTRYTEXT				
+		END				
+						
+/noecho	noecho	SET botMode oldBotMode				
+		CLEAR oldBotMode				
+		PRINT ENTRYTEXT				
+		END				
+						
+/.+/	everything	IF NEQ botMode 99 THEN GOTO everything2				
+		PRINT ENTRYTEXT				
+		END				
+						
+//	everything2	SET type ENTRYTYPE				
+		SET id ENTRYID				
+		PRINT mediaInfo				
+		END				
+						
 /start	start	MENU TITLE titChooseMode OPTIONS optInitialBot optHowdoiBot TO botMode				
 		IF EQ botMode optInitialBot THEN GOTO oldstart				
 		IF EQ botMode optHowdoiBot THEN GOTO howdoi				
@@ -234,11 +253,6 @@ main	main	main
 		GOTO start				
 						
 /test	test	PRINT sendMedia				
-		END				
-						
-//		SET type ENTRYTYPE				
-		SET id ENTRYID				
-		PRINT mediaInfo				
 		END				
 						
 /letmeask1		CLEAR id				
