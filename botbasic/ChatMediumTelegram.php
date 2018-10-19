@@ -632,7 +632,7 @@ namespace botbasic {
                 $this->conditionalLog(Log::TYPE_DAEMON, "CMTG490 Error de regexp");
             }
             // [[[preformatted-fixed-block-text]]] and newlines (avoids nesting of <pre>'s)
-            $magicMarker = '!#"$#%$&%___!#"$#%$&%';
+            $magicMarker = '!#"##%#&%___!#"##%#&%';
             $count = null;
             while ($count !== 0) {
                 $text = preg_replace('/\[\[\[(.*)\n((.|\n)*)\]\]\]/', '[[[$1' . $magicMarker . '$2]]]', $text, 1, $count);
