@@ -900,6 +900,10 @@ namespace botbasic {
          */
         private function makeMediaContentBase ($type, $resource, $caption = null)
         {
+            $shortenCaption = function ($text) {
+                if (strlen($text) <= 1024) { return $text;                              }
+                else                       { return substr($text, 0, 1024 - 3) . '...'; }
+            };
             // URL style submit
             //$parameters = [
             //    $type => isset($resource->fileId) ? $resource->fileId : $this->makeMediaUrl($resource),
@@ -913,7 +917,8 @@ namespace botbasic {
             }
             else {
                 $fields = [];
-                if ($caption !== null) { $fields['caption'] = $caption; }
+                if ($caption !== null) { $fields['caption']            = $shortenCaption($caption); }
+                if ($type == 'video')  { $fields['supports_streaming'] = true;                      }
                 $files = [ $type => $this->makeMediaLocalPath($resource) ];
                 $parameters = [ $fields, $files ];
             }
