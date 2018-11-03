@@ -459,9 +459,12 @@ abstract class ChatMedium
                     if ($resource === null) { continue; }
                     $captionResources = $splash->getResources(null, InteractionResource::TYPE_CAPTION);
                     $caption          = isset($captionResources[0]) ? $captionResources[0]->metainfo : null;
+                    $thumbResources   = [];
+                    if ($resource->canHaveThumb()) { $thumbResources = $splash->getResources([ InteractionResource::TYPE_VIDEO, InteractionResource::TYPE_VIDEONOTE, InteractionResource::TYPE_CAPTION ]); }
+                    $thumbResource    = count($thumbResources) > 0 ? $thumbResources[0] : null;
                     if ($caption !== null)  { $resource->metainfo = $caption; $resource->save($splash); }
                     if ($currentText != '') { $textsAndResources[] = $currentText; $currentText = '';   }
-                    $textsAndResources[] = $resource;
+                    $textsAndResources[] = $thumbResource === null ? $resource : [ $resource, $thumbResource ];
                     break;
                 case Splash::SUBTYPE_MENU :
                     if ($splash->getText() !== null) { $currentText .= ($currentText == '' ? '' : "\n") . $splash->getText(); }
@@ -473,10 +476,11 @@ abstract class ChatMedium
         // post to ChatMedium
         for ($i = 0; $i < count($textsAndResources); $i++) {
             $textOrResource = $textsAndResources[$i];
-            if (is_string($textOrResource)) { $text = $textOrResource; $resource = null;            }
-            else                            { $text = null;            $resource = $textOrResource; }
+            $resource = $thumbResource = null;
+            if (is_string($textOrResource)) { $text = $textOrResource;                                                                                                                   }
+            else                            { $text = null; if (is_array($textOrResource)) { list ($resource, $thumbResource) = $textOrResource; } else { $resource = $textOrResource; } }
             $postOptionsNow = $i == count($textsAndResources) - 1;
-            $infoToPost = $this->dressForDisplay($text, $postOptionsNow ? ($options == [] ? null : $options) : null, $resource, $cmChannel);
+            $infoToPost = $this->dressForDisplay($text, $postOptionsNow ? ($options == [] ? null : $options) : null, $resource, $cmChannel, $thumbResource);
             $res = $this->display($infoToPost);
             if (! $res) {
                 Log::register(Log::TYPE_RUNTIME, "CM420 Falla la operacion de encolamiento (display)", $this, $cmChannel);
@@ -496,9 +500,10 @@ abstract class ChatMedium
      * @param  InteractionResource          $resource                   Recurso a ser incluido en el Splash
      * @param  ChatMediumChannel|array      $cmChannelOrCmChatInfo      Tripleta identificadora del destino de la información, como objeto o arreglo;
      *                                                                  como arreglo debe ser: [ cmBotName, cmUserId, cmChatInfo ]
+     * @param  string|null                  $thumbResource              Recurso opcional que representa el thumbnail del video
      * @return array
      */
-    abstract public function dressForDisplay ($text, $menuOptions, $resource, $cmChannelOrCmChatInfo);
+    abstract public function dressForDisplay ($text, $menuOptions, $resource, $cmChannelOrCmChatInfo, $thumbResource = null);
 
 
 

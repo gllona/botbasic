@@ -130,7 +130,7 @@ class ChatMediumWebStub extends ChatMedium
 
 
 
-    public function dressForDisplay ($text, $menuOptions, $resource, $cmChannelOrCmChatInfo)
+    public function dressForDisplay ($text, $menuOptions, $resource, $cmChannelOrCmChatInfo, $thumbResource = null)
     {
         $res = [ $text, $menuOptions, $cmChannelOrCmChatInfo ];   // $resource is not used
         return $res;

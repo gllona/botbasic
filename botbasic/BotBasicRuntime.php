@@ -1258,8 +1258,13 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                     $srcResource = InteractionResource::load($value['id']);
                     if ($srcResource === null) { continue; }
                     $resource = $srcResource->createByCloning($cmType, $bbc->getCMchannel()->getCMbotName());
+                    $thumbResource = null;
+                    if (isset($value['thumbId'])) {
+                        $srcThumbResource = InteractionResource::load($value['thumbId']);
+                        if ($srcResource !== null) { $thumbResource = $srcThumbResource->createByCloning($cmType, $bbc->getCMchannel()->getCMbotName()); }
+                    }
                     $caption  = isset($value['caption']) ? InteractionResource::createFromContent(InteractionResource::TYPE_CAPTION, $cmType, $value['caption']) : null;
-                    $splash   = Splash::createWithResource($resource, $caption);
+                    $splash   = Splash::createWithResource($resource, $caption, $thumbResource);
                 }
                 else {
                     Log::register(Log::TYPE_DEBUG, "RT1016 lambda getBBchannel arroja null", $this);
@@ -2606,17 +2611,19 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
      *
      * @param string        $id                 ID del Resource, el cual debe tener asociado un archivo o un Telegram file_id
      * @param null|string   $caption            Caption del contenido multimedia
+     * @param null|string   $thumbId            ID opcional del Resource (imagen) que actúa como thumb de un video
      * @param null|string   $botName            Nombre del bot sobre el cual aplicar el Splash; o null para derivarlo
      * @param null|int      $bizModelUserId     ID del BizModel user sobre el cual aplicar el Splash; o null para derivarlo
      * @param null|int      $bbChannelId        ID del BotBasicChannel sobre el cual aplicar el Splash; o null para derivarlo
      */
-    public function splashHelperDisplay ($id, $caption, $botName = null, $bizModelUserId = null, $bbChannelId = null)
+    public function splashHelperDisplay ($id, $caption, $thumbId = null, $botName = null, $bizModelUserId = null, $bbChannelId = null)
     {
         if (! BotBasic::isPositiveInteger($id)) { return; }
         $on = $this->completeOn($botName, $bizModelUserId, $bbChannelId);
         if ($on === null) { return; }
         $entry = [ 'type' => 'resource', 'id' => $id ];
         if ($caption !== null) { $entry['caption'] = $caption; }
+        if ($thumbId !== null) { $entry['thumbId'] = $thumbId; }
         $this->prints[] = [ $entry, $on ];
     }
 
@@ -3163,16 +3170,21 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
     {
         $rvals           =& $parsedContent[1];
         $hasTitle        =  isset($parsedContent[2]) && $parsedContent[2] == 'TITLE';
+        $photoOffset     =  2 + ($hasTitle ? 2 : 0);
+        $hasPhoto        =  isset($parsedContent[$photoOffset]) && $parsedContent[$photoOffset] == 'PHOTO';
         $title           =  $hasTitle ? $parsedContent[3] : null;
-        $isOnAllChannels =  isset($parsedContent[$hasTitle ? 5 : 3]) && $parsedContent[$hasTitle ? 5 : 3] == 'CHANNELS';
+        $photo           =  $hasPhoto ? $parsedContent[$photoOffset + 1] : null;
+        $onOffset        =  3 + ($hasTitle ? 2 : 0) + ($hasPhoto ? 2 : 0);
+        $isOnAllChannels =  isset($parsedContent[$onOffset]) && $parsedContent[$onOffset] == 'CHANNELS';
         if ($isOnAllChannels) {
             $ons = [];
             foreach ($this->getBBchannels() as $bbc) { $ons[] = [ $this->getBBbotName(), $this->getBizModelUserId(), $bbc->getId() ]; }
         }
         else {
-            $ons = [ isset($parsedContent[$hasTitle ? 5 : 3]) ? $parsedContent[$hasTitle ? 5 : 3] : $this->on ];
+            $ons = [ isset($parsedContent[$onOffset]) ? $parsedContent[$onOffset] : $this->on ];
         }
         foreach ($ons as $on) {
+            $photoVal = $hasPhoto ? $this->getRvalValue($photo, $lineno, $bot) : null;
             for ($pos = 0; $pos < count($rvals); $pos++) {
                 $onBotName        = isset($on[0]) ? $on[0] : null;
                 $onBizModelUserId = isset($on[1]) ? $on[1] : null;
@@ -3180,7 +3192,7 @@ class BotBasicRuntime extends BotBasic implements Initializable, Closable
                 if ($onBizModelUserId !== null && ! $this->isNumber($onBizModelUserId)) { $onBizModelUserId = $this->getRvalValue($onBizModelUserId, $lineno, $bot); }
                 if ($onBBchannelId    !== null && ! $this->isNumber($onBBchannelId   )) { $onBBchannelId    = $this->getRvalValue($onBBchannelId,    $lineno, $bot); }
                 $titleValue = $title === null ? null : $this->getRvalValue($title, $lineno, $bot);
-                $this->splashHelperDisplay($this->getRvalValue($rvals[$pos], $lineno, $bot), $titleValue, $onBotName, $onBizModelUserId, $onBBchannelId);
+                $this->splashHelperDisplay($this->getRvalValue($rvals[$pos], $lineno, $bot), $titleValue, $photoVal, $onBotName, $onBizModelUserId, $onBBchannelId);
             }
         }
         return -1;

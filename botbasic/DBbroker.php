@@ -518,21 +518,23 @@ END;
      * @param  array|null   $menuOptions        Opciones del menú del Splash, o null en caso de no haber
      * @param  mixed|null   $resource|null      InteractionResource incluido en el Splash, o null de no haber
      * @param  int          $cmcId              ID del ChatMediumChannel al cual está asociado el Splash
+     * @param  string|null  $thumbResource      InteractionResource opcional que representa el thumbnail del video
      * @param  int|null     $specialOrder       Orden especial dirigida a Telegram, que no es un post regular
      * @param  mixed|null   $specialOrderArg    Argumento de la orden especial dirigida a Telegram
      * @return int|null                         null en caso de error de SQL; o el ID del registro recién insertado
      */
-    static public function writeToTelegramMessageQueue ($text, $menuOptions, $resource, $cmcId, $specialOrder = null, $specialOrderArg = null)
+    static public function writeToTelegramMessageQueue ($text, $menuOptions, $resource, $cmcId, $thumbResource = null, $specialOrder = null, $specialOrderArg = null)
     {
         self::connect();
         $text            = self::q($text);
         $menuOptions     = self::q(serialize($menuOptions));
         $resource        = self::q(serialize($resource));
+        $thumbResource   = self::q(serialize($thumbResource));
         $specialOrder    = self::q($specialOrder);
         $specialOrderArg = self::q(serialize($specialOrderArg));
         $sql = <<<END
-            INSERT INTO telegram_queue (text, menu_options, resource, special_order, special_order_arg, cmchannel_id)
-            VALUES ($text, $menuOptions, $resource, $specialOrder, $specialOrderArg, $cmcId);
+            INSERT INTO telegram_queue (text, menu_options, resource, special_order, special_order_arg, cmchannel_id, thumb_resource)
+            VALUES ($text, $menuOptions, $resource, $specialOrder, $specialOrderArg, $cmcId, $thumbResource);
 END;
         $newId = self::exec($sql, true);
         if ($newId === false) { return null; }
@@ -550,7 +552,7 @@ END;
      *
      * @param  int  $tryCount   Cantidad de intentos de envío por la que se desea filtrar
      * @return array|bool|null  null en caso de error de SQL; false si no hay Splashes pendientes por enviar;
-     *                          [ id, text, menuOptions, interactionResource, cmcBotName, cmcChatInfo ] en caso de haberlos
+     *                          [ id, text, menuOptions, interactionResource, cmcBotName, cmcChatInfo, thumbResource ] en caso de haberlos
      */
     static public function readFirstInTelegramMessageQueueAndMarkAsSending ($tryCount)
     {
@@ -578,7 +580,7 @@ END;
         // special case for cmchannel_id = -1 was added in order to allow early submitting of orders to Telegram, before creation of CMC instances
         $sql = <<<END
             (
-            SELECT tq1.id, tq1.text, tq1.menu_options, tq1.resource, tq1.special_order, tq1.special_order_arg, cmc.cm_bot_name, cmc.cm_chat_info 
+            SELECT tq1.id, tq1.text, tq1.menu_options, tq1.resource, tq1.special_order, tq1.special_order_arg, cmc.cm_bot_name, cmc.cm_chat_info, tq1.thumb_resource 
               FROM telegram_queue AS tq1
               JOIN cmchannel AS cmc ON tq1.cmchannel_id = cmc.id  
              WHERE tq1.state = 'pending'
@@ -606,7 +608,7 @@ END;
             ) 
             UNION 
             (
-            SELECT tq3.id, tq3.text, tq3.menu_options, tq3.resource, tq3.special_order, tq3.special_order_arg, NULL, NULL
+            SELECT tq3.id, tq3.text, tq3.menu_options, tq3.resource, tq3.special_order, tq3.special_order_arg, NULL, NULL, tq3.thumb_resource
               FROM telegram_queue AS tq3
              WHERE tq3.state = 'pending'
                AND tq3.try_count = $tryCount
@@ -625,12 +627,13 @@ END;
             $unlock();
             return false;
         }
-        list ($id, $text, $menuOptions, $resource, $specialOrder, $specialOrderArg, $cmBotName, $cmChatInfo) = array_values($rows[0]);
+        list ($id, $text, $menuOptions, $resource, $specialOrder, $specialOrderArg, $cmBotName, $cmChatInfo, $thumbResource) = array_values($rows[0]);
         $menuOptions     = unserialize($menuOptions);
         $resource        = unserialize($resource);
         $specialOrderArg = unserialize($specialOrderArg);
         $cmChatInfo      = $cmChatInfo === null ? null : unserialize($cmChatInfo);
-        $data            = [ $id, $text, $menuOptions, $resource, $specialOrder, $specialOrderArg, $cmBotName, $cmChatInfo ];
+        $thumbResource   = unserialize($thumbResource);
+        $data            = [ $id, $text, $menuOptions, $resource, $specialOrder, $specialOrderArg, $cmBotName, $cmChatInfo, $thumbResource ];
         // mark as sending
         $sql = <<<END
             UPDATE telegram_queue AS tq1

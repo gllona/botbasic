@@ -364,4 +364,16 @@ class InteractionResource
 
 
 
+    /**
+     * Indica si el recurso puede tener un thumbnail asociado
+     *
+     * @return bool
+     */
+    public function canHaveThumb ()
+    {
+        return $this->type == self::TYPE_VIDEO || $this->type == self::TYPE_VIDEONOTE;
+    }
+
+
+
 }

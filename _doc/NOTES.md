@@ -57,6 +57,7 @@ https://gist.github.com/IngmarBoddington/5311858
 
 >in dev server
 
+```
 sudo apt-get install php-xdebug
 cat /etc/php/7.2/mods-available/xdebug.ini
 zend_extension=xdebug.so
@@ -64,11 +65,19 @@ xdebug.remote_enable=1
 xdebug.remote_host=127.0.0.1
 xdebug.remote_port=9000
 xdebug.remote_autostart=1
+```
 
 >in dev machine
 
-ssh -R 9000:localhost:9000 gorka@beta.bots.logicos.org -N   # optional -f for daemon mode
-ssh -L 33060:dev.bots.logicos.org:3306 gorka@beta.bots.logicos.org -N
+* ssh -R 9000:localhost:9000 gorka@beta.bots.logicos.org -N   # optional -f for daemon mode
+* ssh -L 33060:dev.bots.logicos.org:3306 gorka@beta.bots.logicos.org -N
+
+crontab -e
+commebt out telegramsender
+
+* listen in phpstorm
+* breakpoint debug
+* /home/botbasic/httpdocs/scripts/telegramsender/launcher.sh local.beta.bots.logicos.org:8088 375 750 1
 
 
 

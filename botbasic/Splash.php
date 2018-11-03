@@ -126,11 +126,14 @@ class Splash extends Interaction
      *
      * @param  InteractionResource  $resource           Recurso
      * @param  InteractionResource  $captionResource    Otro Resource opcional que contiene el caption de $resource
+     * @param  InteractionResource  $thumbResource      Otro Resource opcional que contiene el thumbnail de $resource
      * @return Splash|null                              null es retornado si el argumento no es una instancia de InteractionResource
      */
-    static public function createWithResource ($resource, $captionResource = null)
+    static public function createWithResource ($resource, $captionResource = null, $thumbResource = null)
     {
-        if (! $resource instanceof InteractionResource) {
+        if (! $resource        instanceof InteractionResource ||
+            ! $captionResource instanceof InteractionResource && $captionResource !== null ||
+            ! $thumbResource   instanceof InteractionResource && $thumbResource   !== null) {
             Log::register(Log::TYPE_RUNTIME, "S133 Argumento no es InteractionResource");
             return null;
         }
@@ -138,9 +141,11 @@ class Splash extends Interaction
         $s->subType   = self::SUBTYPE_RESOURCE;
         $s->resources = [ $resource ];
         if ($captionResource !== null) { $s->resources[] = $captionResource; }
+        if ($thumbResource   !== null) { $s->resources[] = $thumbResource;   }
         $s->save();
         $resource->save($s);
         if ($captionResource !== null) { $captionResource->save($s); }
+        if ($thumbResource   !== null) { $thumbResource->save($s);   }
         return $s;
     }
 

@@ -203,7 +203,7 @@ namespace botbasic {
                 // enqueue a special order for resetting the appearance of the pressed button
                 $callbackQueryId = $update->callback_query->id;
                 $menuhook        = "$menuhook|$callbackQueryId";   // id|signature|callbackqueryid (callbackqueryid not more used after here)
-                $res = DBbroker::writeToTelegramMessageQueue(null, null, null, -1, self::ORDER_RESET_PRESSED_BUTTON, [ $botName, $callbackQueryId ]);
+                $res = DBbroker::writeToTelegramMessageQueue(null, null, null, -1, null, self::ORDER_RESET_PRESSED_BUTTON, [ $botName, $callbackQueryId ]);
                 if ($res === null) {
                     Log::register(Log::TYPE_DATABASE, "CMTG176 Error de BD");
                 }
@@ -289,7 +289,7 @@ namespace botbasic {
 
 
 
-        public function dressForDisplay ($text, $menuOptions, $resource, $cmChannelOrCmChatInfo)
+        public function dressForDisplay ($text, $menuOptions, $resource, $cmChannelOrCmChatInfo, $thumbResource = null)
         {
             // if this is a menu, should guarantee that menu title has a minimum width so menu options' texts don't get cut
             if ($text !== null && $menuOptions !== null) {
@@ -308,6 +308,7 @@ namespace botbasic {
             }
             // pack and return
             $res = [ $text, $menuOptions, $resource, $cmChannelOrCmChatInfo ];
+            if ($thumbResource !== null) { $res[] = $thumbResource; }
             return $res;
         }
 
@@ -317,10 +318,11 @@ namespace botbasic {
         {
             $this->doDummy($forceAsync);
             list ($text, $menuOptions, $resource, $cmcOrChatInfo) = $infoToPost;   /** @var $cmcOrChatInfo ChatMediumChannel|array */
+            $thumbResource = isset($infoToPost[4]) ? $infoToPost[4] : null;
             // in normal cases the display will be done asynchronously
             if ($cmcOrChatInfo instanceof ChatMediumChannel || is_int($cmcOrChatInfo)) {
                 $cmcId = is_int($cmcOrChatInfo) ? $cmcOrChatInfo : $cmcOrChatInfo->getId();
-                $res = DBbroker::writeToTelegramMessageQueue($text, $menuOptions, $resource, $cmcId);
+                $res = DBbroker::writeToTelegramMessageQueue($text, $menuOptions, $resource, $cmcId, $thumbResource);
                 if ($res === null) {
                     Log::register(Log::TYPE_DATABASE, "CMTG301 Error de BD");
                     return false;
@@ -499,8 +501,9 @@ namespace botbasic {
                 }
                 if ($record !== false) {
                     list ($id, $text, $menuOptions, $resource, $specialOrder, $specialOrderArg, $cmBotName, $cmChatId) = $record;
+                    $thumbResource = isset($record[8]) ? $record[8] : null;
                     if ($specialOrder === null) {
-                        $post = $this->makeContentForPost($text, $menuOptions, $resource, $cmChatId, $cmBotName);
+                        $post = $this->makeContentForPost($text, $menuOptions, $resource, $cmChatId, $cmBotName, $thumbResource);
                         if ($post === null) {
                             $this->conditionalLog(Log::TYPE_DAEMON, "CMTG441 No se paso ni texto ni resource");
                             $this->unqueueRollback($id);
@@ -534,10 +537,11 @@ namespace botbasic {
          * @param  InteractionResource  $resource           Resource del Splash, o null si no lo hay; en este último caso debe especificarse un texto
          * @param  string               $chatId             ID del chat de Telegram al cual será enviado el contenido
          * @param  string               $cmBotName          Nombre del bot de Telegram
+         * @param  string|null          $thumbResource      Resource opcional que representa el thumbnail del video
          * @return array|null                               Estructura de datos, en forma: [ cmBotName, jsonContent, telegramWebServiceMethod ],
          *                                                  o null en caso de que no se haya pasado ni texto ni resource
          */
-        private function makeContentForPost ($textOrCaption, $menuOptions, $resource, $chatId, $cmBotName)
+        private function makeContentForPost ($textOrCaption, $menuOptions, $resource, $chatId, $cmBotName, $thumbResource = null)
         {
             $files = null;
             if ($chatId === null) {
@@ -547,13 +551,13 @@ namespace botbasic {
             if ($resource !== null) {
                 if ($textOrCaption === null && is_string($resource->metainfo)) { $textOrCaption = $resource->metainfo; }
                 switch ($resource->type) {
-                    case InteractionResource::TYPE_IMAGE     : $method = "sendPhoto";     $content = $this->makePhotoContentBase(    $resource, $this->limitCaption($textOrCaption)); break;
-                    case InteractionResource::TYPE_AUDIO     : $method = "sendAudio";     $content = $this->makeAudioContentBase(    $resource, $this->limitCaption($textOrCaption)); break;
-                    case InteractionResource::TYPE_VOICE     : $method = "sendVoice";     $content = $this->makeVoiceContentBase(    $resource, $this->limitCaption($textOrCaption)); break;
-                    case InteractionResource::TYPE_DOCUMENT  : $method = "sendDocument";  $content = $this->makeDocumentContentBase( $resource, $this->limitCaption($textOrCaption)); break;
-                    case InteractionResource::TYPE_VIDEO     : $method = "sendVideo";     $content = $this->makeVideoContentBase(    $resource, $this->limitCaption($textOrCaption)); break;
-                    case InteractionResource::TYPE_VIDEONOTE : $method = "sendVideoNote"; $content = $this->makeVideoNoteContentBase($resource, $this->limitCaption($textOrCaption)); break;
-                    case InteractionResource::TYPE_LOCATION  : $method = "sendLocation";  $content = $this->makeLocationContentBase( $resource);                                      break;
+                    case InteractionResource::TYPE_IMAGE     : $method = "sendPhoto";     $content = $this->makePhotoContentBase(    $resource, $this->limitCaption($textOrCaption));                 break;
+                    case InteractionResource::TYPE_AUDIO     : $method = "sendAudio";     $content = $this->makeAudioContentBase(    $resource, $this->limitCaption($textOrCaption));                 break;
+                    case InteractionResource::TYPE_VOICE     : $method = "sendVoice";     $content = $this->makeVoiceContentBase(    $resource, $this->limitCaption($textOrCaption));                 break;
+                    case InteractionResource::TYPE_DOCUMENT  : $method = "sendDocument";  $content = $this->makeDocumentContentBase( $resource, $this->limitCaption($textOrCaption));                 break;
+                    case InteractionResource::TYPE_VIDEO     : $method = "sendVideo";     $content = $this->makeVideoContentBase(    $resource, $this->limitCaption($textOrCaption), $thumbResource); break;
+                    case InteractionResource::TYPE_VIDEONOTE : $method = "sendVideoNote"; $content = $this->makeVideoNoteContentBase($resource, $this->limitCaption($textOrCaption), $thumbResource); break;
+                    case InteractionResource::TYPE_LOCATION  : $method = "sendLocation";  $content = $this->makeLocationContentBase( $resource);                                                      break;
                     default                                  : $method = "sendMessage";
                                                                $content = $this->makeTextContentBase("[INVALID RESOURCE TYPE]" . ($textOrCaption === null ? "" : " / $textOrCaption"));
                                                                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG433 invalid resource type in ChatMediumTelegram::makeJsonForPost()");
@@ -863,13 +867,14 @@ namespace botbasic {
          * Genera la estructura de datos (que será transferida como JSON en el raw content de la petición al web service) que representa el
          * contenido esperado por los servidores de Telegram cuando se envía un video
          *
-         * @param  InteractionResource  $resource   Resource que representa el video
-         * @param  string|null          $caption    Caption descriptivo del video, o null si no la hay
-         * @return array                            Arreglo con los parámetros de contenido que debe recibir Telegram, en su formato final
+         * @param  InteractionResource  $resource       Resource que representa el video
+         * @param  string|null          $caption        Caption descriptivo del video, o null si no la hay
+         * @param  string|null          $thumbResource  Resource opcional que representa el thumbnail del video
+         * @return array                                Arreglo con los parámetros de contenido que debe recibir Telegram, en su formato final
          */
-        private function makeVideoContentBase ($resource, $caption = null)
+        private function makeVideoContentBase ($resource, $caption = null, $thumbResource = null)
         {
-            return $this->makeMediaContentBase('video', $resource, $caption);
+            return $this->makeMediaContentBase('video', $resource, $caption, $thumbResource);
         }
 
 
@@ -878,13 +883,14 @@ namespace botbasic {
          * Genera la estructura de datos (que será transferida como JSON en el raw content de la petición al web service) que representa el
          * contenido esperado por los servidores de Telegram cuando se envía una nota de video
          *
-         * @param  InteractionResource  $resource   Resource que representa el video
-         * @param  string|null          $caption    Caption descriptivo ed la videonota, o null si no la hay
-         * @return array                            Arreglo con los parámetros de contenido que debe recibir Telegram, en su formato final
+         * @param  InteractionResource  $resource       Resource que representa el video
+         * @param  string|null          $caption        Caption descriptivo ed la videonota, o null si no la hay
+         * @param  string|null          $thumbResource  Resource opcional que representa el thumbnail del video
+         * @return array                                Arreglo con los parámetros de contenido que debe recibir Telegram, en su formato final
          */
-        private function makeVideoNoteContentBase ($resource, $caption = null)
+        private function makeVideoNoteContentBase ($resource, $caption = null, $thumbResource = null)
         {
-            return $this->makeMediaContentBase('video_note', $resource, $caption);
+            return $this->makeMediaContentBase('video_note', $resource, $caption, $thumbResource);
         }
 
 
@@ -898,11 +904,16 @@ namespace botbasic {
          * @param  string|null          $caption    Caption descriptiva de la imagen, o null si no la hay
          * @return array                            Arreglo con los parámetros de contenido que debe recibir Telegram, en su formato final
          */
-        private function makeMediaContentBase ($type, $resource, $caption = null)
+        private function makeMediaContentBase ($type, $resource, $caption = null, $thumbResource = null)
         {
             $shortenCaption = function ($text) {
                 if (strlen($text) <= 1024) { return $text;                              }
                 else                       { return substr($text, 0, 1024 - 3) . '...'; }
+            };
+            $addFields = function (&$fields, &$files = null) use ($shortenCaption, $type, $caption, $thumbResource) {
+                if ($caption !== null)                          { $fields['caption']            = $shortenCaption($caption);         }
+                if ($type == 'video')                           { $fields['supports_streaming'] = true;                              }
+                if ($thumbResource !== null && $files !== null) { $files = [ 'thumb' => $this->makeMediaLocalPath($thumbResource) ]; }
             };
             // URL style submit
             //$parameters = [
@@ -910,18 +921,11 @@ namespace botbasic {
             //];
             //if ($caption !== null) { $parameters['caption'] = $caption; }
             // POST multipart style submit
-            if (isset($resource->fileId)) {
-                $parameters = [
-                    $type => $resource->fileId,
-                ];
-            }
-            else {
-                $fields = [];
-                if ($caption !== null) { $fields['caption']            = $shortenCaption($caption); }
-                if ($type == 'video')  { $fields['supports_streaming'] = true;                      }
-                $files = [ $type => $this->makeMediaLocalPath($resource) ];
-                $parameters = [ $fields, $files ];
-            }
+            $fields = $files = [];
+            if (isset($resource->fileId)) { $fields[$type] = $resource->fileId;                    }
+            else                          { $fields[$type] = $this->makeMediaLocalPath($resource); }
+            $addFields($fields, $files);
+            $parameters = count($files) > 0 ? [ $fields, $files ] : $fields;
             return $parameters;
         }
 
