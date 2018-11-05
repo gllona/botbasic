@@ -899,10 +899,11 @@ namespace botbasic {
          * Genera la estructura de datos (que será transferida como JSON en el raw content de la petición al web service) que representa el
          * contenido esperado por los servidores de Telegram cuando se envía una imagen
          *
-         * @param  string               $type       Tipo del Resource
-         * @param  InteractionResource  $resource   Resource que representa la imagen
-         * @param  string|null          $caption    Caption descriptiva de la imagen, o null si no la hay
-         * @return array                            Arreglo con los parámetros de contenido que debe recibir Telegram, en su formato final
+         * @param  string               $type           Tipo del Resource
+         * @param  InteractionResource  $resource       Resource que representa la imagen
+         * @param  string|null          $caption        Caption descriptiva de la imagen, o null si no la hay
+         * @param  InteractionResource  $thumbResource  Resource opcional que representa el thumbnail de la imagen
+         * @return array                                Arreglo con los parámetros de contenido que debe recibir Telegram, en su formato final
          */
         private function makeMediaContentBase ($type, $resource, $caption = null, $thumbResource = null)
         {
@@ -911,9 +912,9 @@ namespace botbasic {
                 else                       { return substr($text, 0, 1024 - 3) . '...'; }
             };
             $addFields = function (&$fields, &$files = null) use ($shortenCaption, $type, $caption, $thumbResource) {
-                if ($caption !== null)                          { $fields['caption']            = $shortenCaption($caption);         }
-                if ($type == 'video')                           { $fields['supports_streaming'] = true;                              }
-                if ($thumbResource !== null && $files !== null) { $files = [ 'thumb' => $this->makeMediaLocalPath($thumbResource) ]; }
+                if ($caption !== null)                          { $fields['caption']            = $shortenCaption($caption);   }
+                if ($type == 'video')                           { $fields['supports_streaming'] = true;                        }
+                if ($thumbResource !== null && $files !== null) { $files['thumb'] = $this->makeMediaLocalPath($thumbResource); }
             };
             // URL style submit
             //$parameters = [
@@ -923,7 +924,7 @@ namespace botbasic {
             // POST multipart style submit
             $fields = $files = [];
             if (isset($resource->fileId)) { $fields[$type] = $resource->fileId;                    }
-            else                          { $fields[$type] = $this->makeMediaLocalPath($resource); }
+            else                          { $files[$type]  = $this->makeMediaLocalPath($resource); }
             $addFields($fields, $files);
             $parameters = count($files) > 0 ? [ $fields, $files ] : $fields;
             return $parameters;
@@ -971,7 +972,66 @@ namespace botbasic {
          */
         private function makeMediaLocalPath ($resource)
         {
-            return BOTBASIC_BASEDIR . '/' . $resource->filename;
+            $path    = BOTBASIC_BASEDIR . '/' . $resource->filename;
+            $newPath = $this->resizeImage($path, BOTBASIC_TELEGRAM_THUMB_MAX_SIZE_PX, BOTBASIC_TELEGRAM_THUMB_MAX_SIZE_PX, true);
+            //$subPath = str_replace($newPath, BOTBASIC_BASEDIR . '/', '');
+            //$resource->filename = $subPath;
+            return $newPath;
+        }
+
+
+
+        /**
+         * Redimensiona una imagen y genera un JPEG a modo de thumbnail
+         *
+         * @param  string   $file   Path de la imagen
+         * @param  int      $w      Nuevo ancho
+         * @param  int      $h      Nueva altura
+         * @param  bool     $crop   Si true, genera una imagen cuadrada
+         * @return string           Path del thumbnail generado (en el directorio de la imagen fuente)
+         * @see https://stackoverflow.com/questions/14649645/resize-image-in-php
+         */
+        function resizeImage($file, $w, $h, $crop=false)
+        {
+            list($width, $height, $type) = getimagesize($file);
+            $r = $width / $height;
+            if ($crop) {
+                if ($width > $height) {
+                    $width = ceil($width-($width*abs($r-$w/$h)));
+                } else {
+                    $height = ceil($height-($height*abs($r-$w/$h)));
+                }
+                $newwidth = $w;
+                $newheight = $h;
+            } else {
+                if ($w/$h > $r) {
+                    $newwidth = $h*$r;
+                    $newheight = $h;
+                } else {
+                    $newheight = $w/$r;
+                    $newwidth = $w;
+                }
+            }
+            $src = null;
+            switch ($type) {
+                case IMAGETYPE_JPEG:     $src = imagecreatefromjpeg($file); break;
+                case IMAGETYPE_JPEG2000: $src = imagecreatefromjpeg($file); break;
+                case IMAGETYPE_PNG:      $src = imagecreatefrompng( $file); break;
+                case IMAGETYPE_GIF:      $src = imagecreatefromgif( $file); break;
+                case IMAGETYPE_BMP:      $src = imagecreatefrombmp( $file); break;
+            }
+            if ($src === null) {
+                $dstFile = $file;
+            }
+            else {
+                $dst = imagecreatetruecolor($newwidth, $newheight);
+                imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+                $pos = strrpos($file, '.');
+                if ($pos === false) { $dstFile = $file . '_thumb.jpg';                  }
+                else                { $dstFile = substr($file, 0, $pos) . '_thumb.jpg'; }
+                imagejpeg($dst, $dstFile, BOTBASIC_TELEGRAM_JPEG_COMPRESSION);
+            }
+            return $dstFile;
         }
 
 
