@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.4.8	gorkathebot				
+VERSION	0.4.10	gorkathebot				
 BOTS	main					
 						
 						
@@ -153,6 +153,16 @@ rem_hdi_section_end
 						
 						
 						
+rem_feat_section_start						
+						
+featThese		/feat_photo				
+thumbVideo		feats/video.mp4				
+thumbPhoto		feats/photo.png				
+						
+rem_section_section_end						
+						
+						
+						
 MENUS						
 name		description		in	out	remarks
 						
@@ -252,7 +262,7 @@ main	main	main
 		PRINT totalPixels				
 		GOTO start				
 						
-/test	test	PRINT sendMedia				
+/test	test	PRINT sendMedia featThese				
 		END				
 						
 /letmeask1		CLEAR id				
@@ -553,3 +563,11 @@ ENTRYHOOK		LOCALE en
 		CALL UrlEncode q TO q				
 		PRINT txt_hdi_links				
 		RETURN				
+						
+/feat	feat	PRINT featThese				
+		END				
+						
+/feat_photo		BLOAD thumbVideo TO vidId				
+		BLOAD thumbPhoto TO vidThumbId				
+		DISPLAY vidId PHOTO vidThumbId				
+		GOTO feat				
