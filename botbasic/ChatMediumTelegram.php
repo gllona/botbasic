@@ -912,9 +912,9 @@ namespace botbasic {
                 else                       { return substr($text, 0, 1024 - 3) . '...'; }
             };
             $addFields = function (&$fields, &$files = null) use ($shortenCaption, $type, $caption, $thumbResource) {
-                if ($caption !== null)                          { $fields['caption']            = $shortenCaption($caption);   }
-                if ($type == 'video')                           { $fields['supports_streaming'] = true;                        }
-                if ($thumbResource !== null && $files !== null) { $files['thumb'] = $this->makeMediaLocalPath($thumbResource); }
+                if ($caption !== null)                          { $fields['caption']            = $shortenCaption($caption);         }
+                if ($type == 'video')                           { $fields['supports_streaming'] = true;                              }
+                if ($thumbResource !== null && $files !== null) { $files['thumb'] = $this->makeMediaLocalPath($thumbResource, true); }
             };
             // URL style submit
             //$parameters = [
@@ -968,9 +968,10 @@ namespace botbasic {
          * Genera un path completo para un contenido multimedia
          *
          * @param  InteractionResource  $resource   Resource que representa el contenido
+         * @param  bool                 $makeThumb  Indica si se debe convertir el Resource tipo imagen a un thumb para video
          * @return string|null                      Path; o null en caso de falla de creación de directorio o de linkeo
          */
-        private function makeMediaLocalPath ($resource)
+        private function makeMediaLocalPath ($resource, $makeThumb = false)
         {
             $path    = BOTBASIC_BASEDIR . '/' . $resource->filename;
             $newPath = $this->resizeImage($path, BOTBASIC_TELEGRAM_THUMB_MAX_SIZE_PX, BOTBASIC_TELEGRAM_THUMB_MAX_SIZE_PX, true);
