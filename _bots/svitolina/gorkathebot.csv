@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.4.10	gorkathebot				
+VERSION	0.4.12	gorkathebot				
 BOTS	main					
 						
 						
@@ -388,7 +388,8 @@ ENTRYHOOK		LOCALE en
 		SET ffn fn_ffn18brisbane				
 		BLOAD ffn AS video TO id				
 		PRINT txtWaitForVideo				
-		DISPLAY id				
+		GOSUB tt18vidThumb TO tid				
+		DISPLAY id PHOTO tid				
 		RETURN				
 						
 	tt18brisVD2	GOSUB tt18brisVD0 2				
@@ -504,11 +505,14 @@ ENTRYHOOK		LOCALE en
 						
 	tt18whole	SET fn_filename vid_18all_seasonresume				
 		BLOAD fn_ffn18all AS video TO vid				
-		SET fn_filename img_18all_wonthefinals				
-		BLOAD fn_ffn18all AS image TO tid				
+		GOSUB tt18vidThumb TO tid				
 		PRINT txtWaitForVideo				
 		DISPLAY vid PHOTO tid				
 		RETURN				
+						
+	tt18vidThumb	SET fn_filename img_18all_wonthefinals				
+		BLOAD fn_ffn18all AS image TO tid				
+		RETURN tid				
 						
 	isThereContent	ARGS day				
 		IF EQ day 2 THEN SET hl 1 : SET sotd 0 : SET quote 1				
