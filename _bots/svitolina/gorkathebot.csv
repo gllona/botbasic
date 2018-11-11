@@ -1,6 +1,6 @@
 BOTBASIC						
 MAGIC	BotBasic 01.00					
-VERSION	0.3.5	gorkathebot				
+VERSION	0.4.10	gorkathebot				
 BOTS	main					
 						
 						
@@ -64,6 +64,10 @@ enterLocation		Send your current location
 yourLocationIs		You are at {lat}° latitude and {lon}° longitude				
 oppositeLocation		This is the antipodeans:				
 						
+titChooseMode		Which bot?				
+optInitialBot		Legacy				
+optHowdoiBot		How Do I?				
+						
 						
 						
 rem_svb_section		svitolinabot vars				
@@ -76,10 +80,12 @@ img_18brisbane_d4qf_hl		20180104_day4qf_hl_elina_vs_johanna-konta_480p.m4v
 img_18brisbane_d5sf_hl		20180105_day5sf_hl_elina_vs_karolina-pliskova_480p.m4v				
 img_18brisbane_d5sf_sotd		20180105_day5sf_sotd_elina_vs_karolina-pliskova_480p.m4v				
 img_18brisbane_d6f_hl		20180106_day6f_hl_elina_vs_aliaksandra-sasnovic_480p.m4v				
+vid_18all_seasonresume		eli_best_of_season_before_finals.mp4				
 rem_svb_images						
-rem_svb_images_1						
+img_18all_wonthefinals		won_the_finals.jpg				
 rem_svb_genericstrings						
 fn_ffn18brisbane		svitolinabot/tennis/2018/brisbane/{fn_filename}				
+fn_ffn18all		svitolinabot/tennis/2018/all/{fn_filename}				
 prmMediatype		Want to see…				
 optVideos		Videos				
 optImages		Images				
@@ -113,6 +119,7 @@ rem_svb_prompts
 prmHi		Hi, I’m Eli, and this is my bot ;-)				
 prmTournament		Choose a tournament				
 opt18brisbane		Brisbane 2018				
+opt18whole		Whole 2018				
 txtWasAbye		{eliname} didn’t play this day because of a bye				
 rem_svb_quotes						
 qte_18brisbane_d2		"""I always like to come here. I like the audience, I like the performance on this court, for me it's always a special feeling, because before I had heavy matches in Brisbane, every time I go out on the court, it's always loaded on the game."""				
@@ -127,6 +134,35 @@ qte_18brisbane_d7		"""I did not have so much time to recover from the semifinals
 qte_18brisbane_d7_lnk		https://vk.com/@svitolina-elina-svitolina-nadeus-ya-horoshaya-aktrisa-i-vy-ne-zametili				
 						
 rem_svb_section_end		svitolinabot vars end				
+						
+						
+						
+rem_hdi_section_start						
+						
+txt_hdi_hello		This is a howdoi in bot shape, ask technical				
+txt_hdi_help		Enter howdoi followed by your question \nEx. howdoi cast a dog in java \nType /start to abandon bot				
+txt_hdi_prefix		howdoi 				
+txt_hdi_prefix_2		how do i 				
+txt_hdi_q_with_prefix		howdoi {q}				
+txt_hdi_filter_start		howdoi start				
+txt_hdi_filter_die		howdoi die				
+txt_hdi_dont_die		Bots are not designed to help you die				
+txt_hdi_thisishow		{a}				
+lnk_hdi_wikipedia		https:Wikipedia://en.wikipedia.org/w/index.php?search={q}				
+lnk_hdi_google		https:Google://www.google.com/search?hl=en&q={q}				
+txt_hdi_links		Take a look at {lnk_hdi_google} and {lnk_hdi_wikipedia}				
+						
+rem_hdi_section_end						
+						
+						
+						
+rem_feat_section_start						
+						
+featThese		/feat_photo				
+thumbVideo		feats/video.mp4				
+thumbPhoto		feats/photo.png				
+						
+rem_section_section_end						
 						
 						
 						
@@ -146,6 +182,13 @@ name		description		in	out	remarks
 StrReplace				strFrom strTo strSubject	strResult	
 SplitToArray				strSeparator strString	...	
 DiffPipeArrays				strPipedArrayFrom strPipedArrayMinus	strPipedArrayDiff	
+StrPosOf				strHaystack strNeedle	intPos	returns -1 if not found
+SubStr				strString, intStart, intLength	strSubstring	
+StrToLower				strString	strLowercased	
+StrToUpper				strString	strUppercased	
+UrlEncode				strString	strUrlencoded	
+						
+Howdoi				strQ	strA	
 						
 						
 						
@@ -154,7 +197,31 @@ main	main	main
 						
 						
 						
-/start	start	PRINT commandOptions				
+/echo	echo	SET oldBotMode botMode				
+		SET botMode 99				
+		PRINT ENTRYTEXT				
+		END				
+						
+/noecho	noecho	SET botMode oldBotMode				
+		CLEAR oldBotMode				
+		PRINT ENTRYTEXT				
+		END				
+						
+/.+/	everything	IF NEQ botMode 99 THEN GOTO everything2				
+		PRINT ENTRYTEXT				
+		END				
+						
+//	everything2	SET type ENTRYTYPE				
+		SET id ENTRYID				
+		PRINT mediaInfo				
+		END				
+						
+/start	start	MENU TITLE titChooseMode OPTIONS optInitialBot optHowdoiBot TO botMode				
+		IF EQ botMode optInitialBot THEN GOTO oldstart				
+		IF EQ botMode optHowdoiBot THEN GOTO howdoi				
+		END				
+						
+/oldstart	oldstart	PRINT commandOptions				
 		END				
 						
 /ai		PRINT myname				
@@ -198,12 +265,7 @@ main	main	main
 		PRINT totalPixels				
 		GOTO start				
 						
-/test	test	PRINT sendMedia				
-		END				
-						
-//		SET type ENTRYTYPE				
-		SET id ENTRYID				
-		PRINT mediaInfo				
+/test	test	PRINT sendMedia featThese				
 		END				
 						
 /letmeask1		CLEAR id				
@@ -276,11 +338,12 @@ main	main	main
 						
 		REM svitolinabot				
 						
-ENTRYHOOK		LOCALE en				
+ENTRYHOOK	ENTRYHOOK	LOCALE en				
 		END				
 						
 /svitolinabot	svitolinabot	PRINT prmHi				
 	eli_menu	OPTION opt18brisbane GOSUB tt18brisbane				
+		OPTION opt18whole GOSUB tt18whole				
 		MENU TITLE prmTournament TO tournament				
 		PRINT txtThanks				
 		MENU TITLE prmAgain OPTIONS optYes optNo TO way				
@@ -439,6 +502,14 @@ ENTRYHOOK		LOCALE en
 	tt18brisQ7	GOSUB tt18brisQD0 7				
 		RETURN				
 						
+	tt18whole	SET fn_filename vid_18all_seasonresume				
+		BLOAD fn_ffn18all AS video TO vid				
+		SET fn_filename img_18all_wonthefinals				
+		BLOAD fn_ffn18all AS photo TO tid				
+		PRINT txtWaitForVideo				
+		DISPLAY vid PHOTO tid				
+		RETURN				
+						
 	isThereContent	ARGS day				
 		IF EQ day 2 THEN SET hl 1 : SET sotd 0 : SET quote 1				
 		IF EQ day 3 THEN SET hl 1 : SET sotd 1 : SET quote 0				
@@ -455,3 +526,60 @@ ENTRYHOOK		LOCALE en
 		IF EQ nameCounter 3 THEN SET name txtSvitolina				
 		IF EQ nameCounter 4 THEN SET name txtElinaS				
 		RETURN name				
+						
+						
+						
+/howdoi	howdoi	PRINT txt_hdi_hello				
+		GOSUB hdi_help				
+	hdi_main_loop	GOSUB hdi_listen TO iaskthis				
+		GOSUB hdi_filter iaskthis TO filter				
+		IF EQ filter txt_hdi_filter_start THEN GOTO start				
+		SET answered 1				
+		IF EQ filter 0 THEN GOSUB hdi_tell iaskthis TO answered				
+		IF EQ answered 0 THEN GOSUB hdi_bear iaskthis				
+		GOTO hdi_main_loop				
+						
+/hdi_help	hdi_help_force	CLEAR hdi_help_shown				
+	hdi_help	IF NOT EMPTY hdi_help_shown THEN RETURN				
+		SET hdi_help_shown 1				
+		PRINT txt_hdi_help				
+		RETURN				
+						
+	hdi_listen	INPUT string TITLE tit_hdi_your_howdoi TO q				
+		CALL StrToLower q TO q				
+		CALL StrPosOf q txt_hdi_prefix TO pos				
+		IF GTE pos 0 THEN GOTO hdi_listen_2				
+		CALL StrPosOf q txt_hdi_prefix_2 TO pos				
+		IF GTE pos 0 THEN GOTO hdi_listen_1				
+		SET q txt_hdi_q_with_prefix				
+	hdi_listen_1	CALL StrReplace txt_hdi_prefix_2 txt_hdi_prefix q TO q				
+	hdi_listen_2	RETURN q				
+						
+	hdi_filter	ARGS q				
+		IF EQ q txt_hdi_filter_start THEN RETURN txt_hdi_filter_start				
+		IF NEQ q txt_hdi_filter_die THEN GOTO hdi_filter_end				
+		PRINT txt_hdi_dont_die				
+		GOSUB hdi_bear q				
+		RETURN 1				
+	hdi_filter_end	RETURN 0				
+						
+	hdi_tell	ARGS q				
+		CALL Howdoi q TO a				
+		IF EMPTY a THEN RETURN 0				
+		PRINT txt_hdi_thisishow				
+		RETURN 1				
+						
+	hdi_bear	ARGS q				
+		CLEAR empty				
+		CALL StrReplace txt_hdi_prefix empty q TO q				
+		CALL UrlEncode q TO q				
+		PRINT txt_hdi_links				
+		RETURN				
+						
+/feat	feat	PRINT featThese				
+		END				
+						
+/feat_photo		REM BLOAD thumbVideo TO vidId				
+		REM BLOAD thumbPhoto TO vidThumbId				
+		REM DISPLAY vidId PHOTO vidThumbId				
+		GOTO feat				
