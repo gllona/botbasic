@@ -993,7 +993,12 @@ namespace botbasic {
          */
         function resizeImage($file, $w, $h, $crop=false)
         {
-            list($width, $height, $type) = getimagesize($file);
+            $specs = getimagesize($file);
+            if ($specs === false) {
+                $this->conditionalLog(Log::TYPE_DAEMON, "CMTG998 No se puede obtener las caracteristicas de $file");
+                return $file;
+            }
+            list($width, $height, $type) = $specs;
             $r = $width / $height;
             if ($crop) {
                 if ($width > $height) {

@@ -338,7 +338,7 @@ main	main	main
 						
 		REM svitolinabot				
 						
-ENTRYHOOK	ENTRYHOOK	LOCALE en				
+ENTRYHOOK		LOCALE en				
 		END				
 						
 /svitolinabot	svitolinabot	PRINT prmHi				
@@ -505,7 +505,7 @@ ENTRYHOOK	ENTRYHOOK	LOCALE en
 	tt18whole	SET fn_filename vid_18all_seasonresume				
 		BLOAD fn_ffn18all AS video TO vid				
 		SET fn_filename img_18all_wonthefinals				
-		BLOAD fn_ffn18all AS photo TO tid				
+		BLOAD fn_ffn18all AS image TO tid				
 		PRINT txtWaitForVideo				
 		DISPLAY vid PHOTO tid				
 		RETURN				
