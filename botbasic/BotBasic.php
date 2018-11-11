@@ -215,6 +215,12 @@ abstract class BotBasic
         [ 'sentence', 'USERID TO <variable>' ],
         [ 'sentence', 'TRACE' ],
         [ 'sentence', 'NOTRACE' ],
+        [ 'sentence', 'DISPLAY <variable1> … TITLE <variable2> PHOTO <variable3> ON CHANNELS' ],
+        [ 'sentence', 'DISPLAY <variable1> … TITLE <variable2> PHOTO <variable3> ON <BotName> <variable4opt> <variable5opt>' ],
+        [ 'sentence', 'DISPLAY <variable1> … TITLE <variable2> PHOTO <variable3>' ],
+        [ 'sentence', 'DISPLAY <variable1> … PHOTO <variable3> ON CHANNELS' ],
+        [ 'sentence', 'DISPLAY <variable1> … PHOTO <variable3> ON <BotName> <variable3opt> <variable4opt>' ],
+        [ 'sentence', 'DISPLAY <variable1> … PHOTO <variable3>' ],
         [ 'sentence', 'DISPLAY <variable1> … TITLE <variable2> ON CHANNELS' ],
         [ 'sentence', 'DISPLAY <variable1> … TITLE <variable2> ON <BotName> <variable3opt> <variable4opt>' ],
         [ 'sentence', 'DISPLAY <variable1> … TITLE <variable2>' ],
@@ -359,6 +365,7 @@ abstract class BotBasic
         209 => [ 'BUILD', 'build' ],
         210 => [ 'WITH', '' ],
         211 => [ 'reload', '' ],
+        212 => [ 'PHOTO', '' ],
     ];
 
 
