@@ -2,8 +2,8 @@
 
 
 
-// Para fijar  el hook: wget -O - http://local.beta.bots.logicos.org/scripts/hooksetter/setwebhook.php
-// Para borrar el hook: wget -O - http://local.beta.bots.logicos.org/scripts/hooksetter/setwebhook.php?action=delete_webhook
+// Para fijar  el hook: wget -O - http://local.beta.bots19.logicos.org:8088/scripts/hooksetter/setwebhook.php
+// Para borrar el hook: wget -O - http://local.beta.bots19.logicos.org:8088/scripts/hooksetter/setwebhook.php?action=delete_webhook
 
 define('PUBLIC_SERVER', 'dev');
 define('PRIVATE_SERVER', 'beta');
@@ -70,7 +70,7 @@ if ($hook === null) { die("Can't locate bot credentials"); }
 define('WEBHOOK_BASE_URL'       , 'https://' . PUBLIC_SERVER . '.' . SUBDOMAIN . '.logicos.org:' . PORT . '/telegram');
 define('WEBHOOK_URL'            , WEBHOOK_BASE_URL . '/' . $hook);
 define('API_URL'                , 'https://api.telegram.org/bot' . $token . '/');
-define('LOCAL_SERVER'           , 'local.' . PRIVATE_SERVER . '.bots.logicos.org');
+define('LOCAL_SERVER'           , 'local.' . PRIVATE_SERVER . '.' . SUBDOMAIN . '.logicos.org');
 define('BASEDIR'                , '/home/gorka/telegram/panama_bot');
 define('LOGFILE'                , BASEDIR . '/logs/hooksetter.log');
 
