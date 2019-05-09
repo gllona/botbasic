@@ -70,7 +70,7 @@ if ($hook === null) { die("Can't locate bot credentials"); }
 define('WEBHOOK_BASE_URL'       , 'https://' . PUBLIC_SERVER . '.' . SUBDOMAIN . '.logicos.org:' . PORT . '/telegram');
 define('WEBHOOK_URL'            , WEBHOOK_BASE_URL . '/' . $hook);
 define('API_URL'                , 'https://api.telegram.org/bot' . $token . '/');
-define('LOCAL_SERVER'           , 'local.' . PRIVATE_SERVER . '.' . SUBDOMAIN . '.logicos.org');
+define('LOCAL_SERVER'           , 'local.' . PRIVATE_SERVER . '.' . SUBDOMAIN . '.logicos.org:8088');
 define('BASEDIR'                , '/home/gorka/telegram/panama_bot');
 define('LOGFILE'                , BASEDIR . '/logs/hooksetter.log');
 
