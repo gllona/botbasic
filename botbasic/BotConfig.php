@@ -60,6 +60,7 @@ abstract class BotConfig
         822 => [ 'bot14bot',        '0', 'main',        ],
         823 => [ 'nimadonkey',      '0', 'main',        ],
         830 => [ 'constituyente',   '0', 'main',        ],
+        840 => [ 'actnow',          '0', 'main',    899 ],
         880 => [ 'aitanathebot',    '0', 'main',    888 ],
         888 => [ 'aitanathebot',    '0', 'monitor',     ],
         890 => [ 'gorkathebot',     '0', 'main',    899 ],
@@ -184,6 +185,9 @@ abstract class BotConfig
         830 => [   // webhook aun no registrado
             [ 'ConstituyenteVenezuelaBot',  'tgrp_830_00_542354553412303858468016.php',                                                                                                             '334418130:AAEBFWacQ6ns5a9yvdtRlmaATlqyXZtMI_Q' ],
         ],
+        840 => [
+            [ 'actnowbot',                  'tgrp_840_00_462480079952423437074388.php',                                                                                                             '802198317:AAGCbZxefi5Gj1f-jYAE1DWdX0gnhUxb4CM' ],
+        ],
         880 => [
             [ 'AitanaTheBot',               'tgrp_880_00_832569490854734632897368.php',                                                                                                             '601186767:AAEeWKOuRV726V3aUtnF9dq1irFE7Bs1LNI' ],
         ],
@@ -213,10 +217,10 @@ abstract class BotConfig
      *             ChatMedium::$bbBots. El nombre debe ser extraido de Telegram o Telegram web PERO garantizando que el número de teléfono asociado
      *             NO esté en la agenda de Android, pues en este caso el nombre mostrado en esas interfaces será el de Android */
     static private $cmLogBotsTelegram = [
-        12  => [ 'Gorka G LLona'  ],
-        21  => [ 'Gorka G LLona'  ],
-        888 => [ 'Aitana Llona'   ],
-        899 => [ 'Gorka G LLona'  ],
+        12  => [ 'Gorka G LLona', 'Gorka Llona' ],
+        21  => [ 'Gorka G LLona', 'Gorka Llona' ],
+        888 => [ 'Aitana Llona' , 'Gorka Llona' ],
+        899 => [ 'Gorka G LLona', 'Gorka Llona' ],
     ];
 
 
@@ -273,7 +277,7 @@ abstract class BotConfig
 
 
     static public $ideDebugBots = [   //TODO doc
-        890 => [ 'Gorka G LLona' ],
+        890 => [ 'Gorka G LLona', 'Gorka Llona' ],
     ];
 
 

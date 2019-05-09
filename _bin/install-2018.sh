@@ -2,11 +2,11 @@
 # run as root
 # before set DNS A entry dev.bots.logicos.org --> this instance external, static IP address
 # example call:
-#   BB_HOST=alpha BB_SUBDOMAIN=bots BB_ENV=dev BB_REPO=gitlab BB_CODE_BRANCH=master ENABLE_PHPMYADMIN=0 BB_MYSQL_ROOT_PASSWORD=huanaco BB_MYSQL_BOTBASIC_PASSWORD=candela install.sh
-#   (BB_REPO can be gitlab, github or gcloud)
+#   BB_HOST=alpha BB_ENV=dev BB_CODE_BRANCH=master ENABLE_PHPMYADMIN=0 BB_MYSQL_ROOT_PASSWORD=huanaco BB_MYSQL_BOTBASIC_PASSWORD=candela install.sh
+
 # INTERNALS
 
-set -ex
+set -e
 export PATH=$PATH:/snap/google-cloud-sdk/current/bin
 crontab -l | crontab -
 
@@ -33,8 +33,7 @@ ENABLE_PHPMYADMIN=0
 # ENVIRONMENT
 
 SCRIPT=$(basename $0)
-assertVarSet BB_SUBDOMAIN
-BB_FQD=$BB_SUBDOMAIN.logicos.org
+BB_FQD=bots.logicos.org
 assertVarSet BB_HOST
 assertVarSet BB_ENV
 BB_HOST_ENV=$BB_ENV.$BB_FQD
@@ -42,11 +41,11 @@ BB_HOST_PUBLIC=$BB_HOST.$BB_FQD
 BB_HOST_MEDIA=media-$BB_ENV.$BB_FQD
 BB_HOST_PARSER=parser.$BB_HOST.$BB_FQD
 BB_HOST_PRIVATE=local.$BB_HOST.$BB_FQD
+BB_CODE_REPO=botbasic-core
+assertVarSet BB_CODE_BRANCH
 BB_HOME=/home/botbasic/httpdocs
 BB_PHP_VERSION=7.2
 assertVarSet BB_MYSQL_ROOT_PASSWORD
-assertVarSet BB_REPO
-assertVarSet BB_CODE_BRANCH
 
 # PACKAGES
 
@@ -59,12 +58,6 @@ if [ "$ENABLE_PHPMYADMIN" != "0" ]; then
     apt-get install -y phpmyadmin
 fi
 
-# RESET
-
-userdel botbasic
-rm -rf $(dirname $BB_HOME)
-cp /etc/hosts.bb.bak /etc/hosts
-
 # ACCOUNT
 
 useradd -c botbasic -m -s /bin/bash -g 0 botbasic
@@ -74,18 +67,7 @@ useradd -c botbasic -m -s /bin/bash -g 0 botbasic
 mkdir -p $BB_HOME
 cd $BB_HOME/..
 rmdir $(basename $BB_HOME)
-
-if [ "$BB_REPO" == "gcloud" ]; then
-    BB_CODE_REPO=botbasic-core
-    gcloud source repos clone $BB_CODE_REPO --project=botbasic-enter
-elif [ "$BB_REPO" == "gitlab" ]; then
-    BB_CODE_REPO=botbasic-core
-    git clone https://gitlab.com/botbasic/botbasic-core.git
-elif [ "$BB_REPO" == "github" ]; then
-    BB_CODE_REPO=botbasic
-    git clone https://github.com/gllona/botbasic.git
-fi
-
+gcloud source repos clone $BB_CODE_REPO --project=botbasic-enter
 cd $BB_CODE_REPO
 git pull origin $BB_CODE_BRANCH
 git checkout $BB_CODE_BRANCH
@@ -117,8 +99,6 @@ assertFileExists $BB_SQL_SCHEMA
 
 # HOSTS
 
-cp /etc/hosts /etc/hosts.bb.bak
-
 cat >>/etc/hosts <<END
 
 127.0.0.1   $BB_HOST_ENV
@@ -134,7 +114,7 @@ apt-get -y install certbot
 apt-get -y install python-certbot-apache
 certbot --apache --domains $BB_HOST_ENV -n -m gllona@gmail.com --agree-tos certonly
 
-LINE="14 3 * * 1 certbot renew --pre-hook \"service apache2 stop\" --post-hook \"service apache2 start\" >/dev/null 2>/dev/null"
+LINE="14 3 * * 1 certbot renew --pre-hook "service apache2 stop" --post-hook "service apache2 start" >/dev/null 2>/dev/null"
 (crontab -l; echo "$LINE") | crontab -
 
 # APACHE2

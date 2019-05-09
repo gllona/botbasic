@@ -7,18 +7,15 @@
 
 define('PUBLIC_SERVER', 'dev');
 define('PRIVATE_SERVER', 'beta');
+define('SUBDOMAIN', 'bots19');
 define('PORT', '443');
-define('BOT', 'grokabot');
+define('BOT', 'actnowbot');
 
 
 
 // COPY-PASTE FROM BOTCONFIG HERE (delete "static..."):
 
 $cmBots = [
-
-    /////////////////////////////
-    // NEUROPOWER (TEST DRIVE #1)
-    /////////////////////////////
 
     // NP - main
     10 => [
@@ -41,6 +38,9 @@ $cmBots = [
     ],
     899 => [
         [ 'grokabot',                   'tgrp_899_00_423809869823579639532654.php',                                                                                                             '476497270:AAFNZbJXgsKUrldupreWgY_CMZE6QbwJj7w' ],
+    ],
+    840 => [
+        [ 'actnowbot',                  'tgrp_840_00_462480079952423437074388.php',                                                                                                             '802198317:AAGCbZxefi5Gj1f-jYAE1DWdX0gnhUxb4CM' ],
     ],
 
 ];
@@ -67,7 +67,7 @@ if ($hook === null) { die("Can't locate bot credentials"); }
 //define('LOGFILE'              , 'php://stdout');
 
 // 2018
-define('WEBHOOK_BASE_URL'       , 'https://' . PUBLIC_SERVER . '.bots.logicos.org:' . PORT . '/telegram');
+define('WEBHOOK_BASE_URL'       , 'https://' . PUBLIC_SERVER . '.' . SUBDOMAIN . '.logicos.org:' . PORT . '/telegram');
 define('WEBHOOK_URL'            , WEBHOOK_BASE_URL . '/' . $hook);
 define('API_URL'                , 'https://api.telegram.org/bot' . $token . '/');
 define('LOCAL_SERVER'           , 'local.' . PRIVATE_SERVER . '.bots.logicos.org');
