@@ -103,6 +103,10 @@ ALTER TABLE bbcode CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE bbtunnel CHANGE rand rand VARCHAR(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE bbtunnel CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- MIGRATIONS
+ALTER TABLE telegram_queue ADD COLUMN thumb_resource TEXT NULL;
+ALTER TABLE telegram_queue CHANGE thumb_resource thumb_resource TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- INITIAL VALUES
 INSERT INTO daemons_log_stamps (daemon, cm_type, stamp, rand) VALUES ('download', 111, NOW(), ''), ('message', 111, NOW(), '');
 -- INSERT INTO parser_user (user_id, password, rand) VALUES ('username', PASSWORD('password'), '');

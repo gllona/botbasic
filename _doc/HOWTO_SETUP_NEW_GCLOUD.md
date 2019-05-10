@@ -12,7 +12,7 @@
   - name: botbasic-dev-2019
   
 * Create new Google Compute VM instance
-  - f1-micro
+  - g1-small
   - us-west-1 / us-west-1b
   - name: beta
   - image: Ubuntu 18.04 LTS
@@ -32,8 +32,20 @@
   - entries:
     - A / beta.bots19.logicos.org / external IP of instance / TTL 300s
     - CNAME / dev.bots19.logicos.org / beta.bots19.logicos.org / TTL 300s
-    - CNAME / media-dev.beta.bots19.logicos.org / dev.bots19.logicos.org / TTL 300s
+    - CNAME / media-dev.bots19.logicos.org / dev.bots19.logicos.org / TTL 300s
+    - CNAME / parser-beta.bots19.logicos.org / beta.bots19.logicos.org / TTL 300s
     
+* Enable external network access to parser w/o ngrok
+  - VPC networks / default / Firewall rules
+  - Add firewall rule
+    - name: allow-http-8080
+    - type: ingress
+    - targets: apply to all (or reduce access to VM instance)
+    - IP ranges: 0.0.0.0/0
+    - protocols/ports: tcp:8080
+    - action: allow
+    - priority: 1000
+
 * Redirect bots19.logicos.org to gcloud
   - switch UI to main DNS provider (ex. DNS server for logicos.org):
     - https://cpanel.hostinger.co/advanced/dns-zone-editor
@@ -90,18 +102,48 @@
     - $ cd botbasic
     - $ git checkout develop
 
-* Download & install
+* Download, configure & install
   - SSH to instance, then in the instance
-    - Either (choose one):
+  - Download
+    - either (choose one):
       - $ git clone https://gitlab.com/botbasic/botbasic-core.git
       - $ git clone https://github.com/gllona/botbasic
       - install repo as Google Cloud Source Repository botbasic-core
     - $ cd *cloned_dir*
     - $ cd _bin
+  - Configure parser user
+    - open schema.sql in a text editor
+    - uncomment last line (INSERT INTO parser_user ....) and set parser username/password
+    - save & quit
+  - Install
     - $ chmod +x install.sh
     - $ sudo su
-    - $ BB_HOST=beta BB_SUBDOMAIN=bots19 BB_ENV=dev BB_REPO=gitlab BB_CODE_BRANCH=develop ENABLE_PHPMYADMIN=0 BB_MYSQL_ROOT_PASSWORD=rsqlt BB_MYSQL_BOTBASIC_PASSWORD=bsqlb ./install.sh
+    - $ BB_HOST=beta BB_SUBDOMAIN=bots19 BB_ENV=dev BB_REPO=gitlab BB_CODE_BRANCH=develop ENABLE_PHPMYADMIN=0 BB_MYSQL_ROOT_PASSWORD=rsqlt BB_MYSQL_BOTBASIC_PASSWORD=candela ./install.sh
 
 ## BotBasic
 
-* See [HOW TO](./HOWTO_BBAPPS_CONFIGURATION)
+* See [HOW TO](./HOWTO_BBAPPS_CONFIGURATION) (parts related to BotConfig.php)
+
+* Configure new bot in BotConfig.php
+
+* Set webhook (in the VM instance) 
+  - $ curl http://local.beta.bots19.logicos.org:8088/scripts/hooksetter/setwebhook.php
+  
+* Browse to parser
+  - http://parser-beta.bots19.logicos.org:8080/parser_upload_form.html
+
+* Parse & Save to DB the BotBasic code for the new bot
+  - "code name" will be the name you chose for your new bot in BotConfig.php::$bbBots
+  
+* Monitor
+  - open new shell window
+  - $ cd /home/botbasic/logs
+  - $ tail -f runtime.log
+
+* Activate daemons
+  - $ sudo su
+  - $ crontab -e
+  - uncomment lines for downloader and telegramsender
+  - save and quit editor
+
+* Test new bot in Telegram

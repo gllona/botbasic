@@ -1,0 +1,49 @@
+BOTBASIC						
+MAGIC	BotBasic 01.00					
+VERSION	0.0.1					
+BOTS	main					
+						
+						
+						
+MESSAGES						
+name		en				
+						
+helloWorld		Hello world!				
+askYourName		What is your name?				
+sayYourName		So, your name is {name}, great				
+restart		/start again				
+						
+						
+						
+MENUS						
+name		description		in	out	remarks
+						
+						
+						
+MAGICVARS						
+name		description				
+						
+						
+						
+PRIMITIVES						
+name		description		in	out	remarks
+						
+StrReplace				strFrom strTo strSubject	strResult	
+SplitToArray				strSeparator strString	...	
+DiffPipeArrays				strPipedArrayFrom strPipedArrayMinus	strPipedArrayDiff	
+StrPosOf				strHaystack strNeedle	intPos	returns -1 if not found
+SubStr				strString, intStart, intLength	strSubstring	
+StrToLower				strString	strLowercased	
+StrToUpper				strString	strUppercased	
+UrlEncode				strString	strUrlencoded	
+						
+						
+						
+PROGRAM						
+main	main	main				
+						
+/start	start	PRINT helloWorld				
+		INPUT string TITLE askYourName TO name				
+		PRINT sayYourName				
+		PRINT restart				
+		END				
